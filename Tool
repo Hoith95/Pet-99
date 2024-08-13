@@ -1,2 +1,30 @@
--- Fishing
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Fishing"))()
+-- Thiết lập các biến toàn cục để kiểm soát việc chạy script
+getgenv().scripts = {
+    WaitForGameLoad = true,
+    AntiAFK = true,
+    AntiStaff = true,
+    CPUReducer = true
+    ServerHop = false,
+}
+
+-- Hàm để tải và chạy script nếu biến toàn cục tương ứng là true
+local function loadAndRunScript(scriptName, url)
+    if getgenv().scripts[scriptName] then
+        loadstring(game:HttpGet(url))()
+    end
+end
+
+-- WaitForGameLoad Kiểm tra xem trò chơi đã tải xong chưa.
+loadAndRunScript("WaitForGameLoad", "https://raw.githubusercontent.com/Hoith95/Pet-99/main/WaitForGameLoad")
+
+-- Anti AFK ngăn người chơi bị đăng xuất tự động
+loadAndRunScript("AntiAFK", "https://raw.githubusercontent.com/Hoith95/Pet-99/main/AntiAFK")
+
+-- AntiStaff kiểm tra nhân viên BIG Games
+loadAndRunScript("AntiStaff", "https://raw.githubusercontent.com/Hoith95/Pet-99/main/AntiStaff")
+
+-- ServerHop chuyển người chơi đến máy chủ mới
+loadAndRunScript("ServerHop", "https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop")
+
+-- CPUReducer Tối ưu hóa trò chơi giảm tải CPU
+loadAndRunScript("CPUReducer", "https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPUReducer")
