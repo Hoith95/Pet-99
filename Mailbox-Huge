@@ -1,5 +1,5 @@
 -- Danh sách các username được định sẵn.
-local usernames = {"User1", "User2", "User3", "User4", "User5"}
+local usernames = getgenv().usernames
 
 -- Yêu cầu module Save từ ReplicatedStorage để lấy thông tin lưu trữ.
 local saveModule = require(game:GetService("ReplicatedStorage").Library.Client.Save)
