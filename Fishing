@@ -182,4 +182,4 @@ while getgenv().autoFishing do
     while game.Players.LocalPlayer.Character.Model.Rod:FindFirstChild("FishingLine") do
         Network.Instancing_InvokeCustomFromClient:InvokeServer("AdvancedFishing", "Clicked")
     end
-end
+end)
