@@ -1,20 +1,20 @@
 -- Thiết lập các biến toàn cục để kiểm soát việc chạy script
 getgenv().scripts = {
-    WaitForGameLoad = true,
-    AntiAFK = true,
-    AntiStaff = true,
-    CPUReducer = false,
-    ServerHop = false,
-	DayCare = true,
-	Fishing = true,
-	Notification = false,
+WaitForGameLoad = true,
+AntiAFK = true,
+AntiStaff = true,
+CPUReducer = false,
+ServerHop = false,
+DayCare = true,
+Fishing = true,
+Notification = false,
 }
 
 -- Hàm để tải và chạy script nếu biến toàn cục tương ứng là true
 local function loadAndRunScript(scriptName, url)
     if getgenv().scripts[scriptName] then
         loadstring(game:HttpGet(url))()
-		print(scriptName .. " đã được chạy.")
+	print(scriptName .. " đã được chạy.")
     end
 end
 
