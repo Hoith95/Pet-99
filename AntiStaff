@@ -12,7 +12,7 @@ local function serverhop(player)
 
     -- Thử chạy script server hop từ một URL GitHub.
     local success, _ = pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/fdvll/pet-simulator-99/main/serverhop.lua"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop"))()
     end)
 
     -- Nếu không thành công, đá người chơi ra khỏi máy chủ với thông báo lý do.
