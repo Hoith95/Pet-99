@@ -79,7 +79,7 @@ diamondLabel.TextScaled = true
 
 -- Định nghĩa hàm cập nhật thông báo số lượng Huge pet.
 local function updateHugeNotification(hugeCount)
-    hugeLabel.Text = "Húp Được " .. hugeCount .. " HUGE!"
+    hugeLabel.Text = "Húp Được " .. hugeCount .. " HUGE"
     -- Thay đổi màu nền dựa trên số lượng Huge pet.
     hugeLabel.BackgroundColor3 = hugeCount == 0 and Color3.fromRGB(153, 204, 204) or Color3.fromRGB(0, 128, 128)
 end
