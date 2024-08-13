@@ -1,43 +1,60 @@
+-- Biến cờ để kiểm tra xem có đang chờ đợi để server hop hay không.
 local WAITING = false
 
+-- Hàm này thực hiện việc chuyển đổi máy chủ khi phát hiện nhân viên BIG Games.
 local function serverhop(player)
+    -- Chọn một khoảng thời gian ngẫu nhiên từ 30 đến 60 giây để chờ trước khi chuyển đổi máy chủ.
     local timeToWait = Random.new():NextInteger(30, 60)
+    -- In ra thông báo với tên nhân viên và thời gian chờ.
     print("[ANTI-STAFF] BIG Games staff (" .. player.Name ..  ") is in server! Waiting for " .. tostring(timeToWait) .. " seconds before server hopping...")
+    -- Đợi cho đến khi hết thời gian chờ.
     task.wait(timeToWait)
 
+    -- Thử chạy script server hop từ một URL GitHub.
     local success, _ = pcall(function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/fdvll/pet-simulator-99/main/serverhop.lua"))()
     end)
 
+    -- Nếu không thành công, đá người chơi ra khỏi máy chủ với thông báo lý do.
     if not success then
         game.Players.LocalPlayer:Kick("[ANTI-STAFF] A BIG Games staff member joined and script was unable to server hop")
     end
 end
 
+-- Duyệt qua danh sách người chơi hiện tại để kiểm tra nhân viên BIG Games.
 for _, player in pairs(game.Players:GetPlayers()) do
     local success, _ = pcall(function()
+        -- Kiểm tra nếu người chơi thuộc nhóm có ID 5060810 (nhóm BIG Games).
         if player:IsInGroup(5060810) then
-            WAITING = true
-            serverhop(player)
+            WAITING = true -- Đặt cờ chờ đợi.
+            serverhop(player) -- Gọi hàm server hop.
         end
     end)
+    -- Nếu có lỗi trong quá trình kiểm tra, in ra thông báo lỗi.
     if not success then
         print("[ANTI-STAFF] Error while checking player: " .. player.Name)
     end
 end
 
+-- In ra thông báo nếu không phát hiện nhân viên nào.
 print("[ANTI-STAFF] No staff member detected")
 
+-- Kết nối sự kiện khi có người chơi mới tham gia máy chủ.
 game.Players.PlayerAdded:Connect(function(player)
+    -- Kiểm tra nếu người chơi mới là nhân viên và không đang chờ đợi.
     if player:IsInGroup(5060810) and not WAITING then
+        -- In ra thông báo và dừng tất cả script tự động.
         print("[ANTI-STAFF] Staff member joined, stopping all scripts")
         getgenv().autoBalloon = false
         getgenv().autoChest = false
         getgenv().autoFishing = false
 
+        -- Đặt cờ phát hiện nhân viên.
         getgenv().STAFF_DETECTED = true
+        -- Bỏ neo vị trí của nhân vật người chơi.
         game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
 
+        -- Xác định thế giới và đường dẫn bản đồ dựa trên ID địa điểm.
         local world
         local mapPath
         if game.PlaceId == 8737899170 then
@@ -48,17 +65,18 @@ game.Players.PlayerAdded:Connect(function(player)
             world = "World 2"
         end
 
-
+        -- Lấy thông tin khu vực ngẫu nhiên dựa trên thế giới.
         local _, zoneData
-
         if world == "World 1" then
             _, zoneData = require(game:GetService("ReplicatedStorage").Library.Util.ZonesUtil).GetZoneFromNumber(Random.new():NextInteger(40, 90))
         else
             _, zoneData = require(game:GetService("ReplicatedStorage").Library.Util.ZonesUtil).GetZoneFromNumber(Random.new():NextInteger(5, 20))
         end
 
+        -- Di chuyển nhân vật người chơi đến khu vực được chọn.
         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = mapPath[tostring(zoneData["_script"])].PERSISTENT.Teleport.CFrame
 
+        -- Gọi hàm server hop.
         serverhop(player)
     end
 end)
