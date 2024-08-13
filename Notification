@@ -41,8 +41,8 @@ screenGui.Parent = playerGui
 -- Tạo một Frame làm nền cho các thông báo.
 local backgroundFrame = Instance.new("Frame")
 backgroundFrame.Size = UDim2.new(1, 0, 1, 0)
-backgroundFrame.BackgroundColor3 = Color3.fromRGB(58, 58, 58)
-backgroundFrame.BackgroundTransparency = 0.3
+backgroundFrame.BackgroundColor3 = Color3.fromRGB(36, 36, 36) -- Màu nền tối hơn cho độ tương phản cao
+backgroundFrame.BackgroundTransparency = 0.1 -- Giảm độ trong suốt để nền đậm hơn
 backgroundFrame.Parent = screenGui
 
 -- Tạo một TextLabel để hiển thị thời gian còn lại.
@@ -50,7 +50,7 @@ local timeLabel = Instance.new("TextLabel", backgroundFrame)
 timeLabel.Name = "TimeLabel"
 timeLabel.Size = UDim2.new(1, 0, 1/3, 0)
 timeLabel.Position = UDim2.new(0, 0, 0, 0)
-timeLabel.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
+timeLabel.BackgroundColor3 = Color3.fromRGB(45, 45, 45) -- Màu nền nhẹ hơn cho timeLabel
 timeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 timeLabel.BorderSizePixel = 0
 timeLabel.TextScaled = true
@@ -61,7 +61,7 @@ hugeLabel.Name = "HugeLabel"
 hugeLabel.Text = "Chưa Húp Được Huge nào."
 hugeLabel.Size = UDim2.new(1, 0, 1/3, 0)
 hugeLabel.Position = UDim2.new(0, 0, 1/3, 0)
-hugeLabel.BackgroundColor3 = Color3.fromRGB(153, 204, 204)
+hugeLabel.BackgroundColor3 = Color3.fromRGB(123, 132, 142) -- Màu xám nhạt cho hugeLabel
 hugeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 hugeLabel.BorderSizePixel = 0
 hugeLabel.TextScaled = true
@@ -72,7 +72,7 @@ diamondLabel.Name = "DiamondLabel"
 diamondLabel.Text = "Đang cập nhật Diamonds..."
 diamondLabel.Size = UDim2.new(1, 0, 1/3, 0)
 diamondLabel.Position = UDim2.new(0, 0, 2/3, 0)
-diamondLabel.BackgroundColor3 = Color3.fromRGB(0, 168, 255)
+diamondLabel.BackgroundColor3 = Color3.fromRGB(0, 120, 215) -- Màu xanh coban cho diamondLabel
 diamondLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 diamondLabel.BorderSizePixel = 0
 diamondLabel.TextScaled = true
@@ -81,7 +81,7 @@ diamondLabel.TextScaled = true
 local function updateHugeNotification(hugeCount)
     hugeLabel.Text = "Húp Được " .. hugeCount .. " HUGE"
     -- Thay đổi màu nền dựa trên số lượng Huge pet.
-    hugeLabel.BackgroundColor3 = hugeCount == 0 and Color3.fromRGB(153, 204, 204) or Color3.fromRGB(0, 128, 128)
+    hugeLabel.BackgroundColor3 = hugeCount == 0 and Color3.fromRGB(128, 0, 128) or Color3.fromRGB(139, 0, 0)
 end
 
 -- Định nghĩa hàm cập nhật thông báo số lượng Diamonds.
