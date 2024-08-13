@@ -58,7 +58,7 @@ timeLabel.TextScaled = true
 -- Tạo một TextLabel khác để hiển thị thông báo về số lượng Huge pet.
 local hugeLabel = Instance.new("TextLabel", backgroundFrame)
 hugeLabel.Name = "HugeLabel"
-hugeLabel.Text = "Chưa Húp Được Huge nào."
+hugeLabel.Text = "Éo Được Huge nào."
 hugeLabel.Size = UDim2.new(1, 0, 1/3, 0)
 hugeLabel.Position = UDim2.new(0, 0, 1/3, 0)
 hugeLabel.BackgroundColor3 = Color3.fromRGB(128, 0, 128) -- Màu tím cho hugeLabel
