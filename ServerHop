@@ -1,39 +1,62 @@
+-- Hàm này gửi yêu cầu HTTP GET để lấy danh sách các máy chủ công cộng từ Roblox.
 local function alternateServersRequest()
-    local response = request({Url = 'https://games.roblox.com/v1/games/' .. tostring(game.PlaceId) .. '/servers/Public?sortOrder=Asc&limit=100', Method = "GET", Headers = { ["Content-Type"] = "application/json" },})
+    -- Tạo yêu cầu HTTP với URL, phương thức và headers cần thiết.
+    local response = request({
+        Url = 'https://games.roblox.com/v1/games/' .. tostring(game.PlaceId) .. '/servers/Public?sortOrder=Asc&limit=100',
+        Method = "GET",
+        Headers = { ["Content-Type"] = "application/json" },
+    })
 
+    -- Kiểm tra nếu yêu cầu thành công và trả về nội dung phản hồi, nếu không trả về nil.
     if response.Success then
+        -- Nếu yêu cầu thành công, phân tích cú pháp nội dung JSON và trả về.
         return response.Body
     else
+        -- Nếu yêu cầu thất bại, trả về nil để sử dụng phương pháp khác.
         return nil
     end
 end
 
+-- Hàm này lấy thông tin của một máy chủ ngẫu nhiên từ danh sách máy chủ.
 local function getServer()
-    local servers
+    local servers -- Biến để lưu trữ danh sách máy chủ.
 
+    -- Sử dụng pcall để bắt lỗi trong quá trình gọi HttpService.
     local success, _ = pcall(function()
+        -- Gửi yêu cầu HTTP GET và phân tích cú pháp kết quả JSON để lấy danh sách máy chủ.
         servers = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. tostring(game.PlaceId) .. '/servers/Public?sortOrder=Asc&limit=100')).data
     end)
 
+    -- Nếu việc lấy thông tin máy chủ thất bại, in ra thông báo lỗi và sử dụng hàm dự phòng.
     if not success then
         print("Error getting servers, using backup method")
+        -- Gọi hàm dự phòng để lấy danh sách máy chủ.
         servers = game.HttpService:JSONDecode(alternateServersRequest()).data
     end
 
-    local server = servers[Random.new():NextInteger(5, 100)]
+    -- Chọn một máy chủ ngẫu nhiên từ danh sách và trả về thông tin của máy chủ đó.
+    local server = servers[Random.new():NextInteger(5, #servers)]
+    -- Kiểm tra nếu có thông tin máy chủ, trả về thông tin, nếu không gọi lại hàm.
     if server then
         return server
     else
+        -- Đệ quy gọi lại hàm để chọn một máy chủ khác nếu máy chủ trước đó không hợp lệ.
         return getServer()
     end
 end
 
+-- Sử dụng pcall để thực hiện việc chuyển đổi máy chủ mà không gây lỗi.
 pcall(function()
+    -- Gọi hàm TeleportService để chuyển người chơi đến máy chủ được chọn.
     game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, getServer().id, game.Players.LocalPlayer)
 end)
 
+-- Đợi 5 giây trước khi thực hiện vòng lặp chuyển đổi máy chủ.
 task.wait(5)
+-- Vòng lặp vô tận để chuyển người chơi đến máy chủ mới sau mỗi lần đợi.
 while true do
+    -- Gọi hàm Teleport để chuyển người chơi đến máy chủ mới.
     game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
+    -- Đợi một khoảng thời gian ngắn trước khi thực hiện chuyển đổi tiếp theo.
     task.wait()
 end
