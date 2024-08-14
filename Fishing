@@ -9,11 +9,24 @@ repeat
 until game:IsLoaded()
 
 -- Đợi thêm 3 giây sau khi trò chơi tải xong để đảm bảo mọi thứ đã sẵn sàng.
-task.wait(5)
+task.wait(3)
 
 -- Lấy đối tượng Network từ ReplicatedStorage để sử dụng cho các hoạt động mạng sau này.
 local Network = game:GetService("ReplicatedStorage"):WaitForChild("Network")
 
+-- Vô hiệu hóa theo dõi idle
+game:GetService("Players").LocalPlayer.PlayerScripts.Scripts.Core["Idle Tracking"].Enabled = false
+if getconnections then
+    for _, v in pairs(getconnections(game.Players.LocalPlayer.Idled)) do
+        v:Disable()
+    end
+else
+    game.Players.LocalPlayer.Idled:Connect(function()
+        game:GetService("VirtualUser"):Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+        task.wait(1)
+        game:GetService("VirtualUser"):Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+    end)
+end
 -- Kiểm tra xem người chơi đã ở trong khu vực câu cá chưa, nếu chưa thì di chuyển họ đến đó.
 if not game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("AdvancedFishing") then
     -- Di chuyển người chơi đến điểm teleport của khu vực câu cá.
@@ -76,8 +89,6 @@ if getgenv().autoFishingConfig.OPTIMIZE_GAME then
 
     -- Chạy script giảm tải CPU từ một URL GitHub.
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPUReducer"))()
-    -- Anti AFK ngăn người chơi bị đăng xuất tự động
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/AntiAFK"))()
 
     -- Làm trong suốt tất cả các phần của nhân vật người chơi để giảm độ phức tạp đồ họa.
     for _, v in pairs(game.Players:GetChildren()) do
