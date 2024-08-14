@@ -140,6 +140,10 @@ task.spawn(function()
         else
             -- Cập nhật GUI nếu không có pet trong daycare.
             timeLabel.Text = "Không có pet nào trong daycare."
+            -- Thực hiện hành động khác khi không có pet trong daycare
+            print("Không có pet nào trong daycare, bắt đầu thực hiện Hop Server mới.")
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop"))()
+            break -- Dừng vòng lặp sau khi thực hiện script khác
         end
         -- Đợi 1 giây trước khi kiểm tra lại.
         task.wait(1)
