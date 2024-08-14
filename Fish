@@ -1,7 +1,7 @@
 getgenv().autoFishing = true
 getgenv().autoFishingConfig = {
-    OPTIMIZE_GAME = false,
-    HIDE_PLAYER = false,
+    OPTIMIZE_GAME = true,
+    HIDE_PLAYER = true,
 }
 
 task.wait(3)
