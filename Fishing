@@ -3,13 +3,13 @@ getgenv().autoFishingConfig = {
     OPTIMIZE_GAME = true,
     HIDE_PLAYER = true
 }
--- Đợi cho đến khi trò chơi tải xong trước khi thực hiện các thay đổi.
-repeat
-    task.wait()
-until game:IsLoaded()
-
 -- Đợi thêm 3 giây sau khi trò chơi tải xong để đảm bảo mọi thứ đã sẵn sàng.
 task.wait(3)
+
+-- WaitForGameLoad Kiểm tra xem trò chơi đã tải xong chưa.
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/WaitForGameLoad"))()
+-- AntiStaff kiểm tra nhân viên BIG Games
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/AntiStaff"))()
 
 -- Lấy đối tượng Network từ ReplicatedStorage để sử dụng cho các hoạt động mạng sau này.
 local Network = game:GetService("ReplicatedStorage"):WaitForChild("Network")
