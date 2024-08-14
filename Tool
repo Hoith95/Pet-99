@@ -19,6 +19,9 @@ local function loadAndRunScript(scriptName, url)
     end
 end
 
+-- CPUReducer Tối ưu hóa trò chơi giảm tải CPU
+loadAndRunScript("CPUReducer", "https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPUReducer")
+
 -- WaitForGameLoad Kiểm tra xem trò chơi đã tải xong chưa.
 loadAndRunScript("WaitForGameLoad", "https://raw.githubusercontent.com/Hoith95/Pet-99/main/WaitForGameLoad")
 
@@ -27,9 +30,6 @@ loadAndRunScript("AntiAFK", "https://raw.githubusercontent.com/Hoith95/Pet-99/ma
 
 -- AntiStaff kiểm tra nhân viên BIG Games
 loadAndRunScript("AntiStaff", "https://raw.githubusercontent.com/Hoith95/Pet-99/main/AntiStaff")
-
--- CPUReducer Tối ưu hóa trò chơi giảm tải CPU
-loadAndRunScript("CPUReducer", "https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPUReducer")
 
 -- ServerHop chuyển người chơi đến máy chủ mới
 loadAndRunScript("ServerHop", "https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop")
