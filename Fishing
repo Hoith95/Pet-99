@@ -53,10 +53,17 @@ end
 if getgenv().autoFishingConfig.OPTIMIZE_GAME then
     -- Lấy đối tượng advancedFishing từ Workspace.
     local advancedFishing = game:GetService("Workspace"):FindFirstChild("__THINGS").__INSTANCE_CONTAINER.Active.AdvancedFishing
-    -- Xóa tất cả con của Debris để giảm tải cho CPU.
-    advancedFishing.Debris:ClearAllChildren()
-    -- Hủy đối tượng Model để giảm tải đồ họa.
-    advancedFishing.Model:Destroy()
+    -- Kiểm tra xem Debris có tồn tại trong advancedFishing không.
+    if advancedFishing:FindFirstChild("Debris") then
+        -- Xóa tất cả con của Debris để giảm tải cho CPU.
+        advancedFishing.Debris:ClearAllChildren()
+    end
+    -- Kiểm tra xem Model có tồn tại trong advancedFishing không.
+    if advancedFishing:FindFirstChild("Model") then
+        -- Hủy đối tượng Model để giảm tải đồ họa.
+        advancedFishing.Model:Destroy()
+    end
+end
 
     -- Thực hiện một lời gọi an toàn để hủy các đối tượng không cần thiết khác.
     pcall(function()
@@ -118,7 +125,6 @@ if getgenv().autoFishingConfig.OPTIMIZE_GAME then
             gui.Enabled = false
         end
     end
-end
 
 -- Kiểm tra cấu hình ẩn người chơi trong biến toàn cục.
 if getgenv().autoFishingConfig.HIDE_PLAYER then
