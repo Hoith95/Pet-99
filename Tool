@@ -5,7 +5,7 @@ AntiAFK = false,
 AntiStaff = false,
 CPUReducer = false,
 ServerHop = false,
-DayCare = false,
+DayCare = true,
 Fishing = true,
 Notification = false,
 }
