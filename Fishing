@@ -1,7 +1,7 @@
 getgenv().autoFishing = true
 getgenv().autoFishingConfig = {
     OPTIMIZE_GAME = true,
-    HIDE_PLAYER = true
+    HIDE_PLAYER = false
 }
 -- Đợi cho đến khi trò chơi tải xong trước khi thực hiện các thay đổi.
 repeat
@@ -9,7 +9,7 @@ repeat
 until game:IsLoaded()
 
 -- Đợi thêm 3 giây sau khi trò chơi tải xong để đảm bảo mọi thứ đã sẵn sàng.
-task.wait(3)
+task.wait(5)
 
 -- Lấy đối tượng Network từ ReplicatedStorage để sử dụng cho các hoạt động mạng sau này.
 local Network = game:GetService("ReplicatedStorage"):WaitForChild("Network")
