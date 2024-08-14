@@ -1,14 +1,8 @@
 getgenv().autoFishing = true
 getgenv().autoFishingConfig = {
     OPTIMIZE_GAME = true,
-    HIDE_PLAYER = true
+    HIDE_PLAYER = true,
 }
--- Đợi cho đến khi trò chơi tải xong trước khi thực hiện các thay đổi.
-repeat
-    task.wait()
-until game:IsLoaded()
--- Đợi thêm 3 giây sau khi trò chơi tải xong để đảm bảo mọi thứ đã sẵn sàng.
-task.wait(3)
 -- Lấy đối tượng Network từ ReplicatedStorage để sử dụng cho các hoạt động mạng sau này.
 local Network = game:GetService("ReplicatedStorage"):WaitForChild("Network")
 -- Vô hiệu hóa theo dõi idle
@@ -128,82 +122,76 @@ platform.CFrame = LocalPlayer.CFrame + Vector3.new(0, -5, 0)
 platform.Size = Vector3.new(5, 1, 5)
 platform.Transparency = 1
 
--- Đợi cho đến khi LocalPlayer.Anchored trở thành true.
-repeat task.wait() until LocalPlayer.Anchored
--- Đợi thêm 3 giây trước khi tiếp tục các hoạt động khác.
-task.wait(3)
-
--- Cho phép người chơi di chuyển trở lại.
-LocalPlayer.Anchored = false
-
 -- Vòng lặp này sẽ tiếp tục chạy miễn là biến autoFishing trong getgenv() là true.
 while getgenv().autoFishing do
     -- Khai báo biến deepPool để tìm khu vực câu cá sâu.
-    local deepPool
-    -- Duyệt qua tất cả các đối tượng Interactable trong khu vực câu cá.
-    for _, instance in pairs(game:GetService("Workspace"):FindFirstChild("__THINGS").__INSTANCE_CONTAINER.Active.AdvancedFishing:FindFirstChild("Interactable"):GetChildren()) do
-        -- Nếu tìm thấy DeepPool, gán nó vào biến deepPool và thoát khỏi vòng lặp.
-        if instance.Name == "DeepPool" then
-            deepPool = instance
+local deepPool
+-- Duyệt qua tất cả các đối tượng Interactable trong khu vực câu cá.
+for _, instance in pairs(game:GetService("Workspace"):FindFirstChild("__THINGS").__INSTANCE_CONTAINER.Active.AdvancedFishing:FindFirstChild("Interactable"):GetChildren()) do
+    -- Nếu tìm thấy DeepPool, gán nó vào biến deepPool và thoát khỏi vòng lặp.
+    if instance.Name == "DeepPool" then
+        deepPool = instance
+        break
+    end
+end
+
+local castVector
+-- Nếu tìm thấy deepPool, tạo một Vector3 ngẫu nhiên xung quanh vị trí của nó.
+if deepPool then
+    castVector = Vector3.new(deepPool.Position.X + Random.new():NextNumber(-4.75, 4.75), deepPool.Position.Y, deepPool.Position.Z + Random.new():NextNumber(-4.75, 4.75))
+else
+    castVector = Vector3.new(1480.482421875 + Random.new():NextInteger(-20, 20), 61.62470245361328, -4451.23583984375 + Random.new():NextInteger(-20, 20))
+end
+
+-- Gửi yêu cầu ném cần câu đến máy chủ với vị trí đã xác định.
+local Network = game:GetService("ReplicatedStorage"):WaitForChild("Network")
+Network.Instancing_FireCustomFromClient:FireServer("AdvancedFishing", "RequestCast", castVector)
+
+-- Lấy đối tượng Bobbers và xóa tất cả con của nó.
+local bobbers = game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active.AdvancedFishing.Bobbers
+bobbers:ClearAllChildren()
+
+local playerBobber
+local foundBobber = false
+-- Vòng lặp này sẽ tiếp tục cho đến khi tìm thấy bobber của người chơi.
+while not foundBobber do
+    for _, v in pairs(bobbers:GetChildren()) do
+        if v:FindFirstChild("Bobber") and v.Bobber.CFrame.X == castVector.X and v.Bobber.CFrame.Z == castVector.Z then
+            foundBobber = true
+            playerBobber = v.Bobber
             break
         end
     end
-    -- Khai báo biến castVector để xác định vị trí ném cần câu.
-    local castVector
-    -- Nếu tìm thấy deepPool, tạo một Vector3 ngẫu nhiên xung quanh vị trí của nó.
-    if deepPool then
-        -- Giới hạn khoảng cách ném cần là -/+ 4.75 so với vị trí của deepPool.
-        castVector = Vector3.new(deepPool.Position.X + Random.new():NextNumber(-4.75, 4.75), deepPool.Position.Y, deepPool.Position.Z + Random.new():NextNumber(-4.75, 4.75))
-    else
-        -- Nếu không tìm thấy deepPool, sử dụng một vị trí ngẫu nhiên đã được xác định trước.
-        castVector = Vector3.new(1480.482421875 + Random.new():NextInteger(-20, 20), 61.62470245361328, -4451.23583984375 + Random.new():NextInteger(-20, 20))
+    task.wait()
+end
+
+local previousPos
+-- Vòng lặp này sẽ tiếp tục cho đến khi bobber không di chuyển.
+while true do
+    local bp = playerBobber.CFrame.Y
+    if bp == previousPos then
+        break
     end
-    -- Gửi yêu cầu ném cần câu đến máy chủ với vị trí đã xác định.
-    Network.Instancing_FireCustomFromClient:FireServer("AdvancedFishing", "RequestCast", castVector)
-    -- Lấy đối tượng Bobbers và xóa tất cả con của nó.
-    local bobbers = game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active.AdvancedFishing.Bobbers
-    bobbers:ClearAllChildren()
-    -- Khai báo biến để theo dõi bobber của người chơi.
-    local playerBobber
-    local foundBobber = false
-    -- Vòng lặp này sẽ tiếp tục cho đến khi tìm thấy bobber của người chơi.
-    while not foundBobber do
-        -- Duyệt qua tất cả các bobber.
-        for _, v in pairs(bobbers:GetChildren()) do
-            -- Kiểm tra nếu bobber có vị trí trùng với vị trí ném cần.
-            if v:FindFirstChild("Bobber") then
-                if v.Bobber.CFrame.X == castVector.X and v.Bobber.CFrame.Z == castVector.Z then
-                    foundBobber = true
-                    playerBobber = v.Bobber
-                    break
-                end
-            end
-        end
-        task.wait()
-    end
-    -- Khai báo biến để theo dõi vị trí trước đó của bobber.
-    local previousPos
-    -- Vòng lặp này sẽ tiếp tục cho đến khi bobber không di chuyển.
-    while true do
-        local bp = playerBobber.CFrame.Y
-        if bp == previousPos then
-            break
-        end
-        previousPos = bp
-        task.wait()
-    end
-    -- Lấy vị trí Y hiện tại của bobber.
-    local bobberPos = playerBobber.CFrame.Y
-    -- Đợi cho đến khi bobber chìm xuống dưới vị trí ban đầu.
-    while playerBobber.CFrame.Y >= bobberPos do
-        task.wait()
-    end
-    -- Gửi yêu cầu kéo cần câu về máy chủ.
-    Network.Instancing_FireCustomFromClient:FireServer("AdvancedFishing", "RequestReel")
-    -- Vòng lặp này sẽ tiếp tục cho đến khi không còn FishingLine trên cần câu của người chơi.
-    while game.Players.LocalPlayer.Character.Model.Rod:FindFirstChild("FishingLine") do
-        -- Gửi sự kiện "Clicked" đến máy chủ để kéo cần câu.
-        Network.Instancing_InvokeCustomFromClient:InvokeServer("AdvancedFishing", "Clicked")
-    end
+    previousPos = bp
+    task.wait()
+end
+
+local bobberPos = playerBobber.CFrame.Y
+-- Đợi cho đến khi bobber chìm xuống dưới vị trí ban đầu.
+while playerBobber.CFrame.Y >= bobberPos do
+    task.wait()
+end
+
+-- Gửi yêu cầu kéo cần câu về máy chủ.
+Network.Instancing_FireCustomFromClient:FireServer("AdvancedFishing", "RequestReel")
+
+-- Vòng lặp này sẽ tiếp tục cho đến khi không còn FishingLine trên cần câu của người chơi.
+while game.Players.LocalPlayer.Character:FindFirstChild("Model") and game.Players.LocalPlayer.Character.Model:FindFirstChild("Rod") and game.Players.LocalPlayer.Character.Model.Rod:FindFirstChild("FishingLine") do
+    Network.Instancing_InvokeCustomFromClient:InvokeServer("AdvancedFishing", "Clicked")
+    task.wait()
+end
+
+task.wait(1)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Notification"))()
 end
 end
