@@ -1,3 +1,6 @@
+-- Đặt danh sách usernames vào một biến môi trường toàn cục.
+getgenv().usernames = {"User1", "User2", "User3", "User4", "User5"}
+
 -- Danh sách các username được định sẵn.
 local usernames = getgenv().usernames
 
