@@ -15,7 +15,7 @@ getgenv().scripts = {
 local function loadAndRunScript(scriptName, url)
     if getgenv().scripts[scriptName] then
         loadstring(game:HttpGet(url))()
-		print(scriptName .. " đã được chạy.")
+	print(scriptName .. " đã được chạy.")
     end
 end
 -- Lấy đối tượng Network từ ReplicatedStorage để sử dụng cho các hoạt động mạng sau này.
