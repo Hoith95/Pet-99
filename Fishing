@@ -136,8 +136,6 @@ task.wait(3)
 -- Cho phép người chơi di chuyển trở lại.
 LocalPlayer.Anchored = false
 
--- Notification cập nhật thông báo thời gian còn lại Daycare, số lượng Huge, Gems hiện có
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Notification"))()
 -- Vòng lặp này sẽ tiếp tục chạy miễn là biến autoFishing trong getgenv() là true.
 while getgenv().autoFishing do
     -- Khai báo biến deepPool để tìm khu vực câu cá sâu.
