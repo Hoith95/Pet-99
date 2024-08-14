@@ -1,20 +1,21 @@
 -- Thiết lập các biến toàn cục để kiểm soát việc chạy script
 getgenv().scripts = {
-CPUReducer = true,
-WaitForGameLoad = true,
-AntiAFK = true,
-AntiStaff = true,
-ServerHop = false,
-DayCare = true,
-Fishing = true,
-Notification = false,
+    WaitForGameLoad = true,
+    AntiAFK = true,
+    AntiStaff = true,
+    CPUReducer = false,
+    ServerHop = false,
+    DayCare = true,
+    Fishing = true,
+    Notification = false,
+    Mailbox_Huge = false,
 }
 
 -- Hàm để tải và chạy script nếu biến toàn cục tương ứng là true
 local function loadAndRunScript(scriptName, url)
     if getgenv().scripts[scriptName] then
         loadstring(game:HttpGet(url))()
-	print(scriptName .. " đã được chạy.")
+		print(scriptName .. " đã được chạy.")
     end
 end
 
@@ -41,3 +42,6 @@ loadAndRunScript("Fishing", "https://raw.githubusercontent.com/Hoith95/Pet-99/ma
 
 -- Notification cập nhật thông báo thời gian còn lại Daycare, số lượng Huge, Gems hiện có
 loadAndRunScript("Notification", "https://raw.githubusercontent.com/Hoith95/Pet-99/main/Notification")
+
+-- Mailbox Huge gửi toàn bộ Huge hiện có sang một acc ngẫu nhiên
+loadAndRunScript("Mailbox_Huge", "https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge")
