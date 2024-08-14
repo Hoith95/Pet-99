@@ -76,6 +76,8 @@ if getgenv().autoFishingConfig.OPTIMIZE_GAME then
 
     -- Chạy script giảm tải CPU từ một URL GitHub.
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPUReducer"))()
+    -- Anti AFK ngăn người chơi bị đăng xuất tự động
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/AntiAFK"))()
 
     -- Làm trong suốt tất cả các phần của nhân vật người chơi để giảm độ phức tạp đồ họa.
     for _, v in pairs(game.Players:GetChildren()) do
