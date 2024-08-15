@@ -107,5 +107,4 @@ while true do
         end
         lastCheckTime = os.time()
     end
-    wait(60)
 end
