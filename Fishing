@@ -23,8 +23,8 @@ if not game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active:FindFir
     repeat task.wait() until loaded
     -- Ngắt kết nối với sự kiện để tránh rò rỉ bộ nhớ.
     detectLoad:Disconnect()
-    -- Đợi thêm 30 giây trước khi tiếp tục.
-    task.wait(30)
+    -- Đợi thêm 3 giây trước khi tiếp tục.
+    task.wait(3)
 end
 -- Kiểm tra cấu hình tối ưu hóa trò chơi trong biến toàn cục.
 if getgenv().autoFishingConfig.OPTIMIZE_GAME then
