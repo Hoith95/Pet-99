@@ -1,7 +1,7 @@
 getgenv().autoFishing = true
 getgenv().autoFishingConfig = {
     OPTIMIZE_GAME = true,
-    HIDE_PLAYER = false,
+    HIDE_PLAYER = true,
 }
 task.wait(3)
 -- Lấy đối tượng Network từ ReplicatedStorage để sử dụng cho các hoạt động mạng sau này.
