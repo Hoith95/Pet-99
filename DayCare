@@ -107,5 +107,26 @@ while true do
         end
         lastCheckTime = os.time()
     end
+    wait(60)
 end
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Fishing"))()
+
+task.spawn(function()
+    while true do
+        OgPos = Hrp.CFrame
+        if petInDaycare() then
+            repeat task.wait(1)
+            until getRemainingTime() <= 0
+            Hrp.CFrame = DaycareMachineCFrame
+            repeat task.wait()
+            until require(game.ReplicatedStorage.Library.Client.DaycareCmds).Claim() and not petInDaycare()
+        else
+            Hrp.CFrame = DaycareMachineCFrame
+            local EnrollAmount = require(game.ReplicatedStorage.Library.Client.DaycareCmds).GetMaxSlots() - require(game.ReplicatedStorage.Library.Client.DaycareCmds).GetUsedSlots()
+            repeat task.wait()
+            until require(game.ReplicatedStorage.Library.Client.DaycareCmds).Enroll({[daycarePetId] = EnrollAmount})
+            repeat task.wait()
+            until petInDaycare()
+            Hrp.CFrame = OgPos
+        end
+    end
+end)
