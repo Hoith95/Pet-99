@@ -65,18 +65,10 @@ local function GetPetID(pt, shiny)
 end
 
 if string.lower(Daycare.PetType) == "normal" then
-    if not Daycare.Shiny then
-        daycarePetId = GetPetID(nil, nil)
-    else
-        daycarePetId = GetPetID(nil, true)
-    end
+    daycarePetId = Daycare.Shiny and GetPetID(nil, true) or GetPetID(nil, nil)
 else
     local pt = string.lower(Daycare.PetType) == "golden" and 1 or 2
-    if not Daycare.Shiny then
-        daycarePetId = GetPetID(pt, nil)
-    else
-        daycarePetId = GetPetID(pt, true)
-    end
+    daycarePetId = Daycare.Shiny and GetPetID(pt, true) or GetPetID(pt, nil)
 end
 
 print(Daycare.PetName, Daycare.PetType, Daycare.Shiny, daycarePetId)
@@ -117,24 +109,3 @@ while true do
     end
     wait(60)
 end
-
-task.spawn(function()
-    while true do
-        OgPos = Hrp.CFrame
-        if petInDaycare() then
-            repeat task.wait(1)
-            until getRemainingTime() <= 0
-            Hrp.CFrame = DaycareMachineCFrame
-            repeat task.wait()
-            until require(game.ReplicatedStorage.Library.Client.DaycareCmds).Claim() and not petInDaycare()
-        else
-            Hrp.CFrame = DaycareMachineCFrame
-            local EnrollAmount = require(game.ReplicatedStorage.Library.Client.DaycareCmds).GetMaxSlots() - require(game.ReplicatedStorage.Library.Client.DaycareCmds).GetUsedSlots()
-            repeat task.wait()
-            until require(game.ReplicatedStorage.Library.Client.DaycareCmds).Enroll({[daycarePetId] = EnrollAmount})
-            repeat task.wait()
-            until petInDaycare()
-            Hrp.CFrame = OgPos
-        end
-    end
-end)
