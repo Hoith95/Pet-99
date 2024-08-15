@@ -65,10 +65,18 @@ local function GetPetID(pt, shiny)
 end
 
 if string.lower(Daycare.PetType) == "normal" then
-    daycarePetId = Daycare.Shiny and GetPetID(nil, true) or GetPetID(nil, nil)
+    if not Daycare.Shiny then
+        daycarePetId = GetPetID(nil, nil)
+    else
+        daycarePetId = GetPetID(nil, true)
+    end
 else
     local pt = string.lower(Daycare.PetType) == "golden" and 1 or 2
-    daycarePetId = Daycare.Shiny and GetPetID(pt, true) or GetPetID(pt, nil)
+    if not Daycare.Shiny then
+        daycarePetId = GetPetID(pt, nil)
+    else
+        daycarePetId = GetPetID(pt, true)
+    end
 end
 
 print(Daycare.PetName, Daycare.PetType, Daycare.Shiny, daycarePetId)
