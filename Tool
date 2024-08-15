@@ -2,8 +2,8 @@ task.wait(3)
 -- Thiết lập các biến toàn cục để kiểm soát việc chạy script
 getgenv().scripts = {
     WaitForGameLoad = false,
-    AntiAFK = true,
-    AntiStaff = true,
+    AntiAFK = false,
+    AntiStaff = false,
     CPUReducer = fale,
     ServerHop = false,
     DayCare = true,
