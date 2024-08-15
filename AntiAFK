@@ -1,3 +1,4 @@
+-- Vô hiệu hóa theo dõi idle trong script "Idle Tracking" để ngăn người chơi bị đăng xuất tự động.
 game:GetService("Players").LocalPlayer.PlayerScripts.Scripts.Core["Idle Tracking"].Enabled = false
 
 -- Kiểm tra xem hàm getconnections có tồn tại hay không.
