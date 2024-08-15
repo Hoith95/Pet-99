@@ -10,9 +10,10 @@ end
 
 -- Thiết lập một bộ đếm thời gian để giả mạo hoạt động sau 15 phút.
 local function simulateActivity()
-    game:GetService("VirtualUser"):Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+    game:GetService("VirtualUser"):Button1Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
     task.wait(1) -- Đợi một giây.
-    game:GetService("VirtualUser"):Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+    game:GetService("VirtualUser"):Button1Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+end
 end
 
 -- Gọi hàm simulateActivity sau 15 phút.
