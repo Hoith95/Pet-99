@@ -1,6 +1,6 @@
 getgenv().autoFishing = true
 getgenv().autoFishingConfig = {
-    OPTIMIZE_GAME = false,
+    OPTIMIZE_GAME = true,
     HIDE_PLAYER = true,
 }
 task.wait(3)
@@ -77,29 +77,25 @@ end
         end
     end
     -- Ẩn tất cả giao diện người dùng của người chơi hiện tại.
-    for _, v in pairs(game:GetDescendants()) do
-        if v:IsA("Part") or v:IsA("BasePart") then
-            v.Transparency = 1
+    for i, gui in pairs(game.Players.LocalPlayer.PlayerGui:GetChildren()) do
+        if gui:IsA("ScreenGui") then
+            gui.Enabled = false
         end
     end
-
-    for i,v in pairs(game.Players.LocalPlayer.PlayerGui:GetChildren()) do
-        if v:IsA("ScreenGui") then
-            v.Enabled = false
+    -- Ẩn tất cả giao diện người dùng khởi động và hệ thống.
+    for i, gui in pairs(game:GetService("StarterGui"):GetChildren()) do
+        if gui:IsA("ScreenGui") then
+            gui.Enabled = false
         end
     end
-
-    for i, v in pairs(game:GetService("StarterGui"):GetChildren()) do
-        if v:IsA("ScreenGui") then
-            v.Enabled = false
+pcall(function()
+    -- Duyệt qua tất cả các đối tượng trong CoreGui và vô hiệu hóa những đối tượng có tên trong danh sách cho trước.
+    for _, gui in pairs(game:GetService("CoreGui"):GetChildren()) do
+        if gui:IsA("ScreenGui") and table.find({"Chat", "PlayerList", "Backpack", "EmotesMenu", "HealthDisplay"}, gui.Name) then
+            gui.Enabled = false
         end
     end
-
-    for i, v in pairs(game:GetService("CoreGui"):GetChildren()) do
-        if v:IsA("ScreenGui") then
-            v.Enabled = false
-        end
-    end
+end)
 -- Kiểm tra cấu hình ẩn người chơi trong biến toàn cục.
 if getgenv().autoFishingConfig.HIDE_PLAYER then
     -- Lấy vị trí của người chơi hiện tại.
