@@ -187,4 +187,5 @@ while getgenv().autoFishing do
     while game.Players.LocalPlayer.Character.Model.Rod:FindFirstChild("FishingLine") do
         Network.Instancing_InvokeCustomFromClient:InvokeServer("AdvancedFishing", "Clicked")
     end
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Notification"))()
 end
