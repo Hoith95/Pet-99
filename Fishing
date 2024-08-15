@@ -100,11 +100,6 @@ end
             gui.Enabled = false
         end
     end
-    for i, gui in pairs(game:GetService("CoreGui"):GetChildren()) do
-        if gui:IsA("ScreenGui") then
-            gui.Enabled = false
-        end
-    end
 -- Kiểm tra cấu hình ẩn người chơi trong biến toàn cục.
 if getgenv().autoFishingConfig.HIDE_PLAYER then
     -- Lấy vị trí của người chơi hiện tại.
