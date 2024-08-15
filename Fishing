@@ -3,7 +3,6 @@ getgenv().autoFishingConfig = {
     OPTIMIZE_GAME = true,
     HIDE_PLAYER = true,
 }
-task.wait(3)
 -- Lấy đối tượng Network từ ReplicatedStorage để sử dụng cho các hoạt động mạng sau này.
 local Network = game:GetService("ReplicatedStorage"):WaitForChild("Network")
 
@@ -23,8 +22,8 @@ if not game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active:FindFir
     repeat task.wait() until loaded
     -- Ngắt kết nối với sự kiện để tránh rò rỉ bộ nhớ.
     detectLoad:Disconnect()
-    -- Đợi thêm 3 giây trước khi tiếp tục.
-    task.wait(3)
+    -- Đợi thêm 1 giây trước khi tiếp tục.
+    task.wait(1)
 end
 -- Kiểm tra cấu hình tối ưu hóa trò chơi trong biến toàn cục.
 if getgenv().autoFishingConfig.OPTIMIZE_GAME then
