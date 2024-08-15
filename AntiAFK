@@ -14,7 +14,6 @@ local function simulateActivity()
     task.wait(1) -- Đợi một giây.
     game:GetService("VirtualUser"):Button1Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
 end
-end
 
 -- Gọi hàm simulateActivity sau 15 phút.
 task.delay(900, simulateActivity)
