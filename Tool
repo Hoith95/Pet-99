@@ -8,8 +8,8 @@ getgenv().scripts = {
     CPUReducer = false,
     ServerHop = false,
     DayCare = true,
-    Fishing = true,
-    Notification = false,
+    Fishing = false,
+    Notification = true,
     Mailbox_Huge = false,
 }
 
