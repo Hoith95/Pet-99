@@ -4,18 +4,21 @@ getgenv().RngEvent = {
     Selected_RngEgg = "First",
     Rolling_Enabled = true,
     Rolling_Delay = 0.1,
-    Visible_Rolling = false, -- Visible Rolling is Slower by ~1s; but you can see it :P
+    Visible_Rolling = false, -- Visible Rolling is Slower by ~1s; but you can see it if you don't have gui enabled :P
 
-    Selected_Upgrades = {"RNGHugeLuck", "RNGEggLuck", "RNGHatchSpeed", "RNGBonusLuck"},
+    Selected_Upgrades = {"RNGHugeLuck", "RNGEggLuck", "RNGHatchSpeed", "RNGBonusLuck", "RNGExtraEgg"},
     AutoUpgrades_Enabled = true,
     AutoMerchant_Enabled = true,
     Lucky_Dice_Enabled = true,
     Lucky_Dice_Config = {
+        ["Fire Dice"] = {Craft = false, Use = true, Only_Use_If_Not_Active = true, Only_Use_If_Rolls_Ends_In = nil},
         ["Lucky Dice"] = {Craft = false, Use = true, Only_Use_If_Not_Active = true, Only_Use_If_Rolls_Ends_In = nil},
         ["Lucky Dice II"] = {Craft = true, Use = true, Only_Use_If_Not_Active = true, Only_Use_If_Rolls_Ends_In = nil},
+        ["Lucky Dice III"] = {Craft = true, Use = true, Only_Use_If_Not_Active = true, Only_Use_If_Rolls_Ends_In = nil},
         ["Mega Lucky Dice"] = {Craft = true, Use = true, Only_Use_If_Not_Active = true, Only_Use_If_Rolls_Ends_In = nil},
         ["Mega Lucky Dice II"] = {Craft = true, Use = true, Only_Use_If_Not_Active = true, Only_Use_If_Rolls_Ends_In = 9},
     },
+    AutoBreakChests_Enabled = true,
 
     Webhook_Url = "https://discord.com/api/webhooks/1274021500931936352/SeHqpnEBx_rUYodIjkMgCAUMF_bDfsKVQh-Dhe8t1sbFnhpZSn3balGuJex-gtG9JzIJ",
     Discord_UserID = "344054115539615745",
