@@ -35,8 +35,8 @@ for i, v in pairs(pet) do
         print("Đã gửi " .. v.id .. " đến " .. username)
         
         -- Kiểm tra giới hạn gửi pet.
-        if hugeSentCount >= 1 then
-            break -- Thoát khỏi vòng lặp sau khi gửi một pet Huge.
+        if hugeSentCount >= 5 then
+            break -- Thoát khỏi vòng lặp sau khi gửi 5 pet Huge.
         end
     end
 end
