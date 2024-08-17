@@ -1,7 +1,7 @@
 -- Tạo một luồng mới để kiểm tra hộp thư đến.
 spawn(function() 
-    -- Vòng lặp vô hạn, mỗi 2 giây kiểm tra một lần.
-    while wait(2) do 
+    -- Vòng lặp vô hạn, mỗi 1 phú kiểm tra một lần.
+    while wait(60) do 
         -- Lấy thông tin hộp thư từ server.
         local mb = game.ReplicatedStorage.Network["Mailbox: Get"]:InvokeServer()
         -- Nếu có thông tin hộp thư.
