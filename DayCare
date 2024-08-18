@@ -4,12 +4,10 @@ getgenv().Daycare = {
     PetType = "Rainbow", -- Loại thú cưng: Golden, Rainbow, hoặc Normal.
     Shiny = false, -- Có phải là thú cưng lấp lánh không.
 }
-
 -- Lấy vị trí của phần tử HumanoidRootPart từ nhân vật của người chơi.
 local Hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
 -- Lấy thư viện Util từ ReplicatedStorage.
 local Util = game.ReplicatedStorage.Library.Util
-
 -- Hàm này tìm và trả về CFrame của máy chăm sóc thú cưng.
 local GetDaycare = function()
     local MachineName
@@ -26,7 +24,6 @@ local GetDaycare = function()
         end
     end
 end
-
 -- Hàm này di chuyển người chơi đến khu vực chỉ định.
 local tpZone = function(ZoneFolder)
     -- Kiểm tra nếu khu vực không có tương tác và di chuyển người chơi đến đó.
@@ -37,7 +34,6 @@ local tpZone = function(ZoneFolder)
         until ZoneFolder and ZoneFolder:FindFirstChild("INTERACT")
     end
 end
-
 -- Hàm này tính toán thời gian còn lại để thú cưng ở lại trong máy chăm sóc.
 local getRemainingTime = function()
     local remainingTime = 0
@@ -49,7 +45,6 @@ local getRemainingTime = function()
     end
     return remainingTime
 end
-
 -- Hàm này trả về số lượng phần tử trong một bảng.
 local TableLength = function(t)
     local count = 0
@@ -58,18 +53,14 @@ local TableLength = function(t)
     end
     return count
 end
-
 -- Hàm này kiểm tra xem có thú cưng nào đang ở trong máy chăm sóc hay không.
 local petInDaycare = function()
     return TableLength(require(game.ReplicatedStorage.Library.Client.DaycareCmds).GetActive()) > 0
 end
-
 -- Nếu người chơi đang ở thế giới số 1, di chuyển họ đến khu vực "Beach".
 if require(Util.WorldsUtil).GetWorld().WorldNumber == 1 then tpZone(require(Util.MapUtil).GetZone("Beach")) end
-
 -- Lấy CFrame của máy chăm sóc và ID của thú cưng.
 local DaycareMachineCFrame, daycarePetId = GetDaycare(), nil
-
 -- Hàm này tìm và trả về ID của thú cưng dựa trên tên, loại và tính chất lấp lánh.
 local function GetPetID(pt, shiny)
     for id, data in pairs(require(game.ReplicatedStorage.Library.Client.Save).Get().Inventory.Pet) do
@@ -78,7 +69,6 @@ local function GetPetID(pt, shiny)
         end
     end
 end
-
 -- Xác định ID của thú cưng dựa trên cấu hình đã đặt.
 if string.lower(Daycare.PetType) == "normal" then
     if not Daycare.Shiny then
@@ -94,20 +84,15 @@ else
         daycarePetId = GetPetID(pt, true)
     end
 end
-
 -- In thông tin thú cưng và ID của nó.
 print(Daycare.PetName, Daycare.PetType, Daycare.Shiny, daycarePetId)
-
 -- Biến để lưu vị trí ban đầu của người chơi.
 local OgPos
 -- Tạo một luồng mới để xử lý việc chăm sóc thú cưng.
 task.spawn(function()
     while true do
         -- Lưu vị trí hiện tại của người chơi.
-        local Hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
         OgPos = Hrp.CFrame
-        local success = true -- Biến cờ để kiểm tra thành công của các hành động
-
         -- Kiểm tra nếu có thú cưng trong máy chăm sóc.
         if petInDaycare() then
             -- Đợi cho đến khi thời gian chăm sóc kết thúc.
@@ -116,40 +101,21 @@ task.spawn(function()
             -- Di chuyển người chơi đến máy chăm sóc.
             Hrp.CFrame = DaycareMachineCFrame
             -- Đợi cho đến khi có thể nhận thú cưng và không còn thú cưng nào trong máy chăm sóc.
-            if not require(game.ReplicatedStorage.Library.Client.DaycareCmds).Claim() or petInDaycare() then
-                task.wait(3)
-                success = false -- Cập nhật biến cờ nếu không thể nhận thú cưng
-            end
-            -- Sau khi nhận thú cưng, tiếp tục đăng ký thú cưng mới.
-            local EnrollAmount = require(game.ReplicatedStorage.Library.Client.DaycareCmds).GetMaxSlots() - require(game.ReplicatedStorage.Library.Client.DaycareCmds).GetUsedSlots()
-            -- Đợi cho đến khi có thể đăng ký thú cưng.
-            if not require(game.ReplicatedStorage.Library.Client.DaycareCmds).Enroll({[daycarePetId] = EnrollAmount}) then
-                task.wait(3)
-                success = false -- Cập nhật biến cờ nếu không thể đăng ký thú cưng
-            end
+            repeat task.wait()
+            until require(game.ReplicatedStorage.Library.Client.DaycareCmds).Claim() and not petInDaycare()
         else
             -- Nếu không có thú cưng trong máy chăm sóc, di chuyển người chơi đến máy chăm sóc.
             Hrp.CFrame = DaycareMachineCFrame
             -- Tính toán số lượng thú cưng có thể đăng ký.
             local EnrollAmount = require(game.ReplicatedStorage.Library.Client.DaycareCmds).GetMaxSlots() - require(game.ReplicatedStorage.Library.Client.DaycareCmds).GetUsedSlots()
             -- Đợi cho đến khi có thể đăng ký thú cưng.
-            if not require(game.ReplicatedStorage.Library.Client.DaycareCmds).Enroll({[daycarePetId] = EnrollAmount}) then
-                task.wait(3)
-                success = false -- Cập nhật biến cờ nếu không thể đăng ký thú cưng
-            end
+            repeat task.wait()
+            until require(game.ReplicatedStorage.Library.Client.DaycareCmds).Enroll({[daycarePetId] = EnrollAmount})
+            -- Đợi cho đến khi có thú cưng trong máy chăm sóc.
+            repeat task.wait()
+            until petInDaycare()
+            -- Trả lại người chơi về vị trí ban đầu.
+            Hrp.CFrame = OgPos
         end
-
-        -- Kiểm tra biến cờ để xác định xem có cần thực hiện script khác không.
-        if not success then
-            -- Thực hiện script "ServerHop" nếu một trong các hành động trên không thành công.
-            task.wait(3)
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop"))()
-            break -- Kết thúc vòng lặp sau khi thực hiện script "ServerHop"
-        end
-
-        -- Trả lại người chơi về vị trí ban đầu.
-        Hrp.CFrame = OgPos
-        -- Đợi một khoảng thời gian trước khi kiểm tra lại.
-        task.wait(60)
     end
 end)
