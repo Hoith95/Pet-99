@@ -5,7 +5,7 @@ task.wait(1)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Gift-Free"))()
 task.wait(1)
 --loadstring(game:HttpGet('https://zaphub.xyz/Exec'))()
-task.wait(3)
+--task.wait(3)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CheckTimeDaycare"))()
 task.wait(1)
 getgenv().RngEvent = {
