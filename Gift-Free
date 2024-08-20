@@ -3,5 +3,3 @@ local args = {
 }
 
 game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("ForeverPacks: Claim Free"):InvokeServer(unpack(args))
-break
-end
