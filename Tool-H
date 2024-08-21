@@ -1,9 +1,7 @@
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
 task.wait(1)
 ---
-getgenv().usernames = {"chanshinqua4t","chanhoiqua30t"}
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge"))()
-task.wait(3)
+
 ---
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/DayCare"))()
 task.wait(1)
