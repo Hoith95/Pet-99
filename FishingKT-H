@@ -1,0 +1,15 @@
+getgenv().Fishing = {
+    Instance = "AdvancedFishing", -- Fishing or AdvancedFishing
+
+    Webhook = {
+        WebhookURL = "https://discord.com/api/webhooks/1238894754322972744/kIdEI4XNso7W_HOgK7LlYXxSNA3Akg3Kp_-Fg-mnaDefDs9iYWRnUddyCddEjgpT-YAc",
+        UserID = 344054115539615745,
+        HugeWebhooks = true,
+
+        AccountUpdateWebhooks = true,
+        AccountUpdateFrequency = 600,
+    },
+}
+
+script_key="UBqwHOLCQMlruRZAOrFffLsGREatfXyk";
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/9c80ad00cfba7a0d8aea09bc2c304c9f.lua"))()
