@@ -6,7 +6,7 @@ getgenv().Fishing = {
         UserID = 344054115539615745,
         HugeWebhooks = true,
 
-        AccountUpdateWebhooks = true,
+        AccountUpdateWebhooks = false,
         AccountUpdateFrequency = 600,
     },
 }
