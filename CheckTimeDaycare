@@ -15,7 +15,7 @@ local function getAcceleratedRemainingTime()
             remainingTime = time
         end
     end
-    return remainingTime / 3
+    return remainingTime / 5
 end
 
 -- Định nghĩa hàm định dạng thời gian từ giây sang giờ:phút:giây.
