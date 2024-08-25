@@ -97,7 +97,7 @@ task.spawn(function()
         local fishingLocation = game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("AdvancedFishing")
         if fishingLocation then
             -- Thực hiện ServerHop.
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop"))()
+            --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop"))()
         else
             -- Kiểm tra nếu có thú cưng trong máy chăm sóc.
             if petInDaycare() then
