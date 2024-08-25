@@ -5,7 +5,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/K
 task.wait(2)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
 --task.wait(1)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/DayCareH"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/DayCare"))()
 task.wait(1)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/FishingKT"))()
 task.wait(1)
