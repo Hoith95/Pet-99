@@ -2,6 +2,8 @@ task.wait(1)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/DayCareH"))()
 task.wait(1)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/FishingKT"))()
+task.wait(1)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Notification"))()
 --task.wait(120)
 --getgenv().usernames = {"Kim_Nhi95", "MrxHeoz", "Quy_Lez", "S2Linh_Kute", "Saca_Long", "Ca_Canhx", "Thu_Linhx", "Le_Thao2k"}
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge"))()
