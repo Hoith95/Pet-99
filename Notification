@@ -145,7 +145,7 @@ task.spawn(function()
             timeLabel.Text = "Đã tới lúc nhận thưởng daycare."
             timeLabel.Font = Enum.Font.GothamBold
                 -- Thực hiện hành động khi thời gian kết thúc
-                print("Thời gian đã hết, bắt đầu thực hiện Hop Server mới.")
+                --print("Thời gian đã hết, bắt đầu thực hiện Hop Server mới.")
                 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop"))()
             else
                 -- Cập nhật thời gian còn lại trên GUI.
@@ -157,7 +157,7 @@ task.spawn(function()
             timeLabel.Text = "Không có pet nào trong daycare."
             timeLabel.Font = Enum.Font.GothamBold
             -- Thực hiện hành động khác khi không có pet trong daycare
-            print("Không có pet nào trong daycare, bắt đầu thực hiện Hop Server mới.")
+            --print("Không có pet nào trong daycare, bắt đầu thực hiện Hop Server mới.")
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop"))()
         end
         -- Đợi 1 giây trước khi kiểm tra lại.
