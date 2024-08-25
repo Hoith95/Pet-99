@@ -19,7 +19,7 @@ local function getAcceleratedRemainingTime()
             remainingTime = time
         end
     end
-    -- Chia thời gian còn lại cho 3 để tăng tốc độ.
+    -- Chia thời gian còn lại cho 5 để tăng tốc độ.
     return remainingTime / 5
 end
 
