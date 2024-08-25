@@ -135,7 +135,7 @@ task.spawn(function()
                 break -- Dừng vòng lặp khi thời gian đã hết
             else
                 -- Cập nhật thời gian còn lại trên GUI.
-                timeLabel.Text = "TIME DAYCARE: " .. formatTime(acceleratedTime)
+                timeLabel.Text = "DAYCARE: " .. formatTime(acceleratedTime)
             end
         else
             -- Cập nhật GUI nếu không có pet trong daycare.
