@@ -93,12 +93,10 @@ task.spawn(function()
     while true do
         -- Lưu vị trí hiện tại của người chơi.
         OgPos = Hrp.CFrame
-
         -- Kiểm tra nếu nhân vật đang ở trong "AdvancedFishing".
         local fishingLocation = game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("AdvancedFishing")
         if fishingLocation then
             -- Thực hiện ServerHop.
-            print("Nhân vật đang ở trong khu vực câu cá nâng cao.")
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop"))()
         else
             -- Kiểm tra nếu có thú cưng trong máy chăm sóc.
@@ -106,28 +104,22 @@ task.spawn(function()
                 -- Đợi cho đến khi thời gian chăm sóc kết thúc.
                 repeat task.wait(1)
                 until getRemainingTime() <= 0
-
                 -- Di chuyển người chơi đến máy chăm sóc.
                 Hrp.CFrame = DaycareMachineCFrame
-
                 -- Đợi cho đến khi có thể nhận thú cưng và không còn thú cưng nào trong máy chăm sóc.
                 repeat task.wait()
                 until require(game.ReplicatedStorage.Library.Client.DaycareCmds).Claim() and not petInDaycare()
             else
                 -- Nếu không có thú cưng trong máy chăm sóc, di chuyển người chơi đến máy chăm sóc.
                 Hrp.CFrame = DaycareMachineCFrame
-
                 -- Tính toán số lượng thú cưng có thể đăng ký.
                 local EnrollAmount = require(game.ReplicatedStorage.Library.Client.DaycareCmds).GetMaxSlots() - require(game.ReplicatedStorage.Library.Client.DaycareCmds).GetUsedSlots()
-
                 -- Đợi cho đến khi có thể đăng ký thú cưng.
                 repeat task.wait()
                 until require(game.ReplicatedStorage.Library.Client.DaycareCmds).Enroll({[daycarePetId] = EnrollAmount})
-
                 -- Đợi cho đến khi có thú cưng trong máy chăm sóc.
                 repeat task.wait()
                 until petInDaycare()
-
                 -- Trả lại người chơi về vị trí ban đầu.
                 Hrp.CFrame = OgPos
             end
