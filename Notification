@@ -20,7 +20,7 @@ local function getAcceleratedRemainingTime()
         end
     end
     -- Chia thời gian còn lại cho 3 để tăng tốc độ.
-    return remainingTime / 3
+    return remainingTime / 5
 end
 
 -- Định nghĩa hàm định dạng thời gian từ giây sang giờ:phút:giây.
@@ -40,17 +40,18 @@ screenGui.Parent = playerGui
 
 -- Tạo một Frame làm nền cho các thông báo.
 local backgroundFrame = Instance.new("Frame")
-backgroundFrame.Size = UDim2.new(1, 0, 1, 0)
-backgroundFrame.BackgroundColor3 = Color3.fromRGB(36, 36, 36) -- Màu nền tối hơn cho độ tương phản cao
-backgroundFrame.BackgroundTransparency = 0.1 -- Giảm độ trong suốt để nền đậm hơn
+backgroundFrame.Size = UDim2.new(1, 0, 0.6, 0) -- Phủ 45% màn hình theo chiều dọc
+backgroundFrame.BackgroundColor3 = Color3.new(0, 0, 0) -- Màu nền đen
+backgroundFrame.Position = UDim2.new(0, 0, 0, -70) -- Vị trí bắt đầu từ góc trên bên trái
+backgroundFrame.BorderSizePixel = 0 -- Không có viền
 backgroundFrame.Parent = screenGui
 
 -- Tạo một TextLabel để hiển thị thời gian còn lại.
 local timeLabel = Instance.new("TextLabel", backgroundFrame)
 timeLabel.Name = "TimeLabel"
 timeLabel.Size = UDim2.new(1, 0, 1/3, 0)
-timeLabel.Position = UDim2.new(0, 0, 0, 0)
-timeLabel.BackgroundColor3 = Color3.fromRGB(45, 45, 45) -- Màu nền nhẹ hơn cho timeLabel
+timeLabel.Position = UDim2.new(0, 0, 0, 20)
+timeLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Màu nền đen
 timeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 timeLabel.BorderSizePixel = 0
 timeLabel.TextScaled = true
@@ -61,7 +62,7 @@ hugeLabel.Name = "HugeLabel"
 hugeLabel.Text = "Éo Được Huge nào."
 hugeLabel.Size = UDim2.new(1, 0, 1/3, 0)
 hugeLabel.Position = UDim2.new(0, 0, 1/3, 0)
-hugeLabel.BackgroundColor3 = Color3.fromRGB(128, 0, 128) -- Màu tím cho hugeLabel
+hugeLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Màu nền đen
 hugeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 hugeLabel.BorderSizePixel = 0
 hugeLabel.TextScaled = true
@@ -72,21 +73,23 @@ diamondLabel.Name = "DiamondLabel"
 diamondLabel.Text = "Đang cập nhật Diamonds..."
 diamondLabel.Size = UDim2.new(1, 0, 1/3, 0)
 diamondLabel.Position = UDim2.new(0, 0, 2/3, 0)
-diamondLabel.BackgroundColor3 = Color3.fromRGB(0, 120, 215) -- Màu xanh coban cho diamondLabel
+diamondLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Màu nền đen
 diamondLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 diamondLabel.BorderSizePixel = 0
 diamondLabel.TextScaled = true
 
 -- Định nghĩa hàm cập nhật thông báo số lượng Huge pet.
 local function updateHugeNotification(hugeCount)
-    hugeLabel.Text = "Húp Được " .. hugeCount .. " HUGE"
+    hugeLabel.Text = "HUGE: " .. hugeCount ..""
     -- Thay đổi màu nền dựa trên số lượng Huge pet.
-    hugeLabel.BackgroundColor3 = hugeCount == 0 and Color3.fromRGB(128, 0, 128) or Color3.fromRGB(0, 128, 0)
+    hugeLabel.BackgroundColor3 = hugeCount == 0 and Color3.fromRGB(0, 0, 0) or Color3.fromRGB(0, 128, 0)
+    hugeLabel.Font = Enum.Font.GothamBold
 end
 
 -- Định nghĩa hàm cập nhật thông báo số lượng Diamonds.
 local function updateDiamondNotification(diamondCount)
-    diamondLabel.Text = "Có " .. diamondCount .. " Gems!"
+    diamondLabel.Text = "GEMS: " .. diamondCount ..""
+    diamondLabel.Font = Enum.Font.GothamBold
 end
 
 -- Khởi tạo biến để theo dõi thời gian cập nhật cuối cùng.
@@ -129,6 +132,9 @@ task.spawn(function()
             local acceleratedTime = getAcceleratedRemainingTime()
             -- Thoát vòng lặp nếu hết thời gian.
             if acceleratedTime <= 0 then
+            -- Cập nhật GUI nếu tới thời gian nhận thưởng trong daycare.
+            timeLabel.Text = "Đã tới lúc nhận thưởng daycare."
+            timeLabel.Font = Enum.Font.GothamBold
                 -- Thực hiện hành động khi thời gian kết thúc
                 print("Thời gian đã hết, bắt đầu thực hiện Hop Server mới.")
                 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop"))()
@@ -136,16 +142,18 @@ task.spawn(function()
             else
                 -- Cập nhật thời gian còn lại trên GUI.
                 timeLabel.Text = "DAYCARE: " .. formatTime(acceleratedTime)
+                timeLabel.Font = Enum.Font.GothamBold
             end
         else
             -- Cập nhật GUI nếu không có pet trong daycare.
             timeLabel.Text = "Không có pet nào trong daycare."
+            timeLabel.Font = Enum.Font.GothamBold
             -- Thực hiện hành động khác khi không có pet trong daycare
             print("Không có pet nào trong daycare, bắt đầu thực hiện Hop Server mới.")
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop"))()
             break -- Dừng vòng lặp sau khi thực hiện script khác
         end
-        -- Đợi 10 giây trước khi kiểm tra lại.
-        task.wait(10)
+        -- Đợi 1 giây trước khi kiểm tra lại.
+        task.wait(1)
     end
 end)
