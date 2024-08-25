@@ -4,7 +4,7 @@ getgenv().Fishing = {
     Webhook = {
         WebhookURL = "https://discord.com/api/webhooks/1270424375635480690/h2SjW2QQUijHBNY-5HOxxxNHThoMuAkMATaZTNbRr8M0s-uLCGW0FDH7ZO8hg2C-jXKa",
         UserID = 344054115539615745,
-        HugeWebhooks = true,
+        HugeWebhooks = false,
 
         AccountUpdateWebhooks = false,
         AccountUpdateFrequency = 600,
