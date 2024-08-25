@@ -83,12 +83,14 @@ local function updateHugeNotification(hugeCount)
     hugeLabel.Text = "HUGE: " .. hugeCount ..""
     -- Thay đổi màu nền dựa trên số lượng Huge pet.
     hugeLabel.BackgroundColor3 = hugeCount == 0 and Color3.fromRGB(0, 0, 0) or Color3.fromRGB(0, 128, 0)
+    hugeLabel.TextColor3 = hugeCount == 0 and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(255, 0, 0)
     hugeLabel.Font = Enum.Font.GothamBold
 end
 
 -- Định nghĩa hàm cập nhật thông báo số lượng Diamonds.
 local function updateDiamondNotification(diamondCount)
     diamondLabel.Text = "GEMS: " .. diamondCount ..""
+    diamondLabel.TextColor3 = Color3.fromRGB(0, 128, 255)
     diamondLabel.Font = Enum.Font.GothamBold
 end
 
