@@ -122,10 +122,11 @@ task.spawn(function()
             local currentDiamondValue = game.Players.LocalPlayer.leaderstats["\240\159\146\142 Diamonds"].Value
             updateDiamondNotification(currentDiamondValue)
             lastDiamondUpdateTime = currentTime
+
             -- Kiểm tra nếu giá trị Diamonds không thay đổi trong 5 phút.
-            if currentDiamondValue == initialDiamondValue then
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop"))()
+            if currentDiamondValue == initialDiamondValue and currentTime >= lastDiamondUpdateTime + 300 then
                 print("Giá trị Diamonds không thay đổi trong 5 phút!")
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop"))()
             end
         end
         -- Đợi 5 giây trước khi kiểm tra lại.
