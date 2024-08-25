@@ -5,7 +5,7 @@ task.wait(1)
 ---
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/DayCare"))()
 task.wait(1)
---loadstring(game:HttpGet('https://zaphub.xyz/Exec'))()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/Hoith95/Pet-99/main/ZAP'))()
 task.wait(3)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CheckTimeDaycarex3"))()
 task.wait(1)
