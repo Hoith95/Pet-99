@@ -2,4 +2,4 @@ local args = {
     [1] = "Default"
 }
 
-game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("ForeverPacks: Claim Free"):InvokeServer(unpack(args))
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("KawaiiPacks: Claim Free"):InvokeServer(unpack(args))
