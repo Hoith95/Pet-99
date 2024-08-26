@@ -6,7 +6,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/D
 --task.wait(1)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/DayCare"))()
 task.wait(1)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/FishingKT-H"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/FishingKT"))()
 task.wait(1)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Notification"))()
 ---
