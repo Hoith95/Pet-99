@@ -20,7 +20,7 @@ local function getAcceleratedRemainingTime()
         end
     end
     -- Chia thời gian còn lại cho 5 để tăng tốc độ.
-    return remainingTime / 4
+    return remainingTime / 5
 end
 
 -- Định nghĩa hàm định dạng thời gian từ giây sang giờ:phút:giây.
