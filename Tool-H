@@ -1,9 +1,9 @@
 ---
 
 ---
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/KiTTYWARE-H"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/KiTTYWARE-H"))()
 task.wait(2)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
 --task.wait(1)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/DayCare"))()
 task.wait(1)
