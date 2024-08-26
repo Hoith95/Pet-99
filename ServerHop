@@ -58,5 +58,5 @@ while true do
     -- Gọi hàm Teleport để chuyển người chơi đến máy chủ mới.
     game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
     -- Đợi một khoảng thời gian ngắn trước khi thực hiện chuyển đổi tiếp theo.
-    task.wait()
+    task.wait(1)
 end
