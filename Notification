@@ -142,7 +142,7 @@ task.spawn(function()
             -- Thoát vòng lặp nếu hết thời gian.
             if acceleratedTime <= 0 then
             -- Cập nhật GUI nếu tới thời gian nhận thưởng trong daycare.
-            timeLabel.Text = "Đã tới lúc nhận thưởng daycare."
+            timeLabel.Text = "NHẬN THƯỞNG DAYCARE."
             timeLabel.Font = Enum.Font.GothamBold
                 -- Thực hiện hành động khi thời gian kết thúc
                 --print("Thời gian đã hết, bắt đầu thực hiện Hop Server mới.")
@@ -154,7 +154,7 @@ task.spawn(function()
             end
         else
             -- Cập nhật GUI nếu không có pet trong daycare.
-            timeLabel.Text = "Không có pet nào trong daycare."
+            timeLabel.Text = "Không có pet trong daycare."
             timeLabel.Font = Enum.Font.GothamBold
             -- Thực hiện hành động khác khi không có pet trong daycare
             --print("Không có pet nào trong daycare, bắt đầu thực hiện Hop Server mới.")
