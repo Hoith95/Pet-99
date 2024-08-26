@@ -1,6 +1,6 @@
 -- Cấu hình cho việc sử dụng máy chăm sóc thú cưng (Daycare).
 getgenv().Daycare = {
-    PetName = "Rave Axolotl", -- Tên thú cưng.
+    PetName = "Chef Monkey", -- Tên thú cưng.
     PetType = "Rainbow", -- Loại thú cưng: Golden, Rainbow, hoặc Normal.
     Shiny = false, -- Có phải là thú cưng lấp lánh không.
 }
