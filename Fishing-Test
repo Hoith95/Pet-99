@@ -32,16 +32,3 @@ end
     end)
     -- Chạy script giảm tải CPU từ một URL GitHub.
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPUReducer"))()
-
--- Làm cho người chơi không thể di chuyển.
-LocalPlayer.Anchored = true
--- Di chuyển người chơi đến một vị trí ngẫu nhiên dưới mặt đất.
-LocalPlayer.CFrame = Vector3.new(Random.new():NextInteger(-10, 10), -30, Random.new():NextInteger(-10, 10))
-
--- Tạo một nền tảng trong suốt dưới người chơi.
-local platform = Instance.new("Part")
-platform.Parent = game:GetService("Workspace")
-platform.Anchored = true
-platform.CFrame = LocalPlayer.CFrame + Vector3.new(0, -5, 0)
-platform.Size = Vector3.new(5, 1, 5)
-platform.Transparency = 1
