@@ -40,5 +40,3 @@
             v.Enabled = false
         end
 end
-task.wait(3)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Notification"))()
