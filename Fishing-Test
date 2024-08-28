@@ -6,6 +6,7 @@ if not game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active:FindFir
     -- Di chuyển người chơi đến điểm teleport của khu vực câu cá.
     game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = game:GetService("Workspace").__THINGS.Instances.AdvancedFishing.Teleports.Enter.CFrame
 task.wait(5)
+end
 -- Lấy vị trí của người chơi hiện tại.
 local LocalPlayer = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
 -- Làm cho người chơi không thể di chuyển.
