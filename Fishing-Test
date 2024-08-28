@@ -5,7 +5,7 @@ local Network = game:GetService("ReplicatedStorage"):WaitForChild("Network")
 if not game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("AdvancedFishing") then
     -- Di chuyển người chơi đến điểm teleport của khu vực câu cá.
     game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = game:GetService("Workspace").__THINGS.Instances.AdvancedFishing.Teleports.Enter.CFrame
-end
+task.wait(1)
 -- Lấy vị trí của người chơi hiện tại.
 local LocalPlayer = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
 -- Làm cho người chơi không thể di chuyển.
