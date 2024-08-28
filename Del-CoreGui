@@ -39,3 +39,5 @@
         if v:IsA("ScreenGui") then
             v.Enabled = false
         end
+    end
+end
