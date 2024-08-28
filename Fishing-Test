@@ -4,31 +4,3 @@
     game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = game:GetService("Workspace").__THINGS.Instances.AdvancedFishing.Teleports.Enter.CFrame
 task.wait(9)
 end
--- Thực hiện một lời gọi an toàn để hủy các đối tượng không cần thiết khác.
-    pcall(function()
-        -- Duyệt qua tất cả các đối tượng trong "__THINGS" và hủy những đối tượng có tên trong danh sách cho trước.
-        for _, v in pairs(game:GetService("Workspace"):FindFirstChild("__THINGS"):GetChildren()) do
-            if table.find({"ShinyRelics", "Ornaments", "Instances", "Ski Chairs"}, v.Name) then
-                v:Destroy()
-            end
-        end
-        -- Duyệt qua tất cả các con của advancedFishing và hủy những đối tượng không cần thiết.
-        for _, v in pairs(advancedFishing:GetChildren()) do
-            if string.find(v.Name, "Interactable") then
-                v:FindFirstChild("Merchant"):Destroy()
-            elseif string.find(v.Name, "Model") or string.find(v.Name, "Water") or string.find(v.Name, "Debris") then
-                v:Destroy()
-            elseif v.Name == "Map" then
-                -- Trong đối tượng Map, hủy tất cả các con không phải là "Union".
-                for _, obj in pairs(v:GetChildren()) do
-                    if obj.Name ~= "Union" then
-                        obj:Destroy()
-                    end
-                end
-            end
-        end
-        -- Hủy đối tượng ALWAYS_RENDERING để giảm tải đồ họa.
-        game:GetService("Workspace"):WaitForChild("ALWAYS_RENDERING"):Destroy()
-    end)
-    -- Chạy script giảm tải CPU từ một URL GitHub.
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPUReducer"))()
