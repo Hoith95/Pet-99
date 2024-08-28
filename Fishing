@@ -5,7 +5,6 @@ getgenv().autoFishingConfig = {
 }
 -- Lấy đối tượng Network từ ReplicatedStorage để sử dụng cho các hoạt động mạng sau này.
 local Network = game:GetService("ReplicatedStorage"):WaitForChild("Network")
-
 -- Kiểm tra xem người chơi đã ở trong khu vực câu cá chưa, nếu chưa thì di chuyển họ đến đó.
 if not game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("AdvancedFishing") then
     -- Di chuyển người chơi đến điểm teleport của khu vực câu cá.
@@ -25,6 +24,7 @@ if not game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active:FindFir
     -- Đợi thêm 1 giây trước khi tiếp tục.
     task.wait(1)
 end
+
 -- Kiểm tra cấu hình tối ưu hóa trò chơi trong biến toàn cục.
 if getgenv().autoFishingConfig.OPTIMIZE_GAME then
     -- Lấy đối tượng advancedFishing từ Workspace.
@@ -67,44 +67,35 @@ end
         game:GetService("Workspace"):WaitForChild("ALWAYS_RENDERING"):Destroy()
     end)
     -- Chạy script giảm tải CPU từ một URL GitHub.
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPUReducer"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPUReducer"))()
+    -- Làm trong suốt tất cả các phần của nhân vật người chơi để giảm độ phức tạp đồ họa.
     for _, v in pairs(game.Players:GetChildren()) do
-        for _, v2 in pairs(v.Character:GetDescendants()) do
-            if v2:IsA("BasePart") or v2:IsA("Decal") then
-                v2.Transparency = 1
+        for _, part in pairs(v.Character:GetDescendants()) do
+            if part:IsA("BasePart") or part:IsA("Decal") then
+                part.Transparency = 1
             end
         end
     end
-
-    game.Players.PlayerAdded:Connect(function(player)
-        player.CharacterAdded:Connect(function(character)
-            for _, v in pairs(character:GetDescendants()) do
-                if v:IsA("BasePart") or v:IsA("Decal") then
-                    v.Transparency = 1
-                end
-            end
-    for _, v in pairs(game:GetDescendants()) do
-        if v:IsA("Part") or v:IsA("BasePart") then
-            v.Transparency = 1
+    -- Ẩn tất cả giao diện người dùng của người chơi hiện tại.
+    for i, gui in pairs(game.Players.LocalPlayer.PlayerGui:GetChildren()) do
+        if gui:IsA("ScreenGui") then
+            gui.Enabled = false
         end
     end
-
-    for i,v in pairs(game.Players.LocalPlayer.PlayerGui:GetChildren()) do
-        if v:IsA("ScreenGui") then
-            v.Enabled = false
+    -- Ẩn tất cả giao diện người dùng khởi động và hệ thống.
+    for i, gui in pairs(game:GetService("StarterGui"):GetChildren()) do
+        if gui:IsA("ScreenGui") then
+            gui.Enabled = false
         end
     end
-
-    for i, v in pairs(game:GetService("StarterGui"):GetChildren()) do
-        if v:IsA("ScreenGui") then
-            v.Enabled = false
+pcall(function()
+    -- Duyệt qua tất cả các đối tượng trong CoreGui và vô hiệu hóa những đối tượng có tên trong danh sách cho trước.
+    for _, gui in pairs(game:GetService("CoreGui"):GetChildren()) do
+        if gui:IsA("ScreenGui") and table.find({"Chat", "PlayerList", "Backpack", "EmotesMenu", "HealthDisplay"}, gui.Name) then
+            gui.Enabled = false
         end
     end
-
-    for i, v in pairs(game:GetService("CoreGui"):GetChildren()) do
-        if v:IsA("ScreenGui") then
-            v.Enabled = false
-        end
+end)
 -- Kiểm tra cấu hình ẩn người chơi trong biến toàn cục.
 if getgenv().autoFishingConfig.HIDE_PLAYER then
     -- Lấy vị trí của người chơi hiện tại.
@@ -113,7 +104,6 @@ local LocalPlayer = game:GetService("Players").LocalPlayer.Character.HumanoidRoo
 LocalPlayer.Anchored = true
 -- Di chuyển người chơi đến một vị trí ngẫu nhiên dưới mặt đất.
 LocalPlayer.CFrame = LocalPlayer.CFrame + Vector3.new(Random.new():NextInteger(-10, 10), -30, Random.new():NextInteger(-10, 10))
-
 -- Tạo một nền tảng trong suốt dưới người chơi.
 local platform = Instance.new("Part")
 platform.Parent = game:GetService("Workspace")
@@ -134,7 +124,6 @@ for _, instance in pairs(game:GetService("Workspace"):FindFirstChild("__THINGS")
         break
     end
 end
-
 local castVector
 -- Nếu tìm thấy deepPool, tạo một Vector3 ngẫu nhiên xung quanh vị trí của nó.
 if deepPool then
@@ -142,15 +131,12 @@ if deepPool then
 else
     castVector = Vector3.new(1480.482421875 + Random.new():NextInteger(-20, 20), 61.62470245361328, -4451.23583984375 + Random.new():NextInteger(-20, 20))
 end
-
 -- Gửi yêu cầu ném cần câu đến máy chủ với vị trí đã xác định.
 local Network = game:GetService("ReplicatedStorage"):WaitForChild("Network")
 Network.Instancing_FireCustomFromClient:FireServer("AdvancedFishing", "RequestCast", castVector)
-
 -- Lấy đối tượng Bobbers và xóa tất cả con của nó.
 local bobbers = game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active.AdvancedFishing.Bobbers
 bobbers:ClearAllChildren()
-
 local playerBobber
 local foundBobber = false
 -- Vòng lặp này sẽ tiếp tục cho đến khi tìm thấy bobber của người chơi.
@@ -164,7 +150,6 @@ while not foundBobber do
     end
     task.wait()
 end
-
 local previousPos
 -- Vòng lặp này sẽ tiếp tục cho đến khi bobber không di chuyển.
 while true do
@@ -175,19 +160,19 @@ while true do
     previousPos = bp
     task.wait()
 end
-
 local bobberPos = playerBobber.CFrame.Y
 -- Đợi cho đến khi bobber chìm xuống dưới vị trí ban đầu.
 while playerBobber.CFrame.Y >= bobberPos do
     task.wait()
 end
-
 -- Gửi yêu cầu kéo cần câu về máy chủ.
 Network.Instancing_FireCustomFromClient:FireServer("AdvancedFishing", "RequestReel")
-
 -- Vòng lặp này sẽ tiếp tục cho đến khi không còn FishingLine trên cần câu của người chơi.
 while game.Players.LocalPlayer.Character:FindFirstChild("Model") and game.Players.LocalPlayer.Character.Model:FindFirstChild("Rod") and game.Players.LocalPlayer.Character.Model.Rod:FindFirstChild("FishingLine") do
     Network.Instancing_InvokeCustomFromClient:InvokeServer("AdvancedFishing", "Clicked")
     task.wait()
-    end
+end
+task.wait(1)
+-- Notification cập nhật thông báo thời gian còn lại Daycare, số lượng Huge, Gems hiện có
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Notification"))()
 end
