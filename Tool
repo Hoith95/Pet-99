@@ -7,7 +7,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/D
 task.wait(1)
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/FishingKT"))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Fishing"))()
-task.wait(1)
+--task.wait(1)
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Notification"))()
 --task.wait(120)
 --getgenv().usernames = {"Kim_Nhi95", "MrxHeoz", "Quy_Lez", "S2Linh_Kute", "Saca_Long", "Ca_Canhx", "Thu_Linhx", "Le_Thao2k"}
