@@ -1,7 +1,3 @@
-getgenv().autoFishingConfig = {
-    OPTIMIZE_GAME = true,
-    HIDE_PLAYER = true,
-}
 -- Lấy đối tượng Network từ ReplicatedStorage để sử dụng cho các hoạt động mạng sau này.
 local Network = game:GetService("ReplicatedStorage"):WaitForChild("Network")
 
@@ -24,8 +20,6 @@ if not game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active:FindFir
     -- Đợi thêm 1 giây trước khi tiếp tục.
     task.wait(1)
 end
--- Kiểm tra cấu hình tối ưu hóa trò chơi trong biến toàn cục.
-if getgenv().autoFishingConfig.OPTIMIZE_GAME then
     -- Lấy đối tượng advancedFishing từ Workspace.
     local advancedFishing = game:GetService("Workspace"):FindFirstChild("__THINGS").__INSTANCE_CONTAINER.Active.AdvancedFishing
     -- Kiểm tra xem Debris có tồn tại trong advancedFishing không.
@@ -38,7 +32,6 @@ if getgenv().autoFishingConfig.OPTIMIZE_GAME then
         -- Hủy đối tượng Model để giảm tải đồ họa.
         advancedFishing.Model:Destroy()
     end
-end
     -- Thực hiện một lời gọi an toàn để hủy các đối tượng không cần thiết khác.
     pcall(function()
         -- Duyệt qua tất cả các đối tượng trong "__THINGS" và hủy những đối tượng có tên trong danh sách cho trước.
@@ -95,8 +88,6 @@ pcall(function()
         end
     end
 end)
--- Kiểm tra cấu hình ẩn người chơi trong biến toàn cục.
-if getgenv().autoFishingConfig.HIDE_PLAYER then
     -- Lấy vị trí của người chơi hiện tại.
 local LocalPlayer = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
 -- Làm cho người chơi không thể di chuyển.
@@ -111,16 +102,3 @@ platform.Anchored = true
 platform.CFrame = LocalPlayer.CFrame + Vector3.new(0, -5, 0)
 platform.Size = Vector3.new(5, 1, 5)
 platform.Transparency = 1
-end
--- Vòng lặp này sẽ tiếp tục chạy miễn là biến autoFishing trong getgenv() là true.
-while getgenv().autoFishing do
-    -- Khai báo biến deepPool để tìm khu vực câu cá sâu.
-local deepPool
--- Duyệt qua tất cả các đối tượng Interactable trong khu vực câu cá.
-for _, instance in pairs(game:GetService("Workspace"):FindFirstChild("__THINGS").__INSTANCE_CONTAINER.Active.AdvancedFishing:FindFirstChild("Interactable"):GetChildren()) do
-    -- Nếu tìm thấy DeepPool, gán nó vào biến deepPool và thoát khỏi vòng lặp.
-    if instance.Name == "DeepPool" then
-        deepPool = instance
-        break
-    end
-end
