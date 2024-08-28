@@ -2,5 +2,18 @@
 if not game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("AdvancedFishing") then
     -- Di chuyển người chơi đến điểm teleport của khu vực câu cá.
     game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = game:GetService("Workspace").__THINGS.Instances.AdvancedFishing.Teleports.Enter.CFrame
-task.wait(5)
+    -- Đặt biến loaded để theo dõi việc tải khu vực câu cá.
+    local loaded = false
+    -- Kết nối với sự kiện ChildAdded để biết khi nào khu vực câu cá đã được tải.
+    local detectLoad = game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active.ChildAdded:Connect(function(child)
+        if child.Name == "AdvancedFishing" then
+            loaded = true
+        end
+    end)
+    -- Đợi cho đến khi biến loaded được thiết lập thành true, tức là khu vực câu cá đã tải xong.
+    repeat task.wait() until loaded
+    -- Ngắt kết nối với sự kiện để tránh rò rỉ bộ nhớ.
+    detectLoad:Disconnect()
+    -- Đợi thêm 1 giây trước khi tiếp tục.
+    task.wait(1)
 end
