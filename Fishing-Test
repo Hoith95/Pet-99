@@ -112,6 +112,7 @@ platform.CFrame = LocalPlayer.CFrame + Vector3.new(0, -5, 0)
 platform.Size = Vector3.new(5, 1, 5)
 platform.Transparency = 1
 end
+task.wait(1)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/KiTTYWARE"))()
 -- Vòng lặp này sẽ tiếp tục chạy miễn là biến autoFishing trong getgenv() là true.
 while getgenv().autoFishing do
