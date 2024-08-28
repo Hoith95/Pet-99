@@ -1,0 +1,126 @@
+getgenv().autoFishingConfig = {
+    OPTIMIZE_GAME = true,
+    HIDE_PLAYER = true,
+}
+-- Lấy đối tượng Network từ ReplicatedStorage để sử dụng cho các hoạt động mạng sau này.
+local Network = game:GetService("ReplicatedStorage"):WaitForChild("Network")
+
+-- Kiểm tra xem người chơi đã ở trong khu vực câu cá chưa, nếu chưa thì di chuyển họ đến đó.
+if not game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("AdvancedFishing") then
+    -- Di chuyển người chơi đến điểm teleport của khu vực câu cá.
+    game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = game:GetService("Workspace").__THINGS.Instances.AdvancedFishing.Teleports.Enter.CFrame
+    -- Đặt biến loaded để theo dõi việc tải khu vực câu cá.
+    local loaded = false
+    -- Kết nối với sự kiện ChildAdded để biết khi nào khu vực câu cá đã được tải.
+    local detectLoad = game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active.ChildAdded:Connect(function(child)
+        if child.Name == "AdvancedFishing" then
+            loaded = true
+        end
+    end)
+    -- Đợi cho đến khi biến loaded được thiết lập thành true, tức là khu vực câu cá đã tải xong.
+    repeat task.wait() until loaded
+    -- Ngắt kết nối với sự kiện để tránh rò rỉ bộ nhớ.
+    detectLoad:Disconnect()
+    -- Đợi thêm 1 giây trước khi tiếp tục.
+    task.wait(1)
+end
+-- Kiểm tra cấu hình tối ưu hóa trò chơi trong biến toàn cục.
+if getgenv().autoFishingConfig.OPTIMIZE_GAME then
+    -- Lấy đối tượng advancedFishing từ Workspace.
+    local advancedFishing = game:GetService("Workspace"):FindFirstChild("__THINGS").__INSTANCE_CONTAINER.Active.AdvancedFishing
+    -- Kiểm tra xem Debris có tồn tại trong advancedFishing không.
+    if advancedFishing:FindFirstChild("Debris") then
+        -- Xóa tất cả con của Debris để giảm tải cho CPU.
+        advancedFishing.Debris:ClearAllChildren()
+    end
+    -- Kiểm tra xem Model có tồn tại trong advancedFishing không.
+    if advancedFishing:FindFirstChild("Model") then
+        -- Hủy đối tượng Model để giảm tải đồ họa.
+        advancedFishing.Model:Destroy()
+    end
+end
+    -- Thực hiện một lời gọi an toàn để hủy các đối tượng không cần thiết khác.
+    pcall(function()
+        -- Duyệt qua tất cả các đối tượng trong "__THINGS" và hủy những đối tượng có tên trong danh sách cho trước.
+        for _, v in pairs(game:GetService("Workspace"):FindFirstChild("__THINGS"):GetChildren()) do
+            if table.find({"ShinyRelics", "Ornaments", "Instances", "Ski Chairs"}, v.Name) then
+                v:Destroy()
+            end
+        end
+        -- Duyệt qua tất cả các con của advancedFishing và hủy những đối tượng không cần thiết.
+        for _, v in pairs(advancedFishing:GetChildren()) do
+            if string.find(v.Name, "Interactable") then
+                v:FindFirstChild("Merchant"):Destroy()
+            elseif string.find(v.Name, "Model") or string.find(v.Name, "Water") or string.find(v.Name, "Debris") then
+                v:Destroy()
+            elseif v.Name == "Map" then
+                -- Trong đối tượng Map, hủy tất cả các con không phải là "Union".
+                for _, obj in pairs(v:GetChildren()) do
+                    if obj.Name ~= "Union" then
+                        obj:Destroy()
+                    end
+                end
+            end
+        end
+        -- Hủy đối tượng ALWAYS_RENDERING để giảm tải đồ họa.
+        game:GetService("Workspace"):WaitForChild("ALWAYS_RENDERING"):Destroy()
+    end)
+    -- Chạy script giảm tải CPU từ một URL GitHub.
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPUReducer"))()
+    -- Làm trong suốt tất cả các phần của nhân vật người chơi để giảm độ phức tạp đồ họa.
+    for _, v in pairs(game.Players:GetChildren()) do
+        for _, part in pairs(v.Character:GetDescendants()) do
+            if part:IsA("BasePart") or part:IsA("Decal") then
+                part.Transparency = 1
+            end
+        end
+    end
+    -- Ẩn tất cả giao diện người dùng của người chơi hiện tại.
+    for i, gui in pairs(game.Players.LocalPlayer.PlayerGui:GetChildren()) do
+        if gui:IsA("ScreenGui") then
+            gui.Enabled = false
+        end
+    end
+    -- Ẩn tất cả giao diện người dùng khởi động và hệ thống.
+    for i, gui in pairs(game:GetService("StarterGui"):GetChildren()) do
+        if gui:IsA("ScreenGui") then
+            gui.Enabled = false
+        end
+    end
+pcall(function()
+    -- Duyệt qua tất cả các đối tượng trong CoreGui và vô hiệu hóa những đối tượng có tên trong danh sách cho trước.
+    for _, gui in pairs(game:GetService("CoreGui"):GetChildren()) do
+        if gui:IsA("ScreenGui") and table.find({"Chat", "PlayerList", "Backpack", "EmotesMenu", "HealthDisplay"}, gui.Name) then
+            gui.Enabled = false
+        end
+    end
+end)
+-- Kiểm tra cấu hình ẩn người chơi trong biến toàn cục.
+if getgenv().autoFishingConfig.HIDE_PLAYER then
+    -- Lấy vị trí của người chơi hiện tại.
+local LocalPlayer = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+-- Làm cho người chơi không thể di chuyển.
+LocalPlayer.Anchored = true
+-- Di chuyển người chơi đến một vị trí ngẫu nhiên dưới mặt đất.
+LocalPlayer.CFrame = LocalPlayer.CFrame + Vector3.new(Random.new():NextInteger(-10, 10), -30, Random.new():NextInteger(-10, 10))
+
+-- Tạo một nền tảng trong suốt dưới người chơi.
+local platform = Instance.new("Part")
+platform.Parent = game:GetService("Workspace")
+platform.Anchored = true
+platform.CFrame = LocalPlayer.CFrame + Vector3.new(0, -5, 0)
+platform.Size = Vector3.new(5, 1, 5)
+platform.Transparency = 1
+end
+-- Vòng lặp này sẽ tiếp tục chạy miễn là biến autoFishing trong getgenv() là true.
+while getgenv().autoFishing do
+    -- Khai báo biến deepPool để tìm khu vực câu cá sâu.
+local deepPool
+-- Duyệt qua tất cả các đối tượng Interactable trong khu vực câu cá.
+for _, instance in pairs(game:GetService("Workspace"):FindFirstChild("__THINGS").__INSTANCE_CONTAINER.Active.AdvancedFishing:FindFirstChild("Interactable"):GetChildren()) do
+    -- Nếu tìm thấy DeepPool, gán nó vào biến deepPool và thoát khỏi vòng lặp.
+    if instance.Name == "DeepPool" then
+        deepPool = instance
+        break
+    end
+end
