@@ -1,5 +1,3 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
-task.wait(1)
 -- Yêu cầu các module cần thiết từ ReplicatedStorage để sử dụng trong script.
 local DaycareCmds = require(game.ReplicatedStorage.Library.Client.DaycareCmds)
 local SaveModule = require(game.ReplicatedStorage.Library.Client.Save)
