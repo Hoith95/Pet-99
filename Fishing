@@ -105,7 +105,6 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/C
         if v:IsA("ScreenGui") then
             v.Enabled = false
         end
-    end
 -- Kiểm tra cấu hình ẩn người chơi trong biến toàn cục.
 if getgenv().autoFishingConfig.HIDE_PLAYER then
     -- Lấy vị trí của người chơi hiện tại.
