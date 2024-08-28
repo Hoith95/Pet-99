@@ -2,22 +2,12 @@
 local Network = game:GetService("ReplicatedStorage"):WaitForChild("Network")
 
 -- Kiểm tra xem người chơi đã ở trong khu vực câu cá chưa, nếu chưa thì di chuyển họ đến đó.
-if not game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("AdvancedFishing") then
-task.wait(1)
+    if not game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("AdvancedFishing") then
+    -- Di chuyển người chơi đến điểm teleport của khu vực câu cá.
+    game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = game:GetService("Workspace").__THINGS.Instances.AdvancedFishing.Teleports.Enter.CFrame
+task.wait(9)
 end
-    -- Lấy đối tượng advancedFishing từ Workspace.
-    local advancedFishing = game:GetService("Workspace"):FindFirstChild("__THINGS").__INSTANCE_CONTAINER.Active.AdvancedFishing
-    -- Kiểm tra xem Debris có tồn tại trong advancedFishing không.
-    if advancedFishing:FindFirstChild("Debris") then
-        -- Xóa tất cả con của Debris để giảm tải cho CPU.
-        advancedFishing.Debris:ClearAllChildren()
-    end
-    -- Kiểm tra xem Model có tồn tại trong advancedFishing không.
-    if advancedFishing:FindFirstChild("Model") then
-        -- Hủy đối tượng Model để giảm tải đồ họa.
-        advancedFishing.Model:Destroy()
-    end
-    -- Thực hiện một lời gọi an toàn để hủy các đối tượng không cần thiết khác.
+-- Thực hiện một lời gọi an toàn để hủy các đối tượng không cần thiết khác.
     pcall(function()
         -- Duyệt qua tất cả các đối tượng trong "__THINGS" và hủy những đối tượng có tên trong danh sách cho trước.
         for _, v in pairs(game:GetService("Workspace"):FindFirstChild("__THINGS"):GetChildren()) do
