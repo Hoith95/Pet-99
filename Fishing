@@ -185,8 +185,10 @@ while game.Players.LocalPlayer.Character:FindFirstChild("Model") and game.Player
     Network.Instancing_InvokeCustomFromClient:InvokeServer("AdvancedFishing", "Clicked")
     task.wait()
 end
-
 task.wait(1)
--- Notification cập nhật thông báo thời gian còn lại Daycare, số lượng Huge, Gems hiện có
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Notification"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/KiTTYWARE"))()
+task.wait(1)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
+task.wait(1)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Notification"))()
 end
