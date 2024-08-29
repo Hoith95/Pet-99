@@ -86,7 +86,7 @@ hoith95Label.Font = Enum.Font.GothamBold
 hoith95Label.Size = UDim2.new(1, 0, 1/6, 0)
 hoith95Label.Position = UDim2.new(0, 0, 5/6, 0) -- Chỉnh vị trí xuống cuối cùng trên screengui
 hoith95Label.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Màu nền đen
-hoith95Label.TextColor3 = Color3.fromRGB(255, 0, 0) -- Màu đỏ
+hoith95Label.TextColor3 = Color3.fromRGB(0, 128, 0) -- Màu xanh lá cây
 hoith95Label.BorderSizePixel = 0
 hoith95Label.TextScaled = true
 
