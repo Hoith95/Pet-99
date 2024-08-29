@@ -40,9 +40,9 @@ screenGui.Parent = playerGui
 
 -- Tạo một Frame làm nền cho các thông báo.
 local backgroundFrame = Instance.new("Frame")
-backgroundFrame.Size = UDim2.new(1, 0, 1.2, 0) -- Phủ 45% màn hình theo chiều dọc
+backgroundFrame.Size = UDim2.new(1, 0, 1.1, 0) -- Phủ 45% màn hình theo chiều dọc
 backgroundFrame.BackgroundColor3 = Color3.new(0, 0, 0) -- Màu nền đen
-backgroundFrame.Position = UDim2.new(0, 0, 0, -70) -- Vị trí bắt đầu từ góc trên bên trái
+backgroundFrame.Position = UDim2.new(0, 0, 0, -50) -- Vị trí bắt đầu từ góc trên bên trái
 backgroundFrame.BorderSizePixel = 0 -- Không có viền
 backgroundFrame.Parent = screenGui
 
@@ -77,6 +77,18 @@ diamondLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Màu nền đen
 diamondLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 diamondLabel.BorderSizePixel = 0
 diamondLabel.TextScaled = true
+
+-- Tạo một TextLabel nữa để hiển thị chức năng tool và tác giả.
+local hoith95Label = Instance.new("TextLabel", backgroundFrame)
+hoith95Label.Name = "hoith95Label"
+hoith95Label.Text = "HOITH95 | FISNING "
+hoith95Label.Font = Enum.Font.GothamBold
+hoith95Label.Size = UDim2.new(1, 0, 1/6, 0)
+hoith95Label.Position = UDim2.new(0, 0, 5/6, 0) -- Chỉnh vị trí xuống cuối cùng trên screengui
+hoith95Label.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Màu nền đen
+hoith95Label.TextColor3 = Color3.fromRGB(255, 0, 0) -- Màu đỏ
+hoith95Label.BorderSizePixel = 0
+hoith95Label.TextScaled = true
 
 -- Định nghĩa hàm cập nhật thông báo số lượng Huge pet.
 local function updateHugeNotification(hugeCount)
