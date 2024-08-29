@@ -81,7 +81,7 @@ diamondLabel.TextScaled = true
 -- Tạo một TextLabel nữa để hiển thị chức năng tool và tác giả.
 local hoith95Label = Instance.new("TextLabel", backgroundFrame)
 hoith95Label.Name = "hoith95Label"
-hoith95Label.Text = "HOITH95 | FISNING "
+hoith95Label.Text = "DAYCARE|FISNING "
 hoith95Label.Font = Enum.Font.GothamBold
 hoith95Label.Size = UDim2.new(1, 0, 1/6, 0)
 hoith95Label.Position = UDim2.new(0, 0, 5/6, 0) -- Chỉnh vị trí xuống cuối cùng trên screengui
