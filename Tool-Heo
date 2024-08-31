@@ -2,7 +2,7 @@ getgenv().usernames = {"dungxta23", "tymaxse", "nhungxsite3", "ngoxchauu6", "luo
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge"))()
 ---
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ZAP"))()
-task.wait(10)
+task.wait(2)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/DayCareH"))()
 task.wait(2)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Fishing"))()
