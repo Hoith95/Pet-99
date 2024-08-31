@@ -173,4 +173,5 @@ while game.Players.LocalPlayer.Character:FindFirstChild("Model") and game.Player
     task.wait()
 end
 task.wait(1)
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Notification"))()
 end
