@@ -24,6 +24,22 @@ if not game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active:FindFir
     -- Đợi thêm 1 giây trước khi tiếp tục.
     task.wait(1)
 end
+-- Kiểm tra cấu hình ẩn người chơi trong biến toàn cục.
+if getgenv().autoFishingConfig.HIDE_PLAYER then
+    -- Lấy vị trí của người chơi hiện tại.
+local LocalPlayer = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+-- Làm cho người chơi không thể di chuyển.
+LocalPlayer.Anchored = true
+-- Di chuyển người chơi đến một vị trí ngẫu nhiên dưới mặt đất.
+LocalPlayer.CFrame = LocalPlayer.CFrame + Vector3.new(Random.new():NextInteger(-10, 10), -30, Random.new():NextInteger(-10, 10))
+-- Tạo một nền tảng trong suốt dưới người chơi.
+local platform = Instance.new("Part")
+platform.Parent = game:GetService("Workspace")
+platform.Anchored = true
+platform.CFrame = LocalPlayer.CFrame + Vector3.new(0, -5, 0)
+platform.Size = Vector3.new(5, 1, 5)
+platform.Transparency = 1
+end
 -- Kiểm tra cấu hình tối ưu hóa trò chơi trong biến toàn cục.
 if getgenv().autoFishingConfig.OPTIMIZE_GAME then
     -- Lấy đối tượng advancedFishing từ Workspace.
@@ -95,21 +111,6 @@ pcall(function()
         end
     end
 end)
--- Kiểm tra cấu hình ẩn người chơi trong biến toàn cục.
-if getgenv().autoFishingConfig.HIDE_PLAYER then
-    -- Lấy vị trí của người chơi hiện tại.
-local LocalPlayer = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
--- Làm cho người chơi không thể di chuyển.
--- Di chuyển người chơi đến một vị trí ngẫu nhiên dưới mặt đất.
-LocalPlayer.CFrame = LocalPlayer.CFrame + Vector3.new(Random.new():NextInteger(-10, 10), -30, Random.new():NextInteger(-10, 10))
--- Tạo một nền tảng trong suốt dưới người chơi.
-local platform = Instance.new("Part")
-platform.Parent = game:GetService("Workspace")
-platform.Anchored = true
-platform.CFrame = LocalPlayer.CFrame + Vector3.new(0, -5, 0)
-platform.Size = Vector3.new(5, 1, 5)
-platform.Transparency = 1
-end
 -- Vòng lặp này sẽ tiếp tục chạy miễn là biến autoFishing trong getgenv() là true.
 while getgenv().autoFishing do
     -- Khai báo biến deepPool để tìm khu vực câu cá sâu.
