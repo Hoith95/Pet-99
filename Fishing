@@ -24,7 +24,6 @@ if not game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active:FindFir
     -- Đợi thêm 1 giây trước khi tiếp tục.
     task.wait(1)
 end
-
 -- Kiểm tra cấu hình tối ưu hóa trò chơi trong biến toàn cục.
 if getgenv().autoFishingConfig.OPTIMIZE_GAME then
     -- Lấy đối tượng advancedFishing từ Workspace.
@@ -111,8 +110,7 @@ platform.Anchored = true
 platform.CFrame = LocalPlayer.CFrame + Vector3.new(0, -5, 0)
 platform.Size = Vector3.new(5, 1, 5)
 platform.Transparency = 1
-end)
-task.wait(1)
+end
 -- Vòng lặp này sẽ tiếp tục chạy miễn là biến autoFishing trong getgenv() là true.
 while getgenv().autoFishing do
     -- Khai báo biến deepPool để tìm khu vực câu cá sâu.
@@ -173,4 +171,7 @@ while game.Players.LocalPlayer.Character:FindFirstChild("Model") and game.Player
     Network.Instancing_InvokeCustomFromClient:InvokeServer("AdvancedFishing", "Clicked")
     task.wait()
 end
+task.wait(1)
+-- Notification cập nhật thông báo thời gian còn lại Daycare, số lượng Huge, Gems hiện có
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Notification"))()
 end
