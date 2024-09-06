@@ -173,6 +173,8 @@ task.spawn(function()
             --print("Không có pet nào trong daycare, bắt đầu thực hiện Hop Server mới.")
             task.wait(1)
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop"))()
+            task.wait(3)
+            game.Players.LocalPlayer:Kick("Heo")
         end
         -- Đợi 1 giây trước khi kiểm tra lại.
         task.wait(1)
