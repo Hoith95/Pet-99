@@ -138,6 +138,8 @@ task.spawn(function()
             if currentDiamondValue == initialDiamondValue and currentTime >= lastDiamondUpdateTime + 300 then
                 print("Giá trị Diamonds không thay đổi trong 5 phút!")
                 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"))()
+                task.wait(5)
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop2"))()
             end
         end
         -- Đợi 5 giây trước khi kiểm tra lại.
@@ -160,6 +162,8 @@ task.spawn(function()
                 --print("Thời gian đã hết, bắt đầu thực hiện Hop Server mới.")
                 task.wait(1)
                 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"))()
+                task.wait(5)
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop2"))()
             else
                 -- Cập nhật thời gian còn lại trên GUI.
                 timeLabel.Text = "DAYCARE: " .. formatTime(acceleratedTime)
@@ -173,6 +177,8 @@ task.spawn(function()
             --print("Không có pet nào trong daycare, bắt đầu thực hiện Hop Server mới.")
             task.wait(1)
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"))()
+            task.wait(5)
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop2"))()
         end
         -- Đợi 1 giây trước khi kiểm tra lại.
         task.wait(1)
