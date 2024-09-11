@@ -1,21 +1,3 @@
--- Tạo một luồng mới để kiểm tra hộp thư đến.
-spawn(function() 
-    -- Vòng lặp vô hạn, mỗi 1 phú kiểm tra một lần.
-    while wait(60) do 
-        -- Lấy thông tin hộp thư từ server.
-        local mb = game.ReplicatedStorage.Network["Mailbox: Get"]:InvokeServer()
-        -- Nếu có thông tin hộp thư.
-        if mb then 
-            -- Khởi tạo một danh sách để lưu trữ ID của các mục trong hộp thư.
-            local AllId = {}
-            -- Duyệt qua hộp thư và thêm ID của mỗi mục vào danh sách.
-            for k,v in pairs(mb.Inbox) do
-                table.insert(AllId,v.uuid) 
-            end
-            -- Nếu có ít nhất một mục trong hộp thư, yêu cầu nhận tất cả.
-            if #AllId > 0 then 
-                game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Claim"):InvokeServer(AllId)
-            end
-        end
-    end
-end)
+while task.wait(60) do
+    game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Mailbox: Claim All"):InvokeServer()
+end
