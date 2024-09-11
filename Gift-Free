@@ -3,3 +3,15 @@ local args = {
 }
 
 game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("KawaiiPacks: Claim Free"):InvokeServer(unpack(args))
+
+
+---
+
+spawn(function()
+    while true do
+        for rewardNmbr = 1, 65 do
+            game:GetService("ReplicatedStorage").Network.Ranks_ClaimReward:FireServer(rewardNmbr)
+            task.wait(1)
+        end
+    end
+end)
