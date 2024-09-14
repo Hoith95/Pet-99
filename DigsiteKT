@@ -1,0 +1,17 @@
+getgenv().Digsite = {
+    Instance = "AdvancedDigsite", -- Digsite or AdvancedDigsite
+    CollectGoop = true,
+    FPSBooster = true,
+
+    Webhook = {
+        HugeWebhook = true,
+        WebhookURL = "https://discord.com/api/webhooks/1279571716783472721/9uacbNPpqWUIHjJsvL_riiT7SoYj1osiccLFRjq5O6yy2qxwNPREYRzfYvKpjZrEnQN_",
+        UserID = 344054115539615745,
+
+        AccountUpdateWebhooks = false,
+        AccountUpdateFrequency = 600,
+    }
+}
+
+script_key="UBqwHOLCQMlruRZAOrFffLsGREatfXyk";
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/e710fe1b6803a4a072b51910f7b39115.lua"))()
