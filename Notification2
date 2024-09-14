@@ -40,7 +40,7 @@ screenGui.Parent = playerGui
 
 -- Tạo một Frame làm nền cho các thông báo.
 local backgroundFrame = Instance.new("Frame")
-backgroundFrame.Size = UDim2.new(1, 0, 0.3, 0) -- Phủ 45% màn hình theo chiều dọc
+backgroundFrame.Size = UDim2.new(1, 0, 0.25, 0) -- Phủ 45% màn hình theo chiều dọc
 backgroundFrame.BackgroundColor3 = Color3.new(0, 0, 0) -- Màu nền đen
 backgroundFrame.Position = UDim2.new(0, 0, 0, -50) -- Vị trí bắt đầu từ góc trên bên trái
 backgroundFrame.BorderSizePixel = 0 -- Không có viền
