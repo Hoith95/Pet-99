@@ -13,4 +13,4 @@ getgenv().Fishing = {
 }
 
 script_key="UBqwHOLCQMlruRZAOrFffLsGREatfXyk";
-loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/60927caf7cf9fb3937d2a1b6a04f957d.lua"))()
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/3d538f3842c223256dfc833d4f5ccfe9.lua"))()
