@@ -1,5 +1,4 @@
 -- Khởi tạo biến để theo dõi thời gian cập nhật cuối cùng.
-local function updateDiamondNotification(diamondCount)
 local lastDiamondUpdateTime = 0
 local initialDiamondValue = game.Players.LocalPlayer.leaderstats["\240\159\146\142 Diamonds"].Value
 
@@ -10,7 +9,6 @@ task.spawn(function()
         -- Kiểm tra và cập nhật thông báo Diamonds mỗi 30 giây.
         if currentTime >= lastDiamondUpdateTime + 30 then
             local currentDiamondValue = game.Players.LocalPlayer.leaderstats["\240\159\146\142 Diamonds"].Value
-            updateDiamondNotification(currentDiamondValue)
             lastDiamondUpdateTime = currentTime
             -- Kiểm tra nếu giá trị Diamonds không thay đổi trong 5 phút.
             if currentDiamondValue == initialDiamondValue and currentTime >= lastDiamondUpdateTime + 300 then
