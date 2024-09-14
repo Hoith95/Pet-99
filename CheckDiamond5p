@@ -1,0 +1,16 @@
+-- Tạo một luồng mới để cập nhật thông báo.
+task.spawn(function()
+    while true do
+        local currentTime = os.time()
+            -- Kiểm tra nếu giá trị Diamonds không thay đổi trong 5 phút.
+            if currentDiamondValue == initialDiamondValue and currentTime >= lastDiamondUpdateTime + 300 then
+                print("Giá trị Diamonds không thay đổi trong 5 phút!")
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"))()
+                task.wait(9)
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop2"))()
+            end
+        end
+        -- Đợi 5 giây trước khi kiểm tra lại.
+        task.wait(5)
+    end
+end
