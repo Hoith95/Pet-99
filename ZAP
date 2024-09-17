@@ -1,2 +1,2 @@
-task.wait(15)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/KiTTYWARE"))()
+script_key="NLuCoPActKswdIEkZFzAhDWUTghPJEri";
+loadstring(game:HttpGet('https://zaphub.xyz/Exec'))()
