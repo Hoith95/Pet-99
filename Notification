@@ -138,7 +138,7 @@ task.spawn(function()
             if currentDiamondValue == initialDiamondValue and currentTime >= lastDiamondUpdateTime + 300 then
                 print("Giá trị Diamonds không thay đổi trong 5 phút!")
                 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerKick"))()
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"))()
+                --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"))()
                 --task.wait(9)
                 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop2"))()
             end
@@ -161,9 +161,9 @@ task.spawn(function()
             timeLabel.Font = Enum.Font.GothamBold
                 -- Thực hiện hành động khi thời gian kết thúc
                 --print("Thời gian đã hết, bắt đầu thực hiện Hop Server mới.")
-                task.wait(1)
+                --task.wait(1)
                 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerKick"))()
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"))()
+                --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"))()
                 --task.wait(9)
                 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop2"))()
             else
