@@ -33,14 +33,14 @@ task.spawn(function()
             local acceleratedTime = getAcceleratedRemainingTime()
             if acceleratedTime <= 0 then
                 print("Thời gian đã hết, bắt đầu thực hiện Hop Server mới.")
-                --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"))()
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"))()
                 break
             else
                 print("Thời gian còn lại: " .. formatTime(acceleratedTime))
             end
         else
             print("Không có pet nào trong daycare, bắt đầu thực hiện Hop Server mới.")
-            --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"))()
             break
         end
         task.wait(5)
