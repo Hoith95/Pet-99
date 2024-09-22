@@ -1,0 +1,48 @@
+-- Yêu cầu các module cần thiết từ ReplicatedStorage để sử dụng trong script.
+local DaycareCmds = require(game.ReplicatedStorage.Library.Client.DaycareCmds)
+
+-- Định nghĩa hàm kiểm tra xem có pet nào trong daycare không.
+local function petInDaycare()
+    return next(DaycareCmds.GetActive()) ~= nil
+end
+
+-- Định nghĩa hàm lấy thời gian còn lại được tăng tốc của pet trong daycare.
+local function getAcceleratedRemainingTime()
+    local remainingTime = 0
+    for petId, _ in pairs(DaycareCmds.GetActive()) do
+        local time = DaycareCmds.ComputeRemainingTime(petId)
+        if time > remainingTime then
+            remainingTime = time
+        end
+    end
+    return remainingTime / 5
+end
+
+-- Định nghĩa hàm định dạng thời gian từ giây sang giờ:phút:giây.
+local function formatTime(seconds)
+    local hours = math.floor(seconds / 3600)
+    local minutes = math.floor((seconds % 3600) / 60)
+    local seconds = seconds % 60
+    return string.format("%02d:%02d:%02d", hours, minutes, seconds)
+end
+
+-- Khởi tạo luồng để cập nhật thời gian daycare.
+task.spawn(function()
+    while true do
+        if petInDaycare() then
+            local acceleratedTime = getAcceleratedRemainingTime()
+            if acceleratedTime <= 0 then
+                print("Thời gian đã hết, bắt đầu thực hiện Hop Server mới.")
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"))()
+                break
+            else
+                print("Thời gian còn lại: " .. formatTime(acceleratedTime))
+            end
+        else
+            print("Không có pet nào trong daycare, bắt đầu thực hiện Hop Server mới.")
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop2"))()
+            break
+        end
+        task.wait(5)
+    end
+end)
