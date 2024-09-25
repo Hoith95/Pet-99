@@ -137,11 +137,14 @@ task.spawn(function()
             -- Kiểm tra nếu giá trị Diamonds không thay đổi trong 5 phút.
             if currentDiamondValue == initialDiamondValue and currentTime >= lastDiamondUpdateTime + 300 then
                 print("Giá trị Diamonds không thay đổi trong 5 phút!")
+                --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerKick"))()
                 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"))()
+                --task.wait(9)
+                --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop2"))()
+            end
         end
         -- Đợi 5 giây trước khi kiểm tra lại.
         task.wait(5)
-        end
     end
 end)
 
@@ -158,8 +161,11 @@ task.spawn(function()
             timeLabel.Font = Enum.Font.GothamBold
                 -- Thực hiện hành động khi thời gian kết thúc
                 --print("Thời gian đã hết, bắt đầu thực hiện Hop Server mới.")
-                --task.wait(5)
+                --task.wait(1)
+                --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerKick"))()
                 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"))()
+                --task.wait(9)
+                --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop2"))()
             else
                 -- Cập nhật thời gian còn lại trên GUI.
                 timeLabel.Text = "DAYCARE: " .. formatTime(acceleratedTime)
@@ -171,8 +177,11 @@ task.spawn(function()
             timeLabel.Font = Enum.Font.GothamBold
             -- Thực hiện hành động khác khi không có pet trong daycare
             --print("Không có pet nào trong daycare, bắt đầu thực hiện Hop Server mới.")
-            task.wait(30)
+            task.wait(60)
+            --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerKick"))()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"))()
+            --task.wait(9)
+            --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop2"))()
         end
         -- Đợi 1 giây trước khi kiểm tra lại.
         task.wait(1)
