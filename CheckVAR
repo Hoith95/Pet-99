@@ -1,2 +1,2 @@
-task.wait(4800)
+task.wait(9999)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"))()
