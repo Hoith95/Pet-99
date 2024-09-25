@@ -137,10 +137,7 @@ task.spawn(function()
             -- Kiểm tra nếu giá trị Diamonds không thay đổi trong 5 phút.
             if currentDiamondValue == initialDiamondValue and currentTime >= lastDiamondUpdateTime + 300 then
                 print("Giá trị Diamonds không thay đổi trong 5 phút!")
-                --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerKick"))()
                 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"))()
-                --task.wait(9)
-                --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop2"))()
             end
         end
         -- Đợi 5 giây trước khi kiểm tra lại.
@@ -154,34 +151,24 @@ task.spawn(function()
         -- Kiểm tra và cập nhật thời gian nếu có pet trong daycare.
         if petInDaycare() then
             local acceleratedTime = getAcceleratedRemainingTime()
-            -- Thoát vòng lặp nếu hết thời gian.
-            if acceleratedTime <= 0 then
             -- Cập nhật GUI nếu tới thời gian nhận thưởng trong daycare.
             timeLabel.Text = "NHẬN THƯỞNG DAYCARE."
             timeLabel.Font = Enum.Font.GothamBold
                 -- Thực hiện hành động khi thời gian kết thúc
                 --print("Thời gian đã hết, bắt đầu thực hiện Hop Server mới.")
                 --task.wait(1)
-                --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerKick"))()
                 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"))()
-                --task.wait(9)
-                --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop2"))()
-            else
                 -- Cập nhật thời gian còn lại trên GUI.
                 timeLabel.Text = "DAYCARE: " .. formatTime(acceleratedTime)
-                timeLabel.Font = Enum.Font.GothamBold
-            end
-        else
+                timeLabel.Font = Enum.Font.GothamBold     
+            else
             -- Cập nhật GUI nếu không có pet trong daycare.
             timeLabel.Text = "Không có pet trong daycare."
             timeLabel.Font = Enum.Font.GothamBold
             -- Thực hiện hành động khác khi không có pet trong daycare
-            --print("Không có pet nào trong daycare, bắt đầu thực hiện Hop Server mới.")
-            task.wait(60)
-            --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerKick"))()
+            print("Không có pet nào trong daycare, bắt đầu thực hiện Hop Server mới.")
+            task.wait(30)
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"))()
-            --task.wait(9)
-            --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop2"))()
         end
         -- Đợi 1 giây trước khi kiểm tra lại.
         task.wait(1)
