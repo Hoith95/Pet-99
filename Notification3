@@ -141,8 +141,8 @@ task.spawn(function()
         end
         -- Đợi 5 giây trước khi kiểm tra lại.
         task.wait(5)
+        end
     end
-end
 end)
 
 -- Khởi tạo luồng để cập nhật thời gian daycare.
