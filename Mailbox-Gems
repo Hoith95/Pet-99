@@ -1,8 +1,5 @@
 getgenv().Settings = {
     Mailing = {
-        ["Charm Stone"] = {Class = "Misc", Amount = "Max"},
-        ["Magic Shard"] = {Class = "Misc", Amount = "Max"},
-        ["Spinny Wheel Ticket"] = {Class = "Misc", Amount = "Max"},
         ["Diamonds"] = {Class = "Currency", Amount = 100000000}
     },
     Users = {
