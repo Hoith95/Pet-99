@@ -6,9 +6,6 @@ getgenv().Settings = {
         "anh_hungz1",
         "thuy_baby98",
         "hung_linhx",
-        "le_lamn6",
-        "minh_yenk7",
-        "do_baoanhc",
     },
     ["Split Items Evenly"] = false, --// False -> it will send the Amount per account.
     ["Only Online Accounts"] = false,
