@@ -1,6 +1,7 @@
 --getgenv().usernames = {"dungxta23", "tymaxse", "nhungxsite3", "ngoxchauu6", "luongxchau8", "thuxbinh2", "Thu_Linhx", "linhxbi", "xuxca2"}
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge"))()
 ---
+task.wait(10)
 script_key="xznlDbCHnLICEciRYOPSEbLNyuekhFSq";
 _G.GPROGRESS_MODE = "Hybrid" -- Hatch
 _G.GRANK_TO = 99
