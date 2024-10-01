@@ -15,5 +15,5 @@ _G.GUSE_FLAGS = {"Fortune Flag","Diamonds Flag","Coins Flag"}
 _G.GFRUITS = {"Watermelon","Candycane","Apple","Rainbow","Pineapple","Orange","Banana"}
 _G.GPOTIONS = {"Coins","Lucky","The Cocktail","Huge","Treasure Hunter","Walkspeed","Diamonds","Damage"}
 _G.GPOTIONS_MAX_TIER = 19
-_G.GENCHANTS = {}
+_G.GENCHANTS = {"Diamonds","Criticals","Treasure Hunter","Lucky Eggs","Fortune","Huge Hunter"}
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/34915da4ad87a5028e1fd64efbe3543f.lua"))()
