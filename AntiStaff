@@ -63,6 +63,9 @@ game.Players.PlayerAdded:Connect(function(player)
         elseif game.PlaceId == 16498369169 then
             mapPath = game:GetService("Workspace").Map2
             world = "World 2"
+        elseif game.PlaceId == 17503543197 then
+            mapPath = game:GetService("Workspace").Map3
+            world = "World 3"
         end
 
         -- Lấy thông tin khu vực ngẫu nhiên dựa trên thế giới.
