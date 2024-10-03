@@ -1,4 +1,1 @@
-task.wait(10800)
-local TeleportService = game:GetService("TeleportService")
-local placeId = 8737899170
-TeleportService:Teleport(placeId, game.Players.LocalPlayer)
+
