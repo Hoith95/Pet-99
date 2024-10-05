@@ -6,5 +6,5 @@ loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/a2369ce34d4418
 --loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/23521cea1cff5c0e428954401f395af3.lua"))()
 task.wait(30)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
-task.wait(1)
+task.wait(3)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Notification3"))()
