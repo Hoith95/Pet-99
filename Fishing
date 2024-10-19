@@ -67,14 +67,6 @@ end
     end)
     -- Chạy script giảm tải CPU từ một URL GitHub.
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPUReducer"))()
-    -- Làm trong suốt tất cả các phần của nhân vật người chơi để giảm độ phức tạp đồ họa.
-    for _, v in pairs(game.Players:GetChildren()) do
-        for _, part in pairs(v.Character:GetDescendants()) do
-            if part:IsA("BasePart") or part:IsA("Decal") then
-                part.Transparency = 1
-            end
-        end
-    end
     -- Ẩn tất cả giao diện người dùng của người chơi hiện tại.
     for i, gui in pairs(game.Players.LocalPlayer.PlayerGui:GetChildren()) do
         if gui:IsA("ScreenGui") then
