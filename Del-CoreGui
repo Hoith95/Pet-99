@@ -1,11 +1,3 @@
-    for _, v in pairs(game.Players:GetChildren()) do
-        for _, v2 in pairs(v.Character:GetDescendants()) do
-            if v2:IsA("BasePart") or v2:IsA("Decal") then
-                v2.Transparency = 1
-            end
-        end
-    end
-
     game.Players.PlayerAdded:Connect(function(player)
         player.CharacterAdded:Connect(function(character)
             for _, v in pairs(character:GetDescendants()) do
