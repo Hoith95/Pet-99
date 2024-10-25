@@ -1,2 +1,2 @@
-task.wait(18)
+task.wait(12)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/KiTTYWARE"))()
