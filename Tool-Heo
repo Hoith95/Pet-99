@@ -7,5 +7,4 @@
 --task.wait(2)
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/DayCare"))()
 --task.wait(2)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/KiTTYWARE-Heo"))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Fishing"))()
