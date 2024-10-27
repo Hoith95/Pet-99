@@ -2,8 +2,6 @@
 local Network = game:GetService("ReplicatedStorage"):WaitForChild("Network")
 -- Kiểm tra xem người chơi đã ở trong khu vực câu cá chưa, nếu chưa thì di chuyển họ đến đó.
 if not game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("AdvancedFishing") then
-    -- Đặt biến loaded để theo dõi việc tải khu vực câu cá.
-    local loaded = false
     -- Kết nối với sự kiện ChildAdded để biết khi nào khu vực câu cá đã được tải.
     local detectLoad = game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active.ChildAdded:Connect(function(child)
         if child.Name == "AdvancedFishing" then
