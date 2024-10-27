@@ -1,4 +1,4 @@
-task.wait(90)
+task.wait(68)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
 task.wait(3)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Notification3"))()
