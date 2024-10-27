@@ -17,6 +17,7 @@ if not game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active:FindFir
     -- Đợi thêm 1 giây trước khi tiếp tục.
     task.wait(1)
 end
+task.wait(9)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
 task.wait(3)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Notification3"))()
