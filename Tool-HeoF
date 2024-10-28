@@ -6,5 +6,5 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/M
 --game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World1Teleport"):InvokeServer()
 ---
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
-task.wait(10)
+task.wait(12)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScriptsH"))()
