@@ -1,7 +1,7 @@
 --getgenv().usernames = {"dungxta23", "tymaxse", "nhungxsite3", "ngoxchauu6", "luongxchau8", "thuxbinh2", "Thu_Linhx", "linhxbi", "xuxca2"}
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge"))()
 ---
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-GemsH"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-GemsH"))()
 ---
 --game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World1Teleport"):InvokeServer()
 ---
