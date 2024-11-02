@@ -1,5 +1,5 @@
 while true do
     wait(60)  -- chờ 60 giây (1 phút)
-    print("Bé Heo")
+    print("Heo Bé")
     --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-GemsH"))()
 end
