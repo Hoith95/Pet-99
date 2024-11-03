@@ -1,8 +1,3 @@
---getgenv().usernames = {"dungxta23", "tymaxse", "Thu_Linhx", "nhungxsite3", "MrxHeoz", "luongxchau8", "thuxbinh2", "linhxbi", "xuxca2"}
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge"))()
----
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-GemsH"))()
----
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ZAP"))()
 --task.wait(2)
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/DayCare"))()
