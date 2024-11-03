@@ -1,4 +1,4 @@
 while true do
-    wait(90)  -- chờ 60 giây (6 phút)
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TestB"))()
+    wait(360)  -- chờ 360 giây (6 phút)
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Heo"))()
 end
