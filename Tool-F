@@ -3,5 +3,5 @@ while true do
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Heo"))()
 end
 
-wait(math.random(5000, 5555))
+task.wait(math.random(5000, 5555))
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-F"))()
