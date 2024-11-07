@@ -7,11 +7,14 @@ end
 local currentDiamondValue = getCurrentDiamondValue()
 print("Số lượng kim cương hiện tại là: " .. currentDiamondValue)
 
+-- Kiểm tra nếu số lượng kim cương nhỏ hơn 100000
+if currentDiamondValue < 100000 then
+    print("Số lượng kim cương không đủ.")
+    return -- Dừng script tại đây
+end
+
 -- Tính toán số lượng kim cương sau khi trừ đi 100000
 local adjustedDiamondValue = currentDiamondValue - 100000
-if adjustedDiamondValue < 0 then
-    adjustedDiamondValue = 0 -- Đảm bảo giá trị không âm
-end
 
 -- Cài đặt các thông số trong getgenv()
 getgenv().Settings = {
