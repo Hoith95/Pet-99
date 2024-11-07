@@ -3,5 +3,7 @@ while true do
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Heo"))()
 end
 
-task.wait(math.random(5000, 5555))
+-- Chọn một khoảng thời gian ngẫu nhiên từ 5000 đến 5555 giây để chờ trước khi chuyển đổi máy chủ.
+local timeToWait = Random.new():NextInteger(5000, 5555)
+task.wait(timeToWait)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-F"))()
