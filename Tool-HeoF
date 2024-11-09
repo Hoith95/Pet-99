@@ -1,10 +1,12 @@
---getgenv().usernames = {"dungxta23", "tymaxse", "nhungxsite3", "ngoxchauu6", "luongxchau8", "thuxbinh2", "Thu_Linhx", "linhxbi", "xuxca2"}
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge"))()
----
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-GemsH"))()
----
 --game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World3Teleport"):InvokeServer()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
+--task.wait(25)
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScriptsH"))()
+
 ---
+
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World1Teleport"):InvokeServer()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
-task.wait(25)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScriptsH"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/KiTTYWARE-Heo"))()
+task.wait(1)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Fishing"))()
