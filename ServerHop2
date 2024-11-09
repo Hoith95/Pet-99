@@ -1,3 +1,3 @@
 local TeleportService = game:GetService("TeleportService")
-local placeId = 8737899170
+local placeId = 84810042603306
 TeleportService:Teleport(placeId, game.Players.LocalPlayer)
