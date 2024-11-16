@@ -1,3 +1,4 @@
+task.wait(25)
 -- Yêu cầu các module cần thiết từ ReplicatedStorage để sử dụng trong script.
 local DaycareCmds = require(game.ReplicatedStorage.Library.Client.DaycareCmds)
 local SaveModule = require(game.ReplicatedStorage.Library.Client.Save)
