@@ -1,2 +1,2 @@
-script_key="NLuCoPActKswdIEkZFzAhDWUTghPJEri";
+script_key="KdqcejlWQednKCTBnWSxwDOBFXyavkaN";
 loadstring(game:HttpGet('https://zaphub.xyz/Exec'))()
