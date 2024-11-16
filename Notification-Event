@@ -90,7 +90,7 @@ hoith95Label.Font = Enum.Font.GothamBold
 hoith95Label.Size = UDim2.new(1, 0, 1/6, 0)
 hoith95Label.Position = UDim2.new(0, 0, 5/6, 0) -- Chỉnh vị trí xuống cuối cùng trên screengui
 hoith95Label.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Màu nền đen
-backgroundFrame.BackgroundTransparency = 0.5 -- Trong suốt
+hoith95Label.BackgroundTransparency = 0.5 -- Trong suốt
 hoith95Label.TextColor3 = Color3.fromRGB(0, 128, 0) -- Màu xanh lá cây
 hoith95Label.BorderSizePixel = 0
 hoith95Label.TextScaled = true
@@ -100,6 +100,7 @@ local function updateHugeNotification(hugeCount)
     hugeLabel.Text = "HUGE: " .. hugeCount ..""
     -- Thay đổi màu nền dựa trên số lượng Huge pet.
     hugeLabel.BackgroundColor3 = hugeCount == 0 and Color3.fromRGB(0, 0, 0) or Color3.fromRGB(0, 128, 0)
+    hugeLabel.BackgroundTransparency = 0.5 -- Trong suốt
     hugeLabel.TextColor3 = hugeCount == 0 and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(255, 0, 0)
     hugeLabel.Font = Enum.Font.GothamBold
 end
