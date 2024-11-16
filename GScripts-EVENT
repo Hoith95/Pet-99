@@ -1,0 +1,8 @@
+script_key = "xznlDbCHnLICEciRYOPSEbLNyuekhFSq";
+_G.GDO_LINE_FOR_HUGE = true
+_G.GGFX_MODE = 1  -- or 1 for no visuals
+_G.GZONE_TO = 999 -- to access the instance from W3, 99 to access it from W1
+_G.GDAYCARE = true
+_G.GWEBHOOK_USERID = "344054115539615745" -- your discord userID, not your name. numerical id.
+_G.GWEBHOOK_LINK = "https://discord.com/api/webhooks/1304874872031281192/6p16n6bPcQS7mkSDo0tBy1dnuU14PWTClMn2Tn7zPttiro30xvcq9H74ZacMfbQhJjm0" -- a webhook URL from your private discord channel.
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/34915da4ad87a5028e1fd64efbe3543f.lua"))()
