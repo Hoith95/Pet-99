@@ -1,6 +1,5 @@
-task.wait(30)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ZAP"))()
-task.wait(9)
+task.wait(30)
 -- Yêu cầu các module cần thiết từ ReplicatedStorage để sử dụng trong script.
 local DaycareCmds = require(game.ReplicatedStorage.Library.Client.DaycareCmds)
 local SaveModule = require(game.ReplicatedStorage.Library.Client.Save)
