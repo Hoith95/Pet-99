@@ -34,11 +34,14 @@ end
 
 -- Lấy PlayerGui của người chơi hiện tại.
 local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
 -- Tạo một ScreenGui mới để hiển thị thông báo.
+local function createScreenGui()
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "NotificationGui"
 screenGui.Parent = playerGui
-screenGui.Archivable = false
 
 -- Tạo một Frame làm nền cho các thông báo.
 local backgroundFrame = Instance.new("Frame")
@@ -83,6 +86,16 @@ diamondLabel.BackgroundTransparency = 0.5 -- Trong suốt
 diamondLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 diamondLabel.BorderSizePixel = 0
 diamondLabel.TextScaled = true
+    return screenGui
+end
+
+-- Giám sát và khôi phục nếu bị xóa
+while true do
+    if not playerGui:FindFirstChild("NotificationGui") then
+        createScreenGui()
+    end
+    wait(0.1) -- Kiểm tra mỗi 0.1 giây
+end
 
 -- Định nghĩa hàm cập nhật thông báo số lượng Huge pet.
 local function updateHugeNotification(hugeCount)
