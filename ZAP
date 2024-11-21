@@ -1,3 +1,13 @@
-script_key="KdqcejlWQednKCTBnWSxwDOBFXyavkaN";
-task.wait(1)
+task.wait(5)
+-- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
+if _G.ZAP then
+    warn("Script đã được chạy trước đó!")
+    return -- Dừng script nếu đã chạy
+end
+
+-- Đánh dấu script đã được chạy
+_G.ZAP = true
+
+-- Script của bạn
+script_key = "KdqcejlWQednKCTBnWSxwDOBFXyavkaN"
 loadstring(game:HttpGet('https://zaphub.xyz/Exec'))()
