@@ -1,0 +1,27 @@
+getgenv().Config = {
+    ["Farming"] = {
+        ["AutoEvents"] = {"Party Box", "Mini Lucky Block"},
+        ["AutoOpen"] = {"Gift Bag", "Large Gift Bag", "Mini Chest", "Diamond Gift Bag"},
+        ["AutoPotions"] = {"Coins","Lucky","The Cocktail","Huge","Treasure Hunter","Walkspeed","Diamonds","Damage"},
+        ["AutoFlags"] = {"Fortune Flag"}
+    },
+    ["Webhook"] = {
+        ["HugeURL"] = "https://discord.com/api/webhooks/1290696894850535464/Qv2HIfAg2mGX5qQFcPN8p0GdjdgiNt4qFmb2wx9QLihkGPM_1N6glMsQfzErh9ic672k",
+        ["StatsURL"] = "",
+        ["UserID"] = "344054115539615745",
+        ["SendEvery"] = 1
+    },
+    ["Misc"] = {
+        ["AutoDaycare"] = true,
+        ["UltraFPS"] = true,
+        ["AutoBuyAllSlots"] = true,
+        ["EquipEnchants"] = {"Diamonds","Criticals","Treasure Hunter","Lucky Eggs","Fortune","Huge Hunter"},
+    },
+    ["Elemental"] = {
+        ["AutoBuyCubes"] = {"Ultra Pet Cube"},
+        ["AutoTrainerQuests"] = true,
+        ["AutoFarmChest"] = false,
+    },
+    ["AutoMailUser"] = ""
+}
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/2bdebaf848a6be382ed338dad329aaf2.lua"))()
