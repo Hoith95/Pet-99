@@ -1,4 +1,4 @@
-task.wait(12)
+task.wait(9)
 -- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
 if _G.PiraAreaFarm then
     warn("Script đã được chạy trước đó!")
