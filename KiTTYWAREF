@@ -1,4 +1,3 @@
-game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World3Teleport"):InvokeServer()
 -- KiTTYWARE
 script_key="UBqwHOLCQMlruRZAOrFffLsGREatfXyk";
 -- Farm
