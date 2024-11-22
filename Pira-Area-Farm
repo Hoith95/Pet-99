@@ -17,7 +17,7 @@ getgenv().Config = {
         ["HugeURL"] = "",
         ["StatsURL"] = "",
         ["UserID"] = "",
-        ["SendEvery"] = 99
+        ["SendEvery"] = 99,
     },
     ["Misc"] = {
         ["AutoDaycare"] = false,
@@ -29,6 +29,6 @@ getgenv().Config = {
         ["AutoTrainerQuests"] = false,
         ["AutoFarmChest"] = false,
     },
-    ["AutoMailUser"] = ""
+    ["AutoMailUser"] = "",
 }
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/2bdebaf848a6be382ed338dad329aaf2.lua"))()
