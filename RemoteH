@@ -1,7 +1,6 @@
 --task.wait(105)
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
---task.wait(3)
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Notification3"))()
+--
 
 ---
 
@@ -10,6 +9,8 @@
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop2"))()
 ---
 task.wait(300)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Notification-GScripts"))()
+task.wait(3)
 while true do
 wait(30)  -- chờ 30 giây (1 phút)
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(6986.53369, 416.241425, -20570.0332, -0.826375067, -1.17252284e-07, 0.563120127, -8.21544859e-08, 1, 8.76577957e-08, -0.563120127, 2.61753765e-08, -0.826375067)
