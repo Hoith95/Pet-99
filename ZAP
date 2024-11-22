@@ -1,4 +1,4 @@
-task.wait(5)
+task.wait(3)
 -- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
 if _G.ZAP then
     warn("Script đã được chạy trước đó!")
