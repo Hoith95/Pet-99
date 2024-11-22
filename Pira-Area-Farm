@@ -12,9 +12,6 @@ _G.PiraAreaFarm = true
 getgenv().Config = {
     ["Farming"] = {
         ["AutoEvents"] = {"Party Box", "Mini Lucky Block"},
-        ["AutoOpen"] = {"Gift Bag", "Large Gift Bag", "Mini Chest", "Diamond Gift Bag"},
-        ["AutoPotions"] = {"Coins","Lucky","The Cocktail","Huge","Treasure Hunter","Walkspeed","Diamonds","Damage"},
-        ["AutoFlags"] = {"Fortune Flag"}
     },
     ["Webhook"] = {
         ["HugeURL"] = "",
@@ -26,7 +23,6 @@ getgenv().Config = {
         ["AutoDaycare"] = false,
         ["UltraFPS"] = false,
         ["AutoBuyAllSlots"] = false,
-        ["EquipEnchants"] = {"Diamonds","Criticals","Treasure Hunter","Lucky Eggs","Fortune","Huge Hunter"},
     },
     ["Elemental"] = {
         ["AutoBuyCubes"] = false,
