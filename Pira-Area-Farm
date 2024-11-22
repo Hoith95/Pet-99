@@ -1,4 +1,4 @@
-task.wait(5)
+task.wait(12)
 -- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
 if _G.PiraAreaFarm then
     warn("Script đã được chạy trước đó!")
@@ -17,15 +17,15 @@ getgenv().Config = {
         ["AutoFlags"] = {"Fortune Flag"}
     },
     ["Webhook"] = {
-        ["HugeURL"] = "https://discord.com/api/webhooks/1290696894850535464/Qv2HIfAg2mGX5qQFcPN8p0GdjdgiNt4qFmb2wx9QLihkGPM_1N6glMsQfzErh9ic672k",
+        ["HugeURL"] = "",
         ["StatsURL"] = "",
-        ["UserID"] = "344054115539615745",
-        ["SendEvery"] = 1
+        ["UserID"] = "",
+        ["SendEvery"] = 99
     },
     ["Misc"] = {
-        ["AutoDaycare"] = true,
+        ["AutoDaycare"] = false,
         ["UltraFPS"] = true,
-        ["AutoBuyAllSlots"] = true,
+        ["AutoBuyAllSlots"] = false,
         ["EquipEnchants"] = {"Diamonds","Criticals","Treasure Hunter","Lucky Eggs","Fortune","Huge Hunter"},
     },
     ["Elemental"] = {
