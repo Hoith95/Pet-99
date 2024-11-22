@@ -10,3 +10,8 @@ task.wait(9)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
 -- ZAP
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ZAP"))()
+
+--
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World3Teleport"):InvokeServer()
+task.wait(math.random(5000, 5555))
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World1Teleport"):InvokeServer()
