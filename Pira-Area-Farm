@@ -29,8 +29,8 @@ getgenv().Config = {
         ["EquipEnchants"] = {"Diamonds","Criticals","Treasure Hunter","Lucky Eggs","Fortune","Huge Hunter"},
     },
     ["Elemental"] = {
-        ["AutoBuyCubes"] = {"Ultra Pet Cube"},
-        ["AutoTrainerQuests"] = true,
+        ["AutoBuyCubes"] = false,
+        ["AutoTrainerQuests"] = false,
         ["AutoFarmChest"] = false,
     },
     ["AutoMailUser"] = ""
