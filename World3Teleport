@@ -1,4 +1,3 @@
-game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World3Teleport"):InvokeServer()
 -- Lấy dịch vụ Players
 local players = game:GetService("Players")
 
