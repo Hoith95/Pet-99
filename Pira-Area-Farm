@@ -22,7 +22,7 @@ getgenv().Config = {
     },
     ["Misc"] = {
         ["AutoDaycare"] = false,
-        ["UltraFPS"] = false,
+        ["UltraFPS"] = true,
         ["AutoBuyAllSlots"] = false,
     },
     ["Elemental"] = {
