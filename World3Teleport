@@ -1,0 +1,18 @@
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World3Teleport"):InvokeServer()
+-- Lấy dịch vụ Players
+local players = game:GetService("Players")
+
+-- Kiểm tra xem có người chơi nào trong server không
+local function checkPlayers()
+    return #players:GetPlayers() > 1  -- Kiểm tra xem có hơn 1 người chơi trong server (bao gồm cả LocalPlayer)
+end
+
+-- Nếu không có người chơi khác ngoài bản thân
+if not checkPlayers() then
+    print("Không có người chơi khác trong server, dừng script.")
+    return  -- Dừng script nếu không có người chơi nào khác
+else
+    print("Có người chơi khác trong server, chạy script.")
+    -- Chạy script từ URL nếu có người chơi khác
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-SERVER"))()
+end
