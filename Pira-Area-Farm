@@ -12,6 +12,7 @@ _G.PiraAreaFarm = true
 getgenv().Config = {
     ["Farming"] = {
         ["AutoEvents"] = {"Party Box", "Mini Lucky Block"},
+        ["AutoFlags"] = {"Fortune Flag"},
     },
     ["Webhook"] = {
         ["HugeURL"] = "",
