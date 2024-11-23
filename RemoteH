@@ -1,6 +1,6 @@
 --task.wait(105)
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
---
+-- Fishing
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CheckVAR"))()
 ---
 
