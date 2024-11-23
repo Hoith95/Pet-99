@@ -1,7 +1,7 @@
 --task.wait(105)
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
 --
-
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CheckVAR"))()
 ---
 
 --task.wait(5555)
