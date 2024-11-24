@@ -3,3 +3,4 @@
 -- FARM
 
 -- EVENT
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Pira-Autumn-Event"))()
