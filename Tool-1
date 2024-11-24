@@ -3,5 +3,5 @@
 -- FARM
 
 -- EVENT
-task.wait(9)
+task.wait(15)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Pira-Autumn-Event"))()
