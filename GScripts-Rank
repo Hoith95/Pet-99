@@ -16,5 +16,5 @@ _G.GIGNORE_SLEDRACE = false
 _G.GUSE_SPRINKLERS = true
 _G.GUSE_FLAGS = {"Fortune Flag","Diamonds Flag","Coins Flag"}
 _G.GPOTIONS_MAX_TIER = 19
-_G.GENCHANTS = {"Diamonds","Criticals","Treasure Hunter","Strong Pets","Fortune","Tap Power"}
+_G.GENCHANTS = {"Coins","Criticals","Treasure Hunter","Diamonds","Lucky Eggs","Huge Hunter"}
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/34915da4ad87a5028e1fd64efbe3543f.lua"))()
