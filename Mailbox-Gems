@@ -22,7 +22,7 @@ getgenv().Settings = {
         ["Diamonds"] = {Class = "Currency", Amount = adjustedDiamondValue},
     },
     Users = {
-        "vimotchuhieu2166",
+        "kosaodauam235",
     },
     ["Split Items Evenly"] = false, -- False -> it will send the Amount per account.
     ["Only Online Accounts"] = false,
