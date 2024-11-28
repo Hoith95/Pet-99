@@ -1,0 +1,5 @@
+-- SeverHop
+
+-- ServerKick
+task.wait(2868)  -- 8h Reset 1 Lần
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerKick"))()
