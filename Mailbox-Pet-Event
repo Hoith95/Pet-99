@@ -14,7 +14,7 @@ getgenv().Settings = {
 		["Shiny Rainbow Corn Cat"] = {Class = "Pet", Amount = "Max"},
     },
     Users = {
-        "EmxBanxCa",
+        "Thien_Hax",
     },
     ["Split Items Evenly"] = true, --// False -> it will send the Amount per account.
     ["Only Online Accounts"] = false,
