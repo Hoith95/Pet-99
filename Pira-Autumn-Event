@@ -1,7 +1,7 @@
 script_key = "EQIoLEOOlSXsTSklLuOEKorRdJFWpzIi"
 -----------------------------
 getgenv().Config = {
-    ["AutoMailUser"] = "",
+    ["AutoMailUser"] = "Kim_Huex",
     ["EquipEnchants"] = {"Lucky Eggs","Lucky Eggs","Huge Hunter","Criticals","Treasure Hunter","Diamonds"},
     ["UserID"] = "",
     ["Webhook"] = ""
