@@ -1,16 +1,10 @@
----
-
----
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Gems"))()
----
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ZAP"))()
---task.wait(2)
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/DayCare"))()
---task.wait(2)
+-- FISHING 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/KiTTYWARE-Suu"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/KiTTYWARE-EVENT-SUU"))()
 task.wait(1)
-game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = game:GetService("Workspace").__THINGS.Instances.AdvancedFishing.Teleports.Enter.CFrame
-task.wait(3)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Fishing"))()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/KiTTYWARE-EVENT-SUU"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Fishing"))()
+-- FARM
+
+-- EVENT
+--task.wait(38)
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Pira-Autumn-Event"))()
