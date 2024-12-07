@@ -2,7 +2,7 @@
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/KiTTYWARE-EVENT-SUU"))()
 task.wait(1)
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Fishing"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Fishing"))()
 -- FARM
 
 -- EVENT
