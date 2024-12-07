@@ -22,10 +22,9 @@ getgenv().Settings = {
     Mailing = {
         ["Diamonds"] = {Class = "Currency", Amount = adjustedDiamondValue},
     },
-    Users = getgenv().usernames,
+    Users = getgenv().usernames, -- Sử dụng danh sách từ getgenv().usernames
     ["Split Items Evenly"] = false, -- False -> it will send the Amount per account.
     ["Only Online Accounts"] = false,
 }
-
 -- Tải script từ URL
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/86847850c3165379f5be2d9d071eaccb.lua"))()
