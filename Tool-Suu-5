@@ -2,4 +2,4 @@
 getgenv().usernames = {"baanhlasieunha23123"}
 
 --- Gửi Tất Cả Gems ---
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Gems"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Gems"))()
