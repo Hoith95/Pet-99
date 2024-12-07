@@ -1,0 +1,6 @@
+script_key="xznlDbCHnLICEciRYOPSEbLNyuekhFSq";
+_G.GPROGRESS_MODE = "Fish" -- Hatch
+_G.GGFX_MODE = 1
+_G.GHOLD_GIFTS = false
+_G.GHOLD_BUNDLES = true
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/34915da4ad87a5028e1fd64efbe3543f.lua"))()
