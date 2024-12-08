@@ -1,4 +1,4 @@
 -- Mailbox
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Tool-Mailbox-Heo"))()
 --task.wait(25)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-GemsH"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-GemsH"))()
