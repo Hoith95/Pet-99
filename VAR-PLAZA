@@ -1,3 +1,4 @@
+task.wait(38)
 -- Lấy dịch vụ Players
 local players = game:GetService("Players")
 
