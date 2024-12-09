@@ -11,7 +11,7 @@ while true do
     if not checkPlayers() then
         print("Số người chơi trong server ít hơn hoặc bằng 10, chạy script.")
         -- Chạy script từ URL
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-SERVER"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza"))()
         break -- Thoát vòng lặp sau khi script chạy
     else
         print("Số người chơi trong server hơn 10, chờ 3 phút và kiểm tra lại.")
