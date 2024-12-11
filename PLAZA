@@ -1,4 +1,4 @@
-script_key = "eGRdGzqLZORDhDwEDeuoZyYbMNYKUvFi"
+script_key = "PsfbqGFrCJMYlTqHpELxacKrEgftPyMu"
 getgenv().Settings = {
     Seller = {
         Active = true,
