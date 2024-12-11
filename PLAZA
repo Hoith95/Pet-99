@@ -7,7 +7,7 @@ getgenv().Settings = {
         },
         Serverhop = {
             ["Switch Servers"] = true,
-            ["Teleport Delay (m)"] = 180,
+            ["Teleport Delay (m)"] = 120,
             ["Add Pro Plaza Lobbies"] = false,
         },
         Webhook = {
