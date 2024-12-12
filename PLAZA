@@ -3,8 +3,8 @@ getgenv().Settings = {
     Seller = {
         Active = true,
         Items = {
-            ["Golden All Huges"] = {Class = "Pet", Price = "+5%"},
             ["Rainbow All Huges"] = {Class = "Pet", Price = "+5%"},
+            ["Golden All Huges"] = {Class = "Pet", Price = "+5%"},
             ["Shiny All Huges"] = {Class = "Pet", Price = "+5%"},
             ["Golden Shiny All Huges"] = {Class = "Pet", Price = "+5%"},
             ["Rainbow Shiny All Huges"] = {Class = "Pet", Price = "+5%"},
