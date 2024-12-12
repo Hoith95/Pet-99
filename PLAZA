@@ -1,3 +1,4 @@
+task.wait(9)
 script_key = "PsfbqGFrCJMYlTqHpELxacKrEgftPyMu"
 getgenv().Settings = {
     Seller = {
