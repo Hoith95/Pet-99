@@ -2,20 +2,50 @@ task.wait(90)
 -- Lấy dịch vụ Players
 local players = game:GetService("Players")
 
--- Kiểm tra xem có người chơi nào trong server không
+-- URL của script để chạy khi cần
+local scriptUrl = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza"
+
+-- Kiểm tra số người chơi trong server
 local function checkPlayers()
-    return #players:GetPlayers() > 10  -- Kiểm tra nếu có hơn 10 người chơi trong server
+    return #players:GetPlayers() <= 10 -- Kiểm tra nếu số người chơi nhỏ hơn hoặc bằng 10
 end
 
--- Vòng lặp kiểm tra
-while true do
-    if not checkPlayers() then
-        print("Số người chơi trong server ít hơn hoặc bằng 10, chạy script.")
-        -- Chạy script từ URL
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza"))()
-        break -- Thoát vòng lặp sau khi script chạy
+-- Kiểm tra lỗi HTTP 429
+local function checkHttp429()
+    local testUrl = "https://httpbin.org/status/429" -- URL kiểm tra giả lập HTTP 429
+    local success, response = pcall(function()
+        return game:HttpGet(testUrl)
+    end)
+
+    if not success then
+        print("[Lỗi] Không thể gửi yêu cầu: ", response)
+        return false
+    elseif string.find(response, "429") then
+        print("[Lỗi] HTTP 429 phát hiện!")
+        return true
     else
-        print("Số người chơi trong server hơn 10, chờ 3 phút và kiểm tra lại.")
-        wait(180) -- Chờ 180 giây (3 phút) trước khi kiểm tra lại
+        print("[Thành công] Phản hồi: ", response)
+        return false
     end
+end
+
+-- Vòng lặp chính
+while true do
+    -- Kiểm tra điều kiện số người chơi
+    if checkPlayers() then
+        print("Số người chơi nhỏ hơn hoặc bằng 10. Chạy script.")
+        loadstring(game:HttpGet(scriptUrl))()
+        break -- Thoát vòng lặp
+    end
+
+    -- Kiểm tra điều kiện HTTP 429
+    if checkHttp429() then
+        print("HTTP 429 phát hiện. Chạy script.")
+        loadstring(game:HttpGet(scriptUrl))()
+        break -- Thoát vòng lặp
+    end
+
+    -- Nếu không có điều kiện nào xảy ra, chờ trước khi kiểm tra lại
+    print("Không có điều kiện nào xảy ra. Chờ 60 giây và kiểm tra lại.")
+    wait(60) -- Chờ 60 giây trước khi lặp lại
 end
