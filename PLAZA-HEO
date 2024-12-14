@@ -1,0 +1,34 @@
+task.wait(9)
+script_key = "PsfbqGFrCJMYlTqHpELxacKrEgftPyMu"
+getgenv().Settings = {
+    Seller = {
+        Active = true,
+        Items = {
+            ["All Huges"] = {Class = "Pet", Price = "+1%", AllTypes = true},
+        },
+        Serverhop = {
+            ["Switch Servers"] = true,
+            ["Teleport Delay (m)"] = 120,
+            ["Add Pro Plaza Lobbies"] = false,
+        },
+        Webhook = {
+            ["URL"] = "https://discord.com/api/webhooks/1315610547974307850/Zph1cy8O_AXqtb-B3Mxch_q7lf6KtTNWnJEVR6Blj4b2INSyTT6xfCCdS2S7ThhKDuBS",
+            ["Send Embeds"] = true,
+            ["Remove Username"] = false,
+        },
+        StopParams = {
+            ["Item Runout"] = false,
+            ["Diamonds Hit: 1b"] = false,
+            ["60 Minutes"] = false,
+            ["Switch To Sniping"] = false,
+        },
+        Other = {
+            ["Auto Accept Mail"] = true,
+            ["Always Try Adding Listings"] = true,
+            ["Never Join Friendslist"] = true,
+        },
+    },
+    
+    [[ Thank you for using System Exodus <3! ]]
+}
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/60a293774110e918789cddc0e20be048.lua"))()
