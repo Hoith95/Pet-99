@@ -8,6 +8,8 @@ getgenv().Settings = {
 	    ["Huge Machine Egg 4"] = {Class = "Egg", Price = "5%"},
 	    ["Hype Egg"] = {Class = "Lootbox", Price = 500000},
 	    ["2024 Anniversary Gift"] = {Class = "Lootbox", Price = 20000000},
+	    ["Autumn Gift"] = {Class = "Lootbox", Price = +1%"},
+	    ["Turkey Gift"] = {Class = "Lootbox", Price = +1%"},
 	    ["Overload"] = {Class = "Charm", Price = 8000000},
 	    ["Magic Shard"] = {Class = "Misc", Price = 65000},
 	    ["Bucket O' Magic"] = {Class = "Misc", Price = 65000},
