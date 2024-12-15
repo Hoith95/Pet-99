@@ -8,6 +8,6 @@ _G.GHATCH_SPEED_MS = 0
 _G.GMAX_EGG_SLOTS = 99
 _G.GMAX_EQUIP_SLOTS = 99
 _G.GPOTIONS = {"Coins","Lucky","The Cocktail","Treasure Hunter","Walkspeed","Diamonds","Damage"}
-_G.GHATCH_CHARGED_EGGS = true
+_G.GHATCH_CHARGED_EGGS = false
 _G.GENCHANTS = {"Lucky Eggs","Tap Power", "Coins","Criticals","Huge Hunter","Treasure Hunter"}
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/34915da4ad87a5028e1fd64efbe3543f.lua"))()
