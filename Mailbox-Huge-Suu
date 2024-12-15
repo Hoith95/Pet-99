@@ -1,3 +1,5 @@
+--getgenv().usernames = {"tinhyeuthon222"}
+
 -- Danh sách các username được định sẵn.
 local usernames = getgenv().usernames
 
