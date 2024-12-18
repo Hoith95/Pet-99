@@ -4,4 +4,4 @@
 --- Gửi Tất Cả Pet Event ---
 
 --- Gửi Tất Cả Gems ---
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Gems-Suu"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Gems-Suu"))()
