@@ -1,4 +1,4 @@
-getgenv().usernames = {"mottetamno231"}
+getgenv().usernames = {"thatralata2201"}
 
 -- Danh sách các username được định sẵn.
 local usernames = getgenv().usernames
