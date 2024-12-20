@@ -12,6 +12,8 @@ getgenv().Settings = {
 	["Shiny Lit Octopus"] = {Class = "Pet", Amount = "Max"},
 	["Shiny Golden Lit Octopus"] = {Class = "Pet", Amount = "Max"},
 	["Shiny Rainbow Lit Octopus"] = {Class = "Pet", Amount = "Max"},
+        ["Mega Lucky Gingerbread"] = {Class = "Misc", Amount = "Max"},
+        ["Snowflake Gift"] = {Class = "Lootbox", Amount = "Max"},
     },
     Users = {
         "Tru_BatGioi",
