@@ -1,6 +1,5 @@
 getgenv().Settings = {
     Mailing = {
-        ["All Huges"] = {Class = "Pet", Amount = 5, AllTypes = true},
 	["Icy Phoenix"] = {Class = "Pet", Amount = "Max"},
 	["Golden Icy Phoenix"] = {Class = "Pet", Amount = "Max"},
 	["Rainbow Icy Phoenix"] = {Class = "Pet", Amount = "Max"},
@@ -13,8 +12,6 @@ getgenv().Settings = {
 	["Shiny Lit Octopus"] = {Class = "Pet", Amount = "Max"},
 	["Shiny Golden Lit Octopus"] = {Class = "Pet", Amount = "Max"},
 	["Shiny Rainbow Lit Octopus"] = {Class = "Pet", Amount = "Max"},
-        ["Mega Lucky Gingerbread"] = {Class = "Misc", Amount = "Max"},
-        ["Snowflake Gift"] = {Class = "Lootbox", Amount = "Max"},
     },
     Users = {
         "Tru_BatGioi",
