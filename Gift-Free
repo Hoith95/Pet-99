@@ -15,3 +15,8 @@ spawn(function()
         end
     end
 end)
+
+
+while task.wait(60) do
+    game:GetService("ReplicatedStorage").Network:FindFirstChild("Hype Wheel: Claim"):InvokeServer()
+end
