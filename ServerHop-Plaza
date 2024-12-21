@@ -9,7 +9,7 @@ local function teleportToRandomServer(placeId, retryLimit)
     while attempts < retryLimit do
         attempts += 1
         local success, result = pcall(function()
-            return HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. placeId .. '/servers/Public?sortOrder=Asc&limit=100')).data
+            return HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. placeId .. '/servers/Public?sortOrder=Asc&limit=10')).data
         end)
 
         if success and result and #result > 0 then
