@@ -6,7 +6,7 @@ getgenv().Settings = {
 	    ["All Huges"] = {Class = "Pet", Amount = "Max", AllTypes = true},
     },
     Users = {
-        "Username1",
+        "mailaembecuaanh1",
     },
     ["Split Items Evenly"] = false,
     ["Only Online Accounts"] = false,
