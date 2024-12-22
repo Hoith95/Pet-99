@@ -1,25 +1,13 @@
 getgenv().Settings = {
     Mailing = {
-        ["Charm Stone"] = {Class = "Misc", Amount = "Max"},
 	    ["Huge Machine Egg 4"] = {Class = "Egg", Amount = "Max"},
 	    ["Hype Egg"] = {Class = "Lootbox", Amount = "Max"},
-	    ["Overload"] = {Class = "Charm", Amount = "Max"},
-	    ["Magic Shard"] = {Class = "Misc", Amount = "Max"},
-	    ["Bucket O' Magic"] = {Class = "Misc", Amount = "Max"},
-	    ["Secret Key"] = {Class = "Misc", Amount = "Max"},
-	    ["Void Key"] = {Class = "Misc", Amount = "Max"},
-	    ["Tech Key"] = {Class = "Misc", Amount = "Max"},
-	    ["Crystal Key"] = {Class = "Misc", Amount = "Max"},
-	    ["Spinny Wheel Ticket"] = {Class = "Misc", Amount = "Max"},
-	    ["Tech Spinny Wheel Ticket"] = {Class = "Misc", Amount = "Max"},
-	    ["Void Spinny Wheel Ticket"] = {Class = "Misc", Amount = "Max"},
+	    ["Snowflake Gift"] = {Class = "Lootbox", Amount = "Max"},
     },
     Users = {
         "Username1",
-        "Username2",
-        "Username3",
     },
-    ["Split Items Evenly"] = true,
+    ["Split Items Evenly"] = false,
     ["Only Online Accounts"] = false,
 }
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/86847850c3165379f5be2d9d071eaccb.lua"))()
