@@ -24,7 +24,7 @@ getgenv().Settings = {
             ["Add Pro Plaza Lobbies"] = false,
         },
         Webhook = {
-            ["URL"] = "https://discord.com/api/webhooks/1317523450633388092/gJotsAO6aODC5jyij40oygKC7t5rBvW5N9CiTOPiBt9JS1hkSDhp_aaKRtKuMcxn3Gl3",
+            ["URL"] = "https://discord.com/api/webhooks/1315610547974307850/Zph1cy8O_AXqtb-B3Mxch_q7lf6KtTNWnJEVR6Blj4b2INSyTT6xfCCdS2S7ThhKDuBS",
             ["Send Embeds"] = true,
             ["Remove Username"] = false,
         },
