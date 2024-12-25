@@ -4,7 +4,11 @@ getgenv().Settings = {
     Seller = {
         Active = true,
         Items = {
-	    ["Adoption Gift"] = {Class = "Lootbox", Price = "+1%"},
+	    ["2024 Gargantuan Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
+	    ["2024 X-Large Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
+	    ["2024 Large Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
+	    ["2024 Medium Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
+	    ["2024 Small Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
 	    ["Snowflake Gift"] = {Class = "Lootbox", Price = "+1%"},
 	    ["Huge Machine Egg 4"] = {Class = "Egg", Price = "+5%"},
 	    ["Hype Egg"] = {Class = "Lootbox", Price = 500000},
