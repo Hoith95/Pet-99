@@ -1,0 +1,50 @@
+task.wait(30)
+script_key = "PsfbqGFrCJMYlTqHpELxacKrEgftPyMu"
+getgenv().Settings = {
+    Seller = {
+        Active = true,
+        Items = {
+	    ["2024 Gargantuan Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
+	    ["2024 X-Large Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
+	    ["2024 Large Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
+	    ["2024 Medium Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
+	    ["2024 Small Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
+	    ["Snowflake Gift"] = {Class = "Lootbox", Price = "+1%"},
+	    ["Huge Machine Egg 4"] = {Class = "Egg", Price = "+5%"},
+	    ["Hype Egg"] = {Class = "Lootbox", Price = 500000},
+	    ["Magic Shard"] = {Class = "Misc", Price = 65000},
+	    ["Charm Stone"] = {Class = "Misc", Price = 20000},
+	    ["Secret Key"] = {Class = "Misc", Price = 25000},
+	    ["Void Key"] = {Class = "Misc", Price = 50000},
+	    ["Tech Key"] = {Class = "Misc", Price = 25000},
+	    ["Crystal Key"] = {Class = "Misc", Price = 20000},
+	    ["Spinny Wheel Ticket"] = {Class = "Misc", Price = 4500},
+	    ["Tech Spinny Wheel Ticket"] = {Class = "Misc", Price = 6000},
+	    ["Void Spinny Wheel Ticket"] = {Class = "Misc", Price = 35000},
+            ["All Huges"] = {Class = "Pet", Price = "+1%", AllTypes = true},
+        },
+        Serverhop = {
+            ["Switch Servers"] = true,
+            ["Teleport Delay (m)"] = 120,
+            ["Add Pro Plaza Lobbies"] = false,
+        },
+        Webhook = {
+            ["URL"] = "https://discord.com/api/webhooks/1317523450633388092/gJotsAO6aODC5jyij40oygKC7t5rBvW5N9CiTOPiBt9JS1hkSDhp_aaKRtKuMcxn3Gl3",
+            ["Send Embeds"] = true,
+            ["Remove Username"] = false,
+        },
+        StopParams = {
+            ["Item Runout"] = false,
+            ["Diamonds Hit: 1b"] = false,
+            ["60 Minutes"] = false,
+            ["Switch To Sniping"] = false,
+        },
+        Other = {
+            ["Auto Accept Mail"] = true,
+            ["Always Try Adding Listings"] = true,
+            ["Never Join Friendslist"] = true,
+        },
+    },
+    
+}
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/60a293774110e918789cddc0e20be048.lua"))()
