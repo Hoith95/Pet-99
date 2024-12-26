@@ -1,49 +1,9 @@
-task.wait(9)
-script_key = "PsfbqGFrCJMYlTqHpELxacKrEgftPyMu"
-getgenv().Settings = {
-    Seller = {
-        Active = true,
-        Items = {
-	    ["2024 Gargantuan Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
-	    ["2024 X-Large Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
-	    ["2024 Large Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
-	    ["2024 Medium Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
-	    ["2024 Small Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
-	    ["Snowflake Gift"] = {Class = "Lootbox", Price = "+1%"},
-	    ["Huge Machine Egg 4"] = {Class = "Egg", Price = "+5%"},
-	    ["Hype Egg"] = {Class = "Lootbox", Price = 500000},
-	    ["Magic Shard"] = {Class = "Misc", Price = 65000},
-	    ["Secret Key"] = {Class = "Misc", Price = 25000},
-	    ["Void Key"] = {Class = "Misc", Price = 50000},
-	    ["Tech Key"] = {Class = "Misc", Price = 25000},
-	    ["Crystal Key"] = {Class = "Misc", Price = 20000},
-	    ["Spinny Wheel Ticket"] = {Class = "Misc", Price = 4500},
-	    ["Tech Spinny Wheel Ticket"] = {Class = "Misc", Price = 6000},
-	    ["Void Spinny Wheel Ticket"] = {Class = "Misc", Price = 35000},
-            ["All Huges"] = {Class = "Pet", Price = "+1%", AllTypes = true},
-        },
-        Serverhop = {
-            ["Switch Servers"] = true,
-            ["Teleport Delay (m)"] = 120,
-            ["Add Pro Plaza Lobbies"] = false,
-        },
-        Webhook = {
-            ["URL"] = "https://discord.com/api/webhooks/1315610547974307850/Zph1cy8O_AXqtb-B3Mxch_q7lf6KtTNWnJEVR6Blj4b2INSyTT6xfCCdS2S7ThhKDuBS",
-            ["Send Embeds"] = true,
-            ["Remove Username"] = false,
-        },
-        StopParams = {
-            ["Item Runout"] = false,
-            ["Diamonds Hit: 1b"] = false,
-            ["60 Minutes"] = false,
-            ["Switch To Sniping"] = false,
-        },
-        Other = {
-            ["Auto Accept Mail"] = true,
-            ["Always Try Adding Listings"] = true,
-            ["Never Join Friendslist"] = true,
-        },
-    },
-    
-}
-loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/60a293774110e918789cddc0e20be048.lua"))()
+task.wait(15)
+local success, err = pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TOOL-PLAZA-SUU"))()
+end)
+
+if not success and tostring(err):find("HTTP 429") then
+    print("Gặp lỗi HTTP 429, chuyển sang script thay thế...")
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza"))()
+end
