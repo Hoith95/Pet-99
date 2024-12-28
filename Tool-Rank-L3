@@ -6,4 +6,3 @@ task.wait(38)
 --- HOLIDAY EVENT ---
 --script_key="bSdJMZGmgbmiNOeWrtXQAwcHwiVDAieg";
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-HOLIDAY"))()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Pira-Holiday-Event"))()
