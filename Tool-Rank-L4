@@ -6,6 +6,7 @@ task.wait(1)
 --- HOLIDAY EVENT ---
 --script_key="MwpgreoxkMbqtBRseeXTeaehFyvfaVmK";
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-HOLIDAY"))()
+
 -- Script 2: Chờ trạng thái hoàn thành và thực thi
 print("Kiểm tra trạng thái Script 1...")
 
