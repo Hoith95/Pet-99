@@ -1,3 +1,7 @@
+task.wait(1)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-10263.3203, 6.76867676, -7303.77002, 2.33650208e-05, -0.999464869, 0.032712467, 1.00000012, 2.33650208e-05, -3.85567546e-07, -3.85567546e-07, 0.032712467, 0.99946481)
+task.wait(5)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(2613.33887, 16.2394943, -20876.5293, 0.999862969, 3.38701192e-08, -0.0165540222, -3.29262626e-08, 1, 5.72893448e-08, 0.0165540222, -5.67364324e-08, 0.999862969)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/WaitForGameLoad"))()
 script_key="UBqwHOLCQMlruRZAOrFffLsGREatfXyk";
 --- RANK ---
