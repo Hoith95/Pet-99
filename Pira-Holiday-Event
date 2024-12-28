@@ -1,0 +1,9 @@
+getgenv().Config = {
+    ["EquipEnchants"] = {"Lucky Eggs", "Criticals", "Coins", "Huge Hunter", "Lucky Eggs", "Treasure Hunter"},
+    ["CraftSnowflakeGifts"] = true,
+    ["Notifications"] = {
+        ["UserID"] = "",
+        ["Webhook"] = ""
+    }
+}
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/b883bc159a5f609adb4871db6fc15ea8.lua"))()
