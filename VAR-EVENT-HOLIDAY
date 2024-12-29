@@ -9,26 +9,33 @@ spawn(function()
         -- Lấy vị trí hiện tại của nhân vật
         local currentPos = humanoidRootPart.Position
 
-        -- Vị trí mục tiêu để kiểm tra
-        local targetPos = Vector3.new(2593.89, 16.24, -20876.46)
+        -- Vị trí cũ và vị trí mới để kiểm tra
+        local oldPos = Vector3.new(776.7086791992188, 16.297792434692383, -20873.853515625)
+        local newPos = Vector3.new(2593.89, 16.24, -20876.46)
 
         -- Định nghĩa bán kính phạm vi kiểm tra (tùy chỉnh nếu cần)
         local radius = 25 -- Bán kính trong khoảng cách mà bạn muốn kiểm tra
 
-        -- Tính khoảng cách giữa vị trí hiện tại và mục tiêu
-        local distance = (currentPos - targetPos).Magnitude
+        -- Tính khoảng cách giữa vị trí hiện tại và vị trí cũ
+        local distanceToOld = (currentPos - oldPos).Magnitude
 
-        -- Kiểm tra nếu nhân vật trong phạm vi
-        if distance <= radius then
-            print("Nhân vật đang trong phạm vi vị trí mục tiêu!")
-            -- Dịch chuyển nhân vật đến vị trí mới
+        -- Tính khoảng cách giữa vị trí hiện tại và vị trí mới
+        local distanceToNew = (currentPos - newPos).Magnitude
+
+        -- Kiểm tra nếu nhân vật đang trong phạm vi của một trong hai vị trí
+        if distanceToOld <= radius then
+            print("Nhân vật đang trong phạm vi vị trí cũ!")
+            -- Nếu nhân vật đang ở gần vị trí cũ, dịch chuyển đến vị trí mới
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(2613.33887, 16.2394943, -20876.5293, 0.999862969, 3.38701192e-08, -0.0165540222, -3.29262626e-08, 1, 5.72893448e-08, 0.0165540222, -5.67364324e-08, 0.999862969)
+        elseif distanceToNew <= radius then
+            print("Nhân vật đang trong phạm vi vị trí mới!")
+            -- Nếu nhân vật đang ở gần vị trí mới, có thể thêm hành động tại đây nếu cần
+            -- Ví dụ: bạn có thể dịch chuyển đến vị trí khác hoặc thực hiện các hành động khác
         else
-            print("Nhân vật không trong phạm vi vị trí mục tiêu!")
+            print("Nhân vật không trong phạm vi vị trí cũ hoặc mới!")
         end
 
-        -- Dừng 10 giây trước khi kiểm tra lại
+        -- Dừng 1 giây trước khi kiểm tra lại
         wait(10)
     end
 end)
-
