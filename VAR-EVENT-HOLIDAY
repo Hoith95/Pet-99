@@ -36,6 +36,6 @@ spawn(function()
         end
 
         -- Dừng 1 giây trước khi kiểm tra lại
-        wait(10)
+        wait(1)
     end
 end)
