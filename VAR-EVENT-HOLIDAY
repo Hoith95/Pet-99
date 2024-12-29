@@ -24,14 +24,14 @@ spawn(function()
 
         -- Kiểm tra nếu nhân vật đang trong phạm vi của một trong hai vị trí
         if distanceToOld <= radius then
-            print("Nhân vật đang trong phạm vi vị trí cũ!")
+            --print("Nhân vật đang trong phạm vi vị trí cũ!")
             -- Nếu nhân vật đang ở gần vị trí cũ, dịch chuyển đến vị trí mới
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(2613.33887, 16.2394943, -20876.5293, 0.999862969, 3.38701192e-08, -0.0165540222, -3.29262626e-08, 1, 5.72893448e-08, 0.0165540222, -5.67364324e-08, 0.999862969)
         elseif distanceToNew <= radius then
-            print("Nhân vật đang trong phạm vi vị trí mới!")
+            --print("Nhân vật đang trong phạm vi vị trí mới!")
             -- Nếu nhân vật đang ở gần vị trí mới, có thể thêm hành động tại đây nếu cần
         else
-            print("Nhân vật không trong phạm vi vị trí cũ hoặc mới!")
+            --print("Nhân vật không trong phạm vi vị trí cũ hoặc mới!")
         end
 
         -- Dừng 1 giây trước khi kiểm tra lại
