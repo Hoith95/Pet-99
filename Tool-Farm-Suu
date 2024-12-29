@@ -3,9 +3,6 @@ game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
 task.wait(25)
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-Suu"))()
---- HOLIDAY EVENT ---
---script_key="xznlDbCHnLICEciRYOPSEbLNyuekhFSq";
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-HOLIDAY"))()
 
 -- Script 2: Chờ trạng thái hoàn thành và thực thi
 print("Kiểm tra trạng thái Script 1...")
@@ -18,5 +15,9 @@ end
 
 -- Khi trạng thái là true, thực thi Script 2
 print("Script 1 đã hoàn thành. Bắt đầu chạy Script 2...")
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Pira-Holiday-Event"))()
+--- HOLIDAY EVENT ---
+script_key="xznlDbCHnLICEciRYOPSEbLNyuekhFSq";
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-HOLIDAY"))()
+
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Pira-Holiday-Event"))()
 print("Script 2 đã chạy xong.")
