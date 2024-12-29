@@ -16,7 +16,7 @@ end
 -- Khi trạng thái là true, thực thi Script 2
 print("Script 1 đã hoàn thành. Bắt đầu chạy Script 2...")
 --- HOLIDAY EVENT ---
-script_key="xCQxdVoKLDHreffYEHWDsWwcvipMyeHq";
+script_key="xznlDbCHnLICEciRYOPSEbLNyuekhFSq";
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-HOLIDAY"))()
 
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Pira-Holiday-Event"))()
