@@ -1,3 +1,21 @@
+-- Hàm kiểm tra và thực thi nếu cần
+local function checkAndRunScript()
+    local startTime = tick()  -- Lấy thời gian bắt đầu
+
+    -- Kiểm tra trong vòng 3 phút (180 giây)
+    while tick() - startTime < 180 do
+        if shared.script1Done == true then
+            return  -- Nếu trạng thái đã hoàn thành, thoát khỏi hàm
+        end
+        wait(1)  -- Kiểm tra lại mỗi giây
+    end
+
+    -- Nếu sau 3 phút mà shared.script1Done vẫn chưa true, tải và chạy script
+end
+
+-- Gọi hàm kiểm tra và thực thi
+checkAndRunScript()
+
 -- SeverHop
 task.wait(19686)  -- 5h Reset 1 Lần
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
