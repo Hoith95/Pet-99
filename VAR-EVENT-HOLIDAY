@@ -1,0 +1,34 @@
+spawn(function()
+    -- Liên tục kiểm tra vị trí nhân vật
+    while true do
+        -- Lấy nhân vật và HumanoidRootPart của người chơi
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+        -- Lấy vị trí hiện tại của nhân vật
+        local currentPos = humanoidRootPart.Position
+
+        -- Vị trí mục tiêu để kiểm tra
+        local targetPos = Vector3.new(776.7086791992188, 16.297792434692383, -20873.853515625)
+
+        -- Định nghĩa bán kính phạm vi kiểm tra (tùy chỉnh nếu cần)
+        local radius = 25 -- Bán kính trong khoảng cách mà bạn muốn kiểm tra
+
+        -- Tính khoảng cách giữa vị trí hiện tại và mục tiêu
+        local distance = (currentPos - targetPos).Magnitude
+
+        -- Kiểm tra nếu nhân vật trong phạm vi
+        if distance <= radius then
+            print("Nhân vật đang trong phạm vi vị trí mục tiêu!")
+            -- Dịch chuyển nhân vật đến vị trí mới
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(2613.33887, 16.2394943, -20876.5293, 0.999862969, 3.38701192e-08, -0.0165540222, -3.29262626e-08, 1, 5.72893448e-08, 0.0165540222, -5.67364324e-08, 0.999862969)
+        else
+            print("Nhân vật không trong phạm vi vị trí mục tiêu!")
+        end
+
+        -- Dừng 10 giây trước khi kiểm tra lại
+        wait(10)
+    end
+end)
+
