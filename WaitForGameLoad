@@ -1,30 +1,13 @@
 -- Vòng lặp này đợi cho đến khi trò chơi được tải hoàn toàn.
-repeat
-    task.wait() -- Đợi một khoảng thời gian ngắn trước khi kiểm tra lại.
-until game:IsLoaded() -- Kiểm tra xem trò chơi đã tải xong chưa.
+repeat wait() until game:IsLoaded()
 
--- Vòng lặp này đợi cho đến khi ID của địa điểm trong trò chơi được xác định.
 repeat
-    task.wait() -- Đợi một khoảng thời gian ngắn trước khi kiểm tra lại.
-until game.PlaceId ~= nil -- Kiểm tra xem ID địa điểm đã có chưa.
-
--- Vòng lặp này đợi cho đến khi người chơi và nhân vật của họ được tải hoàn toàn trong trò chơi.
-repeat
-    task.wait() -- Đợi một khoảng thời gian ngắn trước khi kiểm tra lại.
-until game:GetService("Players").LocalPlayer and game:GetService("Players").LocalPlayer.Character and game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
--- Kiểm tra xem người chơi, nhân vật và phần tử HumanoidRootPart đã có sẵn chưa.
-
--- Vòng lặp này đợi cho đến khi một trong hai đối tượng "Map" hoặc "Map2" xuất hiện trong Workspace.
-repeat
-    task.wait() -- Đợi một khoảng thời gian ngắn trước khi kiểm tra lại.
-until game:GetService("Workspace"):FindFirstChild("Map") or game:GetService("Workspace"):FindFirstChild("Map2")
--- Kiểm tra xem đối tượng "Map" hoặc "Map2" đã được tìm thấy trong Workspace chưa.
-
--- Vòng lặp này đợi cho đến khi các đối tượng "__THINGS" và "__DEBRIS" xuất hiện trong Workspace.
-repeat
-    task.wait() -- Đợi một khoảng thời gian ngắn trước khi kiểm tra lại.
-until game:GetService("Workspace").__THINGS and game:GetService("Workspace").__DEBRIS
--- Kiểm tra xem đối tượng "__THINGS" và "__DEBRIS" đã có trong Workspace chưa.
+    wait()
+until game:IsLoaded() and
+    game:GetService("Players").LocalPlayer:FindFirstChild("PlayerGui") and
+    game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("MainLeft") and
+    game:GetService("Players").LocalPlayer.PlayerGui.MainLeft.Left.Currency.Diamonds.Diamonds.Visible == true and
+    not game:GetService("Players").LocalPlayer:FindFirstChild("GUIFX Holder")
 
 -- In ra thông báo khi trò chơi đã được tải hoàn toàn.
 print("[CLIENT] Loaded Game")
