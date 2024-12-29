@@ -17,3 +17,5 @@ loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/a2369ce34d4418
 -- Đánh dấu trạng thái hoàn thành
 shared.script1Done = true
 print("Script 1 đã hoàn thành.")
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-EVENT-HOLIDAY"))()
