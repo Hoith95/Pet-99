@@ -11,6 +11,7 @@ local function checkAndRunScript()
     end
 
     -- Nếu sau 3 phút mà shared.script1Done vẫn chưa true, tải và chạy script
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
 end
 
 -- Gọi hàm kiểm tra và thực thi
