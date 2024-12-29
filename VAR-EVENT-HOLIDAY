@@ -10,7 +10,7 @@ spawn(function()
         local currentPos = humanoidRootPart.Position
 
         -- Vị trí mục tiêu để kiểm tra
-        local targetPos = Vector3.new(776.7086791992188, 16.297792434692383, -20873.853515625)
+        local targetPos = Vector3.new(2593.89, 16.24, -20876.46)
 
         -- Định nghĩa bán kính phạm vi kiểm tra (tùy chỉnh nếu cần)
         local radius = 25 -- Bán kính trong khoảng cách mà bạn muốn kiểm tra
