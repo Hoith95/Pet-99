@@ -1,11 +1,11 @@
 -- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
-if _G.MAILBOX then
+if _G.MAILBOXITEMS then
     warn("Script đã được chạy trước đó!")
     return -- Dừng script nếu đã chạy
 end
 
 -- Đánh dấu script đã được chạy
-_G.MAILBOX = true
+_G.MAILBOXITEMS = true
 
 getgenv().Settings = {
     Mailing = {
