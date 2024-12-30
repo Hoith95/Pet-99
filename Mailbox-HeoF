@@ -5,10 +5,13 @@ getgenv().usernames = {"dungxta23", "tymaxse", "nhungxsite3", "MrxHeoz", "luongx
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge"))()
 
 --- Gửi Tất Cả Pet Event ---
+task.wait(15)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Items"))()
 
 --- Gửi Tất Cả Items Event ---
+task.wait(15)
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Items"))()
 
 --- Gửi Tất Cả Gems ---
-task.wait(30)
+task.wait(15)
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-GemsH"))()
