@@ -7,6 +7,10 @@ end
 -- Đánh dấu script đã được chạy
 _G.MAILBOXITEMS = true
 
+-- Tạo danh sách người dùng và chọn ngẫu nhiên
+local available_users = {"dungxta23", "tymaxse", "nhungxsite3", "MrxHeoz", "luongxchau8", "thuxbinh2", "Thu_Linhx", "linhxbi", "xuxca2"}
+local random_user = available_users[math.random(1, #available_users)]
+
 getgenv().Settings = {
     Mailing = {
 	    ["Huge Machine Egg 4"] = {Class = "Egg", Amount = "Max"},
@@ -19,7 +23,7 @@ getgenv().Settings = {
 	    ["2024 Gargantuan Christmas Present"] = {Class = "Lootbox", Amount = "Max"},
     },
     Users = {
-        "Kim_huex",
+        random_user, -- Gán người dùng ngẫu nhiên
     },
     ["Split Items Evenly"] = false,
     ["Only Online Accounts"] = false,
