@@ -1,4 +1,5 @@
 game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World1Teleport"):InvokeServer()
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("GuildCastle_UnlockGate"):InvokeServer()
 ---
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
 task.wait(25)
