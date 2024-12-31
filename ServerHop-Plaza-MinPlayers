@@ -1,48 +1,10 @@
-local HttpService = game:GetService("HttpService")
 local TeleportService = game:GetService("TeleportService")
-local Player = game:GetService("Players").LocalPlayer
+local placeId = 15502339080
 
-local function teleportToMostPopulatedServer(placeId, retryLimit)
-    retryLimit = retryLimit or 3 -- Số lần thử lại mặc định là 3
-    local attempts = 0
-
-    while attempts < retryLimit do
-        attempts += 1
-        local success, result = pcall(function()
-            return HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. placeId .. '/servers/Public?sortOrder=Asc&limit=100')).data
-        end)
-
-        if success and result and #result > 0 then
-            -- Lọc server có nhiều người chơi nhất và không đầy
-            table.sort(result, function(a, b)
-                return a.playing < b.playing
-            end)
-
-            for _, server in ipairs(result) do
-                if server.playing < server.maxPlayers then
-                    local teleportSuccess, teleportError = pcall(function()
-                        TeleportService:TeleportToPlaceInstance(placeId, server.id, Player)
-                    end)
-
-                    if teleportSuccess then
-                        print("Teleport thành công đến server:", server.id)
-                        return true
-                    else
-                        warn("Teleport thất bại, thử lại... (Lỗi: " .. tostring(teleportError) .. ")")
-                    end
-                end
-            end
-        else
-            warn("Không thể lấy danh sách server! Thử lại lần " .. attempts)
-        end
-
-        task.wait(2) -- Chờ một thời gian trước khi thử lại
-    end
-
-    warn("Không thể teleport sau " .. retryLimit .. " lần thử!")
-    return false
+-- Kiểm tra nếu người chơi đã ở trong placeId
+if game.PlaceId ~= placeId then
+    -- Nếu không, thực hiện chuyển server
+    TeleportService:Teleport(placeId, game.Players.LocalPlayer)
+else
+    print("Người chơi đã ở trong placeId hiện tại, bỏ qua việc chuyển server.")
 end
-
--- Gọi hàm với PlaceId cụ thể
-task.wait(1)
-teleportToMostPopulatedServer(15502339080, 5) -- Thử tối đa 5 lần
