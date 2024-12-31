@@ -1,5 +1,5 @@
 local TeleportService = game:GetService("TeleportService")
-local placeId = 84810042603306
+local placeId = 8737899170
 
 -- Kiểm tra nếu người chơi đã ở trong placeId
 if game.PlaceId ~= placeId then
