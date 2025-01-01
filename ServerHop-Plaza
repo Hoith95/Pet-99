@@ -37,12 +37,12 @@ local function teleportToMostPopulatedServer(placeId, retryLimit, userIdsToExclu
                 end
             end
 
-            -- Nếu có server hợp lệ, chọn ngẫu nhiên một server trong phạm vi từ thứ tự 5 đến 20
+            -- Nếu có server hợp lệ, chọn ngẫu nhiên một server trong phạm vi từ thứ tự 10 đến 20
             if #validServers > 0 then
                 local startIndex = math.min(10, #validServers)
                 local endIndex = math.min(20, #validServers)
                 
-                -- Nếu có ít nhất 5 server hợp lệ, chọn ngẫu nhiên một server trong khoảng từ 5 đến 20
+                -- Nếu có ít nhất 5 server hợp lệ, chọn ngẫu nhiên một server trong khoảng từ 10 đến 20
                 if startIndex < endIndex then
                     local randomIndex = mathRandom(startIndex, endIndex)
                     local serverToTeleport = validServers[randomIndex]
