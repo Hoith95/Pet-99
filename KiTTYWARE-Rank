@@ -1,5 +1,5 @@
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/WaitForGameLoad"))()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza-MinPlayers"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza-MinPlayers"))()
 --task.wait(1)
 --game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-10263.3203, 6.76867676, -7303.77002, 2.33650208e-05, -0.999464869, 0.032712467, 1.00000012, 2.33650208e-05, -3.85567546e-07, -3.85567546e-07, 0.032712467, 0.99946481)
 
