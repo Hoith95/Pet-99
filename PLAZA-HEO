@@ -5,5 +5,5 @@ end)
 task.wait(30)
 if not success and tostring(err):find("HTTP 429") then
     print("Gặp lỗi HTTP 429, chuyển sang script thay thế...")
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza-MinPlayers"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza"))()
 end
