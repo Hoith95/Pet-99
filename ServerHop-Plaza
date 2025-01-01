@@ -8,6 +8,11 @@ local function teleportToMostPopulatedServer(placeId, retryLimit, userIdsToExclu
     local attempts = 0
     local minPlayers = 15 -- Số lượng người chơi tối thiểu (ví dụ: 15 người)
 
+    -- Lấy ID server ban đầu của người chơi
+    local function getCurrentServerId()
+        return game:GetService("Players").LocalPlayer.Team or "Unknown"  -- Chỉ ra server ID của player (hoặc cách khác nếu có)
+    end
+
     while attempts < retryLimit do
         attempts += 1
         local success, result = pcall(function()
@@ -43,23 +48,41 @@ local function teleportToMostPopulatedServer(placeId, retryLimit, userIdsToExclu
                 local endIndex = math.min(20, #validServers)
                 
                 -- Nếu có ít nhất 5 server hợp lệ, chọn ngẫu nhiên một server trong khoảng từ 10 đến 20
-                if startIndex < endIndex then
-                    local randomIndex = mathRandom(startIndex, endIndex)
-                    local serverToTeleport = validServers[randomIndex]
+                local randomIndex = mathRandom(startIndex, endIndex)
+                local serverToTeleport = validServers[randomIndex]
 
-                    -- Teleport vào server đã chọn
-                    local teleportSuccess, teleportError = pcall(function()
-                        TeleportService:TeleportToPlaceInstance(placeId, serverToTeleport.id, Player)
-                    end)
+                -- Teleport vào server đã chọn
+                local teleportSuccess, teleportError = pcall(function()
+                    TeleportService:TeleportToPlaceInstance(placeId, serverToTeleport.id, Player)
+                end)
 
-                    if teleportSuccess then
-                        print("Teleport thành công đến server:", serverToTeleport.id)
-                        return true
+                if teleportSuccess then
+                    print("Teleport thành công đến server:", serverToTeleport.id)
+                    
+                    -- Lưu lại ID server trước khi teleport
+                    local originalServerId = getCurrentServerId()
+
+                    -- Chờ 3 giây và kiểm tra xem người chơi có chuyển server không
+                    task.wait(3)
+                    
+                    -- Kiểm tra lại ID server
+                    if getCurrentServerId() == originalServerId then
+                        print("Không chuyển đến server mới, thử lại teleport.")
+                        -- Nếu vẫn ở server cũ, thử teleport lại một server khác trong danh sách hợp lệ
+                        table.remove(validServers, randomIndex)  -- Loại bỏ server đã thử
+                        if #validServers > 0 then
+                            -- Chọn ngẫu nhiên một server khác từ danh sách hợp lệ
+                            local newRandomIndex = mathRandom(1, #validServers)
+                            return teleportToMostPopulatedServer(placeId, retryLimit, userIdsToExclude)  -- Gọi lại hàm với server mới
+                        else
+                            print("Không còn server hợp lệ để thử teleport.")
+                            return false
+                        end
                     else
-                        warn("Teleport thất bại, thử lại... (Lỗi: " .. tostring(teleportError) .. ")")
+                        return true -- Người chơi đã chuyển đến server mới, thành công
                     end
                 else
-                    print("Không đủ server hợp lệ trong phạm vi từ 10 đến 20!")
+                    warn("Teleport thất bại, thử lại... (Lỗi: " .. tostring(teleportError) .. ")")
                 end
             else
                 print("Không có server hợp lệ!")
