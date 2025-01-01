@@ -59,7 +59,7 @@ local function teleportToMostPopulatedServer(placeId, retryLimit, userIdsToExclu
                         warn("Teleport thất bại, thử lại... (Lỗi: " .. tostring(teleportError) .. ")")
                     end
                 else
-                    print("Không đủ server hợp lệ trong phạm vi từ 5 đến 20!")
+                    print("Không đủ server hợp lệ trong phạm vi từ 10 đến 20!")
                 end
             else
                 print("Không có server hợp lệ!")
