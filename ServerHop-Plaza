@@ -1,34 +1,68 @@
 local HttpService = game:GetService("HttpService")
 local TeleportService = game:GetService("TeleportService")
 local Player = game:GetService("Players").LocalPlayer
+local mathRandom = math.random
 
-local function teleportToMostPopulatedServer(placeId, retryLimit)
-    retryLimit = retryLimit or 5 -- Số lần thử lại mặc định là 5
+local function teleportToMostPopulatedServer(placeId, retryLimit, userIdsToExclude)
+    retryLimit = retryLimit or 5 -- Số lần thử lại mặc định là 3
     local attempts = 0
     local minPlayers = 15 -- Số lượng người chơi tối thiểu (ví dụ: 10 người)
 
     while attempts < retryLimit do
         attempts += 1
         local success, result = pcall(function()
-            -- Lấy danh sách server với sortOrder=Desc để sắp xếp theo số người chơi giảm dần
-            return HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. placeId .. '/servers/Public?sortOrder=Desc&limit=100')).data
+            -- Lấy danh sách server với sortOrder=Desc và excludeFullServers=true để lọc các server đầy
+            return HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. placeId .. '/servers/Public?sortOrder=Desc&limit=100&excludeFullServers=true')).data
         end)
 
         if success and result and #result > 0 then
             -- Lọc server có ít nhất minPlayers người chơi và không đầy
+            local validServers = {}
             for _, server in ipairs(result) do
+                -- Kiểm tra xem server có ít nhất minPlayers người chơi và không đầy
                 if server.playing >= minPlayers and server.playing < server.maxPlayers then
+                    -- Kiểm tra nếu có người chơi với UserId trong userIdsToExclude
+                    local hasExcludedPlayer = false
+                    for _, playerId in ipairs(server.players) do
+                        if table.find(userIdsToExclude, playerId) then
+                            hasExcludedPlayer = true
+                            break
+                        end
+                    end
+
+                    -- Nếu không có người chơi với UserId trong danh sách userIdsToExclude, thêm vào danh sách hợp lệ
+                    if not hasExcludedPlayer then
+                        table.insert(validServers, server)
+                    end
+                end
+            end
+
+            -- Nếu có server hợp lệ, chọn ngẫu nhiên một server trong phạm vi từ thứ tự 5 đến 20
+            if #validServers > 0 then
+                local startIndex = math.min(5, #validServers)
+                local endIndex = math.min(20, #validServers)
+                
+                -- Nếu có ít nhất 5 server hợp lệ, chọn ngẫu nhiên một server trong khoảng từ 5 đến 20
+                if startIndex < endIndex then
+                    local randomIndex = mathRandom(startIndex, endIndex)
+                    local serverToTeleport = validServers[randomIndex]
+
+                    -- Teleport vào server đã chọn
                     local teleportSuccess, teleportError = pcall(function()
-                        TeleportService:TeleportToPlaceInstance(placeId, server.id, Player)
+                        TeleportService:TeleportToPlaceInstance(placeId, serverToTeleport.id, Player)
                     end)
 
                     if teleportSuccess then
-                        print("Teleport thành công đến server:", server.id)
+                        print("Teleport thành công đến server:", serverToTeleport.id)
                         return true
                     else
                         warn("Teleport thất bại, thử lại... (Lỗi: " .. tostring(teleportError) .. ")")
                     end
+                else
+                    print("Không đủ server hợp lệ trong phạm vi từ 5 đến 20!")
                 end
+            else
+                print("Không có server hợp lệ!")
             end
         else
             warn("Không thể lấy danh sách server! Thử lại lần " .. attempts)
@@ -41,6 +75,22 @@ local function teleportToMostPopulatedServer(placeId, retryLimit)
     return false
 end
 
--- Gọi hàm với PlaceId cụ thể
+-- Danh sách các UserId cố định mà bạn muốn tránh
+local userIdsToExclude = {
+    7519675360,
+    7625725649,
+    7224789813,
+    7577832919,
+    7224792106,
+    7224814975,
+    7224795766,
+    7224781183,
+    7225011556,
+    7224799107,
+    7225041011,
+    7224796491
+}
+
+-- Gọi hàm với PlaceId cụ thể và danh sách các UserId bạn muốn tránh
 task.wait(1)
-teleportToMostPopulatedServer(15502339080, 25) -- Thử tối đa 5 lần
+teleportToMostPopulatedServer(15502339080, 25, userIdsToExclude) -- Thử tối đa 5 lần
