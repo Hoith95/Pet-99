@@ -1,3 +1,57 @@
 local TeleportService = game:GetService("TeleportService")
+local Players = game:GetService("Players")
 local placeId = 15502339080
-TeleportService:Teleport(placeId, game.Players.LocalPlayer)
+
+-- Hàm kiểm tra xem người chơi có bạn bè trong server này không
+local function hasFriendsInServer(player)
+    for _, otherPlayer in pairs(Players:GetPlayers()) do
+        -- Kiểm tra xem player có phải là bạn của player hiện tại không
+        if player:HasFriend(otherPlayer.UserId) then
+            return true
+        end
+    end
+    return false
+end
+
+-- Hàm thực hiện teleport và thử lại nếu thất bại
+local function tryTeleport()
+    -- Kiểm tra điều kiện số lượng người chơi
+    if Players.NumPlayers >= 25 and Players.NumPlayers <= 34 then
+        -- Kiểm tra nếu người chơi có bạn bè trong server
+        if hasFriendsInServer(Players.LocalPlayer) then
+            print("Không thể teleport vì bạn có bạn bè trong server này.")
+            return false
+        else
+            -- Tiến hành teleport nếu không có bạn bè và số lượng người chơi hợp lý
+            local success, errorMessage = pcall(function()
+                TeleportService:TeleportAsync(placeId, {Players.LocalPlayer})
+            end)
+            
+            if success then
+                print("Teleport thành công.")
+                return true
+            else
+                print("Teleport thất bại: " .. errorMessage)
+                return false
+            end
+        end
+    else
+        print("Số lượng người chơi không nằm trong phạm vi từ 25 đến 34, không thể teleport.")
+        return false
+    end
+end
+
+-- Hàm thử teleport nhiều lần cho đến khi thành công
+local function attemptTeleportUntilSuccess()
+    local success = false
+    while not success do
+        success = tryTeleport()
+        if not success then
+            print("Đang thử lại teleport...")
+            wait(3) -- Chờ 3 giây trước khi thử lại
+        end
+    end
+end
+
+-- Bắt đầu quá trình thử teleport
+attemptTeleportUntilSuccess()
