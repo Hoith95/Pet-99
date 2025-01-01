@@ -1,21 +1,60 @@
 task.wait(5)
+
 -- Lấy dịch vụ Players
 local players = game:GetService("Players")
 
--- Kiểm tra xem có người chơi nào trong server không
+-- Danh sách các UserId cố định mà bạn muốn tránh
+local userIdsToExclude = {
+    7519675360,
+    7625725649,
+    7224789813,
+    7577832919,
+    7224792106,
+    7224814975,
+    7224795766,
+    7224781183,
+    7225011556,
+    7224799107,
+    7225041011,
+    7224796491
+}
+
+-- Kiểm tra xem có người chơi nào trong server có UserId nằm trong danh sách không
+local function hasExcludedPlayer()
+    for _, player in ipairs(players:GetPlayers()) do
+        if table.find(userIdsToExclude, player.UserId) then
+            return true -- Nếu tìm thấy người chơi có UserId nằm trong danh sách cần tránh
+        end
+    end
+    return false -- Không có người chơi nào trong danh sách cần tránh
+end
+
+-- Kiểm tra xem có người chơi nào trong server không (ít nhất 10 người)
 local function checkPlayers()
-    return #players:GetPlayers() > 10  -- Kiểm tra nếu có hơn 10 người chơi trong server
+    return #players:GetPlayers() <= 10  -- Kiểm tra nếu có ít hơn hoặc bằng 10 người chơi trong server
 end
 
 -- Vòng lặp kiểm tra
 while true do
-    if not checkPlayers() then
-        print("Số người chơi trong server ít hơn hoặc bằng 10, chạy script.")
+    if checkPlayers() then
+        -- Nếu có người chơi trong server cần tránh hoặc số người chơi ít hơn hoặc bằng 10
+        if hasExcludedPlayer() then
+            print("Có người chơi trong server có UserId nằm trong danh sách cần tránh, chạy script.")
+        else
+            print("Số người chơi trong server ít hơn hoặc bằng 10 và không có người chơi cần tránh, chạy script.")
+        end
+        
         -- Chạy script từ URL
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza"))()
-        break -- Thoát vòng lặp sau khi script chạy
+        local success, result = pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza"))()
+        end)
+        
+        if not success then
+            warn("Lỗi khi tải và chạy script: " .. result)
+        end
+        break -- Thoát vòng lặp sau khi kiểm tra
     else
         print("Số người chơi trong server hơn 10, chờ 3 phút và kiểm tra lại.")
-        wait(180) -- Chờ 180 giây (3 phút) trước khi kiểm tra lại
+        task.wait(180) -- Chờ 180 giây (3 phút) trước khi kiểm tra lại
     end
 end
