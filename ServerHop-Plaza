@@ -52,28 +52,33 @@ local function teleportToMostPopulatedServer(placeId, retryLimit, userIdsToExclu
                         TeleportService:TeleportToPlaceInstance(placeId, serverToTeleport.id, Player)
                     end)
 
-                    -- Nếu teleport thất bại do server full, thử lại với server khác trong danh sách
-                    while not teleportSuccess and teleportError:match("GameFull") and #validServers > 0 do
-                        print("Server bị đầy! Thử teleport vào server khác...")
-                        -- Loại bỏ server đã thử
-                        table.remove(validServers, randomIndex)
-                        if #validServers > 0 then
-                            randomIndex = mathRandom(1, #validServers)
-                            serverToTeleport = validServers[randomIndex]
-
-                            -- Thử teleport vào server khác
-                            teleportSuccess, teleportError = pcall(function()
-                                TeleportService:TeleportToPlaceInstance(placeId, serverToTeleport.id, Player)
-                            end)
-                        else
-                            print("Không còn server hợp lệ nào để thử!")
-                            break
-                        end
-                    end
-
+                    -- Kiểm tra nếu teleport thành công
                     if teleportSuccess then
-                        print("Teleport thành công đến server:", serverToTeleport.id)
-                        return true
+                        -- Kiểm tra lại trạng thái server sau khi teleport
+                        task.wait(5) -- Chờ một thời gian ngắn để chắc chắn rằng teleport đã hoàn thành
+                        local playersInServer = #game:GetService("Players"):GetPlayers()
+
+                        -- Nếu server đầy, thử lại teleport vào server khác
+                        if playersInServer >= serverToTeleport.maxPlayers then
+                            warn("Server đã đầy sau khi teleport, thử lại...")
+                            -- Loại bỏ server này khỏi danh sách và chọn lại server khác
+                            table.remove(validServers, randomIndex)
+                            -- Nếu còn server hợp lệ, thử lại
+                            if #validServers > 0 then
+                                print("Chọn server khác...")
+                                randomIndex = mathRandom(1, #validServers)
+                                serverToTeleport = validServers[randomIndex]
+                                teleportSuccess, teleportError = pcall(function()
+                                    TeleportService:TeleportToPlaceInstance(placeId, serverToTeleport.id, Player)
+                                end)
+                            else
+                                print("Không còn server hợp lệ nào để thử!")
+                                break
+                            end
+                        else
+                            print("Teleport thành công đến server:", serverToTeleport.id)
+                            return true
+                        end
                     else
                         warn("Teleport thất bại, thử lại... (Lỗi: " .. tostring(teleportError) .. ")")
                     end
