@@ -4,9 +4,9 @@ local Player = game:GetService("Players").LocalPlayer
 local mathRandom = math.random
 
 local function teleportToMostPopulatedServer(placeId, retryLimit, userIdsToExclude)
-    retryLimit = retryLimit or 5 -- Số lần thử lại mặc định là 3
+    retryLimit = retryLimit or 5 -- Số lần thử lại mặc định là 5
     local attempts = 0
-    local minPlayers = 15 -- Số lượng người chơi tối thiểu (ví dụ: 10 người)
+    local minPlayers = 15 -- Số lượng người chơi tối thiểu (ví dụ: 15 người)
 
     while attempts < retryLimit do
         attempts += 1
@@ -52,6 +52,25 @@ local function teleportToMostPopulatedServer(placeId, retryLimit, userIdsToExclu
                         TeleportService:TeleportToPlaceInstance(placeId, serverToTeleport.id, Player)
                     end)
 
+                    -- Nếu teleport thất bại do server full, thử lại với server khác trong danh sách
+                    while not teleportSuccess and teleportError:match("GameFull") and #validServers > 0 do
+                        print("Server bị đầy! Thử teleport vào server khác...")
+                        -- Loại bỏ server đã thử
+                        table.remove(validServers, randomIndex)
+                        if #validServers > 0 then
+                            randomIndex = mathRandom(1, #validServers)
+                            serverToTeleport = validServers[randomIndex]
+
+                            -- Thử teleport vào server khác
+                            teleportSuccess, teleportError = pcall(function()
+                                TeleportService:TeleportToPlaceInstance(placeId, serverToTeleport.id, Player)
+                            end)
+                        else
+                            print("Không còn server hợp lệ nào để thử!")
+                            break
+                        end
+                    end
+
                     if teleportSuccess then
                         print("Teleport thành công đến server:", serverToTeleport.id)
                         return true
@@ -93,4 +112,4 @@ local userIdsToExclude = {
 
 -- Gọi hàm với PlaceId cụ thể và danh sách các UserId bạn muốn tránh
 task.wait(1)
-teleportToMostPopulatedServer(15502339080, 25, userIdsToExclude) -- Thử tối đa 5 lần
+teleportToMostPopulatedServer(15502339080, 25, userIdsToExclude) -- Thử tối đa 25 lần
