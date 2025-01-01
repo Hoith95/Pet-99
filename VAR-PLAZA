@@ -1,60 +1,84 @@
-task.wait(5)
+-- Đảm bảo game đã tải xong và player đã có leaderstats
+repeat
+    wait()
+until game:IsLoaded() and game.Players.LocalPlayer:FindFirstChild("leaderstats")
 
 -- Lấy dịch vụ Players
 local players = game:GetService("Players")
+local leaderstats = game.Players.LocalPlayer.leaderstats
+local initialDiamonds = leaderstats["\240\159\146\142 Diamonds"].Value
 
--- Danh sách các UserId cố định mà bạn muốn tránh
+-- Danh sách các UserId cần tránh
 local userIdsToExclude = {
-    7519675360,
-    7625725649,
-    7224789813,
-    7577832919,
-    7224792106,
-    7224814975,
-    7224795766,
-    7224781183,
-    7225011556,
-    7224799107,
-    7225041011,
-    7224796491
+    7519675360, 7625725649, 7224789813, 7577832919, 7224792106,
+    7224814975, 7224795766, 7224781183, 7225011556, 7224799107,
+    7225041011, 7224796491
 }
 
--- Kiểm tra xem có người chơi nào trong server có UserId nằm trong danh sách không
+-- Hàm kiểm tra người chơi cần tránh
 local function hasExcludedPlayer()
     for _, player in ipairs(players:GetPlayers()) do
         if table.find(userIdsToExclude, player.UserId) then
-            return true -- Nếu tìm thấy người chơi có UserId nằm trong danh sách cần tránh
+            return true
         end
     end
-    return false -- Không có người chơi nào trong danh sách cần tránh
+    return false
 end
 
--- Kiểm tra xem có người chơi nào trong server không (ít nhất 10 người)
+-- Hàm kiểm tra số lượng người chơi trong server
 local function checkPlayers()
-    return #players:GetPlayers() <= 10  -- Kiểm tra nếu có ít hơn hoặc bằng 10 người chơi trong server
+    return #players:GetPlayers() <= 10
 end
 
--- Vòng lặp kiểm tra
-while true do
+-- Kiểm tra người chơi trong server
+local function handleServerHop()
     if checkPlayers() then
-        -- Nếu có người chơi trong server cần tránh hoặc số người chơi ít hơn hoặc bằng 10
         if hasExcludedPlayer() then
-            print("Có người chơi trong server có UserId nằm trong danh sách cần tránh, chạy script.")
+            print("Có người chơi cần tránh, chạy ServerHop.")
         else
-            print("Số người chơi trong server ít hơn hoặc bằng 10 và không có người chơi cần tránh, chạy script.")
+            print("Số người chơi trong server ít hơn hoặc bằng 10 và không có người chơi cần tránh, chạy ServerHop.")
         end
         
-        -- Chạy script từ URL
+        -- Chạy script ServerHop
         local success, result = pcall(function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza"))()
         end)
         
         if not success then
-            warn("Lỗi khi tải và chạy script: " .. result)
+            warn("Lỗi khi chạy ServerHop: " .. result)
         end
-        break -- Thoát vòng lặp sau khi kiểm tra
     else
-        print("Số người chơi trong server hơn 10, chờ 3 phút và kiểm tra lại.")
-        task.wait(180) -- Chờ 180 giây (3 phút) trước khi kiểm tra lại
+        print("Số người chơi trong server quá nhiều (> 10), chờ 3 phút và kiểm tra lại.")
+        task.wait(180) -- Chờ 3 phút
+        handleServerHop() -- Thực hiện lại kiểm tra
     end
 end
+
+-- Kiểm tra số lượng kim cương sau 1 giờ
+local function checkDiamonds()
+    -- In ra số lượng kim cương ban đầu
+    print("Số lượng kim cương hiện có ban đầu: " .. initialDiamonds)
+
+    -- Chờ 1 giờ (3600 giây)
+    wait(3600)
+
+    -- Kiểm tra lại số lượng kim cương sau 1 giờ
+    local currentDiamonds = leaderstats["\240\159\146\142 Diamonds"].Value
+
+    -- Nếu số lượng kim cương không thay đổi, thực hiện lại ServerHop
+    if currentDiamonds == initialDiamonds then
+        print("Số lượng kim cương không thay đổi, thực hiện lại ServerHop.")
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza"))()
+    else
+        print("Số lượng kim cương đã thay đổi, không thực hiện ServerHop.")
+    end
+end
+
+-- Chạy cả 2 tác vụ song song: kiểm tra người chơi và số lượng kim cương
+task.spawn(function()
+    handleServerHop()
+end)
+
+task.spawn(function()
+    checkDiamonds()
+end)
