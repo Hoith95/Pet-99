@@ -1,10 +1,2 @@
 local TeleportService = game:GetService("TeleportService")
 local placeId = 15502339080
-
--- Kiểm tra nếu người chơi đã ở trong placeId
-if game.PlaceId ~= placeId then
-    -- Nếu không, thực hiện chuyển server
-    TeleportService:Teleport(placeId, game.Players.LocalPlayer)
-else
-    print("Người chơi đã ở trong placeId hiện tại, bỏ qua việc chuyển server.")
-end
