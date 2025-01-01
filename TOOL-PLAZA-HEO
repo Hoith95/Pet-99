@@ -28,7 +28,7 @@ getgenv().Settings = {
             ["All Huges"] = {Class = "Pet", Price = "+1%", AllTypes = true},
         },
         Serverhop = {
-            ["Switch Servers"] = false,
+            ["Switch Servers"] = true,
             ["Teleport Delay (m)"] = 120,
             ["Add Pro Plaza Lobbies"] = false,
         },
