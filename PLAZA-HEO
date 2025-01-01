@@ -1,4 +1,4 @@
-task.wait(15)
+task.wait(30)
 local success, err = pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TOOL-PLAZA-HEO"))()
 end)
