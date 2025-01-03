@@ -158,12 +158,11 @@ while playerBobber.CFrame.Y >= bobberPos do
 end
 -- Gửi yêu cầu kéo cần câu về máy chủ.
 Network.Instancing_FireCustomFromClient:FireServer("AdvancedFishing", "RequestReel")
--- Vòng lặp này sẽ tiếp tục cho đến khi không còn FishingLine trên cần câu của người chơi.
-while game.Players.LocalPlayer.Character:FindFirstChild("Model") and game.Players.LocalPlayer.Character.Model:FindFirstChild("Rod") and game.Players.LocalPlayer.Character.Model.Rod:FindFirstChild("FishingLine") do
-    Network.Instancing_InvokeCustomFromClient:InvokeServer("AdvancedFishing", "Clicked")
-    task.wait()
-end
-task.wait(1)
--- Notification cập nhật thông báo thời gian còn lại Daycare, số lượng Huge, Gems hiện có
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Notification"))()
-end
+spawn(function()
+    while game.Players.LocalPlayer.Character:FindFirstChild("Model") and 
+          game.Players.LocalPlayer.Character.Model:FindFirstChild("Rod") and 
+          game.Players.LocalPlayer.Character.Model.Rod:FindFirstChild("FishingLine") do
+        Network.Instancing_InvokeCustomFromClient:InvokeServer("AdvancedFishing", "Clicked")
+        task.wait()
+    end
+end)
