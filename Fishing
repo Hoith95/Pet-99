@@ -24,6 +24,10 @@ if not game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active:FindFir
     -- Đợi thêm 1 giây trước khi tiếp tục.
     task.wait(1)
 end
+
+-- Đánh dấu script đã được chạy
+_G.FISHING = true
+
 -- Kiểm tra cấu hình tối ưu hóa trò chơi trong biến toàn cục.
 if getgenv().autoFishingConfig.OPTIMIZE_GAME then
     -- Lấy đối tượng advancedFishing từ Workspace.
