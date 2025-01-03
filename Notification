@@ -1,9 +1,3 @@
--- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
-if _G.Notification then
-    warn("Script đã được chạy trước đó!")
-    return -- Dừng script nếu đã chạy
-end
-
 -- Script 2: Chờ trạng thái hoàn thành và thực thi
 print("Kiểm tra trạng thái Script 1...")
 
@@ -15,6 +9,12 @@ end
 
 -- Khi trạng thái là true, thực thi Script 2
 print("Script 1 đã hoàn thành. Bắt đầu chạy Script 2...")
+
+-- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
+if _G.Notification then
+    warn("Script đã được chạy trước đó!")
+    return -- Dừng script nếu đã chạy
+end
 
 -- Yêu cầu các module cần thiết từ ReplicatedStorage để sử dụng trong script.
 local DaycareCmds = require(game.ReplicatedStorage.Library.Client.DaycareCmds)
