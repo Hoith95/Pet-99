@@ -8,7 +8,7 @@ end
 _G.MAILBOXITEMS = true
 
 -- Tạo danh sách người dùng và chọn ngẫu nhiên
-local available_users = {"dungxta23", "tymaxse", "nhungxsite3", "MrxHeoz", "luongxchau8", "thuxbinh2", "Thu_Linhx", "linhxbi", "xuxca2"}
+local available_users = {"Kim_Huex"}
 local random_user = available_users[math.random(1, #available_users)]
 
 getgenv().Settings = {
@@ -17,7 +17,6 @@ getgenv().Settings = {
 	    ["Hype Egg"] = {Class = "Lootbox", Amount = "Max"},
 	    ["Snowflake Gift"] = {Class = "Lootbox", Amount = "Max"},
 	    ["Jolly Gift"] = {Class = "Lootbox", Amount = "Max"},
-	    ["2025 New Years Gift"] = {Class = "Lootbox", Amount = "Max"},
 	    ["2024 Gargantuan Christmas Present"] = {Class = "Lootbox", Amount = "Max"},
     },
     Users = {
