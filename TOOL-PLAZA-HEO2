@@ -10,7 +10,7 @@ getgenv().Settings = {
 	    ["Secret Key"] = {Class = "Misc", Price = 25000},
 	    ["Void Key"] = {Class = "Misc", Price = 50000},
 	    ["Tech Key"] = {Class = "Misc", Price = 25000},
-	    ["Crystal Key"] = {Class = "Misc", Price = 20000},
+	    ["Crystal Key"] = {Class = "Misc", Price = "+15%"},
         },
         Serverhop = {
             ["Switch Servers"] = true,
