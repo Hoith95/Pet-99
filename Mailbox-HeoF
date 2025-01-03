@@ -20,3 +20,7 @@ task.wait(15)
 --- Gửi Tất Cả Gems ---
 task.wait(15)
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-GemsH"))()
+
+--- Gửi Tất Cả Titanic ---
+task.wait(15)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Titanic"))()
