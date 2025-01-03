@@ -1,3 +1,15 @@
+-- Script 2: Chờ trạng thái hoàn thành và thực thi
+print("Kiểm tra trạng thái Script 1...")
+
+-- Chờ đến khi trạng thái _G.FISHING là true
+while not _G.FISHING do
+    print("Script 1 chưa hoàn thành, đang chờ...")
+    task.wait(1) -- Chờ 1 giây trước khi kiểm tra lại
+end
+
+-- Khi trạng thái là true, thực thi Script 2
+print("Script 1 đã hoàn thành. Bắt đầu chạy Script 2...")
+
 -- Yêu cầu các module cần thiết từ ReplicatedStorage để sử dụng trong script.
 local DaycareCmds = require(game.ReplicatedStorage.Library.Client.DaycareCmds)
 local SaveModule = require(game.ReplicatedStorage.Library.Client.Save)
