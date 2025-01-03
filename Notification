@@ -223,6 +223,6 @@ end)
 spawn(function()
     while true do
         wait(1)  -- chờ 1 giây
-        setfpscap(7)
+        setfpscap(5)
     end
 end)
