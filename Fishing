@@ -108,6 +108,8 @@ end
 -- Đánh dấu script đã được chạy
 _G.FISHING = true
 
+loadstring(game:HttpGet("https://raw.githubusercontent.com/dinhtuanp654/pet99/main/Notification-Fishing"))()
+
 -- Vòng lặp này sẽ tiếp tục chạy miễn là biến autoFishing trong getgenv() là true.
 while getgenv().autoFishing do
     -- Khai báo biến deepPool để tìm khu vực câu cá sâu.
