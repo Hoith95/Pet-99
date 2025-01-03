@@ -1,3 +1,9 @@
+-- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
+if _G.Notification then
+    warn("Script đã được chạy trước đó!")
+    return -- Dừng script nếu đã chạy
+end
+
 -- Script 2: Chờ trạng thái hoàn thành và thực thi
 print("Kiểm tra trạng thái Script 1...")
 
