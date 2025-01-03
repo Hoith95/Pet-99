@@ -158,11 +158,9 @@ while playerBobber.CFrame.Y >= bobberPos do
 end
 -- Gửi yêu cầu kéo cần câu về máy chủ.
 Network.Instancing_FireCustomFromClient:FireServer("AdvancedFishing", "RequestReel")
-spawn(function()
-    while game.Players.LocalPlayer.Character:FindFirstChild("Model") and 
-          game.Players.LocalPlayer.Character.Model:FindFirstChild("Rod") and 
-          game.Players.LocalPlayer.Character.Model.Rod:FindFirstChild("FishingLine") do
-        Network.Instancing_InvokeCustomFromClient:InvokeServer("AdvancedFishing", "Clicked")
-        task.wait()
-    end
-end)
+while game.Players.LocalPlayer.Character:FindFirstChild("Model") and game.Players.LocalPlayer.Character.Model:FindFirstChild("Rod") and game.Players.LocalPlayer.Character.Model.Rod:FindFirstChild("FishingLine") do
+    Network.Instancing_InvokeCustomFromClient:InvokeServer("AdvancedFishing", "Clicked")
+    task.wait()
+end
+task.wait(1)
+end
