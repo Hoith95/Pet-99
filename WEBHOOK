@@ -5,5 +5,3 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/dinhtuanp654/pet99/ma
 
 -- Đánh dấu script đã được chạy
 _G.KITTY = true
-
-loadstring(game:HttpGet("https://raw.githubusercontent.com/dinhtuanp654/pet99/main/Notification-Fishing"))()
