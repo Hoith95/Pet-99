@@ -11,7 +11,6 @@ _G.GPOTIONS = {"Coins","Lucky","The Cocktail","Treasure Hunter","Walkspeed","Dia
 _G.GHATCH_CHARGED_EGGS = false
 _G.GDO_LOCKPICKING = true
 _G.GDO_ADVENT_CALENDAR = true
-_G.GDO_ADVENT_CALENDAR = true
 _G.GDO_SNOWSTORM_SURVIVAL = true
 _G.GDO_HOLIDAY_EVENT = true
 _G.GENCHANTS = {"Lucky Eggs","Tap Power", "Coins","Criticals","Huge Hunter","Treasure Hunter"}
