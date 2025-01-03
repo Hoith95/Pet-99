@@ -199,3 +199,24 @@ task.spawn(function()
         task.wait(1)
     end
 end)
+
+spawn(function()
+    while true do
+        wait(1)  -- chờ 1 giây
+        _G.WEBHOOK = true
+    end
+end)
+
+spawn(function()
+    while true do
+        wait(1)  -- chờ 1 giây
+        _G.Notification = true
+    end
+end)
+
+spawn(function()
+    while true do
+        wait(1)  -- chờ 1 giây
+        setfpscap(7)
+    end
+end)
