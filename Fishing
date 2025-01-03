@@ -25,9 +25,6 @@ if not game:GetService("Workspace").__THINGS.__INSTANCE_CONTAINER.Active:FindFir
     task.wait(1)
 end
 
--- Đánh dấu script đã được chạy
-_G.FISHING = true
-
 -- Kiểm tra cấu hình tối ưu hóa trò chơi trong biến toàn cục.
 if getgenv().autoFishingConfig.OPTIMIZE_GAME then
     -- Lấy đối tượng advancedFishing từ Workspace.
@@ -107,6 +104,10 @@ platform.CFrame = LocalPlayer.CFrame + Vector3.new(0, -5, 0)
 platform.Size = Vector3.new(5, 1, 5)
 platform.Transparency = 1
 end
+
+-- Đánh dấu script đã được chạy
+_G.FISHING = true
+
 -- Vòng lặp này sẽ tiếp tục chạy miễn là biến autoFishing trong getgenv() là true.
 while getgenv().autoFishing do
     -- Khai báo biến deepPool để tìm khu vực câu cá sâu.
