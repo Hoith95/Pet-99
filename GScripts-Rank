@@ -1,4 +1,5 @@
-script_key="xznlDbCHnLICEciRYOPSEbLNyuekhFSq";
+shared.script2Done = true
+
 _G.GPROGRESS_MODE = "Hybrid" -- Hatch
 _G.GGFX_MODE = 1
 _G.GRANK_TO = 99
@@ -14,7 +15,7 @@ _G.GCOLLECT_FREE_ITEMS = true
 _G.GMAX_ZONE_UPGRADE_COST = 20000
 _G.GIGNORE_SLEDRACE = false
 _G.GUSE_SPRINKLERS = true
+_G.GUSE_ULTIMATES = {"Chest Spell","Ground Pound"}
 _G.GUSE_FLAGS = {"Fortune Flag","Diamonds Flag","Coins Flag"}
---_G.GENCHANTS = {"Diamonds","Criticals","Treasure Hunter","Strong Pets","Fortune","Tap Power"}
-_G.GENCHANTS = {"Coins","Criticals","Tap Power","Strong Pets","Treasure Hunter","Diamonds"}
+_G.GENCHANTS = {"Diamonds","Criticals","Treasure Hunter","Lucky Eggs","Huge Hunter","Fortune"}
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/34915da4ad87a5028e1fd64efbe3543f.lua"))()
