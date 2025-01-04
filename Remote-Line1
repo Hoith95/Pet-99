@@ -16,7 +16,8 @@ spawn(function()
     -- Sau 3 phút kiểm tra, nếu _G.script1Done vẫn không bằng true, chạy script từ URL
     if not _G.script1Done then
         print("_G.script1Done vẫn chưa được set là true sau 3 phút. Đang chạy script từ URL...")
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
+        --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerKick"))()
     else
         print("_G.script1Done đã được set là true.")
     end
@@ -40,7 +41,8 @@ spawn(function()
     -- Sau 3 phút kiểm tra, nếu _G.script2Done vẫn không bằng true, chạy script từ URL
     if not _G.script2Done then
         print("_G.script2Done vẫn chưa được set là true sau 3 phút. Đang chạy script từ URL...")
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
+        --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerKick"))()
     else
         print("_G.script2Done đã được set là true.")
     end
@@ -48,8 +50,8 @@ end)
 
 -- SeverHop
 task.wait(19686)  -- 5h Reset 1 Lần
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
 
 -- ServerKick
 --task.wait(39686)  -- 11h Reset 1 Lần
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerKick"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerKick"))()
