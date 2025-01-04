@@ -10,7 +10,7 @@ _G.TAG = true
 spawn(function()
     while true do
         wait(1)  -- chờ 1 giây
-        shared.script1Done = true
-        shared.script2Done = true
+        _G.script1Done = true
+        _G.script2Done = true
     end
 end)
