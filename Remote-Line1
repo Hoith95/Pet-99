@@ -1,48 +1,48 @@
 -- Tạo một luồng bất đồng bộ với spawn để kiểm tra trạng thái
 spawn(function()
-    -- Kiểm tra trạng thái của shared.script1Done và chờ 3 phút
+    -- Kiểm tra trạng thái của _G.script1Done và chờ 3 phút
     local timeLimit = 3 * 60  -- 3 phút (180 giây)
     local startTime = tick()  -- Thời gian bắt đầu
 
     while (tick() - startTime) < timeLimit do
-        -- Nếu shared.script1Done đã được set là true, thoát khỏi vòng lặp
-        if shared.script1Done then
-            print("shared.script1Done đã được set là true. Dừng kiểm tra.")
+        -- Nếu _G.script1Done đã được set là true, thoát khỏi vòng lặp
+        if _G.script1Done then
+            print("_G.script1Done đã được set là true. Dừng kiểm tra.")
             return
         end
         wait(1)  -- Chờ 1 giây trước khi kiểm tra lại
     end
 
-    -- Sau 3 phút kiểm tra, nếu shared.script1Done vẫn không bằng true, chạy script từ URL
-    if not shared.script1Done then
-        print("shared.script1Done vẫn chưa được set là true sau 3 phút. Đang chạy script từ URL...")
+    -- Sau 3 phút kiểm tra, nếu _G.script1Done vẫn không bằng true, chạy script từ URL
+    if not _G.script1Done then
+        print("_G.script1Done vẫn chưa được set là true sau 3 phút. Đang chạy script từ URL...")
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
     else
-        print("shared.script1Done đã được set là true.")
+        print("_G.script1Done đã được set là true.")
     end
 end)
 
 -- Tạo một luồng bất đồng bộ với spawn để kiểm tra trạng thái
 spawn(function()
-    -- Kiểm tra trạng thái của shared.script2Done và chờ 3 phút
+    -- Kiểm tra trạng thái của _G.script2Done và chờ 3 phút
     local timeLimit = 3 * 60  -- 3 phút (180 giây)
     local startTime = tick()  -- Thời gian bắt đầu
 
     while (tick() - startTime) < timeLimit do
-        -- Nếu shared.script2Done đã được set là true, thoát khỏi vòng lặp
-        if shared.script2Done then
-            print("shared.script2Done đã được set là true. Dừng kiểm tra.")
+        -- Nếu _G.script2Done đã được set là true, thoát khỏi vòng lặp
+        if _G.script2Done then
+            print("_G.script2Done đã được set là true. Dừng kiểm tra.")
             return
         end
         wait(1)  -- Chờ 1 giây trước khi kiểm tra lại
     end
 
-    -- Sau 3 phút kiểm tra, nếu shared.script2Done vẫn không bằng true, chạy script từ URL
-    if not shared.script2Done then
-        print("shared.script2Done vẫn chưa được set là true sau 3 phút. Đang chạy script từ URL...")
+    -- Sau 3 phút kiểm tra, nếu _G.script2Done vẫn không bằng true, chạy script từ URL
+    if not _G.script2Done then
+        print("_G.script2Done vẫn chưa được set là true sau 3 phút. Đang chạy script từ URL...")
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
     else
-        print("shared.script2Done đã được set là true.")
+        print("_G.script2Done đã được set là true.")
     end
 end)
 
