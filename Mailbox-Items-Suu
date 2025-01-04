@@ -13,9 +13,6 @@ getgenv().Settings = {
 	    ["Hype Egg"] = {Class = "Lootbox", Amount = "Max"},
 	    ["Snowflake Gift"] = {Class = "Lootbox", Amount = "Max"},
 	    ["Jolly Gift"] = {Class = "Lootbox", Amount = "Max"},
-	    ["Lockpick A"] = {Class = "Misc", Amount = "Max"},
-	    ["Lockpick B"] = {Class = "Misc", Amount = "Max"},
-	    ["Lockpick C"] = {Class = "Misc", Amount = "Max"},
 	    ["2024 Gargantuan Christmas Present"] = {Class = "Lootbox", Amount = "Max"},
     },
     Users = {
