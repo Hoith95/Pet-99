@@ -20,7 +20,7 @@ getgenv().Settings = {
 	    ["Secret Key"] = {Class = "Misc", Price = 25000},
 	    ["Void Key"] = {Class = "Misc", Price = 50000},
 	    ["Tech Key"] = {Class = "Misc", Price = 25000},
-	    ["Crystal Key"] = {Class = "Misc", Price = 20000},
+	    ["Crystal Key"] = {Class = "Misc", Price = "+15%"},
 	    ["Spinny Wheel Ticket"] = {Class = "Misc", Price = 4500},
 	    ["Tech Spinny Wheel Ticket"] = {Class = "Misc", Price = 6000},
 	    ["Void Spinny Wheel Ticket"] = {Class = "Misc", Price = 35000},
