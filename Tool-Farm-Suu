@@ -10,4 +10,4 @@ end
 
 --- GScripts-Rank ---
 script_key="xznlDbCHnLICEciRYOPSEbLNyuekhFSq";
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-HOLIDAY"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank"))()
