@@ -1,4 +1,4 @@
-shared.script2Done = true
+_G.script2Done = true
 
 _G.GPROGRESS_MODE = "Hybrid" -- Hatch
 _G.GGFX_MODE = 1
