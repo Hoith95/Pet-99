@@ -1,12 +1,6 @@
-game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World1Teleport"):InvokeServer()
-game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("GuildCastle_UnlockGate"):InvokeServer()
----
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
-task.wait(25)
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-L4"))()
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World3Teleport"):InvokeServer()
 
--- Script 2: Chờ trạng thái hoàn thành và thực thi
-print("Kiểm tra trạng thái Script 1...")
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
 
 -- Chờ đến khi trạng thái shared.script1Done là true
 while not shared.script1Done do
@@ -14,11 +8,6 @@ while not shared.script1Done do
     task.wait(1) -- Chờ 1 giây trước khi kiểm tra lại
 end
 
--- Khi trạng thái là true, thực thi Script 2
-print("Script 1 đã hoàn thành. Bắt đầu chạy Script 2...")
---- HOLIDAY EVENT ---
+--- GScripts-Rank ---
 script_key="MwpgreoxkMbqtBRseeXTeaehFyvfaVmK";
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-HOLIDAY"))()
-
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Pira-Holiday-Event"))()
-print("Script 2 đã chạy xong.")
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank"))()
