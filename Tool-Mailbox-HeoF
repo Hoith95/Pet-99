@@ -48,13 +48,13 @@ spawn(function()
 
         if not oneHourElapsed and elapsedTime >= 7200 then  -- Sau 2 giờ (7200 giây)
             setfpscap(4)
-            print("Đã set fpscap xuống 4 sau 1 giờ!")
+            print("Đã set fpscap xuống 4 sau 2 giờ!")
             oneHourElapsed = true
         end
 
         if not twoHoursElapsed and elapsedTime >= 14400 then  -- Sau 4 giờ (14400 giây)
             setfpscap(3)
-            print("Đã set fpscap xuống 3 sau 2 giờ!")
+            print("Đã set fpscap xuống 3 sau 4 giờ!")
             twoHoursElapsed = true
         end
     end
