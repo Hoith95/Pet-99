@@ -11,5 +11,32 @@ spawn(function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-TAG"))()
     end
 end)
+
+spawn(function()
+    -- Kiểm tra trạng thái của _G.script1Done
+    while not _G.script1Done do
+        print("Script 1 chưa hoàn thành, đang chờ...")
+        task.wait(1) -- Chờ 1 giây trước khi kiểm tra lại
+    end
+
+    -- Khi trạng thái _G.script1Done đã là true, thay đổi fpscap
+    wait(30)
+    setfpscap(5)
+    print("Đã set fpscap thành 5!")
+
+    -- Sau khi set fpscap thành 5, kiểm tra lại mỗi 5 phút
+    while true do
+        task.wait(300)  -- Chờ 5 phút (300 giây)
+
+        -- Kiểm tra xem fpscap có phải là 5 không
+        if getfpscap() ~= 5 then
+            setfpscap(5)  -- Nếu không phải 5, set lại
+            print("fpscap không phải 5, đã set lại thành 5!")
+        else
+            print("fpscap vẫn là 5.")
+        end
+    end
+end)
+
 task.wait(120)
 _G.script1Done = true
