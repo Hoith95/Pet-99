@@ -16,6 +16,7 @@ spawn(function()
     -- Sau 3 phút kiểm tra, nếu _G.script1Done vẫn không bằng true, chạy script từ URL
     if not _G.script1Done then
         print("_G.script1Done vẫn chưa được set là true sau 3 phút. Đang chạy script từ URL...")
+        setfpscap(15)
         --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
         game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World1Teleport"):InvokeServer()
     else
@@ -41,6 +42,7 @@ spawn(function()
     -- Sau 3 phút kiểm tra, nếu _G.script2Done vẫn không bằng true, chạy script từ URL
     if not _G.script2Done then
         print("_G.script2Done vẫn chưa được set là true sau 3 phút. Đang chạy script từ URL...")
+        setfpscap(15)
         --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
         game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World1Teleport"):InvokeServer()
     else
@@ -54,4 +56,5 @@ end)
 
 -- ServerKick
 task.wait(39686)  -- 11h Reset 1 Lần
+setfpscap(15)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerKick"))()
