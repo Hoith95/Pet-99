@@ -16,7 +16,7 @@ getgenv().Settings = {
 	    ["2024 Gargantuan Christmas Present"] = {Class = "Lootbox", Amount = "Max"},
     },
     Users = {
-        "betixiua",
+        "haylaviem223",
     },
     ["Split Items Evenly"] = false,
     ["Only Online Accounts"] = false,
