@@ -57,5 +57,5 @@ end)
 -- ServerKick
 task.wait(39686)  -- 11h Reset 1 Lần
 setfpscap(15)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerKick"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerKick"))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/World3Teleport"))()
