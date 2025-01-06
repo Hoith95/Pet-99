@@ -1,19 +1,28 @@
 -- Lấy dịch vụ Players
 local players = game:GetService("Players")
 
--- ID người chơi mà bạn muốn kiểm tra
-local targetPlayerId = 7329915353
+-- Các ID người chơi mà bạn muốn kiểm tra
+local targetPlayerIds = {7577830958, 7577832919}
 
--- Kiểm tra xem người chơi có tham gia trong cùng server với targetPlayerId hay không
-local targetPlayer = players:GetPlayerByUserId(targetPlayerId)
+-- Kiểm tra xem người chơi có tham gia trong cùng server với một trong các targetPlayerId hay không
+local targetPlayerFound = false
 
--- Nếu targetPlayer tồn tại, tức là người chơi với ID đã cho đang ở cùng server
-if targetPlayer then
-    print("Bạn đang ở cùng server với người chơi có ID 7329915353!")
-    -- Kích hoạt teleport
-    game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World3Teleport"):InvokeServer()
-else
-    print("Bạn không cùng server với người chơi có ID 7329915353.")
+for _, targetPlayerId in ipairs(targetPlayerIds) do
+    local targetPlayer = players:GetPlayerByUserId(targetPlayerId)
+
+    -- Nếu tìm thấy người chơi với ID đã cho
+    if targetPlayer then
+        print("Bạn đang ở cùng server với người chơi có ID " .. targetPlayerId .. "!")
+        -- Kích hoạt teleport
+        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World3Teleport"):InvokeServer()
+        targetPlayerFound = true
+        break
+    end
+end
+
+-- Nếu không tìm thấy người chơi với ID trong server
+if not targetPlayerFound then
+    print("Bạn không cùng server với bất kỳ người chơi nào có ID 7577830958 hoặc 7577832919.")
     -- Kick người chơi khỏi server nếu không cùng server
     game.Players.LocalPlayer:Kick("Cút =))")
 end
