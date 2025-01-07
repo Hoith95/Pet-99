@@ -5,7 +5,7 @@
 spawn(function()
     while true do
         wait(1)  -- chờ 360 giây (6 phút)
-        setfpscap(5)
+        setfpscap(4)
     end
 end)
 
