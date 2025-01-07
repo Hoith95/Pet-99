@@ -10,5 +10,5 @@ while not _G.script1Done do
 end
 
 --- GScripts-Rank ---
-script_key="xznlDbCHnLICEciRYOPSEbLNyuekhFSq";
+script_key="MwpgreoxkMbqtBRseeXTeaehFyvfaVmK";
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank"))()
