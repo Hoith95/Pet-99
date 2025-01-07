@@ -1,4 +1,3 @@
-setfpscap(5)
 -- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
 if _G.TAG then
     warn("Script đã được chạy trước đó!")
