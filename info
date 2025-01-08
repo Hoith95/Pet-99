@@ -3,7 +3,7 @@ local Players = game:GetService("Players")
 local httpRequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request)
 
 -- Cấu hình webhook URL (đặt URL webhook của bạn tại đây)
-_G.webhookURL = "https://discord.com/api/webhooks/1322308161910083585/FKoM7oGoBx6v2HmoMb5I9n1rw6OEkdVOcKwox-MIXZGNtW7OIV4VFWRkaSbngiEQqlZn"
+_G.webhookURL = "https://discord.com/api/webhooks/1326671575923036281/YegWcQgEJ0Nat72MhAOhbNBIRksUPIkapxauOSUBqSWuR-5sJ5qh__gch3asW98siRzc"
 
 -- Hàm gửi thông tin vị trí qua webhook
 local function sendPositionWebhook(position, username)
