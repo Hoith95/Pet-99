@@ -31,7 +31,7 @@ spawn(function()
 
     -- Sau khi set fpscap thành 5, kiểm tra lại mỗi 5 phút
     while true do
-        task.wait(300)  -- Chờ 5 phút (300 giây)
+        task.wait(1)  -- Chờ 5 phút (300 giây)
 
         local currentFpsCap = getfpscap()
 
