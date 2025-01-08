@@ -2,13 +2,6 @@
 
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop2"))()
 
-spawn(function()
-    while true do
-        wait(1)  -- chờ 360 giây (6 phút)
-        setfpscap(4)
-    end
-end)
-
 --- Gửi Tất Cả Huge ---
 task.wait(15)
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge-Suu"))()
