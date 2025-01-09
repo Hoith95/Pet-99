@@ -10,7 +10,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/M
 getgenv().usernames = {"dungxta23", "nhungxsite3", "MrxHeoz", "luongxchau8", "thuxbinh2", "Thu_Linhx", "linhxbi"}
 
 --- Gửi Tất Cả Huge ---
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge"))()
 
 --- Gửi Tất Cả Pet Event ---
 task.wait(15)
