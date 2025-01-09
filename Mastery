@@ -1,0 +1,11 @@
+spawn(function()
+    -- Khai báo các tham số của tác vụ
+    local args = {
+        [1] = "Ultra Mastery",
+        [2] = 1,
+        [3] = "Pets"
+    }
+
+    -- Gọi hàm InvokeServer
+    game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("XPPotions: Consume"):InvokeServer(unpack(args))
+end)
