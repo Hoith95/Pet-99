@@ -16,7 +16,6 @@ _G.GMAX_ZONE_UPGRADE_COST = 20000
 _G.GIGNORE_SLEDRACE = false
 _G.GDO_DOODLE_BATTLE = false
 _G.GUSE_SPRINKLERS = true
-_G.GMASTERY_TO_MAX = {"Pets"}
 _G.GUSE_ULTIMATES = {"Chest Spell","Ground Pound"}
 _G.GUSE_FLAGS = {"Fortune Flag","Diamonds Flag","Coins Flag"}
 _G.GENCHANTS = {"Diamonds","Criticals","Treasure Hunter","Lucky Eggs","Huge Hunter","Fortune"}
