@@ -7,10 +7,8 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/T
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mastery"))()
 
 --- Tài Khoản Nhận Huge Và Gems ---
-getgenv().usernames = {"Tru_BatGioi"}
-
---- Gửi Tất Cả Huge ---
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge"))()
+getgenv().usernames = {"Kim_Huex"}
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge"))()
 
 --- Gửi Tất Cả Pet Event ---
 task.wait(15)
@@ -23,7 +21,7 @@ task.wait(15)
 
 --- Gửi Tất Cả Gems ---
 task.wait(15)
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-GemsH"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Gems-Shop"))()
 
 --- Gửi Tất Cả Titanic ---
 task.wait(15)
