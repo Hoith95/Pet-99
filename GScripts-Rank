@@ -18,5 +18,5 @@ _G.GDO_DOODLE_BATTLE = false
 _G.GUSE_SPRINKLERS = true
 _G.GUSE_ULTIMATES = {"Chest Spell","Ground Pound"}
 _G.GUSE_FLAGS = {"Fortune Flag","Diamonds Flag","Coins Flag"}
-_G.GENCHANTS = {"Diamonds","Criticals","Treasure Hunter","Lucky Eggs","Huge Hunter","Fortune"}
+_G.GENCHANTS = {"Criticals","Treasure Hunter","Diamonds","Lucky Eggs","Huge Hunter","Fortune"}
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/34915da4ad87a5028e1fd64efbe3543f.lua"))()
