@@ -1,0 +1,16 @@
+script_key = "bSdJMZGmgbmiNOeWrtXQAwcHwiVDAieg";
+_G.DISABLE_OVERLAY = true -- when true it does not make screen green/red when ready.
+_G.GDRY_RUN = false  -- true means just log as test, false means actually send the mails.
+_G.GMAIL_ITEMS = {
+    ["Diamonds"] = {Class = "Enchant",Id = "Diamonds",Tier = 9, Amount = 1},
+    ["Lucky Eggs"] = {Class = "Enchant",Id = "Lucky Eggs",Tier = 9, Amount = 1},
+    ["Treasure Hunter"] = {Class = "Enchant",Id = "Treasure Hunter",Tier = 9, Amount = 1},
+    ["Criticals"] = {Class = "Enchant",Id = "Criticals",Tier = 9, Amount = 1},
+    ["Huge Hunter"] = {Class = "Enchant",Id = "Huge Hunter",Tier = 1, Amount = 1},
+}
+_G.GMAIL_RECEIVERS = {
+    "Kim_Huex",
+}
+ 
+_G.GMAIL_DELAY  = 7.1 -- The time between mails 7.1 is default & tested, don't know if lower gives errors.
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/8f386eb537ee7b37a8f0ad37fe6dbc60.lua"))()
