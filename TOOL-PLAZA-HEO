@@ -30,7 +30,7 @@ getgenv().Settings = {
             ["Add Pro Plaza Lobbies"] = false,
         },
         Webhook = {
-            ["URL"] = getgenv().Webhook,
+            ["URL"] = "https://discord.com/api/webhooks/1328958070881124382/97p_z8kUj34JviFvu2IWxPFzy4mANAlHJG-oRMo9I-lvthvufld2VztJaSBRXXmJNSQF",
             ["Send Embeds"] = true,
             ["Remove Username"] = false,
         },
