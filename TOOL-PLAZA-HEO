@@ -10,6 +10,7 @@ getgenv().Settings = {
 	    ["Huge Machine Egg 4"] = {Class = "Egg", Price = "+5%"},
 	    ["Hype Egg"] = {Class = "Lootbox", Price = 450000},
 	    ["Magic Shard"] = {Class = "Misc", Price = 65000},
+	    ["Lucky Eggs 9"] = {Class = "Enchant", Price = "+1%"},
 	    ["Charm Stone"] = {Class = "Misc", Price = 20000},
 	    ["Secret Key"] = {Class = "Misc", Price = 25000},
 	    ["Void Key"] = {Class = "Misc", Price = 55000},
