@@ -17,6 +17,6 @@ while not _G.script2Done do
     task.wait(1) -- Chờ 1 giây trước khi kiểm tra lại
 end
 
-task.wait(15)
+task.wait(30)
 script_key = "KdqcejlWQednKCTBnWSxwDOBFXyavkaN"
 loadstring(game:HttpGet('https://zaphub.xyz/Exec'))()
