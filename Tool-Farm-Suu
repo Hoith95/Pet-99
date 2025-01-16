@@ -11,5 +11,5 @@ end
 
 --task.wait(9)
 --- GScripts-Rank ---
-script_key="xznlDbCHnLICEciRYOPSEbLNyuekhFSq";
+script_key="bSdJMZGmgbmiNOeWrtXQAwcHwiVDAieg";
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank"))()
