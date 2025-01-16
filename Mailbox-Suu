@@ -12,7 +12,7 @@ task.wait(15)
 
 --- Gửi Tất Cả Items ---
 task.wait(15)
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Items-Suu"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Items-Suu"))()
 
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/MailBox-Items-Only-Suu"))()
 
