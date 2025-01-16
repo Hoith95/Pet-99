@@ -9,6 +9,7 @@ while not _G.script1Done do
     task.wait(1) -- Chờ 1 giây trước khi kiểm tra lại
 end
 
+task.wait(9)
 --- GScripts-Rank ---
 script_key="MwpgreoxkMbqtBRseeXTeaehFyvfaVmK";
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank"))()
