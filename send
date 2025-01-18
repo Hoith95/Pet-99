@@ -11,7 +11,9 @@ _G.GMAIL_ITEMS = {
     ["Diamonds"] = {Class = "Currency", Id = "Diamonds", Amount = "15m"},
 }
 _G.GMAIL_RECEIVERS = {
-    "Kim_Huex",
+    "voanha3uf7",
+    "holinhwivb3",
+    "truongnhuuvkhx",
 }
  
 _G.GMAIL_DELAY  = 7.1
