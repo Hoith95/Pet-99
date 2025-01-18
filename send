@@ -6,7 +6,9 @@ _G.GMAIL_ITEMS = {
     ["Lucky Eggs"] = {Class = "Enchant",Id = "Lucky Eggs",Tier = 9, Amount = 1},
     ["Treasure Hunter"] = {Class = "Enchant",Id = "Treasure Hunter",Tier = 9, Amount = 1},
     ["Criticals"] = {Class = "Enchant",Id = "Criticals",Tier = 9, Amount = 1},
-    ["Huge Hunter"] = {Class = "Enchant",Id = "Huge Hunter",Tier = 1, Amount = 1},
+    ["Daycare Slot Voucher"] = {Class = "Misc",Id = "Daycare Slot Voucher" Amount = 20},
+    ["Player Corgi"] = {Class = "Pet", Id = "Player Corgi", Amount = 150, IsGold = false, IsRainbow = true, IsShiny = false},
+    ["Diamonds"] = {Class = "Currency", Id = "Diamonds", Amount = "15m"},
 }
 _G.GMAIL_RECEIVERS = {
     "Kim_Huex",
