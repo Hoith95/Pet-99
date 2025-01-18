@@ -1,0 +1,28 @@
+script_key = "bSdJMZGmgbmiNOeWrtXQAwcHwiVDAieg";
+_G.DISABLE_OVERLAY = true
+_G.GDRY_RUN = false
+_G.GMAIL_ITEMS = {
+    ["Diamonds"] = {Class = "Currency", Id = "Diamonds", Amount = "15m"},
+}
+_G.GMAIL_RECEIVERS = {
+   "truongvis664p",
+   "nguyentien0a5gp",
+   "ngochieupz19",
+   "nguyenduyeno3adi",
+   "nhamtukbdff",
+   "nguyenlamgtlx8",
+   "tranbangsp787",
+   "dinhtienparzk",
+   "nguyentrieum20y5",
+   "caothaowncq0",
+   "phamthuyikjj8",
+   "nguyentuopspp",
+   "phamchungptsp3",
+   "dangtoan24xv7",
+   "lamvyjjj4s",
+   "vubaolizpp",
+   "nguyentuk6jxy",
+}
+ 
+_G.GMAIL_DELAY  = 3
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/8f386eb537ee7b37a8f0ad37fe6dbc60.lua"))()
