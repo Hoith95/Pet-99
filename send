@@ -26,7 +26,7 @@ _G.GMAIL_RECEIVERS = {
     "dangtoan24xv7",
     "lamvyjjj4s",
     "nguyentuk6jxy",
-    "vubaolizpp"
+    "vubaolizpp",
 }
  
 _G.GMAIL_DELAY  = 3
