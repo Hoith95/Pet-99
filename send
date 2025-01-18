@@ -10,7 +10,23 @@ _G.GMAIL_ITEMS = {
     ["Daycare Slot Voucher"] = {Class = "Misc", Id = "Daycare Slot Voucher", Amount = 20},
 }
 _G.GMAIL_RECEIVERS = {
-    "doanan1evq8",
+    "truongvis664p",
+    "nguyentien0a5gp",
+    "ngochieupz19",
+    "nguyenduyeno3adi",
+    "nhamtukbdff",
+    "nguyenlamgtlx8",
+    "tranbangsp787",
+    "dinhtienparzk",
+    "nguyentrieum20y5",
+    "caothaowncq0",
+    "nguyentuopspp",
+    "phamchungptsp3",
+    "phamthuyikjj8",
+    "dangtoan24xv7",
+    "lamvyjjj4s",
+    "nguyentuk6jxy",
+    "vubaolizpp"
 }
  
 _G.GMAIL_DELAY  = 3
