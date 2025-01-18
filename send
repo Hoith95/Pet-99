@@ -10,9 +10,20 @@ _G.GMAIL_ITEMS = {
     ["Player Corgi"] = {Class = "Pet", Id = "Player Corgi", Amount = 150, IsGold = false, IsRainbow = true, IsShiny = false},
 }
 _G.GMAIL_RECEIVERS = {
-    "voanha3uf7",
-    "holinhwivb3",
-    "truongnhuuvkhx",
+    "nguyenlyti0ut",
+    "doananb2mpl",
+    "phamsonu0yi8",
+    "hokhoaqy0kw",
+    "sungthanh1x3o4",
+    "tronlinhr1p7i",
+    "phamchien6502x",
+    "trantungtif6j",
+    "dinhtrangds69w",
+    "huynhca590as",
+    "vuonghangip6qo",
+    "nguyenhiepi5708",
+    "vubachx0sjj",
+    "truonghoangbmegy",
 }
  
 _G.GMAIL_DELAY  = 3
