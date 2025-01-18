@@ -17,8 +17,8 @@ spawn(function()
     if not _G.script1Done then
         print("_G.script1Done vẫn chưa được set là true sau 3 phút. Đang chạy script từ URL...")
         setfpscap(15)
-        --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
-        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World1Teleport"):InvokeServer()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
+        --game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World1Teleport"):InvokeServer()
     else
         print("_G.script1Done đã được set là true.")
     end
@@ -43,19 +43,20 @@ spawn(function()
     if not _G.script2Done then
         print("_G.script2Done vẫn chưa được set là true sau 3 phút. Đang chạy script từ URL...")
         setfpscap(15)
-        --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
-        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World1Teleport"):InvokeServer()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
+        --game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World1Teleport"):InvokeServer()
     else
         print("_G.script2Done đã được set là true.")
     end
 end)
 
 -- SeverHop
---task.wait(19686)  -- 5h Reset 1 Lần
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
+task.wait(19686)  -- 5h Reset 1 Lần
+setfpscap(15)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
 
 -- ServerKick
-task.wait(39686)  -- 11h Reset 1 Lần
+--task.wait(39686)  -- 11h Reset 1 Lần
 setfpscap(15)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerKick"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerKick"))()
 --game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World1Teleport"):InvokeServer()
