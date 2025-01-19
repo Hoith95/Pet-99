@@ -7,6 +7,7 @@ _G.GMAIL_ITEMS = {
     ["Treasure Hunter"] = {Class = "Enchant",Id = "Treasure Hunter",Tier = 9, Amount = 1},
     ["Criticals"] = {Class = "Enchant",Id = "Criticals",Tier = 9, Amount = 1},
     ["Player Corgi"] = {Class = "Pet", Id = "Player Corgi", Amount = 150, IsGold = false, IsRainbow = true, IsShiny = false},
+    ["Daycare Slot Voucher"] = {Class = "Misc", Id = "Daycare Slot Voucher", Amount = 20},
 }
 _G.GMAIL_RECEIVERS = {
    "taanh4z4t2",
