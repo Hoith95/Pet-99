@@ -3,6 +3,7 @@ _G.DISABLE_OVERLAY = true
 _G.GDRY_RUN = false
 _G.GMAIL_ITEMS = {
     ["Diamonds"] = {Class = "Currency", Id = "Diamonds", Amount = "15m"},
+    ["Daycare Slot Voucher"] = {Class = "Misc", Id = "Daycare Slot Voucher", Amount = 6},
 }
 _G.GMAIL_RECEIVERS = {
    "nguyenduongd5uqt",
