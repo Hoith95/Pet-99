@@ -23,7 +23,7 @@ getgenv().Settings = {
 	["Shiny Rainbow Guard Hydras"] = {Class = "Pet", Amount = "Max"},
     },
     Users = {
-        "Tru_BatGioi",
+        "dinhhoang0710",
     },
     ["Split Items Evenly"] = false,
     ["Only Online Accounts"] = false,
