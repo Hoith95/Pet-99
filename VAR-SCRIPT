@@ -1,0 +1,82 @@
+-- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
+if _G.VAR then
+    warn("Script đã được chạy trước đó!")
+    return -- Dừng script nếu đã chạy
+end
+
+-- Đánh dấu script đã được chạy
+_G.VAR = true
+
+spawn(function()
+    -- Lấy thời gian bắt đầu
+    local startTime = tick()
+
+    -- Liên tục kiểm tra vị trí nhân vật
+    while true do
+        -- Tính toán thời gian đã trôi qua
+        local elapsedTime = tick() - startTime
+
+        -- Chờ 5 phút (300 giây) trước khi kiểm tra
+        if elapsedTime >= 300 then
+            -- Lấy nhân vật và HumanoidRootPart của người chơi
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+            -- Lấy vị trí hiện tại của nhân vật
+            local currentPos = humanoidRootPart.Position
+
+            -- Định nghĩa các vị trí cho các server
+            local oldPos = Vector3.new(131.67, 16.76, -180.43)  -- Vị trí trên server Word 1
+            local newPos = Vector3.new(-10006.57,  16.77, -381.11)  -- Vị trí trên server Word 2
+            local new2Pos = Vector3.new(-10251.82,  0.06,  -7423.59)  -- Vị trí trên server Word 3
+
+            -- Định nghĩa ID của các server
+            local word1ServerID = 8737899170
+            local word2ServerID = 16498369169
+            local word3ServerID = 17503543197  -- ID cho Word 3
+
+            -- Tìm ID server hiện tại
+            local currentServerID = game.JobId
+
+            -- Định nghĩa bán kính phạm vi kiểm tra (tùy chỉnh nếu cần)
+            local radius = 25 -- Bán kính trong khoảng cách mà bạn muốn kiểm tra
+
+            -- Tính khoảng cách giữa vị trí hiện tại và các vị trí
+            local distanceToOld = (currentPos - oldPos).Magnitude
+            local distanceToNew = (currentPos - newPos).Magnitude
+            local distanceToNew2 = (currentPos - new2Pos).Magnitude
+
+            -- Kiểm tra nếu nhân vật đang ở trong phạm vi của các vị trí
+            if currentServerID == tostring(word1ServerID) then
+                -- Nếu server là Word 1, kiểm tra vị trí cũ
+                if distanceToOld <= radius then
+                    -- Dịch chuyển đến server khác nếu nhân vật ở gần vị trí cũ trên Word 1
+                    setfpscap(15)
+                    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
+                end
+            elseif currentServerID == tostring(word2ServerID) then
+                -- Nếu server là Word 2, kiểm tra vị trí mới
+                if distanceToNew <= radius then
+                    -- Dịch chuyển đến server khác nếu nhân vật ở gần vị trí mới trên Word 2
+                    setfpscap(15)
+                    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
+                end
+            elseif currentServerID == tostring(word3ServerID) then
+                -- Nếu server là Word 3, kiểm tra vị trí mới 2
+                if distanceToNew2 <= radius then
+                    -- Dịch chuyển đến server khác nếu nhân vật ở gần vị trí mới 2 trên Word 3
+                    setfpscap(15)
+                    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
+                end
+            end
+
+            -- Sau khi đã chờ 5 phút, tiếp tục kiểm tra mỗi giây
+            startTime = tick()  -- Reset lại thời gian bắt đầu
+
+        end
+
+        -- Dừng 1 giây trước khi kiểm tra lại
+        wait(1)
+    end
+end)
