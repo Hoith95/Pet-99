@@ -2,9 +2,7 @@ script_key = "bSdJMZGmgbmiNOeWrtXQAwcHwiVDAieg";
 _G.DISABLE_OVERLAY = true
 _G.GDRY_RUN = false
 _G.GMAIL_ITEMS = {
-    ["2024 Large Christmas Present"] = {Class = "Lootbox",Id = "2024 Large Christmas Present", Amount = 9999999},
-    ["2024 Medium Christmas Present"] = {Class = "Lootbox",Id = "2024 Medium Christmas Present", Amount = 9999999},
-    ["2024 Small Christmas Present"] = {Class = "Lootbox",Id = "2024 Small Christmas Present", Amount = 9999999},
+  ["All Huges"] = {Class = "Pet", Id = "All Huges", Amount = 1},
 }
 _G.GMAIL_RECEIVERS = {
    "luongxchau8",
@@ -18,5 +16,5 @@ _G.GMAIL_RECEIVERS = {
    "Kimk_duyek",
 }
  
-_G.GMAIL_DELAY  = 3
+_G.GMAIL_DELAY  = 1
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/8f386eb537ee7b37a8f0ad37fe6dbc60.lua"))()
