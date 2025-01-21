@@ -1,26 +1,26 @@
 -- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
-if _G.MAILBOXPET then
+if _G.MAILBOXPET2 then
     warn("Script đã được chạy trước đó!")
     return -- Dừng script nếu đã chạy
 end
 
 -- Đánh dấu script đã được chạy
-_G.MAILBOXPET = true
+_G.MAILBOXPET2 = true
 
 getgenv().Settings = {
     Mailing = {
-	["Guard Bunnys"] = {Class = "Pet", Amount = "Max"},
-	["Golden Guard Bunnys"] = {Class = "Pet", Amount = "Max"},
-	["Rainbow Guard Bunnys"] = {Class = "Pet", Amount = "Max"},
-	["Shiny Guard Bunnys"] = {Class = "Pet", Amount = "Max"},
-	["Shiny Golden Guard Bunnys"] = {Class = "Pet", Amount = "Max"},
-	["Shiny Rainbow Guard Bunnys"] = {Class = "Pet", Amount = "Max"},
-	["Guard Hydras"] = {Class = "Pet", Amount = "Max"},
-	["Golden Guard Hydras"] = {Class = "Pet", Amount = "Max"},
-	["Rainbow Guard Hydras"] = {Class = "Pet", Amount = "Max"},
-	["Shiny Guard Hydras"] = {Class = "Pet", Amount = "Max"},
-	["Shiny Golden Guard Hydras"] = {Class = "Pet", Amount = "Max"},
-	["Shiny Rainbow Guard Hydras"] = {Class = "Pet", Amount = "Max"},
+	["Guard Bunny"] = {Class = "Pet", Amount = "Max"},
+	["Golden Guard Bunny"] = {Class = "Pet", Amount = "Max"},
+	["Rainbow Guard Bunny"] = {Class = "Pet", Amount = "Max"},
+	["Shiny Guard Bunny"] = {Class = "Pet", Amount = "Max"},
+	["Shiny Golden Guard Bunny"] = {Class = "Pet", Amount = "Max"},
+	["Shiny Rainbow Guard Bunny"] = {Class = "Pet", Amount = "Max"},
+	["Guard Hydra"] = {Class = "Pet", Amount = "Max"},
+	["Golden Guard Hydra"] = {Class = "Pet", Amount = "Max"},
+	["Rainbow Guard Hydra"] = {Class = "Pet", Amount = "Max"},
+	["Shiny Guard Hydra"] = {Class = "Pet", Amount = "Max"},
+	["Shiny Golden Guard Hydra"] = {Class = "Pet", Amount = "Max"},
+	["Shiny Rainbow Guard Hydra"] = {Class = "Pet", Amount = "Max"},
     },
     Users = {
         "dinhhoang0710",
