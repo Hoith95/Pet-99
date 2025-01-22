@@ -10,7 +10,7 @@ end
 
 --task.wait(9)
 --- GScripts-Rank ---
-script_key="MwpgreoxkMbqtBRseeXTeaehFyvfaVmK";
+script_key="oHpduHIKSZMNuNtgAOcPOYsvRrzcymTv";
 
 local Save = require(game:GetService("ReplicatedStorage").Library.Client.Save)
 local rank = Save.Get().Rank
