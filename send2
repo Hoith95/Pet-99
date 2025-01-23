@@ -8,7 +8,6 @@ _G.GMAIL_ITEMS = {
     ["Criticals"] = {Class = "Enchant",Id = "Criticals",Tier = 7, Amount = 1},
     ["Player Fox"] = {Class = "Pet", Id = "Player Fox", Amount = 150, IsGold = false, IsRainbow = true, IsShiny = false},
 }
-}
 _G.GMAIL_RECEIVERS = {
     "phantrungbv9u",
     "hakhaixbnh",
