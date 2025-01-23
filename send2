@@ -2,8 +2,10 @@ script_key = "bSdJMZGmgbmiNOeWrtXQAwcHwiVDAieg";
 _G.DISABLE_OVERLAY = true
 _G.GDRY_RUN = false
 _G.GMAIL_ITEMS = {
-    ["Diamonds"] = {Class = "Currency", Id = "Diamonds", Amount = "4m"},
-    ["Player Fox"] = {Class = "Pet", Id = "Player Fox", Amount = 150, IsGold = false, IsRainbow = true, IsShiny = false},
+    ["Diamonds"] = {Class = "Enchant",Id = "Diamonds",Tier = 7, Amount = 1},
+    ["Lucky Eggs"] = {Class = "Enchant",Id = "Lucky Eggs",Tier = 7, Amount = 2},
+    ["Treasure Hunter"] = {Class = "Enchant",Id = "Treasure Hunter",Tier = 7, Amount = 1},
+    ["Criticals"] = {Class = "Enchant",Id = "Criticals",Tier = 7, Amount = 1},
 }
 _G.GMAIL_RECEIVERS = {
     "vodang6zp3",
