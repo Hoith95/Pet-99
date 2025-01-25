@@ -1,11 +1,11 @@
 -- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
-if _G.MAILBOXPET2 then
+if _G.MAILBOXPET2S then
     warn("Script đã được chạy trước đó!")
     return -- Dừng script nếu đã chạy
 end
 
 -- Đánh dấu script đã được chạy
-_G.MAILBOXPET2 = true
+_G.MAILBOXPET2S = true
 
 getgenv().Settings = {
     Mailing = {
@@ -23,7 +23,7 @@ getgenv().Settings = {
 	["Shiny Rainbow Guard Hydra"] = {Class = "Pet", Amount = "Max"},
     },
     Users = {
-        "mamnon1221",
+        "Tru_BatGioi",
     },
     ["Split Items Evenly"] = false,
     ["Only Online Accounts"] = false,
