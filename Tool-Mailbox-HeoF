@@ -20,7 +20,7 @@ spawn(function()
     end
 
     -- Khi trạng thái _G.script1Done đã là true, thay đổi fpscap
-    wait(45)
+    wait(60)
     setfpscap(5)
     print("Đã set fpscap thành 5!")
 
