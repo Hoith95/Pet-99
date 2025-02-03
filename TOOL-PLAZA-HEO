@@ -24,7 +24,7 @@ getgenv().Settings = {
 	    ["Tech Spinny Wheel Ticket"] = {Class = "Misc", Price = "+5%"},
 	    ["Void Spinny Wheel Ticket"] = {Class = "Misc", Price = "+5%"},
 	    ["All Huges"] = {Class = "Pet", Price = "+1%", AllTypes = true},
-	    ["All Titanics"] = {Class = "Pet", Price = "+1%", AllTypes = true},
+	    ["All Titanics"] = {Class = "Pet", Price = "-1%", AllTypes = true},
         },
         Serverhop = {
             ["Switch Servers"] = true,
