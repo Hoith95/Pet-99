@@ -4,6 +4,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/W
 _G.script1Done = false -- Đặt trạng thái ban đầu là chưa hoàn thành
 
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(179.79, 17.50, -139.68)
+task.wait(10)
 
 script_key="UBqwHOLCQMlruRZAOrFffLsGREatfXyk";
 
