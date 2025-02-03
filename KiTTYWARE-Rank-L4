@@ -3,6 +3,8 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/W
 -- Script 1: Thực thi và lưu trạng thái
 _G.script1Done = false -- Đặt trạng thái ban đầu là chưa hoàn thành
 
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(179.79, 17.50, -139.68)
+
 script_key="UBqwHOLCQMlruRZAOrFffLsGREatfXyk";
 
 local Save = require(game:GetService("ReplicatedStorage").Library.Client.Save)
