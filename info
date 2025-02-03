@@ -3,20 +3,25 @@ local Players = game:GetService("Players")
 local httpRequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request)
 
 -- Cấu hình webhook URL (đặt URL webhook của bạn tại đây)
-_G.webhookURL = "https://discord.com/api/webhooks/1326671575923036281/YegWcQgEJ0Nat72MhAOhbNBIRksUPIkapxauOSUBqSWuR-5sJ5qh__gch3asW98siRzc"
+_G.webhookURL = "https://discord.com/api/webhooks/1331110487298936872/X3n33-ykzDD4ifh79HYMPt2QryNI-j6vn8WLtzV_uaF-pb6XftanxwpeqrJIkP5npORq"
+-- Cấu hình _G.UserID (ID người chơi bạn muốn ping)
+_G.UserID = "344054115539615745"  -- Thay thế bằng UserID thực tế của người chơi bạn muốn ping
 
--- Hàm gửi thông tin vị trí qua webhook
+-- Hàm gửi thông tin vị trí qua webhook và ping người chơi
 local function sendPositionWebhook(position, username)
     if _G.webhookURL == "" then
         warn("Webhook URL chưa được cấu hình.")
         return
     end
 
+    -- Tạo mention cho người chơi (ping người chơi trong Discord)
+    local ping = string.format("<@%s>", _G.UserID)  -- Sử dụng _G.UserID thay vì player.UserId
+
     -- Payload dữ liệu cho webhook
     local payload = {
         username = "Thông tin Vị trí Nhân vật",
         avatar_url = "https://cdn.discordapp.com/embed/avatars/0.png", -- URL avatar (có thể tùy chỉnh)
-        content = string.format("Thông báo từ người chơi: **%s**", username),
+        content = string.format("Thông báo từ người chơi: **%s** %s", username, ping), -- Thêm phần ping người chơi
         embeds = {
             {
                 title = "Vị trí nhân vật",
@@ -54,5 +59,5 @@ local currentPos = humanoidRootPart.Position
 -- In ra vị trí hiện tại của nhân vật
 print("Vị trí hiện tại của nhân vật:", currentPos)
 
--- Gửi vị trí nhân vật qua webhook
+-- Gửi vị trí nhân vật qua webhook và ping người chơi
 sendPositionWebhook(currentPos, player.Name)
