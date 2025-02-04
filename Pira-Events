@@ -1,3 +1,5 @@
+_G.script2Done = true
+
 getgenv().Config = {
     ["Mailing"] = {
         ["Usernames"] = {"Kim_Huex"},
