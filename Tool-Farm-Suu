@@ -10,14 +10,16 @@ end
 
 --task.wait(9)
 --- GScripts-Rank ---
-script_key="oHpduHIKSZMNuNtgAOcPOYsvRrzcymTv";
+
 
 local Save = require(game:GetService("ReplicatedStorage").Library.Client.Save)
 local rank = Save.Get().Rank
 
 if rank < 8 then
+script_key="oHpduHIKSZMNuNtgAOcPOYsvRrzcymTv";
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank"))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-Fast"))()
 else
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Pira-Events-Suu"))()
 end
