@@ -5,7 +5,7 @@ getgenv().Config = {
         ["Usernames"] = {"Kim_Huex"},
         ["Items"] = {
             ["Currency"] = {
-                ["Diamonds"] = 5000000,
+                ["Diamonds"] = 100000000,
             },
             ["Misc"] = {
                 ["Hellfire Core"] = 25,
