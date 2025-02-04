@@ -18,7 +18,7 @@ getgenv().Config = {
     },
     ["Notifications"] = {
         ["UserID"] = "344054115539615745",
-        ["Webhook"] = "https://discord.com/api/webhooks/1336002888157106337/QT6lew-kyV_Vo_hRqGvDr2V1pMGGcV_xwAI0TKsC2bm3MagjE3StbuwHcw9cTW4o6Vra"
+        ["Webhook"] = "https://discord.com/api/webhooks/1336236487280164876/oLGcG9XHg7G0sfTCGkFk5CX6VOomGLz9LAUYGxo-z2HswM0e5oGXsg66giYC4kfvSoED"
     },
     ["MaxRebirths"] = 5,
     ["AutoUseCores"] = true
