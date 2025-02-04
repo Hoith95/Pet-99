@@ -2,7 +2,14 @@
 
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop2"))()
 
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TeleMap"))()
+local Save = require(game:GetService("ReplicatedStorage").Library.Client.Save)
+local rank = Save.Get().Rank
+
+if rank < 8 then
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TeleMap"))()
+else
+-- ok
+end
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TeleMap1-Rank11"))()
 
