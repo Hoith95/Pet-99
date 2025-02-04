@@ -14,7 +14,7 @@ getgenv().Settings = {
 	    ["Hype Egg 2"] = {Class = "Lootbox", Amount = 1},
     },
     Users = {
-        "chianhbebong",
+        "dinhhoang071097",
     },
     ["Split Items Evenly"] = false,
     ["Only Online Accounts"] = false,
