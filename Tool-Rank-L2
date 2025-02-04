@@ -10,12 +10,12 @@ end
 
 --task.wait(9)
 --- GScripts-Rank ---
-script_key="xCQxdVoKLDHreffYEHWDsWwcvipMyeHq";
 
 local Save = require(game:GetService("ReplicatedStorage").Library.Client.Save)
 local rank = Save.Get().Rank
 
 if rank < 8 then
+script_key="xCQxdVoKLDHreffYEHWDsWwcvipMyeHq";
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank"))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-Fast"))()
 else
