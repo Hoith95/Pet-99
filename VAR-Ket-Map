@@ -21,6 +21,7 @@ spawn(function()
         -- Kiểm tra nếu nhân vật đang trong phạm vi của một trong hai vị trí
         if distanceToNew <= radius then
             --print("Nhân vật đang trong phạm vi vị trí mới!")
+            wait(9)
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-64.89, 159.77, 6430.60)
         else
             --print("Nhân vật không trong phạm vi vị trí cũ hoặc mới!")
