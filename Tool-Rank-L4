@@ -8,7 +8,11 @@ while not _G.script1Done do
     task.wait(1) -- Chờ 1 giây trước khi kiểm tra lại
 end
 
---task.wait(9)
+spawn(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Egg-Slots-Rank8"))()
+end)
+
+task.wait(5)
 --- GScripts-Rank ---
 
 
