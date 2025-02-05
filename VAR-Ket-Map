@@ -13,7 +13,7 @@ spawn(function()
         local newPos = Vector3.new(536.61, 17.37, 91.11)
 
         -- Định nghĩa bán kính phạm vi kiểm tra (tùy chỉnh nếu cần)
-        local radius = 25 -- Bán kính trong khoảng cách mà bạn muốn kiểm tra
+        local radius = 15 -- Bán kính trong khoảng cách mà bạn muốn kiểm tra
 
         -- Tính khoảng cách giữa vị trí hiện tại và vị trí mới
         local distanceToNew = (currentPos - newPos).Magnitude
