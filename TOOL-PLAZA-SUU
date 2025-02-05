@@ -11,6 +11,7 @@ getgenv().Settings = {
 	    ["Lockpick A"] = {Class = "Misc", Price = "+1%"},
 	    ["Lockpick B"] = {Class = "Misc", Price = "+1%"},
 	    ["Lockpick C"] = {Class = "Misc", Price = "+1%"},
+	    ["Hellfire Gifts"] = {Class = "Lootbox", Price = "+1%"},
 	    ["Jolly Gift"] = {Class = "Lootbox", Price = "+1%"},
 	    ["Snowflake Gift"] = {Class = "Lootbox", Price = "+1%"},
 	    ["Huge Machine Egg 4"] = {Class = "Egg", Price = "+5%"},
