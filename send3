@@ -2,13 +2,9 @@ script_key = "bSdJMZGmgbmiNOeWrtXQAwcHwiVDAieg";
 _G.DISABLE_OVERLAY = true
 _G.GDRY_RUN = false
 _G.GMAIL_ITEMS = {
-  ["All Huges"] = {Class = "Pet", Id = "All Huges", Amount = 1},
+ ["Hellfire Gifts"] = {Class = "Lootbox", Id = "Hellfire Gift", MinAmount = 9999999},
 }
-_G.GMAIL_RECEIVERS = {
-   "luongxchau8",
-   "Long_Vus1",
-   "Kimk_duyek",
-}
+_G.GMAIL_RECEIVERS = {"Thu_Linhx", "dungxta23", "xuxca2"}
  
 _G.GMAIL_DELAY  = 1
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/8f386eb537ee7b37a8f0ad37fe6dbc60.lua"))()
