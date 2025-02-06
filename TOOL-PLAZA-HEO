@@ -31,7 +31,7 @@ getgenv().Settings = {
         ["Switch Servers"] = {Active = true, MinuteDelay = 120, OnlyPRO = false},
         ["Webhook"] = {Active = true, URL = "https://discord.com/api/webhooks/1331129761325387846/Ejn3akos0TfgJzsmwa4hG2j_giNiYqqErhEdjH_LihoIPslyMASEL6MwHfUavn2vMjPq"},
         ["Kill Switch"] = {
-            ["Booth Runout"] = true,
+            ["Booth Runout"] = false,
             ["Diamonds Hit: 1b"] = false,
             ["60 Minutes Timer"] = false,
             ["^^^ Switch To Sniping"] = false,
