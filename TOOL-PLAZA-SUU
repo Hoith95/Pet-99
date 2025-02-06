@@ -1,8 +1,10 @@
-script_key = "luverOebtFQCftoJADJajSnXIuXGYyqz"
+script_key="luverOebtFQCftoJADJajSnXIuXGYyqz";
 getgenv().Settings = {
     Seller = {
         Active = true,
-        Items = {
+        ["Items"] = {
+	    ["All Titanics"] = {Class = "Pet", Price = "+1%", AllTypes = true},
+            ["All Huges"] = {Price = "+1%", Priority = true, AllTypes = true},
 	    ["2024 Gargantuan Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
 	    ["2024 Large Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
 	    ["2024 Medium Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
@@ -25,31 +27,18 @@ getgenv().Settings = {
 	    ["Spinny Wheel Ticket"] = {Class = "Misc", Price = "+5%"},
 	    ["Tech Spinny Wheel Ticket"] = {Class = "Misc", Price = "+5%"},
 	    ["Void Spinny Wheel Ticket"] = {Class = "Misc", Price = "+5%"},
-	    ["All Huges"] = {Class = "Pet", Price = "+1%", AllTypes = true},
-	    ["All Titanics"] = {Class = "Pet", Price = "+1%", AllTypes = true},
         },
-        Serverhop = {
-            ["Switch Servers"] = true,
-            ["Teleport Delay (m)"] = 120,
-            ["Add Pro Plaza Lobbies"] = false,
-        },
-        Webhook = {
-            ["URL"] = "https://discord.com/api/webhooks/1328957900290261004/MBYKe-Tefq3RHNB7ATIaPM2f68pbLFDB51M3W1sDwjVVUxkoJlW8Lt40y-ebFXPBzJcL",
-            ["Send Embeds"] = true,
-            ["Remove Username"] = false,
-        },
-        StopParams = {
-            ["Item Runout"] = false,
+        ["Switch Servers"] = {Active = true, MinuteDelay = 120, OnlyPRO = false},
+        ["Webhook"] = {Active = true, URL = ""},
+        ["Kill Switch"] = {
+            ["Booth Runout"] = false,
             ["Diamonds Hit: 1b"] = false,
-            ["60 Minutes"] = false,
-            ["Switch To Sniping"] = false,
+            ["60 Minutes Timer"] = false,
+            ["^^^ Switch To Sniping"] = false,
         },
-        Other = {
-            ["Auto Accept Mail"] = true,
-            ["Always Try Adding Listings"] = true,
-            ["Never Join Friendslist"] = true,
-        },
+        ["Diamonds Sendout"] = {Active = false, Username = "", Amount = "1b"},
     },
-    
+
+    [[ Thank you for using System Exodus <3! ]]
 }
-loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/60a293774110e918789cddc0e20be048.lua"))()
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/3b58d9c50c5ea74f255af40a8f735773.lua"))()
