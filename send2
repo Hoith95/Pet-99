@@ -3,7 +3,6 @@ _G.DISABLE_OVERLAY = true
 _G.GDRY_RUN = false
 _G.GMAIL_ITEMS = {
     ["Diamonds"] = {Class = "Currency", Id = "Diamonds", Amount = "1m"},
-    ["Player Fox"] = {Class = "Pet", Id = "Player Fox", Amount = 150, IsGold = false, IsRainbow = true, IsShiny = false},
 }
 _G.GMAIL_RECEIVERS = {
     "maikhanhqe8eb",
