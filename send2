@@ -6,7 +6,6 @@ _G.GMAIL_ITEMS = {
     ["Player Fox"] = {Class = "Pet", Id = "Player Fox", Amount = 150, IsGold = false, IsRainbow = true, IsShiny = false},
 }
 _G.GMAIL_RECEIVERS = {
-    "dongduy7zdzo",
     "caovan1pkhi",
     "haho4j6mm",
     "lenhati8p00",
