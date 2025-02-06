@@ -8,11 +8,6 @@ while not _G.script1Done do
     task.wait(1) -- Chờ 1 giây trước khi kiểm tra lại
 end
 
-spawn(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Egg-Slots-Rank8"))()
-end)
-
-task.wait(5)
 --- GScripts-Rank ---
 
 
@@ -25,5 +20,12 @@ script_key="oHpduHIKSZMNuNtgAOcPOYsvRrzcymTv";
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-Fast"))()
 else
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events"))()
+
+spawn(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Egg-Slots-Rank8"))()
+end)
+
+task.wait(5)
+
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Pira-Events-Suu"))()
 end
