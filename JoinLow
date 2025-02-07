@@ -5,10 +5,28 @@ function ListServers(cursor)
    return game.HttpService:JSONDecode(Raw)
 end
 
-local Server, Next; repeat
+local function teleportToServer(serverId)
+   -- Kiểm tra nếu teleport không thành công và thử lại
+   local success, message = pcall(function()
+       game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, serverId, game.Players.LocalPlayer)
+   end)
+
+   if success then
+       return true
+   else
+       warn("Teleport failed: " .. message)
+       return false
+   end
+end
+
+local Server, Next
+repeat
    local Servers = ListServers(Next)
    Server = Servers.data[1]
    Next = Servers.nextPageCursor
-until Server
 
-game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId , Server.id, game.Players.LocalPlayer)
+   -- Tiến hành teleport đến server
+   local teleportSuccess = teleportToServer(Server.id)
+
+   -- Lặp lại nếu teleport chưa thành công
+until teleportSuccess
