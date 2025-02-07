@@ -286,6 +286,21 @@ _G.GMAIL_RECEIVERS = {
     "lamduyen2201xz",
     "phamngoc1505xz",
     "voyen1602xz"
+    "kieunhu2803xz",
+    "thailap0910xz",
+    "nguyenhuy2707xz",
+    "tranphat2403xz",
+    "dovan2812xz",
+    "homanh1203xz",
+    "phamchuong1811xz",
+    "nguyenthai1909xz",
+    "lodang003xz",
+    "nguyenmuon2401xz",
+    "phannguyen2212xz",
+    "hoangxgiang2309xz",
+    "nguyenngan1912xz",
+    "nguyenan0508xz",
+    "dinhhuy1604xz",
 }
  
 _G.GMAIL_DELAY  = 0
