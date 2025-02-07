@@ -5,8 +5,8 @@ if rank >= 8 then
     if _G.EventDone == true then
         return  -- Dừng script nếu _G.EventDone đã được gán là true
     else
-        --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
+        --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
     end
 else
     -- chưa đủ Rank
