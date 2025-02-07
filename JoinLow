@@ -16,8 +16,8 @@ local function teleportToMostPopulatedServer(placeId, retryLimit, userIdsToExclu
     while attempts < retryLimit do
         attempts += 1
         local success, result = pcall(function()
-            -- Lấy danh sách server với sortOrder=Desc và excludeFullServers=true để lọc các server đầy
-            return HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. placeId .. '/servers/Public?sortOrder=Desc&limit=100&excludeFullServers=true')).data
+            -- Lấy danh sách server với sortOrder=Asc và excludeFullServers=true để lọc các server không đầy
+            return HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. placeId .. '/servers/Public?sortOrder=Asc&limit=100&excludeFullServers=true')).data
         end)
 
         if success and result and #result > 0 then
