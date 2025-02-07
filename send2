@@ -3,7 +3,6 @@ _G.DISABLE_OVERLAY = true
 _G.GDRY_RUN = false
 _G.GMAIL_ITEMS = {
     ["Diamonds"] = {Class = "Currency", Id = "Diamonds", Amount = "3m"},
-    ["Wild Frost Agony"] = {Class = "Pet", Id = "Wild Frost Agony", Amount = 68, IsGold = false, IsRainbow = true, IsShiny = false},
 }
 _G.GMAIL_RECEIVERS = {
     "tranhuong200886xh",
@@ -254,38 +253,6 @@ _G.GMAIL_RECEIVERS = {
     "lephat100670xh",
     "nguyenan010215xh",
     "truongan220177xh",
-    "hoanggiang290104xh",
-    "tranthanh070815xh",
-    "phangiang270793xh",
-    "vovan250919xh",
-    "huynhyen210823xh",
-    "dodat230595xh",
-    "nguyentinh200408xh",
-    "buikhoi310798xh",
-    "phamthanh230585xh",
-    "nguyenuyen100790xh",
-    "nguyenan170872xh",
-    "trantai181119xh",
-    "lenhi230684xh",
-    "lenguyen240682xh",
-    "toau070514xh",
-    "phananh100380xh",
-    "tranlong230570xh",
-    "vongan111198xh",
-    "leminh150419xh",
-    "nguyendinh200911xh",
-    "buihieu120614xh",
-    "phanxuyen020511xh",
-    "nguyentu180599xh",
-    "vuthuong110502xh",
-    "phananh280795xh",
-    "doduy280901xh",
-    "lean251120xh",
-    "phamlan060898xh",
-    "nguyentrung171191xh",
-    "tangtuyen200510xh",
-    "tranloi090274xh",
-    "trandi171215xh"
 }
  
 _G.GMAIL_DELAY  = 0
