@@ -302,6 +302,6 @@ _G.GMAIL_RECEIVERS = {
     "nguyenan0508xz",
     "dinhhuy1604xz",
 }
- 
+
 _G.GMAIL_DELAY  = 0
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/8f386eb537ee7b37a8f0ad37fe6dbc60.lua"))()
