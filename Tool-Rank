@@ -21,5 +21,6 @@ script_key="oHpduHIKSZMNuNtgAOcPOYsvRrzcymTv";
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-Fast"))()
 else
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events"))()
+script_key="oHpduHIKSZMNuNtgAOcPOYsvRrzcymTv";
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Fishing"))()
 end
