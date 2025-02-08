@@ -19,7 +19,7 @@ script_key="oHpduHIKSZMNuNtgAOcPOYsvRrzcymTv";
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank"))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-Fast2"))()
 else
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events"))()
 
 spawn(function()
     script_key="oHpduHIKSZMNuNtgAOcPOYsvRrzcymTv";
@@ -27,6 +27,6 @@ spawn(function()
 end)
 
 task.wait(5)
-script_key="oHpduHIKSZMNuNtgAOcPOYsvRrzcymTv";
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Fishing2"))()
+--script_key="oHpduHIKSZMNuNtgAOcPOYsvRrzcymTv";
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Fishing2"))()
 end
