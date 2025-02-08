@@ -53,10 +53,10 @@ spawn(function()
 end)
 
 -- SeverHop
-task.wait(5555)  -- 1h30 Reset 1 Lần
-setfpscap(15)
+--task.wait(5555)  -- 1h30 Reset 1 Lần
+--setfpscap(15)
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
 
 -- SeverHop
 task.wait(19686)  -- 5h Reset 1 Lần
