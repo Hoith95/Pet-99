@@ -28,5 +28,5 @@ end)
 
 task.wait(5)
 script_key="MwpgreoxkMbqtBRseeXTeaehFyvfaVmK";
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Fishing2"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events"))()
 end
