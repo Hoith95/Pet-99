@@ -10,7 +10,7 @@ print("Số lượng kim cương hiện tại là: " .. currentDiamondValue)
 -- Kiểm tra nếu số lượng kim cương nhỏ hơn 3000000
 if currentDiamondValue < 3000000 then
     print("Số lượng kim cương không đủ.")
-    return -- Dừng script tại đây
+    --return -- Dừng script tại đây
 end
 
 -- Tính toán số lượng kim cương sau khi trừ đi 500000
