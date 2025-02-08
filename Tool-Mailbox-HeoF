@@ -50,7 +50,7 @@ spawn(function()
                 print("fpscap không phải 3, 4, hoặc 5, đã set lại thành 3!")
             end
         else
-            print("fpscap vẫn là một trong 3, 4, hoặc 5.")
+            --print("fpscap vẫn là một trong 3, 4, hoặc 5.")
         end
 
         -- Kiểm tra thời gian đã trôi qua kể từ khi set fpscap thành 5
