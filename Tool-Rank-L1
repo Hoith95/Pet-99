@@ -26,5 +26,5 @@ end)
 
 task.wait(5)
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Pira-Events"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Fishing"))()
 end
