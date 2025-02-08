@@ -21,7 +21,7 @@ else
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events"))()
 
 spawn(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Egg-Slots-Rank8"))()
+    --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Egg-Slots-Rank8"))()
 end)
 
 task.wait(5)
