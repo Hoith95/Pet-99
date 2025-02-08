@@ -16,7 +16,6 @@ end
 -- Tính toán số lượng kim cương sau khi trừ đi 500000
 local adjustedDiamondValue = currentDiamondValue - 500000
 
-script_key="oHpduHIKSZMNuNtgAOcPOYsvRrzcymTv";
 _G.GDRY_RUN = false
 _G.DISABLE_OVERLAY = true
 _G.GLOOTBOXES = {"Locked Hype Egg"}
