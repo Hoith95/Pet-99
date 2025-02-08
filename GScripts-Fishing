@@ -1,4 +1,5 @@
 _G.script2Done = true
+setfpscap(5)
 
 _G.GPROGRESS_MODE = "Fish" -- Hatch
 _G.GGFX_MODE = 1
