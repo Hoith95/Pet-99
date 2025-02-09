@@ -100,6 +100,6 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
 
     -- Nếu không có vật phẩm nào đủ điều kiện để gửi, in ra thông báo
     if not AnyItemsSent then
-        print("Không có vật phẩm nào đủ điều kiện để gửi.")
+        --print("Không có vật phẩm nào đủ điều kiện để gửi.")
     end
 end
