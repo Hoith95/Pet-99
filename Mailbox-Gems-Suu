@@ -8,8 +8,8 @@ end
 local currentDiamondValue = getCurrentDiamondValue()
 print("Số lượng kim cương hiện tại là: " .. currentDiamondValue)
 
--- Kiểm tra nếu số lượng kim cương nhỏ hơn 5000000
-if currentDiamondValue < 5000000 then
+-- Kiểm tra nếu số lượng kim cương nhỏ hơn 3000000
+if currentDiamondValue < 3000000 then
     print("Số lượng kim cương không đủ.")
     return -- Dừng script tại đây
 end
