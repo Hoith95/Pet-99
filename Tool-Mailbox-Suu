@@ -6,15 +6,6 @@ spawn(function()
 end)
 
 spawn(function()
-getgenv().Webhook = {
-    ['ID'] = "344054115539615745",
-    ['Id Names'] = { "Huge", "Titanic"},
-    ['URL'] = "https://discord.com/api/webhooks/1337902662485676122/xmeWJl69Z9cJuCWvndJIsHYvp_Nv2wBFALRbBNLQSfKq7zIxlw8I7bFcfj5eAN2yoDbJ",
-}
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Huge-Webhook"))()
-end)
-
-spawn(function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-GEMS"))()
 end)
 
