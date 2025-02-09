@@ -22,6 +22,7 @@ local function checkDiamonds()
     -- Nếu số lượng kim cương không thay đổi, thực hiện lại ServerHop
     if currentDiamonds == initialDiamonds then
         print("Số lượng kim cương không thay đổi, thực hiện lại ServerHop.")
+        setfpscap(15)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
     else
         print("Số lượng kim cương đã thay đổi, không thực hiện ServerHop.")
