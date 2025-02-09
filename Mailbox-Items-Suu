@@ -1,22 +1,96 @@
--- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
-if _G.MAILBOXITEMS then
-    warn("Script đã được chạy trước đó!")
-    return -- Dừng script nếu đã chạy
-end
-
--- Đánh dấu script đã được chạy
-_G.MAILBOXITEMS = true
-
-getgenv().Settings = {
-    Mailing = {
-	    ["Huge Machine Egg 4"] = {Class = "Egg", Amount = 1},
-	    ["Hellfire Gifts"] = {Class = "Lootbox", Amount = "Max"},
-	    ["Love Gift"] = {Class = "Lootbox", Amount = "Max"},
+getgenv().AutoMail = {
+    ['Items'] = {
+        ['Hype Egg 2'] = { Class = "Lootbox", Amount = 1 },
+        ['Hype Egg'] = { Class = "Lootbox", Amount = "Max" },
+        ['Huge Machine Egg 4'] = { Class = "Egg", Amount = 1 },
+        ['Hellfire Gifts'] = { Class = "Lootbox", MinAmount = 15, Amount = "Max" },
+        ['Love Gift'] = { Class = "Lootbox", MinAmount = 15, Amount = "Max" },
+        ['Doodle Gift'] = { Class = "Lootbox", MinAmount = 3, Amount = "Max" },
     },
-    Users = {
-        "dinhhoang071097",
-    },
-    ["Split Items Evenly"] = false,
-    ["Only Online Accounts"] = false,
+    ['Loop Interval'] = 60,
+    ['Users'] = {"dinhhoang071097"},
 }
-loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/86847850c3165379f5be2d9d071eaccb.lua"))()
+
+repeat task.wait() until game:IsLoaded()
+local LocalPlayer = game:GetService('Players').LocalPlayer
+repeat task.wait() until not LocalPlayer.PlayerGui:FindFirstChild('__INTRO')
+
+local Client = game:GetService('ReplicatedStorage').Library.Client
+
+local Network = require(Client.Network)
+local SaveModule = require(Client.Save)
+
+local PetIds = {"Huge", "Titanic"}
+
+while task.wait(AutoMail['Loop Interval'] or 60) do
+    local Queue = {}
+    local AnyItemsSent = false  -- Biến kiểm tra xem có vật phẩm nào được gửi không
+
+    -- Duyệt qua tất cả các vật phẩm trong inventory của người chơi
+    for Class, Items in pairs(SaveModule.Get()['Inventory']) do
+        for uid, v in pairs(Items) do
+            local PetCheck = (Class == "Pet") and table.find(PetIds, v.id)
+            local Config = false
+
+            -- Duyệt qua các vật phẩm trong AutoMail
+            for Id, Info in pairs(AutoMail['Items']) do
+                if Id == v.id and Info.Class == Class and Info.pt == v.pt and Info.sh == v.sh and Info.tn == v.tn then
+                    if Info.MinAmount then
+                        if (v._am or 0) >= Info.MinAmount then
+                            Config = true
+                        end
+                    else
+                        if Info.Amount == "Max" then
+                            if v._am > 0 then
+                                Config = true
+                            end
+                        elseif (Info.Amount or 0) <= (v._am or 1) then
+                            Config = true
+                        end
+                    end
+                    break
+                end
+            end
+
+            if Class == "Egg" or Config or PetCheck and not Queue[uid] then
+                Queue[uid] = { Class = Class, Info = v }
+            end
+        end
+    end
+
+    -- Nếu có vật phẩm hợp lệ trong hàng đợi, gửi thư
+    for uid, Data in pairs(Queue) do
+        local Unlocked = false
+        local Mailed = false
+        local v = Data.Info
+        local amountToSend = (v._am or 1)
+
+        -- Nếu Amount là "Max", gửi toàn bộ số lượng có sẵn
+        if amountToSend == "Max" then
+            amountToSend = v._am
+        end
+
+        if v._lk then
+            while not Unlocked do
+                Unlocked, err = Network.Invoke("Locking_SetLocked", uid, false) task.wait(0.1)
+            end
+        end
+
+        local User = AutoMail['Users'][math.random(1, #AutoMail['Users'])]
+        -- Gửi thư và in ra thông tin
+        while not Mailed do
+            Mailed, err = Network.Invoke("Mailbox: Send", User, "Bless", Data.Class, uid, amountToSend) task.wait(0.1)
+        end
+
+        -- Đánh dấu rằng đã có vật phẩm được gửi
+        AnyItemsSent = true
+
+        -- In ra số lượng vật phẩm và người nhận
+        print("Đã gửi " .. amountToSend .. " vật phẩm " .. v.id .. " cho người dùng: " .. User)
+    end
+
+    -- Nếu không có vật phẩm nào đủ điều kiện để gửi, in ra thông báo
+    if not AnyItemsSent then
+        print("Không có vật phẩm nào đủ điều kiện để gửi.")
+    end
+end
