@@ -21,8 +21,8 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/G
 else
 
 spawn(function()
-    script_key="oHpduHIKSZMNuNtgAOcPOYsvRrzcymTv";
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-GScripts-Suu"))()
+    --script_key="oHpduHIKSZMNuNtgAOcPOYsvRrzcymTv";
+    --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-GScripts-Suu"))()
 end)
 
 task.wait(5)
