@@ -3,6 +3,7 @@ _G.DISABLE_OVERLAY = true
 _G.GDRY_RUN = false
 _G.GMAIL_ITEMS = {
 ["Hellfire Gift"] = {Class = "Lootbox", Id = "Hellfire Gift", MinAmount = 900, Amount = 9999999},
+["Hype Egg 2"] = {Class = "Lootbox", Id = "Hype Egg 2", Amount = 9999999},
 }
 _G.GMAIL_RECEIVERS = {"Thu_Linhx", "dungxta23", "xuxca2"}
  
