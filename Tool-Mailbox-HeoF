@@ -6,6 +6,15 @@ spawn(function()
 end)
 
 spawn(function()
+getgenv().Webhook = {
+    ['ID'] = "344054115539615745",
+    ['Id Names'] = { "Huge", "Titanic"},
+    ['URL'] = "https://discord.com/api/webhooks/1337893141570912438/DVA9eG_BvI0NSJHGsjlK9GMQbugQV2gdELz4wcoqZl1j2oUnxz8urTzePVIoUDo1-3JX",
+}
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Huge-Webhook"))()
+end)
+
+spawn(function()
     while true do
         wait(360)  -- chờ 360 giây (6 phút)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-TAG"))()
