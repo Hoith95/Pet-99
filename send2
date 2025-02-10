@@ -3,7 +3,6 @@ _G.DISABLE_OVERLAY = true
 _G.GDRY_RUN = false
 _G.GMAIL_ITEMS = {
     ["Lucky Eggs"] = {Class = "Enchant",Id = "Lucky Eggs",Tier = 7, Amount = 2},
-    ["Treasure Hunter"] = {Class = "Enchant",Id = "Treasure Hunter",Tier = 7, Amount = 1},
     ["Criticals"] = {Class = "Enchant",Id = "Criticals",Tier = 7, Amount = 1},
     ["Wild Frost Agony"] = {Class = "Pet", Id = "Wild Frost Agony", Amount = 68, IsGold = false, IsRainbow = true, IsShiny = false},
 }
