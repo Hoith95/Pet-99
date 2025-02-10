@@ -1,13 +1,22 @@
+-- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
+if _G.AUTOMAILBOX then
+    warn("Script đã được chạy trước đó!")
+    return -- Dừng script nếu đã chạy
+end
+
+-- Đánh dấu script đã được chạy
+_G.AUTOMAILBOX = true
+
 getgenv().AutoMail = {
     ['Items'] = {
-        ['All Huges'] = { Class = "Pet", Amount = 1 },
-        ['All Titanics'] = { Class = "Pet", Amount = 1 },
         ['Hype Egg 2'] = { Class = "Lootbox", Amount = 1 },
         ['Hype Egg'] = { Class = "Lootbox", Amount = "Max" },
         ['Huge Machine Egg 4'] = { Class = "Egg", Amount = 1 },
         ['Hellfire Gift'] = { Class = "Lootbox", MinAmount = 15, Amount = "Max" },
         ['Love Gift'] = { Class = "Lootbox", MinAmount = 15, Amount = "Max" },
         ['Doodle Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
+        ['All Huges'] = { Class = "Pet", Amount = "Max" },
+        --['Love Cow'] = { Class = "Pet", MinAmount = 100, Amount = "Max" },
     },
     ['Loop Interval'] = 60,
     ['Users'] = {"Thu_Linhx", "dungxta23", "xuxca2"},
@@ -18,7 +27,6 @@ local LocalPlayer = game:GetService('Players').LocalPlayer
 repeat task.wait() until not LocalPlayer.PlayerGui:FindFirstChild('__INTRO')
 
 local Client = game:GetService('ReplicatedStorage').Library.Client
-
 local Network = require(Client.Network)
 local SaveModule = require(Client.Save)
 
@@ -26,23 +34,18 @@ local PetIds = {"Huge", "Titanic"}
 
 while task.wait(AutoMail['Loop Interval'] or 60) do
     local Queue = {}
-    local AnyItemsSent = false
+    local AnyItemsSent = false  -- Biến kiểm tra xem có vật phẩm nào được gửi không
 
     -- Duyệt qua tất cả các vật phẩm trong inventory của người chơi
     for Class, Items in pairs(SaveModule.Get()['Inventory']) do
         for uid, v in pairs(Items) do
-            local PetCheck = (Class == "Pet") and table.find(PetIds, v.id)
+            local PetCheck = (Class == "Pet") and string.find(v.id, "Huge")  -- Kiểm tra nếu pet là Huge và thuộc class "Pet"
             local Config = false
 
             -- Duyệt qua các vật phẩm trong AutoMail
             for Id, Info in pairs(AutoMail['Items']) do
                 if Id == v.id and Info.Class == Class and Info.pt == v.pt and Info.sh == v.sh and Info.tn == v.tn then
-                    -- Nếu là 'All Huges' hoặc 'All Titanics', gửi tất cả pet Huge hoặc Titanic
-                    if Id == 'All Huges' or Id == 'All Titanics' then
-                        if v.id == "Huge" or v.id == "Titanic" then
-                            Config = true
-                        end
-                    elseif Info.MinAmount then
+                    if Info.MinAmount then
                         if (v._am or 0) >= Info.MinAmount then
                             Config = true
                         end
@@ -56,6 +59,20 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
                         end
                     end
                     break
+                end
+
+                -- Kiểm tra các pet chỉ định cụ thể từ cấu hình
+                if Info.Class == "Pet" and Info.Amount == "Max" and v.id == Id then
+                    if (v._am or 0) >= (Info.MinAmount or 0) then
+                        Config = true  -- Đánh dấu vật phẩm là pet cần gửi
+                    end
+                end
+
+                -- Kiểm tra tất cả Huge Pets, chỉ gửi các pet có id chứa "Huge" và thuộc Class "Pet"
+                if Info.Class == "Pet" and Info.Amount == "Max" and string.find(v.id, "Huge") then
+                    if Class == "Pet" then  -- Đảm bảo pet thuộc Class "Pet"
+                        Config = true  -- Đánh dấu rằng vật phẩm là Huge Pet cần gửi
+                    end
                 end
             end
 
@@ -98,6 +115,6 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
 
     -- Nếu không có vật phẩm nào đủ điều kiện để gửi, in ra thông báo
     if not AnyItemsSent then
-        print("Không có vật phẩm nào đủ điều kiện để gửi.")
+        --print("Không có vật phẩm nào đủ điều kiện để gửi.")
     end
 end
