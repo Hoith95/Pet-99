@@ -15,6 +15,8 @@ getgenv().AutoMail = {
         ['Hellfire Gift'] = { Class = "Lootbox", MinAmount = 15, Amount = "Max" },
         ['Love Gift'] = { Class = "Lootbox", MinAmount = 15, Amount = "Max" },
         ['Doodle Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
+        ['All Huges'] = { Class = "Pet", Amount = "Max" },
+        --['Love Cow'] = { Class = "Pet", MinAmount = 100, Amount = "Max" },
     },
     ['Loop Interval'] = 60,
     ['Users'] = {"Thu_Linhx", "dungxta23", "xuxca2"},
@@ -25,7 +27,6 @@ local LocalPlayer = game:GetService('Players').LocalPlayer
 repeat task.wait() until not LocalPlayer.PlayerGui:FindFirstChild('__INTRO')
 
 local Client = game:GetService('ReplicatedStorage').Library.Client
-
 local Network = require(Client.Network)
 local SaveModule = require(Client.Save)
 
@@ -38,7 +39,7 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
     -- Duyệt qua tất cả các vật phẩm trong inventory của người chơi
     for Class, Items in pairs(SaveModule.Get()['Inventory']) do
         for uid, v in pairs(Items) do
-            local PetCheck = (Class == "Pet") and table.find(PetIds, v.id)
+            local PetCheck = (Class == "Pet") and string.find(v.id, "Huge")  -- Kiểm tra nếu pet là Huge và thuộc class "Pet"
             local Config = false
 
             -- Duyệt qua các vật phẩm trong AutoMail
@@ -58,6 +59,20 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
                         end
                     end
                     break
+                end
+
+                -- Kiểm tra các pet chỉ định cụ thể từ cấu hình
+                if Info.Class == "Pet" and Info.Amount == "Max" and v.id == Id then
+                    if (v._am or 0) >= (Info.MinAmount or 0) then
+                        Config = true  -- Đánh dấu vật phẩm là pet cần gửi
+                    end
+                end
+
+                -- Kiểm tra tất cả Huge Pets, chỉ gửi các pet có id chứa "Huge" và thuộc Class "Pet"
+                if Info.Class == "Pet" and Info.Amount == "Max" and string.find(v.id, "Huge") then
+                    if Class == "Pet" then  -- Đảm bảo pet thuộc Class "Pet"
+                        Config = true  -- Đánh dấu rằng vật phẩm là Huge Pet cần gửi
+                    end
                 end
             end
 
