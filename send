@@ -92,6 +92,7 @@ _G.GMAIL_RECEIVERS = {
     "letai2405z",
     "tranhai0301z",
     "nguyenmy1111z",
+    "nguyenanh200x3z",
 }
  
 _G.GMAIL_DELAY  = 0.5
