@@ -27,5 +27,5 @@ end)
 task.wait(1)
 if not success and tostring(err):find("HTTP") then
     print("Gặp lỗi HTTP, chuyển sang script thay thế...")
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
 end
