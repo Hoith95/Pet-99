@@ -1,15 +1,27 @@
 getgenv().KiTTYWARE = {
-    ["Optimize"] = true,
+    ["Optimize"] = true, -- optimize game
     ["GuiStats"] = true, -- "stats in a gui duh" - Nazov 2024
 
-    ["CraftGifts"] = true, -- auto crafts love gifts
+    ["UseTowerBoosts"] = true, -- uses tower boosts
+    ["OpenLoveGifts"] = false, -- auto opens love gifts
+    ["CraftLoveGifts"] = true, -- auto crafts love gifts
     ["HatchBestEgg"] = true, -- teleports to and hatches best egg available
 
-    ["Mailing"] = false,
-    ["Username"] = "", -- username to mail new huges to
+    ["Timeouts"] = {
+        ["TycoonLoadingTimeout"] = 30, -- time to wait for tycoon to load before server hopping
+        ["EggHatchTimeout"] = 60, -- time to wait to find egg before server hopping
+    },
 
+    ["Mail"] = {
+        ["Mailing"] = false, -- auto mail
+        ["LoveGiftAmount"] = 0, -- amount of love gifts needed before mailing (0 to disable mailing of gifts)
+        ["Username"] = "", -- username to mail new huges to
+    },
+
+    ["Webhook"] = {
     ["Webhook"] = "https://discord.com/api/webhooks/1337893141570912438/DVA9eG_BvI0NSJHGsjlK9GMQbugQV2gdELz4wcoqZl1j2oUnxz8urTzePVIoUDo1-3JX",
     ["DiscordId"] = "344054115539615745", -- will @ you
+    }
 }
 script_key="UBqwHOLCQMlruRZAOrFffLsGREatfXyk";
-loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/3b5d2645e8868be24e57409c6fe4669c.lua"))()
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/27ec6b1cff94c4a33d30c81cbc3e11ec.lua"))()
