@@ -1,3 +1,9 @@
+getgenv().Webhook = {
+    ['ID'] = "344054115539615745",
+    ['Id Names'] = { "Huge", "Titanic"},
+    ['URL'] = "https://discord.com/api/webhooks/1331110487298936872/X3n33-ykzDD4ifh79HYMPt2QryNI-j6vn8WLtzV_uaF-pb6XftanxwpeqrJIkP5npORq",
+}
+
 repeat task.wait() until game:IsLoaded()
 local LocalPlayer = game:GetService('Players').LocalPlayer
 repeat task.wait() until not LocalPlayer.PlayerGui:FindFirstChild('__INTRO')
@@ -84,4 +90,4 @@ Network.Fired('Items: Update'):Connect(function(Player, Inv)
     end
 end)
 
---SendWebhook("Huge Hippo") --[[ Test thing ]]
+SendWebhook("Huge Hippo") --[[ Test thing ]]
