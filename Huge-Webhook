@@ -1,7 +1,16 @@
+-- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
+if _G.WEBHOOK then
+    warn("Script đã được chạy trước đó!")
+    return -- Dừng script nếu đã chạy
+end
+
+-- Đánh dấu script đã được chạy
+_G.WEBHOOK = true
+
 getgenv().Webhook = {
     ['ID'] = "344054115539615745",
     ['Id Names'] = { "Huge", "Titanic"},
-    ['URL'] = "https://discord.com/api/webhooks/1331110487298936872/X3n33-ykzDD4ifh79HYMPt2QryNI-j6vn8WLtzV_uaF-pb6XftanxwpeqrJIkP5npORq",
+    ['URL'] = "https://discord.com/api/webhooks/1337893141570912438/DVA9eG_BvI0NSJHGsjlK9GMQbugQV2gdELz4wcoqZl1j2oUnxz8urTzePVIoUDo1-3JX",
 }
 
 repeat task.wait() until game:IsLoaded()
@@ -65,7 +74,7 @@ local SendWebhook = function(Id, pt, sh)
                 fields = {
                     { name = string.format("💎 Rap: ``%s`` \n💫 Exist: ``%s``", Formatint(Rap or 0), Formatint(Exist or 0)), value = "" }
                 },
-                footer = { text = "Hippo" }
+                footer = { text = "Hoith95" }
             }
         }
     })
@@ -90,4 +99,4 @@ Network.Fired('Items: Update'):Connect(function(Player, Inv)
     end
 end)
 
-SendWebhook("Huge Hippo") --[[ Test thing ]]
+--SendWebhook("Huge Hippo") --[[ Test thing ]]
