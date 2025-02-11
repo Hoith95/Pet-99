@@ -58,7 +58,7 @@ end
 local SendWebhook = function(Id, pt, sh)
     local Img = string.format("https://biggamesapi.io/image/%s", GetAsset(Id, pt))
     local Version = pt == 1 and "Golden " or pt == 2 and "Rainbow " or ""
-    local Title = string.format("||%s|| Obtained a %s%s%s", LocalPlayer.Name, Version, sh and "Shiny " or "", Id)
+    local Title = string.format("||%s|| vừa nhận được %s%s%s", LocalPlayer.Name, Version, sh and "Shiny " or "", Id)
 
     local Exist = GetStats(ExistCmds, "Pet", { id = Id, pt = pt, sh = sh, tn = nil })
     local Rap = GetStats(RapCmds, "Pet", { id = Id, pt = pt, sh = sh, tn = nil })
@@ -74,7 +74,7 @@ local SendWebhook = function(Id, pt, sh)
                 fields = {
                     { name = string.format("💎 Rap: ``%s`` \n💫 Exist: ``%s``", Formatint(Rap or 0), Formatint(Exist or 0)), value = "" }
                 },
-                footer = { text = "Hoith95" }
+                footer = { text = "Heo Notifier" }
             }
         }
     })
@@ -89,14 +89,49 @@ local SendWebhook = function(Id, pt, sh)
     end)
 end
 
-Network.Fired('Items: Update'):Connect(function(Player, Inv)
-    if Inv['set'] and Inv['set']['Pet'] then
-        for i,v in pairs(Inv['set']['Pet']) do
-            if table.find(Webhook['Id Names'], v.id) then
-                SendWebhook(v.id, v.pt, v.sh)
+-- Lưu số lượng Huge theo loại
+local HugeCount = {}
+
+task.spawn(function()
+    while true do
+        -- Lấy inventory mới nhất
+        local Inventory = SaveMod.Get()['Inventory']
+        local CurrentCount = {}
+        local NewHugeFound = false -- Cờ kiểm tra có Huge mới không
+
+        for Class, Items in pairs(Inventory) do
+            for uid, v in pairs(Items) do
+                if Class == "Pet" then
+                    -- Kiểm tra nếu pet thuộc danh sách Huge / Titanic
+                    for _, name in ipairs(Webhook['Id Names']) do
+                        if string.find(v.id, name) then
+                            -- Cập nhật số lượng pet theo loại
+                            CurrentCount[v.id] = (CurrentCount[v.id] or 0) + 1
+
+                            -- Nếu loại pet này nhiều hơn lần trước, có pet mới hoặc quay lại
+                            if (HugeCount[v.id] or 0) < CurrentCount[v.id] then
+                                SendWebhook(v.id, v.pt, v.sh)
+                                NewHugeFound = true
+                            end
+                        end
+                    end
+                end
             end
         end
+
+        -- Nếu số lượng giảm, cập nhật lại nhưng không gửi Webhook
+        for id, count in pairs(HugeCount) do
+            if (CurrentCount[id] or 0) < count then
+                HugeCount[id] = CurrentCount[id] or 0
+            end
+        end
+
+        -- Nếu có pet mới, cập nhật HugeCount
+        if NewHugeFound then
+            HugeCount = CurrentCount
+        end
+
+        -- Đợi 5 giây trước khi kiểm tra lại
+        task.wait(5)
     end
 end)
-
---SendWebhook("Huge Hippo") --[[ Test thing ]]
