@@ -22,18 +22,25 @@ spawn(function()
         -- Tính khoảng cách giữa vị trí hiện tại và vị trí mới
         local distanceToNew = (currentPos - newPos).Magnitude
 
-        -- Kiểm tra nếu nhân vật đang trong phạm vi của một trong hai vị trí
-        if distanceToOld <= radius then
-            --print("Nhân vật đang trong phạm vi vị trí cũ!")
-            -- Nếu nhân vật đang ở gần vị trí cũ, dịch chuyển đến vị trí mới
-            wait(9)
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-64.89, 159.77, 6430.60)
-        elseif distanceToNew <= radius then
-            --print("Nhân vật đang trong phạm vi vị trí mới!")
-            wait(9)
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-64.89, 159.77, 6430.60)
-        else
-            --print("Nhân vật không trong phạm vi vị trí cũ hoặc mới!")
+        -- Lấy giá trị rank từ Save
+        local Save = require(game:GetService("ReplicatedStorage").Library.Client.Save)
+        local rank = Save.Get().Rank
+
+        -- Kiểm tra nếu rank nhỏ hơn 8 và nhân vật ở trong phạm vi vị trí
+        if rank < 8 then
+            -- Kiểm tra nếu nhân vật đang trong phạm vi của một trong hai vị trí
+            if distanceToOld <= radius then
+                --print("Nhân vật đang trong phạm vi vị trí cũ!")
+                -- Nếu nhân vật đang ở gần vị trí cũ, dịch chuyển đến vị trí mới
+                wait(9)
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-64.89, 159.77, 6430.60)
+            elseif distanceToNew <= radius then
+                --print("Nhân vật đang trong phạm vi vị trí mới!")
+                wait(9)
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-64.89, 159.77, 6430.60)
+            else
+                --print("Nhân vật không trong phạm vi vị trí cũ hoặc mới!")
+            end
         end
 
         -- Dừng 1 giây trước khi kiểm tra lại
