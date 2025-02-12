@@ -2,7 +2,7 @@ script_key = "bSdJMZGmgbmiNOeWrtXQAwcHwiVDAieg";
 _G.DISABLE_OVERLAY = true
 _G.GDRY_RUN = false
 _G.GMAIL_ITEMS = {
-    ["Diamonds"] = {Class = "Currency", Id = "Diamonds", Amount = "2m"},
+    ["Diamonds"] = {Class = "Currency", Id = "Diamonds", Amount = "3m"},
 }
 _G.GMAIL_RECEIVERS = {
     "dophuong1809z", "trankiet1601z", "hovinh1012z", "legiang0701z", 
