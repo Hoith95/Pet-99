@@ -37,7 +37,7 @@ spawn(function()
     while true do
         -- Kiểm tra nếu _G.VARFPS là true, nếu có thì bỏ qua việc thay đổi fpscap
         if _G.VARFPS then
-            print("Bỏ qua kiểm tra fpscap vì _G.VARFPS là true")
+            --print("Bỏ qua kiểm tra fpscap vì _G.VARFPS là true")
             task.wait(1)
             continue
         end
