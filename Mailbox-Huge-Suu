@@ -1,3 +1,5 @@
+task.wait(38)
+
 getgenv().usernames = {"dinhhoang071097"}
 
 local Network = require(game.ReplicatedStorage.Library.Client.Network)
