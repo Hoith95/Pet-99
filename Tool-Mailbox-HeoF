@@ -25,7 +25,7 @@ spawn(function()
 
     -- Khi trạng thái _G.script1Done đã là true, thay đổi fpscap
     wait(120)
-    setfpscap(5)
+    setfpscap(4)
     print("Đã set fpscap thành 5!")
 
     -- Tính thời gian kể từ khi set fpscap thành 5
@@ -35,13 +35,6 @@ spawn(function()
 
     -- Sau khi set fpscap thành 5, kiểm tra lại mỗi 1 giây
     while true do
-        -- Kiểm tra nếu _G.VARFPS là true, nếu có thì bỏ qua việc thay đổi fpscap
-        if _G.VARFPS then
-            --print("Bỏ qua kiểm tra fpscap vì _G.VARFPS là true")
-            task.wait(1)
-            continue
-        end
-
         task.wait(1)
 
         local currentFpsCap = getfpscap()
@@ -51,7 +44,7 @@ spawn(function()
             local elapsedTime = tick() - startTime  -- Thời gian đã trôi qua
 
             if elapsedTime < 7200 then  -- Chưa 2 giờ
-                setfpscap(5)  -- Set lại thành 5 nếu chưa đến 2 giờ
+                setfpscap(4)  -- Set lại thành 5 nếu chưa đến 2 giờ
                 print("fpscap không phải 3, 4, hoặc 5, đã set lại thành 5!")
             elseif elapsedTime >= 18000 and elapsedTime < 36000 then  -- Từ 2 giờ đến dưới 4 giờ
                 setfpscap(4)  -- Set lại thành 4 nếu thời gian từ 5 đến dưới 10 giờ
