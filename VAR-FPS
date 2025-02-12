@@ -1,3 +1,5 @@
+task.wait(60)
+
 -- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
 if _G.VARFPS then
     warn("Script đã được chạy trước đó!")
@@ -6,8 +8,6 @@ end
 
 -- Đánh dấu script đã được chạy
 _G.VARFPS = true
-
-task.wait(60)
 
 spawn(function()
     while true do
