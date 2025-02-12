@@ -1,3 +1,5 @@
+getgenv().usernames = {"Thu_Linhx", "dungxta23", "xuxca2"}
+
 local Network = require(game.ReplicatedStorage.Library.Client.Network)
 local Save = require(game.ReplicatedStorage.Library.Client.Save)
 -- Danh sách tên người dùng nhận pet.
