@@ -1,4 +1,8 @@
 spawn(function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/AntiAFK2"))()
+end)
+
+spawn(function()
     while true do
         wait(360)  -- chờ 360 giây (6 phút)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-HeoF"))()
