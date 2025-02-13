@@ -1,3 +1,6 @@
+spawn(function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/AntiAFK2"))()
+end)
 task.wait(15)
 local success, err = pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TOOL-PLAZA-HEO"))()
