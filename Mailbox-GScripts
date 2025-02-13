@@ -1,10 +1,10 @@
-if _G.L1Done then
+if _G.L1Done == true then
     script_key="oHpduHIKSZMNuNtgAOcPOYsvRrzcymTv";
-elseif _G.L2Done then
+elseif _G.L2Done == true then
     script_key="xCQxdVoKLDHreffYEHWDsWwcvipMyeHq";
-elseif _G.L3Done then
+elseif _G.L3Done == true then
     script_key="bSdJMZGmgbmiNOeWrtXQAwcHwiVDAieg";
-elseif _G.L4Done then
+elseif _G.L4Done == true then
     script_key="MwpgreoxkMbqtBRseeXTeaehFyvfaVmK";
 else
     print("Không có điều kiện nào thỏa mãn!")
