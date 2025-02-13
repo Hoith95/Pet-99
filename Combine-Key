@@ -1,0 +1,51 @@
+local l_Save = require(game:GetService("ReplicatedStorage").Library.Client.Save)
+local replicatedStorage = game:GetService("ReplicatedStorage")
+
+local keyPairs = {
+    ["Tech Key"] = {
+        halves = {"Tech Key Lower Half", "Tech Key Upper Half"},
+        combineFunction = "TechKey_Combine"
+    },
+    ["Void Key"] = {
+        halves = {"Void Key Lower Half", "Void Key Upper Half"},
+        combineFunction = "VoidKey_Combine"
+    },
+    ["Secret Key"] = {
+        halves = {"Secret Key Lower Half", "Secret Key Upper Half"},
+        combineFunction = "SecretKey_Combine"
+    },
+    ["Crystal Key"] = {
+        halves = {"Crystal Key Lower Half", "Crystal Key Upper Half"},
+        combineFunction = "CrystalKey_Combine"
+    }
+}
+
+local function checkKeys()
+    local misc = l_Save.Get().Inventory.Misc
+    local foundKeyHalves = {}
+
+    for _, v in pairs(misc) do
+        for _, data in pairs(keyPairs) do
+            if v.id == data.halves[1] or v.id == data.halves[2] then
+                foundKeyHalves[v.id] = v._am or 1
+            end
+        end
+    end
+
+    for _, data in pairs(keyPairs) do
+        if foundKeyHalves[data.halves[1]] and foundKeyHalves[data.halves[2]] then
+            local combineFunction = replicatedStorage.Network:FindFirstChild(data.combineFunction)
+            if combineFunction then
+                combineFunction:InvokeServer(1)
+            end
+        end
+    end
+end
+
+
+task.spawn(function()
+    while true do
+        checkKeys()
+        task.wait(10) -- Adjust interval as needed
+    end
+end)
