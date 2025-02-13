@@ -1,0 +1,15 @@
+if _G.L1Done then
+    script_key="oHpduHIKSZMNuNtgAOcPOYsvRrzcymTv";
+elseif _G.L2Done then
+    script_key="xCQxdVoKLDHreffYEHWDsWwcvipMyeHq";
+elseif _G.L3Done then
+    script_key="bSdJMZGmgbmiNOeWrtXQAwcHwiVDAieg";
+elseif _G.L4Done then
+    script_key="MwpgreoxkMbqtBRseeXTeaehFyvfaVmK";
+else
+    print("Không có điều kiện nào thỏa mãn!")
+    return -- Nếu không có điều kiện nào thỏa mãn, thoát khỏi script
+end
+
+-- Chỉ gọi loadstring sau khi xác định được key
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-GScripts-Heo"))()
