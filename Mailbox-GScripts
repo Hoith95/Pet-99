@@ -11,5 +11,7 @@ else
     return -- Nếu không có điều kiện nào thỏa mãn, thoát khỏi script
 end
 
+wait(300)
+
 -- Chỉ gọi loadstring sau khi xác định được key
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-GScripts-Heo"))()
