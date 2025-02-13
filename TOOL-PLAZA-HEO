@@ -3,7 +3,7 @@ getgenv().Settings = {
     Seller = {
         Active = true,
         ["Items"] = {
-	    ["All Titanics"] = {Class = "Pet", Price = "+1%", AllTypes = true},
+	    ["All Titanics"] = {Class = "Pet", Price = "+5%", AllTypes = true},
             ["All Huges"] = {Price = "+1%", AllTypes = true},
 	    ["2024 Gargantuan Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
 	    ["2024 Large Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
