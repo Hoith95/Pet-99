@@ -8,6 +8,8 @@ while not _G.script1Done do
     task.wait(1) -- Chờ 1 giây trước khi kiểm tra lại
 end
 
+_G.L1Done = true
+
 --- GScripts-Rank ---
 
 
