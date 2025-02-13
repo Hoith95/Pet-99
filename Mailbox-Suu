@@ -30,11 +30,11 @@ task.wait(15)
 
 ---
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-SCRIPT"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-SCRIPT"))()
 
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TeleMap"))()
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-Ket-Map"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-Ket-Map"))()
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TeleMap1-Rank8"))()
 
