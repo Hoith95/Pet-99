@@ -10,7 +10,7 @@ spawn(function()
 end)
 
 spawn(function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-GEMS"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-GEMS"))()
 end)
 
 spawn(function()
