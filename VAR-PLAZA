@@ -47,6 +47,7 @@ local function handleServerHop()
             warn("Lỗi khi chạy ServerHop: " .. result)
         end
     else
+        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Mailbox: Claim All"):InvokeServer()
         print("Số người chơi trong server quá nhiều (> 10), chờ 3 phút và kiểm tra lại.")
         task.wait(180) -- Chờ 3 phút
         handleServerHop() -- Thực hiện lại kiểm tra
