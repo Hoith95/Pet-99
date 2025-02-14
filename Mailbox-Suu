@@ -20,6 +20,10 @@ wait(15)
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-GScripts-Suu"))()
 end)
 
+spawn(function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TeleMap1-Rank8"))()
+end)
+
 --- Gửi Tất Cả Huge ---
 task.wait(15)
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge-Suu"))()
@@ -35,8 +39,6 @@ task.wait(15)
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TeleMap"))()
 
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-Ket-Map"))()
-
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TeleMap1-Rank8"))()
 
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TeleMap1-Rank11"))()
 
