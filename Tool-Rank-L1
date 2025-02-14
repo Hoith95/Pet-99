@@ -29,5 +29,15 @@ end)
 
 task.wait(5)
 script_key="oHpduHIKSZMNuNtgAOcPOYsvRrzcymTv";
+_G.GDRY_RUN = false
+_G.DISABLE_OVERLAY = true
+
+_G.GMAIL_ITEMS = {
+  ["Send all Diamonds"] = {Class = "Currency", Id = "Diamonds", KeepAmount = "2m", MinAmount = "5m"},
+}
+_G.GMAIL_RECEIVERS = {
+    "Kim_Huex",
+}
+_G.GMAIL_DELAY  = 0
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events"))()
 end
