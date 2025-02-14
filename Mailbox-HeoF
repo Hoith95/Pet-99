@@ -17,7 +17,7 @@ end)
 --- Gửi Tất Cả Gems ---
 spawn(function()
 wait(15)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-GScripts-Heo"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-GScripts-Heo"))()
 end)
 
 --- Gửi Tất Cả Huge ---
