@@ -9,15 +9,15 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/H
 end)
 
 --- Gửi Mail ---
-task.wait(15)
 spawn(function()
+wait(15)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Items-Suu"))()
 end)
 
 --- Gửi Tất Cả Gems ---
-task.wait(15)
 spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Gems-Suu"))()
+wait(15)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-GScripts-Suu"))()
 end)
 
 --- Gửi Tất Cả Huge ---
