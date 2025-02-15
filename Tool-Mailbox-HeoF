@@ -18,6 +18,10 @@ spawn(function()
 end)
 
 spawn(function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Notifier"))()
+end)
+
+spawn(function()
     -- Kiểm tra trạng thái của _G.script1Done
     while not _G.script1Done do
         print("Script 1 chưa hoàn thành, đang chờ...")
