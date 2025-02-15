@@ -61,7 +61,7 @@ diamondLabel.TextScaled = true
 -- Tạo một TextLabel để hiển thị thông báo thời gian chạy.
 local timeLabel = Instance.new("TextLabel", backgroundFrame)
 timeLabel.Name = "TimeLabel"
-timeLabel.Text = "Thời gian chạy: 00:00"
+timeLabel.Text = "TIMES: 00:00"
 timeLabel.Size = UDim2.new(1, 0, 1/6, 0)
 timeLabel.Position = UDim2.new(0, 0, 5.8/6, 0)  -- Đặt thông báo thời gian chạy xuống dưới
 timeLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Màu nền đen
