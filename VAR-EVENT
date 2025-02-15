@@ -1,5 +1,5 @@
 spawn(function()
-    -- Liên tục kiểm tra vị trí nhân vật
+    -- Liên tục kiểm tra trạng thái của biến _G.EventDone
     while true do
         -- Lấy nhân vật và HumanoidRootPart của người chơi
         local player = game.Players.LocalPlayer
@@ -10,28 +10,20 @@ spawn(function()
         local currentPos = humanoidRootPart.Position
 
         -- Vị trí cũ và vị trí mới để kiểm tra
-        local oldPos = Vector3.new(10292.66, 15588.00, 8211.65)
         local newPos = Vector3.new(10313.41, 15588.15, 8170.55)
 
         -- Định nghĩa bán kính phạm vi kiểm tra (tùy chỉnh nếu cần)
         local radius = 3 -- Bán kính trong khoảng cách mà bạn muốn kiểm tra
 
-        -- Tính khoảng cách giữa vị trí hiện tại và vị trí cũ
-        local distanceToOld = (currentPos - oldPos).Magnitude
-
-        -- Tính khoảng cách giữa vị trí hiện tại và vị trí mới
-        local distanceToNew = (currentPos - newPos).Magnitude
-
-        -- Kiểm tra nếu nhân vật đang trong phạm vi của một trong hai vị trí
-        if distanceToOld <= radius then
-            --print("Nhân vật đang trong phạm vi vị trí cũ!")
-            -- Nếu nhân vật đang ở gần vị trí cũ, dịch chuyển đến vị trí mới
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(10313.41, 15588.15, 8170.55)
-        elseif distanceToNew <= radius then
-            --print("Nhân vật đang trong phạm vi vị trí mới!")
-            return -- Dừng script tại đây
+        -- Kiểm tra nếu biến _G.EventDone là true
+        if _G.EventDone == true then
+            -- Nếu _G.EventDone là true, đợi 1 phút rồi chuyển nhân vật đến vị trí mới
+            wait(60) -- Đợi 60 giây (1 phút)
+            -- Dịch chuyển nhân vật đến vị trí mới
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(newPos)
+            return -- Dừng script sau khi chuyển nhân vật
         else
-            --print("Nhân vật không trong phạm vi vị trí cũ hoặc mới!")
+            --print("Chưa hoàn thành sự kiện!")
         end
 
         -- Dừng 1 giây trước khi kiểm tra lại
