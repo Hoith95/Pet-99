@@ -33,7 +33,7 @@ _G.GDRY_RUN = false
 _G.DISABLE_OVERLAY = true
 
 _G.GMAIL_ITEMS = {
-  ["Send all Diamonds"] = {Class = "Currency", Id = "Diamonds", KeepAmount = "2m", MinAmount = "5m"},
+  ["Send all Diamonds"] = {Class = "Currency", Id = "Diamonds", KeepAmount = "2m", MinAmount = "10m"},
 }
 _G.GMAIL_RECEIVERS = {
     "hoang071097",
