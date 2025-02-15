@@ -6,4 +6,35 @@ end
 -- Đánh dấu script đã được chạy
 _G.VARRB = true
 
-game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Tycoons: Request Rebirth"):InvokeServer()
+spawn(function()
+    -- Liên tục kiểm tra trạng thái của biến _G.EventDone
+    while true do
+        -- Lấy nhân vật và HumanoidRootPart của người chơi
+        local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+        -- Kiểm tra nếu biến _G.EventDone là true
+        if _G.EventDone == true then
+            -- Đợi 60 giây để kiểm tra số lượng kim cương
+            local initialDiamonds = game.Players.LocalPlayer.leaderstats["\240\159\146\142 Diamonds"].Value
+            wait(60) -- Đợi 60 giây
+            -- Kiểm tra xem số lượng kim cương có thay đổi không
+            local currentDiamonds = game.Players.LocalPlayer.leaderstats["\240\159\146\142 Diamonds"].Value
+            if currentDiamonds == initialDiamonds then
+                -- Nếu không thay đổi, gọi hàm "Request Rebirth" từ ReplicatedStorage
+                game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Tycoons: Request Rebirth"):InvokeServer()
+                return -- Dừng script sau khi gọi Rebirth
+            else
+                -- Nếu kim cương thay đổi, dừng script
+                print("Số lượng kim cương đã thay đổi, dừng script.")
+                return
+            end
+        else
+            -- print("Chưa hoàn thành sự kiện!")
+        end
+
+        -- Dừng 1 giây trước khi kiểm tra lại
+        wait(10)
+    end
+end)
