@@ -1,14 +1,32 @@
+-- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
+if _G.VAR8 then
+    warn("Script đã được chạy trước đó!")
+    return -- Dừng script nếu đã chạy
+end
+
+-- Đánh dấu script đã được chạy
+_G.VARR8 = true
+
+
 local Save = require(game:GetService("ReplicatedStorage").Library.Client.Save)
 local rank = Save.Get().Rank
 
-if rank >= 8 then
-    if _G.EventDone == true then
-        return  -- Dừng script nếu _G.EventDone đã được gán là true
+while true do
+    -- Kiểm tra lại rank mỗi phút
+    rank = Save.Get().Rank  -- Lấy lại rank mới nhất
+
+    if rank >= 8 then
+        if _G.EventDone == true then
+            return  -- Dừng script nếu _G.EventDone đã được gán là true
+        else
+            setfpscap(15)
+
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
+            break  -- Sau khi chạy xong, thoát khỏi vòng lặp
+        end
     else
-        setfpscap(15)
-        --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"))()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
+        -- Nếu rank chưa đủ 8, không làm gì và tiếp tục kiểm tra sau mỗi phút
     end
-else
-    -- chưa đủ Rank
+
+    wait(60)  -- Đợi 60 giây (1 phút) trước khi kiểm tra lại
 end
