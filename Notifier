@@ -30,6 +30,15 @@ local Formatint = function(int)
     return string.format("%.2f%s", int, Suffix[Index])
 end
 
+-- Hàm định dạng thời gian từ giây sang giờ:phút:giây
+local function formatTime(seconds)
+    local hours = math.floor(seconds / 3600)
+    local minutes = math.floor((seconds % 3600) / 60)
+    local remainingSeconds = math.floor(seconds % 60)
+    
+    return string.format("%02d:%02d:%02d", hours, minutes, remainingSeconds)
+end
+
 -- Lấy PlayerGui của người chơi hiện tại.
 local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 -- Tạo một ScreenGui mới để hiển thị thông báo.
@@ -61,7 +70,7 @@ diamondLabel.TextScaled = true
 -- Tạo một TextLabel để hiển thị thông báo thời gian chạy.
 local timeLabel = Instance.new("TextLabel", backgroundFrame)
 timeLabel.Name = "TimeLabel"
-timeLabel.Text = "TIMES: 00:00"
+timeLabel.Text = "TIMES: 00:00:00"
 timeLabel.Size = UDim2.new(1, 0, 1/6, 0)
 timeLabel.Position = UDim2.new(0, 0, 5.8/6, 0)  -- Đặt thông báo thời gian chạy xuống dưới
 timeLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Màu nền đen
@@ -74,26 +83,14 @@ timeLabel.TextScaled = true
 -- Định nghĩa hàm cập nhật thông báo số lượng Diamonds.
 local startTime = tick()  -- Lấy thời gian hiện tại khi script bắt đầu
 
--- Định nghĩa hàm lấy thời gian chạy tính từ khi script bắt đầu
-local function getRunningTime()
-    local elapsedTime = tick() - startTime
-    local minutes = math.floor(elapsedTime / 60)
-    local seconds = math.floor(elapsedTime % 60)
-    return string.format("%02d:%02d", minutes, seconds)
-end
-
-local function updateDiamondNotification(diamondCount)
-    diamondLabel.Text = "GEMS: " .. Formatint(diamondCount)
-    diamondLabel.TextColor3 = Color3.fromRGB(0, 128, 255)
-    diamondLabel.Font = Enum.Font.GothamBold
-end
-
 -- Tạo một luồng mới để cập nhật thông báo.
 task.spawn(function()
     while true do
         local currentDiamondValue = game.Players.LocalPlayer.leaderstats["\240\159\146\142 Diamonds"].Value
-        updateDiamondNotification(currentDiamondValue)
-        timeLabel.Text = "TIMES: " .. getRunningTime()  -- Cập nhật thời gian chạy
+        diamondLabel.Text = "GEMS: " .. Formatint(currentDiamondValue)
+        diamondLabel.TextColor3 = Color3.fromRGB(0, 128, 255)
+        diamondLabel.Font = Enum.Font.GothamBold
+        timeLabel.Text = "TIMES: " .. formatTime(tick() - startTime)  -- Cập nhật thời gian chạy theo định dạng Giờ:Phút:Giây
         task.wait(1)  -- Cập nhật mỗi giây
     end
 end)
