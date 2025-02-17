@@ -37,7 +37,7 @@ getgenv().Settings = {
             ["60 Minutes Timer"] = false,
             ["^^^ Switch To Sniping"] = false,
         },
-        ["Diamonds Sendout"] = {Active = true, Username = "Kim_Huex", Amount = "1b"},
+        ["Diamonds Sendout"] = {Active = true, Username = "Tru_BatGioi", Amount = "1b"},
     },
 
     [[ Thank you for using System Exodus <3! ]]
