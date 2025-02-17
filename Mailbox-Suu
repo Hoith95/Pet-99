@@ -24,6 +24,10 @@ spawn(function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TeleMap1-Rank8"))()
 end)
 
+spawn(function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Combine-Key"))()
+end)
+
 --- Gửi Tất Cả Huge ---
 task.wait(15)
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge-Suu"))()
