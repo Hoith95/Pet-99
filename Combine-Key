@@ -46,6 +46,6 @@ end
 task.spawn(function()
     while true do
         checkKeys()
-        task.wait(10) -- Adjust interval as needed
+        task.wait(1) -- Adjust interval as needed
     end
 end)
