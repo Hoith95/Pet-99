@@ -1,39 +1,45 @@
-script_key = "luverOebtFQCftoJADJajSnXIuXGYyqz"
+script_key="luverOebtFQCftoJADJajSnXIuXGYyqz";
 getgenv().Settings = {
     Seller = {
         Active = true,
-        Items = {
-	    ["2024 Gargantuan Christmas Present"] = {Class = "Lootbox", Price = "+15%"},
+        ["Items"] = {
+	    ["All Titanics"] = {Class = "Pet", Price = "+1%", AllTypes = true},
+            ["All Huges"] = {Price = "+1%", AllTypes = true},
+	    ["2024 Gargantuan Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
+	    ["2024 Large Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
+	    ["2024 Medium Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
+	    ["2024 Small Christmas Present"] = {Class = "Lootbox", Price = "+1%"},
+	    ["Love Gift"] = {Class = "Lootbox", Price = "+1%", Priority = true},
+	    ["Hellfire Gift"] = {Class = "Lootbox", Price = "+1%"},
+	    ["Doodle Gift"] = {Class = "Lootbox", Price = "+5"},
 	    ["Jolly Gift"] = {Class = "Lootbox", Price = "+1%"},
 	    ["Snowflake Gift"] = {Class = "Lootbox", Price = "+1%"},
-	    ["Hype Egg"] = {Class = "Lootbox", Price = 450000},
+	    ["Huge Machine Egg 4"] = {Class = "Egg", Price = "+5%"},
+	    ["Hype Egg"] = {Class = "Lootbox", Price = "+1%"},
+	    ["Hype Egg 2"] = {Class = "Lootbox", Price = "+1%"},
+	    ["Magic Shard"] = {Class = "Misc", Price = 65000},
+	    ["Lucky Eggs 9"] = {Class = "Enchant", Price = "+1%"},
+	    ["Charm Stone"] = {Class = "Misc", Price = 20000},
 	    ["Secret Key"] = {Class = "Misc", Price = 25000},
-	    ["Void Key"] = {Class = "Misc", Price = 50000},
+	    ["Void Key"] = {Class = "Misc", Price = 55000},
 	    ["Tech Key"] = {Class = "Misc", Price = 25000},
-	    ["Crystal Key"] = {Class = "Misc", Price = "+15%"},
+	    ["Crystal Key"] = {Class = "Misc", Price = "+5%"},
+	    ["Treasure Hideout Key"] = {Class = "Misc", Price = "+1%"},
+	    ["Spinny Wheel Ticket"] = {Class = "Misc", Price = "+5%"},
+	    ["Tech Spinny Wheel Ticket"] = {Class = "Misc", Price = "+5%"},
+	    ["Void Spinny Wheel Ticket"] = {Class = "Misc", Price = "+5%"},
         },
-        Serverhop = {
-            ["Switch Servers"] = true,
-            ["Teleport Delay (m)"] = 120,
-            ["Add Pro Plaza Lobbies"] = false,
-        },
-        Webhook = {
-            ["URL"] = getgenv().Webhook,
-            ["Send Embeds"] = true,
-            ["Remove Username"] = false,
-        },
-        StopParams = {
-            ["Item Runout"] = false,
+        ["Switch Servers"] = {Active = true, MinuteDelay = 120, OnlyPRO = false},
+        ["Webhook"] = {Active = true, URL = "https://discord.com/api/webhooks/1341079224282517614/l2w1SAqKVBciXSXqRNM455Zs93b2G34KXjl8cFsP9dH4x3QblO9vOHD5U5acVpJcvMy5"},
+        ["Kill Switch"] = {
+            ["Booth Runout"] = false,
             ["Diamonds Hit: 1b"] = false,
-            ["60 Minutes"] = false,
-            ["Switch To Sniping"] = false,
+            ["60 Minutes Timer"] = false,
+            ["^^^ Switch To Sniping"] = false,
         },
-        Other = {
-            ["Auto Accept Mail"] = true,
-            ["Always Try Adding Listings"] = true,
-            ["Never Join Friendslist"] = true,
-        },
+        ["Diamonds Sendout"] = {Active = true, Username = "Tru_BatGioi", Amount = "1b"},
     },
-    
+
+    [[ Thank you for using System Exodus <3! ]]
 }
-loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/60a293774110e918789cddc0e20be048.lua"))()
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/3b58d9c50c5ea74f255af40a8f735773.lua"))()
