@@ -30,7 +30,7 @@ getgenv().Settings = {
 	    ["Void Spinny Wheel Ticket"] = {Class = "Misc", Price = "+5%"},
         },
         ["Switch Servers"] = {Active = true, MinuteDelay = 120, OnlyPRO = false},
-        ["Webhook"] = {Active = true, URL = "https://discord.com/api/webhooks/1331129761325387846/Ejn3akos0TfgJzsmwa4hG2j_giNiYqqErhEdjH_LihoIPslyMASEL6MwHfUavn2vMjPq"},
+        ["Webhook"] = {Active = true, URL = "https://discord.com/api/webhooks/1341079224282517614/l2w1SAqKVBciXSXqRNM455Zs93b2G34KXjl8cFsP9dH4x3QblO9vOHD5U5acVpJcvMy5"},
         ["Kill Switch"] = {
             ["Booth Runout"] = false,
             ["Diamonds Hit: 1b"] = false,
