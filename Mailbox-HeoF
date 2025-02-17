@@ -26,7 +26,7 @@ end)
 
 --- Gửi Tất Cả Huge ---
 task.wait(15)
---getgenv().usernames = {"Thu_Linhx", "dungxta23", "xuxca2"}
+--getgenv().usernames = {"Tru_BatGioi"}
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge"))()
 
 --- Gửi Tất Cả Pet Event ---
