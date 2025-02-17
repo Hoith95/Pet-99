@@ -10,7 +10,7 @@ _G.WEBHOOKH = true
 getgenv().Webhook = {
     ['ID'] = "344054115539615745",
     ['Id Names'] = { "Huge", "Titanic"},
-    ['URL'] = "https://discord.com/api/webhooks/1341079224282517614/l2w1SAqKVBciXSXqRNM455Zs93b2G34KXjl8cFsP9dH4x3QblO9vOHD5U5acVpJcvMy5",
+    ['URL'] = "https://discord.com/api/webhooks/1341084084654444556/8XP3WD1KdcZCfR4L2rzrmmm1susikfgLPaffPwgPkKBEXyLuYaDLRCpqKu8kuPixC6HR",
 }
 
 repeat task.wait() until game:IsLoaded()
