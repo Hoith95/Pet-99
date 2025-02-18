@@ -1,4 +1,4 @@
-task.wait(38)
+task.wait(168)
 
 getgenv().usernames = {"kimmuot0309"}
 
