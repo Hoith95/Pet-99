@@ -25,7 +25,7 @@ getgenv().AutoMail = {
         --['Love Cow'] = { Class = "Pet", MinAmount = 100, Amount = "Max" },
     },
     ['Loop Interval'] = 60,
-    ['Users'] = {"Kimk_duyek", "Yel_lyvx", "Cao_vyxm", "Yenx_tok"},
+    ['Users'] = {"Kimk_duyek", "Yel_lyvx", "Cao_vyxm", "Yenx_tok", "Tuyx_duyen"},
 }
 
 repeat task.wait() until game:IsLoaded()
