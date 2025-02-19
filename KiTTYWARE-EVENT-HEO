@@ -1,11 +1,18 @@
 getgenv().KiTTYWARE = {
-    ["Optimize"] = true, -- optimize game
+    ["Optimize"] = true,
     ["GuiStats"] = true, -- "stats in a gui duh" - Nazov 2024
 
+    ["AutoRebirth"] = true, -- rebirths when available
+    ["MaxRebirth"] = 5, -- wont rebirth past this number
+
     ["UseTowerBoosts"] = true, -- uses tower boosts
-    ["OpenLoveGifts"] = false, -- auto opens love gifts
-    ["CraftLoveGifts"] = true, -- auto crafts love gifts
+    ["OpenLoveGifts"] = false, -- opens love gifts
+    ["CraftLoveGifts"] = true, -- crafts love gifts
+
     ["HatchBestEgg"] = true, -- teleports to and hatches best egg available
+    ["UseRebirthToken"] = true, -- uses rebirth tokens
+
+    ["AutoRaffleAmount"] = 1000, -- automatically enters raffles (set to 0 to disable)
 
     ["Timeouts"] = {
         ["TycoonLoadingTimeout"] = 30, -- time to wait for tycoon to load before server hopping
@@ -13,14 +20,14 @@ getgenv().KiTTYWARE = {
     },
 
     ["Mail"] = {
-        ["Mailing"] = false, -- auto mail
-        ["LoveGiftAmount"] = 0, -- amount of love gifts needed before mailing (0 to disable mailing of gifts)
-        ["Username"] = "", -- username to mail new huges to
+        ["Mailing"] = true,
+        ["LoveGiftAmount"] = 100, -- amount of love gifts needed before mailing (0 to disable mailing of gifts)
+        ["Username"] = "Tru_BatGioi", -- username to mail new huges to
     },
 
     ["Webhook"] = {
-    ["Webhook"] = "https://discord.com/api/webhooks/1337893141570912438/DVA9eG_BvI0NSJHGsjlK9GMQbugQV2gdELz4wcoqZl1j2oUnxz8urTzePVIoUDo1-3JX",
-    ["DiscordId"] = "344054115539615745", -- will @ you
+        ["Webhook"] = "https://discord.com/api/webhooks/1341084084654444556/8XP3WD1KdcZCfR4L2rzrmmm1susikfgLPaffPwgPkKBEXyLuYaDLRCpqKu8kuPixC6HR",
+        ["DiscordId"] = "344054115539615745",
     }
 }
 script_key="UBqwHOLCQMlruRZAOrFffLsGREatfXyk";
