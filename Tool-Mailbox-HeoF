@@ -48,7 +48,7 @@ spawn(function()
                 setfpscap(4)  -- Set lại thành 5 nếu chưa đến 2 giờ
                 print("fpscap không phải 3, 4, hoặc 5, đã set lại thành 5!")
             elseif elapsedTime >= 18000 and elapsedTime < 36000 then  -- Từ 2 giờ đến dưới 4 giờ
-                setfpscap(4)  -- Set lại thành 4 nếu thời gian từ 5 đến dưới 10 giờ
+                setfpscap(3)  -- Set lại thành 4 nếu thời gian từ 5 đến dưới 10 giờ
                 print("fpscap không phải 3, 4, hoặc 5, đã set lại thành 4!")
             else  -- Sau 4 giờ
                 setfpscap(3)  -- Set lại thành 3 nếu đã quá 10 giờ
