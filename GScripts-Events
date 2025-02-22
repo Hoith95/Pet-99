@@ -3,13 +3,9 @@ _G.EventDone = true
 
 _G.GLOOTBOXES = {"Locked Hype Egg"}
 
-_G.GDO_TOWER_TYCOON_EVENT = true
-_G.GCONVERT_VALENTINE_HEARTS = true
-_G.GUSE_TOWER_TYCOON_BOOSTS = true
-_G.GAUTO_TYCOON_PET_UPGRADE = true
-_G.GUSE_REBIRTH_TOKENS = true
-_G.GTYCOON_MAX_REBIRTHS = 1
-_G.GTOWER_TYCOON_RAFFLE_ENTRIES  = 1000
+_G.GDO_CARD_WORLD_EVENT = true
+_G.GCARD_PACK_TO_BUY = "Retro Pack"
+_G.GCLEAR_FAVORITE_PETS = true
 
 _G.GGFX_MODE = 1
 _G.GZONE_TO = 99
@@ -24,5 +20,6 @@ _G.GFRUITS = {"Watermelon","Candycane","Apple","Rainbow","Pineapple","Orange","B
 _G.GPOTIONS = {"Coins","Lucky","The Cocktail","Huge","Treasure Hunter","Walkspeed","Diamonds","Damage"}
 _G.GPOTIONS_MAX_TIER = 99
 --_G.GENCHANTS = {"Lucky Eggs","Lucky Eggs","Huge Hunter","Criticals", "Coins","Tap Power","Treasure Hunter"}
-_G.GENCHANTS = {"Lucky Eggs","Strong Pets","Criticals","Huge Hunter","Lucky Eggs","Treasure Hunter","Tap Power"}
+--_G.GENCHANTS = {"Lucky Eggs","Strong Pets","Criticals","Huge Hunter","Lucky Eggs","Treasure Hunter","Tap Power"}
+_G.GENCHANTS = {"Coins","Coins", "Strong Pets", "Criticals","Treasure Hunter","Criticals","Strong Pets","Coins","Lucky Eggs", "Diamonds","Tap Power"}
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/34915da4ad87a5028e1fd64efbe3543f.lua"))()
