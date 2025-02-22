@@ -26,7 +26,7 @@ spawn(function()
 
     -- Khi trạng thái _G.script1Done đã là true, thay đổi fpscap
     wait(120)
-    setfpscap(4)
+    setfpscap(3)
     print("Đã set fpscap thành 5!")
 
     -- Tính thời gian kể từ khi set fpscap thành 5
