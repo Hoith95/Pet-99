@@ -5,6 +5,7 @@ spawn(function()
             break
         else
             -- Nếu _G.Event2Done không phải là true, chạy loadstring
+            setfpscap(15)
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
         end
         wait(1)
