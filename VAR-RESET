@@ -1,0 +1,12 @@
+spawn(function()
+    while true do
+        if _G.Event2Done == true then
+            -- Nếu _G.Event2Done là true, dừng script
+            break
+        else
+            -- Nếu _G.Event2Done không phải là true, chạy loadstring
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
+        end
+        wait(1)
+    end
+end)
