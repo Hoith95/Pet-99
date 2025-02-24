@@ -19,7 +19,7 @@ getgenv().Settings = {
 	    --["Charm Stone"] = {Class = "Misc", Price = 20000},
 	    ["Mini Pinata"] = {Price = 45000},
 	    ["Secret Key"] = {Price = 25000},
-	    ["Void Key"] = {Price = 35000},
+	    ["Void Key"] = {Price = 38000},
 	    ["Tech Key"] = {Price = 25000},
 	    ["Crystal Key"] = {Price = "+5%"},
 	    --["Treasure Hideout Key"] = {Class = "Misc", Price = "+1%"},
