@@ -1,10 +1,10 @@
 spawn(function()
     while true do
-        if _G.EventDone == true then
-            -- Nếu _G.EventDone là true, dừng script
+        if _G.Event3Done == true then
+            -- Nếu _G.Event3Done là true, dừng script
             break
         else
-            -- Nếu _G.EventDone không phải là true, chạy loadstring
+            -- Nếu _G.Event3Done không phải là true, chạy loadstring
             setfpscap(15)
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
         end
