@@ -15,6 +15,7 @@ getgenv().AutoMail = {
         ['Hellfire Gift'] = { Class = "Lootbox", MinAmount = 15, Amount = "Max" },
         ['Love Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
         ['Retro Pack'] = { Class = "Lootbox", MinAmount = 1000, Amount = "Max" },
+        ['Fantasy Pack'] = { Class = "Lootbox", MinAmount = 50, Amount = "Max" },
         ['Doodle Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
         ['All Huges'] = { Class = "Pet", Amount = "Max" },
         ['Insta Plant Capsule'] = { Class = "Misc", MinAmount = 20, Amount = "Max" },
