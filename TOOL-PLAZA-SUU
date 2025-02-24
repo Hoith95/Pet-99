@@ -19,7 +19,7 @@ getgenv().Settings = {
 	    --["Magic Shard"] = {Class = "Misc", Price = 65000},
 	    --["Lucky Eggs 9"] = {Class = "Enchant", Price = "+1%"},
 	    --["Charm Stone"] = {Class = "Misc", Price = 20000},
-	    ["Secret Key"] = {Class = "Misc", Price = 25000},
+	    ["Secret Key"] = {Price = 25000},
 	    --["Void Key"] = {Class = "Misc", Price = 55000},
 	    --["Tech Key"] = {Class = "Misc", Price = 25000},
 	    --["Crystal Key"] = {Class = "Misc", Price = "+5%"},
