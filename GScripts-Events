@@ -1,5 +1,5 @@
 _G.script2Done = true
-_G.Event2Done = true
+_G.EventDone = true
 
 _G.GLOOTBOXES = {"Locked Hype Egg"}
 
