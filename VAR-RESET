@@ -1,6 +1,6 @@
 spawn(function()
     while true do
-        if _G.Event2Done == true then
+        if _G.EventDone == true then
             -- Nếu _G.Event2Done là true, dừng script
             break
         else
