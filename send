@@ -4,7 +4,7 @@ _G.GDRY_RUN = false
 _G.GMAIL_ITEMS = {
 --["Diamonds"] = {Class = "Currency", Id = "Diamonds", Amount = "3m"},
 ["Lumi Axolotl"] = {Class = "Pet", Id = "Lumi Axolotl", Amount = 15, IsGold = false, IsRainbow = true, IsShiny = false},
-["Coins"] = {Class = "Enchant",Id = "Coins",Tier = 7, Amount = 1},
+["Coins"] = {Class = "Enchant",Id = "Coins",Tier = 7, Amount = 2},
 --["Lucky Eggs"] = {Class = "Enchant",Id = "Lucky Eggs",Tier = 7, Amount = 1},
 --["Criticals"] = {Class = "Enchant",Id = "Criticals",Tier = 7, Amount = 1},
 --["Strong Pets"] = {Class = "Enchant",Id = "Strong Pets",Tier = 7, Amount = 1},
