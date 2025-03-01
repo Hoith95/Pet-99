@@ -9,22 +9,36 @@ _G.AUTOMAILBOX = true
 
 getgenv().AutoMail = {
     ['Items'] = {
+        ['All Huges'] = { Class = "Pet", AllVariants = true, Amount = 1 },
+        ['Huge Arcade Dog Card'] = { Class = "Pet", AllVariants = true, Amount = 1 },
+        ['Huge Blurred Axolotl Card'] = { Class = "Pet", AllVariants = true, Amount = 1 },
+        ['Huge Nightmare Dog Card'] = { Class = "Pet", AllVariants = true, Amount = 1 },
+        ['Huge Pog Cat Card'] = { Class = "Pet", AllVariants = true, Amount = 1 },
+        ['Huge Storm Axolotl Card'] = { Class = "Pet", AllVariants = true, Amount = 1 },
+        ['Huge Ninja Capybara Card'] = { Class = "Pet", AllVariants = true, Amount = 1 },
+        ['Huge Arcane Dominus Card'] = { Class = "Pet", AllVariants = true, Amount = 1 },
+        ['Titanic Cupcake Pegasus Card'] = { Class = "Pet", AllVariants = true, Amount = 1 },
+        ['Titanic Signature BIG Maskot Card'] = { Class = "Pet", AllVariants = true, Amount = 1 },
+        --['Retro Pack'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
+        --['Nightmare Pack'] = { Class = "Lootbox", MinAmount = 50, Amount = "Max" },
+        --['Fantasy Pack'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
+        --['Ninja Pack'] = { Class = "Lootbox", MinAmount = 50, Amount = "Max" },
+        --['Axolotl Pack'] = { Class = "Lootbox", MinAmount = 50, Amount = "Max" },
+        --['Pog Pack'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
+        ['BIG Pack'] = { Class = "Lootbox", MinAmount = 50, Amount = "Max" },
         ['Hype Egg 2'] = { Class = "Lootbox", Amount = 1 },
         ['Hype Egg'] = { Class = "Lootbox", Amount = "Max" },
         ['Huge Machine Egg 4'] = { Class = "Egg", Amount = 1 },
         ['Hellfire Gift'] = { Class = "Lootbox", MinAmount = 15, Amount = "Max" },
         ['Love Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
-        --['Retro Pack'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
-        --['Fantasy Pack'] = { Class = "Lootbox", MinAmount = 50, Amount = "Max" },
         ['Doodle Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
-        ['All Huges'] = { Class = "Pet", Amount = "Max" },
         ['Insta Plant Capsule'] = { Class = "Misc", MinAmount = 20, Amount = "Max" },
         ['Mini Pinata'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
         ['Secret Key'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
         ['Void Key'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
         ['Tech Key'] = { Class = "Misc", MinAmount = 200, Amount = "Max" },
         ['Crystal Key'] = { Class = "Misc", MinAmount = 200, Amount = "Max" },
-        --['Love Cow'] = { Class = "Pet", MinAmount = 100, Amount = "Max" },
+        --['Love Cow'] = { Class = "Pet", MinAmount = 100, AllVariants = true, Amount = "Max" }, 
     },
     ['Loop Interval'] = 60,
     ['Users'] = {"Kimk_duyek", "Yel_lyvx", "Cao_vyxm", "Yenx_tok", "Tuyx_duyen"},
@@ -52,7 +66,9 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
 
             -- Duyệt qua các vật phẩm trong AutoMail
             for Id, Info in pairs(AutoMail['Items']) do
-                if Id == v.id and Info.Class == Class and Info.pt == v.pt and Info.sh == v.sh and Info.tn == v.tn then
+                local isVariant = Info.AllVariants and string.find(v.id, Id)
+
+                if (Id == v.id or isVariant) and Info.Class == Class and Info.pt == v.pt and Info.sh == v.sh and Info.tn == v.tn then
                     if Info.MinAmount then
                         if (v._am or 0) >= Info.MinAmount then
                             Config = true
@@ -72,14 +88,14 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
                 -- Kiểm tra các pet chỉ định cụ thể từ cấu hình
                 if Info.Class == "Pet" and Info.Amount == "Max" and v.id == Id then
                     if (v._am or 0) >= (Info.MinAmount or 0) then
-                        Config = true  -- Đánh dấu vật phẩm là pet cần gửi
+                        Config = true
                     end
                 end
 
                 -- Kiểm tra tất cả Huge Pets, chỉ gửi các pet có id chứa "Huge" và thuộc Class "Pet"
                 if Info.Class == "Pet" and Info.Amount == "Max" and string.find(v.id, "Huge") then
-                    if Class == "Pet" then  -- Đảm bảo pet thuộc Class "Pet"
-                        Config = true  -- Đánh dấu rằng vật phẩm là Huge Pet cần gửi
+                    if Class == "Pet" then
+                        Config = true
                     end
                 end
             end
