@@ -8,7 +8,7 @@ getgenv().Settings = {
 	    ["Love Gift"] = {Price = "+1%", Priority = true},
 	    ["Retro Pack"] = {Price = "+1%", Priority = true},
 	    ["Nightmare Pack"] = {Price = "+1%", Priority = true},
-	    ["Fantasy Pack"] = {Price = "-5%", Priority = true},
+	    ["Fantasy Pack"] = {Price = "+1%", Priority = true},
 	    ["Hellfire Gift"] = {Price = "+1%"},
 	    ["Doodle Gift"] = {Price = "+5"},
 	    ["Huge Machine Egg 4"] = {Price = "+5%"},
