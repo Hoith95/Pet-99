@@ -100,15 +100,16 @@ task.spawn(function()
         local NewHugeFound = false -- Cờ kiểm tra có Huge mới không
 
         for Class, Items in pairs(Inventory) do
-            for uid, v in pairs(Items) do
-                if Class == "Pet" then
-                    -- Kiểm tra nếu pet thuộc danh sách Huge / Titanic
+            -- Kiểm tra nếu Class thuộc danh sách cần theo dõi
+            if Class == "Pet" or Class == "Card" then
+                for uid, v in pairs(Items) do
+                    -- Kiểm tra nếu item thuộc danh sách Huge / Titanic
                     for _, name in ipairs(Webhook['Id Names']) do
                         if string.find(v.id, name) then
-                            -- Cập nhật số lượng pet theo loại
+                            -- Cập nhật số lượng theo loại
                             CurrentCount[v.id] = (CurrentCount[v.id] or 0) + 1
 
-                            -- Nếu loại pet này nhiều hơn lần trước, có pet mới hoặc quay lại
+                            -- Nếu loại này nhiều hơn lần trước, có item mới hoặc quay lại
                             if (HugeCount[v.id] or 0) < CurrentCount[v.id] then
                                 SendWebhook(v.id, v.pt, v.sh)
                                 NewHugeFound = true
@@ -126,7 +127,7 @@ task.spawn(function()
             end
         end
 
-        -- Nếu có pet mới, cập nhật HugeCount
+        -- Nếu có item mới, cập nhật HugeCount
         if NewHugeFound then
             HugeCount = CurrentCount
         end
