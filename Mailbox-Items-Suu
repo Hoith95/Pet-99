@@ -1,30 +1,46 @@
 -- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
-if _G.AUTOMAILBOX1 then
+if _G.AUTOMAILBOX then
     warn("Script đã được chạy trước đó!")
     return -- Dừng script nếu đã chạy
 end
 
 -- Đánh dấu script đã được chạy
-_G.AUTOMAILBOX1 = true
+_G.AUTOMAILBOX = true
+
+print("Auto MailBox sẽ bắt đầu gửi thư trong 60 giay nữa.")
 
 getgenv().AutoMail = {
     ['Items'] = {
+        ['All Huges'] = { Class = "Pet", AllVariants = true, Amount = 1 },
+        ['Huge Arcade Dog Card'] = { Class = "Card", AllVariants = true, Amount = 1 },
+        ['Huge Blurred Axolotl Card'] = { Class = "Card", AllVariants = true, Amount = 1 },
+        ['Huge Nightmare Dog Card'] = { Class = "Card", AllVariants = true, Amount = 1 },
+        ['Huge Pog Cat Card'] = { Class = "Card", AllVariants = true, Amount = 1 },
+        ['Huge Storm Axolotl Card'] = { Class = "Card", AllVariants = true, Amount = 1 },
+        ['Huge Ninja Capybara Card'] = { Class = "Card", AllVariants = true, Amount = 1 },
+        ['Huge Arcane Dominus Card'] = { Class = "Card", AllVariants = true, Amount = 1 },
+        ['Titanic Cupcake Pegasus Card'] = { Class = "Card", AllVariants = true, Amount = 1 },
+        ['Titanic Signature BIG Maskot Card'] = { Class = "Card", AllVariants = true, Amount = 1 },
+        --['Retro Pack'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
+        --['Nightmare Pack'] = { Class = "Lootbox", MinAmount = 50, Amount = "Max" },
+        --['Fantasy Pack'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
+        --['Ninja Pack'] = { Class = "Lootbox", MinAmount = 50, Amount = "Max" },
+        --['Axolotl Pack'] = { Class = "Lootbox", MinAmount = 50, Amount = "Max" },
+        --['Pog Pack'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
+        ['BIG Pack'] = { Class = "Lootbox", MinAmount = 50, Amount = "Max" },
         ['Hype Egg 2'] = { Class = "Lootbox", Amount = 1 },
         ['Hype Egg'] = { Class = "Lootbox", Amount = "Max" },
         ['Huge Machine Egg 4'] = { Class = "Egg", Amount = 1 },
         ['Hellfire Gift'] = { Class = "Lootbox", MinAmount = 15, Amount = "Max" },
         ['Love Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
-        --['Retro Pack'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
-        --['Fantasy Pack'] = { Class = "Lootbox", MinAmount = 50, Amount = "Max" },
         ['Doodle Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
-        ['All Huges'] = { Class = "Pet", Amount = "Max" },
         ['Insta Plant Capsule'] = { Class = "Misc", MinAmount = 20, Amount = "Max" },
         ['Mini Pinata'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
         ['Secret Key'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
         ['Void Key'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
         ['Tech Key'] = { Class = "Misc", MinAmount = 200, Amount = "Max" },
         ['Crystal Key'] = { Class = "Misc", MinAmount = 200, Amount = "Max" },
-        --['Love Cow'] = { Class = "Pet", MinAmount = 100, Amount = "Max" },
+        --['Love Cow'] = { Class = "Pet", MinAmount = 100, AllVariants = true, Amount = "Max" }, 
     },
     ['Loop Interval'] = 60,
     ['Users'] = {"lagwuadiss"},
@@ -38,48 +54,38 @@ local Client = game:GetService('ReplicatedStorage').Library.Client
 local Network = require(Client.Network)
 local SaveModule = require(Client.Save)
 
-local PetIds = {"Huge", "Titanic"}
-
 while task.wait(AutoMail['Loop Interval'] or 60) do
     local Queue = {}
-    local AnyItemsSent = false  -- Biến kiểm tra xem có vật phẩm nào được gửi không
+    local AnyItemsSent = false  
 
-    -- Duyệt qua tất cả các vật phẩm trong inventory của người chơi
     for Class, Items in pairs(SaveModule.Get()['Inventory']) do
         for uid, v in pairs(Items) do
-            local PetCheck = (Class == "Pet") and string.find(v.id, "Huge")  -- Kiểm tra nếu pet là Huge và thuộc class "Pet"
+            local PetCheck = (Class == "Pet") and string.find(v.id, "Huge")
             local Config = false
 
-            -- Duyệt qua các vật phẩm trong AutoMail
             for Id, Info in pairs(AutoMail['Items']) do
-                if Id == v.id and Info.Class == Class and Info.pt == v.pt and Info.sh == v.sh and Info.tn == v.tn then
+                local isVariant = Info.AllVariants and string.find(v.id, Id)
+
+                local isValid = true
+                if Info.pt and Info.pt ~= v.pt then isValid = false end
+                if Info.sh and Info.sh ~= v.sh then isValid = false end
+                if Info.tn and Info.tn ~= v.tn then isValid = false end
+
+                local itemAmount = tonumber(v._am) or 1
+
+                if (Id == v.id or isVariant) and Info.Class == Class and isValid then
                     if Info.MinAmount then
-                        if (v._am or 0) >= Info.MinAmount then
+                        if itemAmount >= Info.MinAmount then
                             Config = true
                         end
                     else
                         if Info.Amount == "Max" then
-                            if v._am > 0 then
+                            if itemAmount > 0 then
                                 Config = true
                             end
-                        elseif (Info.Amount or 0) <= (v._am or 1) then
+                        elseif Info.Amount <= itemAmount then
                             Config = true
                         end
-                    end
-                    break
-                end
-
-                -- Kiểm tra các pet chỉ định cụ thể từ cấu hình
-                if Info.Class == "Pet" and Info.Amount == "Max" and v.id == Id then
-                    if (v._am or 0) >= (Info.MinAmount or 0) then
-                        Config = true  -- Đánh dấu vật phẩm là pet cần gửi
-                    end
-                end
-
-                -- Kiểm tra tất cả Huge Pets, chỉ gửi các pet có id chứa "Huge" và thuộc Class "Pet"
-                if Info.Class == "Pet" and Info.Amount == "Max" and string.find(v.id, "Huge") then
-                    if Class == "Pet" then  -- Đảm bảo pet thuộc Class "Pet"
-                        Config = true  -- Đánh dấu rằng vật phẩm là Huge Pet cần gửi
                     end
                 end
             end
@@ -90,17 +96,11 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
         end
     end
 
-    -- Nếu có vật phẩm hợp lệ trong hàng đợi, gửi thư
     for uid, Data in pairs(Queue) do
         local Unlocked = false
         local Mailed = false
         local v = Data.Info
-        local amountToSend = (v._am or 1)
-
-        -- Nếu Amount là "Max", gửi toàn bộ số lượng có sẵn
-        if amountToSend == "Max" then
-            amountToSend = v._am
-        end
+        local amountToSend = tonumber(v._am) or 1  
 
         if v._lk then
             while not Unlocked do
@@ -109,19 +109,16 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
         end
 
         local User = AutoMail['Users'][math.random(1, #AutoMail['Users'])]
-        -- Gửi thư và in ra thông tin
         while not Mailed do
             Mailed, err = Network.Invoke("Mailbox: Send", User, "Bless", Data.Class, uid, amountToSend) task.wait(0.1)
         end
 
-        -- Đánh dấu rằng đã có vật phẩm được gửi
         AnyItemsSent = true
 
-        -- In ra số lượng vật phẩm và người nhận
+        -- 📝 Giữ nguyên print() cũ
         print("Đã gửi " .. amountToSend .. " vật phẩm " .. v.id .. " cho người dùng: " .. User)
     end
 
-    -- Nếu không có vật phẩm nào đủ điều kiện để gửi, in ra thông báo
     if not AnyItemsSent then
         --print("Không có vật phẩm nào đủ điều kiện để gửi.")
     end
