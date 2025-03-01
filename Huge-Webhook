@@ -40,33 +40,45 @@ local Formatint = function(int)
     return string.format("%.2f%s", int, Suffix[Index])
 end
 
--- Lấy ảnh của Item (Pet hoặc Card)
-local function GetAsset(Id, pt)
-    local AssetData = Library.Directory.Pets[Id] or Library.Directory.Cards and Library.Directory.Cards[Id]
-    return string.gsub(AssetData and (pt == 1 and AssetData.goldenThumbnail or AssetData.thumbnail) or "14976456685", "rbxassetid://", "")
-end
-
--- Lấy thông tin từ Commands (Rap / Exist)
-local function GetStats(Cmds, Class, ItemTable)
-    return Cmds.Get({
-        Class = { Name = Class },
-        IsA = function(InputClass) return InputClass == Class end,
-        GetId = function() return ItemTable.id end,
-        StackKey = function()
-            return game:GetService("HttpService"):JSONEncode({id = ItemTable.id, sh = ItemTable.sh, pt = ItemTable.pt, tn = ItemTable.tn})
-        end
-    }) or nil
-end
-
 -- Hàm gửi Webhook thông báo
 local function SendWebhook(Class, Id, pt, sh)
-    local Img = string.format("https://biggamesapi.io/image/%s", GetAsset(Id, pt))
     local Version = pt == 1 and "Golden " or pt == 2 and "Rainbow " or ""
     local ItemType = (Class == "Pet" and "Thú cưng" or "Thẻ bài") -- Phân biệt loại
 
     local Title = string.format("||%s|| vừa nhận được **%s%s%s** (%s)", 
         LocalPlayer.Name, Version, sh and "Shiny " or "", Id, ItemType)
 
+    -- Nếu là Card, chỉ gửi webhook đơn giản
+    if Class == "Card" then
+        local Body = game:GetService("HttpService"):JSONEncode({
+            content = string.format("<@%s>", Webhook['ID']),
+            embeds = {
+                {
+                    title = Title,
+                    color = 0xFF00FF,
+                    timestamp = DateTime.now():ToIsoDate(),
+                    footer = { text = "Heo Notifier" }
+                }
+            }
+        })
+
+        local success, err = pcall(function()
+            return request({
+                Url = Webhook['URL'],
+                Method = "POST",
+                Headers = { ["Content-Type"] = "application/json" },
+                Body = Body
+            })
+        end)
+
+        if not success then
+            warn("Webhook gửi thất bại:", err)
+        end
+        return
+    end
+
+    -- Nếu không phải Card, tiếp tục lấy hình ảnh, RAP, Exist
+    local Img = string.format("https://biggamesapi.io/image/%s", GetAsset(Id, pt))
     local Exist = GetStats(ExistCmds, Class, { id = Id, pt = pt, sh = sh, tn = nil })
     local Rap = GetStats(RapCmds, Class, { id = Id, pt = pt, sh = sh, tn = nil })
 
@@ -85,7 +97,7 @@ local function SendWebhook(Class, Id, pt, sh)
             }
         }
     })
-    
+
     local success, err = pcall(function()
         return request({
             Url = Webhook['URL'],
