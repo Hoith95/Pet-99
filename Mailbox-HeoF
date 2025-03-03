@@ -16,6 +16,11 @@ wait(15)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Heo"))()
 end)
 
+spawn(function()
+wait(15)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Egg-Heo"))()
+end)
+
 --- Gửi Tất Cả Gems ---
 spawn(function()
 wait(15)
