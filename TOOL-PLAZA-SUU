@@ -25,6 +25,7 @@ getgenv().Settings = {
 	    ["Hellfire Gift"] = {Price = "+1%"},
 	    ["Doodle Gift"] = {Price = "+5"},
 	    ["Huge Machine Egg 4"] = {Price = "+5%"},
+	    ["Huge Machine Egg 5"] = {Price = "+5%"},
 	    ["Hype Egg"] = {Price = "+1%"},
 	    ["Hype Egg 2"] = {Price = "+1%"},
 	    --["Magic Shard"] = {Class = "Misc", Price = 65000},
