@@ -36,6 +36,7 @@ getgenv().AutoMail = {
         ['Love Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
         ['Doodle Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
         ['Insta Plant Capsule'] = { Class = "Misc", MinAmount = 20, Amount = "Max" },
+        ['Seed Bag'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
         ['Mini Pinata'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
         ['Secret Key'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
         ['Void Key'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
