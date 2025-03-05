@@ -1,11 +1,11 @@
 -- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
-if _G.MAILBOX then
+if _G.MAILBOX2 then
     warn("Script đã được chạy trước đó!")
     return -- Dừng script nếu đã chạy
 end
 
 -- Đánh dấu script đã được chạy
-_G.MAILBOX = true
+_G.MAILBOX2 = true
 
 print("Auto MailBox sẽ bắt đầu gửi thư trong 60 giay nữa.")
 
@@ -45,7 +45,7 @@ getgenv().AutoMail = {
         --['Love Cow'] = { Class = "Pet", MinAmount = 100, AllVariants = true, Amount = "Max" }, 
     },
     ['Loop Interval'] = 60,
-    ['Users'] = {"Kimk_duyek", "Yel_lyvx", "Cao_vyxm", "Yenx_tok", "Tuyx_duyen"},
+    ['Users'] = {"tachi43fi", "Yel_lyvx", "dieuminhf6iy", "phamlamqglc", "buihuuquev","leduongra0f"},
 }
 
 repeat task.wait() until game:IsLoaded()
