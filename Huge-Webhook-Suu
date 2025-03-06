@@ -1,16 +1,16 @@
 -- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
-if _G.WEBHOOKS then
+if _G.WEBHOOKS2 then
     warn("Script đã được chạy trước đó!")
     return -- Dừng script nếu đã chạy
 end
 
 -- Đánh dấu script đã được chạy
-_G.WEBHOOKS = true
+_G.WEBHOOKS2 = true
 
 getgenv().Webhook = {
     ['ID'] = "344054115539615745",
     ['Id Names'] = { "Huge", "Titanic"},
-    ['URL'] = "https://discord.com/api/webhooks/1345498115364618322/Pi-zvyks5MKYSfyTxmEbhhM2tE3m9ACBhkcNmkFg5Vl7svGaDOt9VarP_qi4ksFO1mKN",
+    ['URL'] = "https://discord.com/api/webhooks/1347254188400316478/v78o-WkvoFnRkvLcb-_qDinrg73hNHIWWIFC1zrBhn9GkR-jLwxEomxUY7WlG4kFzBGH",
 }
 
 repeat task.wait() until game:IsLoaded()
