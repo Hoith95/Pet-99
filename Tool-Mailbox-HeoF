@@ -27,6 +27,7 @@ spawn(function()
     -- Khi trạng thái _G.script1Done đã là true, thay đổi fpscap
     wait(120)
     setfpscap(8)
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPU-LOW"))()
     print("Đã set fpscap thành 5!")
 
     -- Tính thời gian kể từ khi set fpscap thành 5
