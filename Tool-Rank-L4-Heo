@@ -23,8 +23,6 @@ script_key="MwpgreoxkMbqtBRseeXTeaehFyvfaVmK";
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank"))()
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-Fast"))()
 else
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events"))()
-
 script_key="MwpgreoxkMbqtBRseeXTeaehFyvfaVmK";
 _G.GDRY_RUN = false
 _G.DISABLE_OVERLAY = true
