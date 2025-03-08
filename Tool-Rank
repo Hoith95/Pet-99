@@ -40,6 +40,6 @@ _G.GMAIL_ITEMS = {
 }
 _G.GMAIL_RECEIVERS = {"tachi43fi", "Yel_lyvx", "dieuminhf6iy", "phamlamqglc", "buihuuquev","leduongra0f"}
 _G.GMAIL_DELAY  = 0
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Fishing"))()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Fishing"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events"))()
 end
