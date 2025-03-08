@@ -1,0 +1,94 @@
+getgenv().AutoMail = {
+    ['Items'] = {
+        ['All Huges'] = { Class = "Pet", AllVariants = true, Amount = 1 },
+        ['Huge Arcade Dog Card'] = { Class = "Card", AllVariants = true, Amount = 1 },
+        ['Huge Blurred Axolotl Card'] = { Class = "Card", AllVariants = true, Amount = 1 },
+        ['Huge Nightmare Dog Card'] = { Class = "Card", AllVariants = true, Amount = 1 },
+        ['Huge Pog Cat Card'] = { Class = "Card", AllVariants = true, Amount = 1 },
+        ['Huge Storm Axolotl Card'] = { Class = "Card", AllVariants = true, Amount = 1 },
+        ['Huge Ninja Capybara Card'] = { Class = "Card", AllVariants = true, Amount = 1 },
+        ['Huge Arcane Dominus Card'] = { Class = "Card", AllVariants = true, Amount = 1 },
+        ['Titanic Cupcake Pegasus Card'] = { Class = "Card", AllVariants = true, Amount = 1 },
+        ['Titanic Signature BIG Maskot Card'] = { Class = "Card", AllVariants = true, Amount = 1 },
+    },
+    ['Loop Interval'] = 60,
+    ['Users'] = {"Heo_LonTon95"},
+}
+
+repeat task.wait() until game:IsLoaded()
+local LocalPlayer = game:GetService('Players').LocalPlayer
+repeat task.wait() until not LocalPlayer.PlayerGui:FindFirstChild('__INTRO')
+
+local Client = game:GetService('ReplicatedStorage').Library.Client
+local Network = require(Client.Network)
+local SaveModule = require(Client.Save)
+
+while task.wait(AutoMail['Loop Interval'] or 60) do
+    local Queue = {}
+    local AnyItemsSent = false  
+
+    for Class, Items in pairs(SaveModule.Get()['Inventory']) do
+        for uid, v in pairs(Items) do
+            local PetCheck = (Class == "Pet") and string.find(v.id, "Huge")
+            local Config = false
+
+            for Id, Info in pairs(AutoMail['Items']) do
+                local isVariant = Info.AllVariants and string.find(v.id, Id)
+
+                local isValid = true
+                if Info.pt and Info.pt ~= v.pt then isValid = false end
+                if Info.sh and Info.sh ~= v.sh then isValid = false end
+                if Info.tn and Info.tn ~= v.tn then isValid = false end
+
+                local itemAmount = tonumber(v._am) or 1
+
+                if (Id == v.id or isVariant) and Info.Class == Class and isValid then
+                    if Info.MinAmount then
+                        if itemAmount >= Info.MinAmount then
+                            Config = true
+                        end
+                    else
+                        if Info.Amount == "Max" then
+                            if itemAmount > 0 then
+                                Config = true
+                            end
+                        elseif Info.Amount <= itemAmount then
+                            Config = true
+                        end
+                    end
+                end
+            end
+
+            if Class == "Egg" or Config or PetCheck and not Queue[uid] then
+                Queue[uid] = { Class = Class, Info = v }
+            end
+        end
+    end
+
+    for uid, Data in pairs(Queue) do
+        local Unlocked = false
+        local Mailed = false
+        local v = Data.Info
+        local amountToSend = tonumber(v._am) or 1  
+
+        if v._lk then
+            while not Unlocked do
+                Unlocked, err = Network.Invoke("Locking_SetLocked", uid, false) task.wait(0.1)
+            end
+        end
+
+        local User = AutoMail['Users'][math.random(1, #AutoMail['Users'])]
+        while not Mailed do
+            Mailed, err = Network.Invoke("Mailbox: Send", User, "Bless", Data.Class, uid, amountToSend) task.wait(0.1)
+        end
+
+        AnyItemsSent = true
+
+        -- 📝 Giữ nguyên print() cũ
+        print("Đã gửi " .. amountToSend .. " vật phẩm " .. v.id .. " cho người dùng: " .. User)
+    end
+
+    if not AnyItemsSent then
+        --print("Không có vật phẩm nào đủ điều kiện để gửi.")
+    end
+end
