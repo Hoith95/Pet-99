@@ -1,11 +1,11 @@
 -- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
-if _G.MAILBOX2 then
+if _G.MAILBOX then
     warn("Script đã được chạy trước đó!")
     return -- Dừng script nếu đã chạy
 end
 
 -- Đánh dấu script đã được chạy
-_G.MAILBOX2 = true
+_G.MAILBOX = true
 
 print("Auto MailBox sẽ bắt đầu gửi thư trong 60 giay nữa.")
 
@@ -21,13 +21,13 @@ getgenv().AutoMail = {
         ['Huge Arcane Dominus Card'] = { Class = "Card", AllVariants = true, Amount = 1 },
         ['Titanic Cupcake Pegasus Card'] = { Class = "Card", AllVariants = true, Amount = 1 },
         ['Titanic Signature BIG Maskot Card'] = { Class = "Card", AllVariants = true, Amount = 1 },
-        --['Retro Pack'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
-        --['Nightmare Pack'] = { Class = "Lootbox", MinAmount = 50, Amount = "Max" },
-        ['Fantasy Pack'] = { Class = "Lootbox", MinAmount = 100, Amount = "Max" },
-        ['Ninja Pack'] = { Class = "Lootbox", MinAmount = 10, Amount = "Max" },
-        ['Axolotl Pack'] = { Class = "Lootbox", MinAmount = 100, Amount = "Max" },
-        --['Pog Pack'] = { Class = "Lootbox", MinAmount = 20, Amount = "Max" },
-        ['BIG Pack'] = { Class = "Lootbox", MinAmount = 25, Amount = "Max" },
+        ['Retro Pack'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
+        ['Nightmare Pack'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
+        ['Fantasy Pack'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
+        ['Ninja Pack'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
+        ['Axolotl Pack'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
+        ['Pog Pack'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
+        ['BIG Pack'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
         ['Hype Egg 2'] = { Class = "Lootbox", Amount = 1 },
         ['Hype Egg'] = { Class = "Lootbox", Amount = "Max" },
         ['Huge Machine Egg 4'] = { Class = "Egg", Amount = 1 },
