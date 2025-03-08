@@ -10,11 +10,6 @@ while not _G.script1Done do
     task.wait(1) -- Chờ 1 giây trước khi kiểm tra lại
 end
 
-_G.L4Done = true
-
---- GScripts-Rank ---
-
-
 local Save = require(game:GetService("ReplicatedStorage").Library.Client.Save)
 local rank = Save.Get().Rank
 
