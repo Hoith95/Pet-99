@@ -18,19 +18,13 @@ _G.L4Done = true
 local Save = require(game:GetService("ReplicatedStorage").Library.Client.Save)
 local rank = Save.Get().Rank
 
-if rank < 8 then
+if rank < 32 then
 script_key="MwpgreoxkMbqtBRseeXTeaehFyvfaVmK";
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank"))()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-Fast"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-Fast"))()
 else
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events"))()
 
-spawn(function()
-    --script_key="MwpgreoxkMbqtBRseeXTeaehFyvfaVmK";
-    --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-GScripts"))()
-end)
-
---task.wait(5)
 script_key="MwpgreoxkMbqtBRseeXTeaehFyvfaVmK";
 _G.GDRY_RUN = false
 _G.DISABLE_OVERLAY = true
