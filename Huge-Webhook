@@ -40,11 +40,15 @@ local Formatint = function(int)
     return string.format("%.2f%s", int, Suffix[Index])
 end
 
+local GetAsset = function(Id, pt)
+    local Asset = require(Library.Directory.Pets)[Id]
+    return string.gsub(Asset and (pt == 1 and Asset.goldenThumbnail or Asset.thumbnail) or "14976456685", "rbxassetid://", "")
+end
+
 -- Hàm gửi Webhook thông báo
 local function SendWebhook(Class, Id, pt, sh)
     local Version = pt == 1 and "Golden " or pt == 2 and "Rainbow " or ""
     local ItemType = (Class == "Pet" and "Thú cưng" or "Thẻ bài") -- Phân biệt loại
-
     local Title = string.format("||%s|| vừa nhận được **%s%s%s** (%s)", 
         LocalPlayer.Name, Version, sh and "Shiny " or "", Id, ItemType)
 
@@ -79,8 +83,6 @@ local function SendWebhook(Class, Id, pt, sh)
 
     -- Nếu không phải Card, tiếp tục lấy hình ảnh, RAP, Exist
     local Img = string.format("https://biggamesapi.io/image/%s", GetAsset(Id, pt))
-    local Exist = GetStats(ExistCmds, Class, { id = Id, pt = pt, sh = sh, tn = nil })
-    local Rap = GetStats(RapCmds, Class, { id = Id, pt = pt, sh = sh, tn = nil })
 
     local Body = game:GetService("HttpService"):JSONEncode({
         content = string.format("<@%s>", Webhook['ID']),
