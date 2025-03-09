@@ -13,7 +13,7 @@ end
 local Save = require(game:GetService("ReplicatedStorage").Library.Client.Save)
 local rank = Save.Get().Rank
 
-if rank < 35 then
+if rank < 11 then
 script_key="bSdJMZGmgbmiNOeWrtXQAwcHwiVDAieg";
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank"))()
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-Fast"))()
