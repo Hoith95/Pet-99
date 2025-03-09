@@ -16,6 +16,7 @@ _G.GEVENT_UPGRADES = {
    "LuckyRaidTitanicChest",
    "LuckyRaidHugeChest",
    "LuckyRaidXP",
+   "LuckyRaidPetSpeed",
 }
 
 _G.GGFX_MODE = 1
