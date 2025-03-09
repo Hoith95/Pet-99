@@ -1,16 +1,25 @@
 _G.script2Done = true
 _G.EventDone = true
 
-_G.GDO_CARD_WORLD_EVENT = true
-_G.GCARD_PACK_TO_BUY = "Fantasy Pack"
-_G.GCLEAR_FAVORITE_PETS = true
---_G.GCOINS_TO_KEEP_FOR_MERCHANT = "2m"
---_G.GSTAT_PET = {"Wicked Agony","Fairy Moth","Hydra Cat","Lumi Axolotl"}
-_G.GPACKS_TO_SKIP_MERCHANT = {"Retro Pack","Nightmare Pack","Pog Pack"}
-_G.GLOOTBOXES = {"Locked Hype Egg","Retro Pack","Nightmare Pack","Pog Pack","Fantasy Pack","BIG Pack"}
+_G.GLOOTBOXES = {"Locked Hype Egg"}
+
+_G.GDO_LUCKY_WORLD_EVENT = true
+_G.GHATCH_LOBBY = true
+_G.GMAKE_LUCKY_GIFTS = true
+_G.GEVENT_UPGRADES = {
+   "LuckyRaidDamage",
+   "LuckyRaidAttackSpeed",
+   "LuckyRaidPets",
+   "LuckyRaidEggCost",
+   "LuckyRaidMoreCurrency",
+   "LuckyRaidBetterLoot",
+   "LuckyRaidTitanicChest",
+   "LuckyRaidHugeChest",
+   "LuckyRaidXP",
+}
 
 _G.GGFX_MODE = 1
-_G.GZONE_TO = 99
+_G.GZONE_TO = 299
 _G.GHOLD_GIFTS = false
 _G.GHOLD_BUNDLES = true
 _G.GHATCH_SPEED_MS = 0
@@ -21,7 +30,9 @@ _G.GUSE_FLAGS = {"Fortune Flag","Diamonds Flag","Coins Flag"}
 _G.GFRUITS = {"Watermelon","Candycane","Apple","Rainbow","Pineapple","Orange","Banana"}
 _G.GPOTIONS = {"Coins","Lucky","The Cocktail","Huge","Treasure Hunter","Walkspeed","Diamonds","Damage"}
 _G.GPOTIONS_MAX_TIER = 99
+--_G.GENCHANTS = {}
 --_G.GENCHANTS = {"Lucky Eggs","Lucky Eggs","Huge Hunter","Criticals", "Coins","Tap Power","Treasure Hunter"}
 --_G.GENCHANTS = {"Lucky Eggs","Strong Pets","Criticals","Huge Hunter","Lucky Eggs","Treasure Hunter","Tap Power"}
-_G.GENCHANTS = {"Coins","Coins", "Strong Pets", "Criticals","Treasure Hunter","Criticals","Strong Pets","Coins","Lucky Eggs", "Diamonds","Tap Power"}
+_G.GENCHANTS = {"Coins","Lucky Eggs", "Strong Pets", "Criticals","Huge Hunter","Treasure Hunter","Diamonds","Lucky Eggs","Tap Power"}
+--_G.GENCHANTS = {"Coins","Coins", "Strong Pets", "Criticals","Treasure Hunter","Criticals","Strong Pets","Coins","Lucky Eggs", "Diamonds","Tap Power"}
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/34915da4ad87a5028e1fd64efbe3543f.lua"))()
