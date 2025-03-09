@@ -1,11 +1,11 @@
 -- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
-if _G.WEBHOOKH then
+if _G.WEBHOOKS2 then
     warn("Script đã được chạy trước đó!")
     return -- Dừng script nếu đã chạy
 end
 
 -- Đánh dấu script đã được chạy
-_G.WEBHOOKH = true
+_G.WEBHOOKS2 = true
 
 getgenv().Webhook = {
     ['ID'] = "344054115539615745",
@@ -38,22 +38,6 @@ local Formatint = function(int)
         Index = Index + 1
     end
     return string.format("%.2f%s", int, Suffix[Index])
-end
-
-local GetAsset = function(Id, pt)
-    local Asset = require(Library.Directory.Pets)[Id]
-    return string.gsub(Asset and (pt == 1 and Asset.goldenThumbnail or Asset.thumbnail) or "14976456685", "rbxassetid://", "")
-end
-
-local GetStats = function(Cmds, Class, ItemTable)
-    return Cmds.Get({
-        Class = { Name = Class },
-        IsA = function(InputClass) return InputClass == Class end,
-        GetId = function() return ItemTable.id end,
-        StackKey = function()
-            return game:GetService("HttpService"):JSONEncode({id = ItemTable.id, sh = ItemTable.sh, pt = ItemTable.pt, tn = ItemTable.tn})
-        end
-    }) or nil
 end
 
 -- Hàm gửi Webhook thông báo
@@ -97,18 +81,6 @@ local function SendWebhook(Class, Id, pt, sh)
     local Img = string.format("https://biggamesapi.io/image/%s", GetAsset(Id, pt))
     local Exist = GetStats(ExistCmds, Class, { id = Id, pt = pt, sh = sh, tn = nil })
     local Rap = GetStats(RapCmds, Class, { id = Id, pt = pt, sh = sh, tn = nil })
-
-local GetRap = function(Class, ItemTable)
-    local Item = require(Library.Items[Class .. "Item"])(ItemTable.id)
-
-    if ItemTable.sh then Item:SetShiny(true) end
-    if ItemTable.pt == 1 then Item:SetGolden() end
-    if ItemTable.pt == 2 then Item:SetRainbow() end
-    if ItemTable.tn then Item:SetTier(ItemTable.tn) end
-
-    return RAPCmds.Get(Item) or 0
-end
-
 
     local Body = game:GetService("HttpService"):JSONEncode({
         content = string.format("<@%s>", Webhook['ID']),
