@@ -10,7 +10,7 @@ _G.WEBHOOKH = true
 getgenv().Webhook = {
     ['ID'] = "344054115539615745",
     ['Id Names'] = { "Huge", "Titanic"},
-    ['URL'] = "https://discord.com/api/webhooks/1345497962662461572/oAzGWj4abAKlVKI56ScMxr53-IEeHN0t_UfyMDvUtsIkbia7xCcIg2cUj5LqWnITChyo",
+    ['URL'] = "https://discord.com/api/webhooks/1348359297628639294/VTJxSbyegwzopQ4-lz0ZEslsFXgaDF2K1C0nKx_GmGcDZF0unIqY-4XoCV2vpzzUlCUE",
 }
 
 repeat task.wait() until game:IsLoaded()
@@ -21,7 +21,7 @@ local Library = game.ReplicatedStorage.Library
 local Client = Library.Client
 
 local ExistCmds = require(Client.ExistCountCmds)
-local RapCmds = require(Client.DevRAPCmds)
+local RapCmds = require(Client.RAPCmds)
 local Network = require(Client.Network)
 local SaveMod = require(Client.Save)
 
@@ -38,6 +38,22 @@ local Formatint = function(int)
         Index = Index + 1
     end
     return string.format("%.2f%s", int, Suffix[Index])
+end
+
+local GetAsset = function(Id, pt)
+    local Asset = require(Library.Directory.Pets)[Id]
+    return string.gsub(Asset and (pt == 1 and Asset.goldenThumbnail or Asset.thumbnail) or "14976456685", "rbxassetid://", "")
+end
+
+local GetStats = function(Cmds, Class, ItemTable)
+    return Cmds.Get({
+        Class = { Name = Class },
+        IsA = function(InputClass) return InputClass == Class end,
+        GetId = function() return ItemTable.id end,
+        StackKey = function()
+            return game:GetService("HttpService"):JSONEncode({id = ItemTable.id, sh = ItemTable.sh, pt = ItemTable.pt, tn = ItemTable.tn})
+        end
+    }) or nil
 end
 
 -- Hàm gửi Webhook thông báo
@@ -81,6 +97,18 @@ local function SendWebhook(Class, Id, pt, sh)
     local Img = string.format("https://biggamesapi.io/image/%s", GetAsset(Id, pt))
     local Exist = GetStats(ExistCmds, Class, { id = Id, pt = pt, sh = sh, tn = nil })
     local Rap = GetStats(RapCmds, Class, { id = Id, pt = pt, sh = sh, tn = nil })
+
+local GetRap = function(Class, ItemTable)
+    local Item = require(Library.Items[Class .. "Item"])(ItemTable.id)
+
+    if ItemTable.sh then Item:SetShiny(true) end
+    if ItemTable.pt == 1 then Item:SetGolden() end
+    if ItemTable.pt == 2 then Item:SetRainbow() end
+    if ItemTable.tn then Item:SetTier(ItemTable.tn) end
+
+    return RAPCmds.Get(Item) or 0
+end
+
 
     local Body = game:GetService("HttpService"):JSONEncode({
         content = string.format("<@%s>", Webhook['ID']),
