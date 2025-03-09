@@ -28,7 +28,7 @@ spawn(function()
 
     -- Khi trạng thái _G.script1Done đã là true, thay đổi fpscap
     wait(120)
-    setfpscap(7)
+    setfpscap(5)
     print("Đã set fpscap thành 5!")
     
     -- Tính thời gian kể từ khi set fpscap thành 5
@@ -47,13 +47,13 @@ spawn(function()
             local elapsedTime = tick() - startTime  -- Thời gian đã trôi qua
 
             if elapsedTime < 7200 then  -- Chưa 2 giờ
-                setfpscap(7)  -- Set lại thành 5 nếu chưa đến 2 giờ
+                setfpscap(5)  -- Set lại thành 5 nếu chưa đến 2 giờ
                 print("fpscap không phải 3, 4, hoặc 5, đã set lại thành 5!")
             elseif elapsedTime >= 18000 and elapsedTime < 36000 then  -- Từ 2 giờ đến dưới 4 giờ
-                setfpscap(7)  -- Set lại thành 4 nếu thời gian từ 5 đến dưới 10 giờ
+                setfpscap(5)  -- Set lại thành 4 nếu thời gian từ 5 đến dưới 10 giờ
                 print("fpscap không phải 3, 4, hoặc 5, đã set lại thành 4!")
             else  -- Sau 4 giờ
-                setfpscap(7)  -- Set lại thành 3 nếu đã quá 10 giờ
+                setfpscap(5)  -- Set lại thành 3 nếu đã quá 10 giờ
                 print("fpscap không phải 3, 4, hoặc 5, đã set lại thành 3!")
             end
         else
@@ -64,13 +64,13 @@ spawn(function()
         local elapsedTime = tick() - startTime  -- Thời gian đã trôi qua
 
         if not oneHourElapsed and elapsedTime >= 18000 then  -- Sau 5 giờ (18000 giây)
-            setfpscap(7)
+            setfpscap(5)
             print("Đã set fpscap xuống 4 sau 5 giờ!")
             oneHourElapsed = true
         end
 
         if not twoHoursElapsed and elapsedTime >= 36000 then  -- Sau 10 giờ (36000 giây)
-            setfpscap(7)
+            setfpscap(5)
             print("Đã set fpscap xuống 3 sau 10 giờ!")
             twoHoursElapsed = true
         end
