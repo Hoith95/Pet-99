@@ -1,16 +1,16 @@
 -- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
-if _G.WEBHOOKS2 then
+if _G.WEBHOOKS then
     warn("Script đã được chạy trước đó!")
     return -- Dừng script nếu đã chạy
 end
 
 -- Đánh dấu script đã được chạy
-_G.WEBHOOKS2 = true
+_G.WEBHOOKS = true
 
 getgenv().Webhook = {
     ['ID'] = "344054115539615745",
     ['Id Names'] = { "Huge", "Titanic"},
-    ['URL'] = "https://discord.com/api/webhooks/1347254188400316478/v78o-WkvoFnRkvLcb-_qDinrg73hNHIWWIFC1zrBhn9GkR-jLwxEomxUY7WlG4kFzBGH",
+    ['URL'] = "https://discord.com/api/webhooks/1348387154593710193/w7bKngm0MdhcbUjwpY9mlxceml7KTlniFvDch0HTOd0ssRApD5E3LqlT1c98dpRyVi4C",
 }
 
 repeat task.wait() until game:IsLoaded()
@@ -21,7 +21,7 @@ local Library = game.ReplicatedStorage.Library
 local Client = Library.Client
 
 local ExistCmds = require(Client.ExistCountCmds)
-local RapCmds = require(Client.DevRAPCmds)
+local RapCmds = require(Client.RAPCmds)
 local Network = require(Client.Network)
 local SaveMod = require(Client.Save)
 
@@ -40,11 +40,15 @@ local Formatint = function(int)
     return string.format("%.2f%s", int, Suffix[Index])
 end
 
+local GetAsset = function(Id, pt)
+    local Asset = require(Library.Directory.Pets)[Id]
+    return string.gsub(Asset and (pt == 1 and Asset.goldenThumbnail or Asset.thumbnail) or "14976456685", "rbxassetid://", "")
+end
+
 -- Hàm gửi Webhook thông báo
 local function SendWebhook(Class, Id, pt, sh)
     local Version = pt == 1 and "Golden " or pt == 2 and "Rainbow " or ""
     local ItemType = (Class == "Pet" and "Thú cưng" or "Thẻ bài") -- Phân biệt loại
-
     local Title = string.format("||%s|| vừa nhận được **%s%s%s** (%s)", 
         LocalPlayer.Name, Version, sh and "Shiny " or "", Id, ItemType)
 
@@ -79,8 +83,6 @@ local function SendWebhook(Class, Id, pt, sh)
 
     -- Nếu không phải Card, tiếp tục lấy hình ảnh, RAP, Exist
     local Img = string.format("https://biggamesapi.io/image/%s", GetAsset(Id, pt))
-    local Exist = GetStats(ExistCmds, Class, { id = Id, pt = pt, sh = sh, tn = nil })
-    local Rap = GetStats(RapCmds, Class, { id = Id, pt = pt, sh = sh, tn = nil })
 
     local Body = game:GetService("HttpService"):JSONEncode({
         content = string.format("<@%s>", Webhook['ID']),
