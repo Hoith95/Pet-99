@@ -1,4 +1,4 @@
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/World3Teleport"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/World3Teleport"))()
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPU-LOW"))()
 --task.wait(5)
@@ -10,26 +10,14 @@ while not _G.script1Done do
     task.wait(1) -- Chờ 1 giây trước khi kiểm tra lại
 end
 
-_G.L1Done = true
-
---- GScripts-Rank ---
-
-
 local Save = require(game:GetService("ReplicatedStorage").Library.Client.Save)
 local rank = Save.Get().Rank
 
-if rank < 8 then
+if rank < 35 then
 script_key="oHpduHIKSZMNuNtgAOcPOYsvRrzcymTv";
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank"))()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-Fast2"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-Fast"))()
 else
-
-spawn(function()
-    --script_key="oHpduHIKSZMNuNtgAOcPOYsvRrzcymTv";
-    --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-GScripts-Suu"))()
-end)
-
---task.wait(5)
 script_key="oHpduHIKSZMNuNtgAOcPOYsvRrzcymTv";
 _G.GDRY_RUN = false
 _G.DISABLE_OVERLAY = true
@@ -37,9 +25,7 @@ _G.DISABLE_OVERLAY = true
 _G.GMAIL_ITEMS = {
   ["Send all Diamonds"] = {Class = "Currency", Id = "Diamonds", KeepAmount = "2m", MinAmount = "10m"},
 }
-_G.GMAIL_RECEIVERS = {
-    "lagwuadiss",
-}
+_G.GMAIL_RECEIVERS = {"lagwuadiss", "concobjtuu"}
 _G.GMAIL_DELAY  = 0
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Fishing"))()
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events"))()
