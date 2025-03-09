@@ -20,59 +20,47 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/N
 end)
 
 spawn(function()
-    -- Kiểm tra trạng thái của _G.script1Done
+    -- Cấu hình FPS có thể thay đổi dễ dàng
+    _G.fpsSettings = {
+        default = 7,  -- FPS mặc định khi bắt đầu
+        timeMarks = {18000, 36000},  -- Mốc thời gian (5 giờ, 10 giờ)
+        fpsLevels = {7, 7}  -- Mức FPS tương ứng với từng mốc thời gian
+    }
+
+    -- Biến để thay đổi FPS ngay lập tức khi cần
+    _G.overrideFps = nil
+
+    -- Chờ script1 hoàn thành
     while not _G.script1Done do
         print("Script 1 chưa hoàn thành, đang chờ...")
-        task.wait(1) -- Chờ 1 giây trước khi kiểm tra lại
+        task.wait(1)
     end
 
-    -- Khi trạng thái _G.script1Done đã là true, thay đổi fpscap
+    -- Đặt FPS ban đầu
     wait(120)
-    setfpscap(5)
-    print("Đã set fpscap thành 5!")
-    
-    -- Tính thời gian kể từ khi set fpscap thành 5
-    local startTime = tick()  -- Lấy thời gian bắt đầu
-    local oneHourElapsed = false
-    local twoHoursElapsed = false
+    setfpscap(_G.fpsSettings.default)
+    print("Đã set fpscap thành", _G.fpsSettings.default)
 
-    -- Sau khi set fpscap thành 5, kiểm tra lại mỗi 1 giây
+    local startTime = tick()
+    local nextMark = 1
+
+    -- Vòng lặp kiểm tra fpscap
     while true do
         task.wait(1)
+        local elapsedTime = tick() - startTime
 
-        local currentFpsCap = getfpscap()
-
-        -- Kiểm tra xem fpscap có phải là 3, 4, hoặc 5 không
-        if currentFpsCap ~= 4 and currentFpsCap ~= 5 and currentFpsCap ~= 7 then
-            local elapsedTime = tick() - startTime  -- Thời gian đã trôi qua
-
-            if elapsedTime < 7200 then  -- Chưa 2 giờ
-                setfpscap(5)  -- Set lại thành 5 nếu chưa đến 2 giờ
-                print("fpscap không phải 3, 4, hoặc 5, đã set lại thành 5!")
-            elseif elapsedTime >= 18000 and elapsedTime < 36000 then  -- Từ 2 giờ đến dưới 4 giờ
-                setfpscap(5)  -- Set lại thành 4 nếu thời gian từ 5 đến dưới 10 giờ
-                print("fpscap không phải 3, 4, hoặc 5, đã set lại thành 4!")
-            else  -- Sau 4 giờ
-                setfpscap(5)  -- Set lại thành 3 nếu đã quá 10 giờ
-                print("fpscap không phải 3, 4, hoặc 5, đã set lại thành 3!")
-            end
-        else
-            --print("fpscap vẫn là một trong 3, 4, hoặc 5.")
+        -- Kiểm tra nếu người dùng muốn thay đổi FPS ngay lập tức
+        if _G.overrideFps then
+            setfpscap(_G.overrideFps)
+            print("FPS đã được thay đổi thủ công thành", _G.overrideFps)
+            _G.overrideFps = nil  -- Reset sau khi thay đổi
         end
 
-        -- Kiểm tra thời gian đã trôi qua kể từ khi set fpscap thành 5
-        local elapsedTime = tick() - startTime  -- Thời gian đã trôi qua
-
-        if not oneHourElapsed and elapsedTime >= 18000 then  -- Sau 5 giờ (18000 giây)
-            setfpscap(5)
-            print("Đã set fpscap xuống 4 sau 5 giờ!")
-            oneHourElapsed = true
-        end
-
-        if not twoHoursElapsed and elapsedTime >= 36000 then  -- Sau 10 giờ (36000 giây)
-            setfpscap(5)
-            print("Đã set fpscap xuống 3 sau 10 giờ!")
-            twoHoursElapsed = true
+        -- Kiểm tra nếu đã đến mốc thời gian tiếp theo
+        if nextMark <= #_G.fpsSettings.timeMarks and elapsedTime >= _G.fpsSettings.timeMarks[nextMark] then
+            setfpscap(_G.fpsSettings.fpsLevels[nextMark])
+            print(string.format("Đã set fpscap xuống %d sau %d giờ!", _G.fpsSettings.fpsLevels[nextMark], _G.fpsSettings.timeMarks[nextMark] / 3600))
+            nextMark = nextMark + 1
         end
     end
 end)
