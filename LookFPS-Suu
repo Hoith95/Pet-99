@@ -11,7 +11,7 @@ spawn(function()
     -- Cấu hình FPS có thể thay đổi dễ dàng
     _G.fpsSettings = {
         default = 6,  -- FPS mặc định khi bắt đầu
-        allowedFps = {3, 4, 5, 7, 8},  -- Các mức FPS hợp lệ
+        allowedFps = {3, 4, 5, 6, 7, 8},  -- Các mức FPS hợp lệ
         timeMarks = {18000, 36000},  -- Mốc thời gian (5 giờ, 10 giờ)
         fpsLevels = {6, 6}  -- Mức FPS tương ứng với từng mốc thời gian
     }
