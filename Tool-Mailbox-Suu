@@ -22,9 +22,9 @@ end)
 spawn(function()
     -- Cấu hình FPS có thể thay đổi dễ dàng
     _G.fpsSettings = {
-        default = 7,  -- FPS mặc định khi bắt đầu
+        default = 6,  -- FPS mặc định khi bắt đầu
         timeMarks = {18000, 36000},  -- Mốc thời gian (5 giờ, 10 giờ)
-        fpsLevels = {7, 7}  -- Mức FPS tương ứng với từng mốc thời gian
+        fpsLevels = {6, 6}  -- Mức FPS tương ứng với từng mốc thời gian
     }
 
     -- Biến để thay đổi FPS ngay lập tức khi cần
@@ -37,7 +37,7 @@ spawn(function()
     end
 
     -- Đặt FPS ban đầu
-    wait(120)
+    wait(60)
     setfpscap(_G.fpsSettings.default)
     print("Đã set fpscap thành", _G.fpsSettings.default)
 
