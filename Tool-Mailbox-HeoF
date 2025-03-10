@@ -37,7 +37,7 @@ spawn(function()
     end
 
     -- Đặt FPS ban đầu
-    wait(120)
+    wait(60)
     setfpscap(_G.fpsSettings.default)
     print("Đã set fpscap thành", _G.fpsSettings.default)
 
