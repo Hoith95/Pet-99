@@ -1,3 +1,5 @@
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TrackLuckyCoins"))()
+
 local RS = game:GetService("ReplicatedStorage")
 local Save = require(RS.Library.Client.Save) 
 
@@ -34,6 +36,3 @@ if luckyCoins >= 10000000 then
 elseif luckyCoins <= 1000000 then
     runScript(scriptB_URL)
 end
-
--- Chạy script theo dõi coin (script mới)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TrackLuckyCoins"))()
