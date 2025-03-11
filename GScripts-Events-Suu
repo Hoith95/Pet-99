@@ -9,7 +9,7 @@ _G.GHATCH_LOBBY = true
 _G.GMAKE_LUCKY_GIFTS = true
 _G.GUSE_LEPRECHAUN_KEYS = false
 _G.GMAX_RAID_LEVEL = 168
-_G.GMIN_MULTIPLIER = 60 -- which egg to hatch
+_G.GMIN_MULTIPLIER = 15 -- which egg to hatch
 
 _G.GEVENT_UPGRADES = {
    "LuckyRaidDamage",
