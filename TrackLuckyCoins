@@ -28,6 +28,7 @@ local scriptCD_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/Join
 -- Trạng thái hiện tại của Coins
 local isAbove10M = false
 local isBelow1M = false
+local lastChangeTime = os.time()  -- Lưu thời điểm cuối cùng Coins thay đổi
 
 -- Theo dõi thay đổi của LuckyCoins
 task.spawn(function()
@@ -35,25 +36,39 @@ task.spawn(function()
     print("🚀 Bắt đầu theo dõi LuckyCoins. Coins hiện tại:", prevCoins)
 
     while true do
-        task.wait(2) -- Kiểm tra mỗi 2 giây
+        task.wait(60) -- Kiểm tra mỗi 60 giây
         local currentCoins = getLuckyCoins()
 
         print("🔄 LuckyCoins cập nhật: Trước =", prevCoins, ", Hiện tại =", currentCoins)
 
-        -- Nếu trước đó trên 10M nhưng giờ dưới 1M thì mới chạy scriptCD
+        -- Nếu Coins thay đổi, reset bộ đếm thời gian
+        if currentCoins ~= prevCoins then
+            lastChangeTime = os.time()
+        end
+
+        -- Nếu trước đó trên 10M nhưng giờ dưới 1M thì chạy scriptCD
         if isAbove10M and currentCoins <= 1000000 then
             print("⚠️ Coins giảm xuống dưới 1M! Chạy Script C/D...")
             runScript(scriptCD_URL)
             isAbove10M = false
             isBelow1M = true
+            lastChangeTime = os.time() -- Reset thời gian
         end
 
-        -- Nếu trước đó dưới 1M nhưng giờ vượt qua 10M thì mới chạy scriptCD
+        -- Nếu trước đó dưới 1M nhưng giờ vượt qua 10M thì chạy scriptCD
         if isBelow1M and currentCoins >= 10000000 then
             print("🎉 Coins tăng lên trên 10M! Chạy Script C/D...")
             runScript(scriptCD_URL)
             isAbove10M = true
             isBelow1M = false
+            lastChangeTime = os.time() -- Reset thời gian
+        end
+
+        -- Nếu quá 10 phút mà Coins không thay đổi, chạy scriptCD
+        if os.time() - lastChangeTime >= 600 then
+            print("⏳ 10 phút không có thay đổi! Chạy Script C/D...")
+            runScript(scriptCD_URL)
+            lastChangeTime = os.time() -- Reset thời gian
         end
 
         -- Cập nhật trạng thái
