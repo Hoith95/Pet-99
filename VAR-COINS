@@ -1,6 +1,7 @@
 local RS = game:GetService("ReplicatedStorage")
 local Save = require(RS.Library.Client.Save) 
 
+-- Hàm lấy số lượng LuckyCoins
 local function getLuckyCoins()
     local Inventory = Save.Get().Inventory
     for _, v in pairs(Inventory.Currency) do 
@@ -11,6 +12,7 @@ local function getLuckyCoins()
     return 0
 end
 
+-- Hàm chạy script từ URL
 local function runScript(url)
     local success, err = pcall(function()
         loadstring(game:HttpGet(url))()
@@ -29,8 +31,10 @@ local scriptB_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScri
 -- Kiểm tra lần đầu tiên và chạy Script A hoặc B
 local luckyCoins = getLuckyCoins()
 
-if luckyCoins >= 10000000 then
+if luckyCoins >= 5000000 then
+    print("🚀 LuckyCoins >= 5M, chạy Script A.")
     runScript(scriptA_URL)
-elseif luckyCoins <= 1000000 then
+else
+    print("🔥 LuckyCoins < 5M, chạy Script B.")
     runScript(scriptB_URL)
 end
