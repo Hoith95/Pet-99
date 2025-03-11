@@ -7,7 +7,7 @@
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-RESET"))()
 
 spawn(function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-Suu"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-Suu"))()
 end)
 
 spawn(function()
