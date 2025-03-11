@@ -1,5 +1,5 @@
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/World3Teleport"))()
-game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World1Teleport"):InvokeServer()
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World3Teleport"):InvokeServer()
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPU-LOW"))()
 --task.wait(5)
