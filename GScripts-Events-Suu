@@ -4,13 +4,14 @@ _G.Event1Done = true
 _G.GLOOTBOXES = {"Locked Hype Egg"}
 
 _G.GDO_LUCKY_WORLD_EVENT = true
-_G.GAUTO_RAID = true
+_G.GAUTO_RAID = false
 _G.GHATCH_LOBBY = true
 _G.GMAKE_LUCKY_GIFTS = true
 _G.GUSE_LEPRECHAUN_KEYS = false
 _G.GMAX_RAID_LEVEL = 9999
 _G.GSKIP_RAID_EGG = true
 _G.GRAID_TIMEOUT_MINUTES = 10
+_G.GUSE_BOOSTS = false
 
 _G.GEVENT_UPGRADES = {
    "LuckyRaidDamage",
@@ -40,6 +41,6 @@ _G.GPOTIONS_MAX_TIER = 99
 --_G.GENCHANTS = {}
 --_G.GENCHANTS = {"Lucky Eggs","Lucky Eggs","Huge Hunter","Criticals", "Coins","Tap Power","Treasure Hunter"}
 --_G.GENCHANTS = {"Lucky Eggs","Strong Pets","Criticals","Huge Hunter","Lucky Eggs","Treasure Hunter","Tap Power"}
-_G.GENCHANTS = {"Coins","Lucky Eggs","Criticals","Huge Hunter","Tap Power","Treasure Hunter","Strong Pets","Diamonds","Lucky Eggs"}
+_G.GENCHANTS = {"Coins","Lucky Eggs","Criticals","Huge Hunter","Strong Pets","Treasure Hunter","Diamonds","Lucky Eggs","Tap Power"}
 --_G.GENCHANTS = {"Coins","Coins", "Strong Pets", "Criticals","Treasure Hunter","Criticals","Strong Pets","Coins","Lucky Eggs", "Diamonds","Tap Power"}
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/34915da4ad87a5028e1fd64efbe3543f.lua"))()
