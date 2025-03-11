@@ -17,16 +17,16 @@ local players = game:GetService("Players")
 local leaderstats = game.Players.LocalPlayer.leaderstats
 local initialDiamonds = leaderstats["\240\159\146\142 Diamonds"].Value
 
--- Kiểm tra số lượng kim cương sau 20 phút
+-- Kiểm tra số lượng kim cương sau 10 phút
 local function checkDiamonds()
     while true do
         -- In ra số lượng kim cương ban đầu
         print("Số lượng kim cương hiện có ban đầu: " .. initialDiamonds)
 
-        -- Chờ 20 phút (1200 giây)
-        wait(1200)
+        -- Chờ 10 phút (600 giây)
+        wait(600)
 
-        -- Kiểm tra lại số lượng kim cương sau 20 phút
+        -- Kiểm tra lại số lượng kim cương sau 10 phút
         local currentDiamonds = leaderstats["\240\159\146\142 Diamonds"].Value
 
         -- Nếu số lượng kim cương không thay đổi, thực hiện lại ServerHop
