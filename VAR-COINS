@@ -1,0 +1,61 @@
+local RS = game:GetService("ReplicatedStorage")
+local Save = require(RS.Library.Client.Save) 
+
+local function getLuckyCoins()
+    local Inventory = Save.Get().Inventory
+    for _, v in pairs(Inventory.Currency) do 
+        if v.id == "LuckyCoins" then
+            return v._am
+        end
+    end
+    return 0
+end
+
+local function runScript(url)
+    local success, err = pcall(function()
+        loadstring(game:HttpGet(url))()
+    end)
+    if success then
+        print("✅ Đã chạy script từ:", url)
+    else
+        print("⚠️ Lỗi khi chạy script:", err)
+    end
+end
+
+-- URLs của các script
+local scriptA_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events-Heo"
+local scriptB_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events-Raid"
+local scriptCD_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"
+
+-- Kiểm tra lần đầu tiên và chạy Script A hoặc B
+local luckyCoins = getLuckyCoins()
+
+if luckyCoins >= 10000000 then
+    runScript(scriptA_URL)
+elseif luckyCoins <= 1000000 then
+    runScript(scriptB_URL)
+end
+
+-- Theo dõi thay đổi của LuckyCoins
+task.spawn(function()
+    local prevCoins = getLuckyCoins()
+
+    while true do
+        task.wait(2) -- Kiểm tra mỗi 2 giây
+        local currentCoins = getLuckyCoins()
+
+        if currentCoins > prevCoins then
+            print("📈 Coins đang tăng...")
+            if currentCoins >= 10000000 then
+                runScript(scriptCD_URL)
+            end
+        elseif currentCoins < prevCoins then
+            print("📉 Coins đang giảm...")
+            if currentCoins <= 1000000 then
+                runScript(scriptCD_URL)
+            end
+        end
+
+        prevCoins = currentCoins
+    end
+end)
