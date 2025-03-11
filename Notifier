@@ -10,7 +10,7 @@ end
 -- Khi trạng thái là true, thực thi Script Notifier
 print("Script 1 đã hoàn thành. Bắt đầu chạy Script Notifier...")
 
-task.wait(168)
+task.wait(68)
 
 -- Yêu cầu các module cần thiết từ ReplicatedStorage để sử dụng trong script.
 local SaveModule = require(game.ReplicatedStorage.Library.Client.Save)
