@@ -1,6 +1,7 @@
 local RS = game:GetService("ReplicatedStorage")
 local Save = require(RS.Library.Client.Save) 
 
+-- Hàm lấy số lượng LuckyCoins
 local function getLuckyCoins()
     local Inventory = Save.Get().Inventory
     for _, v in pairs(Inventory.Currency) do 
@@ -11,6 +12,7 @@ local function getLuckyCoins()
     return 0
 end
 
+-- Hàm chạy script từ URL
 local function runScript(url)
     local success, err = pcall(function()
         loadstring(game:HttpGet(url))()
@@ -29,6 +31,7 @@ local scriptCD_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/Join
 local isAbove10M = false
 local isBelow1M = false
 local lastChangeTime = os.time()  -- Lưu thời điểm cuối cùng Coins thay đổi
+local lastBelow1MTime = nil  -- Thời gian khi Coins xuống dưới 1M
 
 -- Theo dõi thay đổi của LuckyCoins
 task.spawn(function()
@@ -52,7 +55,7 @@ task.spawn(function()
             runScript(scriptCD_URL)
             isAbove10M = false
             isBelow1M = true
-            lastChangeTime = os.time() -- Reset thời gian
+            lastBelow1MTime = os.time() -- Lưu thời gian xuống dưới 1M
         end
 
         -- Nếu trước đó dưới 1M nhưng giờ vượt qua 10M thì chạy scriptCD
@@ -61,14 +64,23 @@ task.spawn(function()
             runScript(scriptCD_URL)
             isAbove10M = true
             isBelow1M = false
-            lastChangeTime = os.time() -- Reset thời gian
+            lastBelow1MTime = nil
         end
 
         -- Nếu quá 10 phút mà Coins không thay đổi, chạy scriptCD
         if os.time() - lastChangeTime >= 600 then
             print("⏳ 10 phút không có thay đổi! Chạy Script C/D...")
             runScript(scriptCD_URL)
-            lastChangeTime = os.time() -- Reset thời gian
+            lastChangeTime = os.time()
+        end
+
+        -- Nếu Coins dưới 1M và trong 3 phút không tăng lên ít nhất 1M, chạy scriptCD
+        if isBelow1M and lastBelow1MTime and os.time() - lastBelow1MTime >= 180 then
+            if currentCoins - prevCoins < 1000000 then
+                print("⏳ Coins dưới 1M và không tăng lên ít nhất 1M trong 3 phút! Chạy Script C/D...")
+                runScript(scriptCD_URL)
+                lastBelow1MTime = os.time() -- Reset thời gian
+            end
         end
 
         -- Cập nhật trạng thái
@@ -76,8 +88,14 @@ task.spawn(function()
             isAbove10M = true
             isBelow1M = false
         elseif currentCoins <= 1000000 then
+            if not isBelow1M then
+                lastBelow1MTime = os.time() -- Lưu thời gian khi lần đầu xuống dưới 1M
+            end
             isBelow1M = true
             isAbove10M = false
+        else
+            isBelow1M = false
+            lastBelow1MTime = nil
         end
 
         prevCoins = currentCoins
