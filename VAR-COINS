@@ -12,7 +12,7 @@ local function getLuckyCoins()
     return 0
 end
 
--- Hàm chạy script từ URL trong một task riêng để không chặn luồng chính
+-- Hàm chạy script từ URL trong một task riêng
 local function runScript(url)
     task.spawn(function()
         local success, err = pcall(function()
@@ -26,118 +26,62 @@ local function runScript(url)
     end)
 end
 
--- URL của các script
-local scriptA_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events-Heo"
-local scriptB_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events-Raid"
-local scriptCD_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"
+-- URL của Script JoinLow
+local scriptJoinLow_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"
 
--- Trạng thái Coins khi bắt đầu chạy script
+-- 🛠 Lấy lượng Coins ban đầu
 local initialCoins = getLuckyCoins()
-local initialAbove10M = initialCoins >= 10000000
-local initialBelow1M = initialCoins <= 1000000
+_G.COINS10M = initialCoins >= 10000000
+_G.COINS0M = initialCoins < 10000000
+
+print("🚀 Script bắt đầu chạy! Coins ban đầu:", initialCoins)
+print("📌 Gán biến _G:", _G.COINS10M and "_G.COINS10M = true" or "_G.COINS0M = true")
+
+-- 🕰 Đợi 5 phút trước khi kiểm tra sự thay đổi
+task.wait(300)
+
+-- 🔄 Theo dõi sự thay đổi của Coins
+local prevCoins = initialCoins
 local lastChangeTime = os.time()
-local lastBelow1MTime = nil 
 
-print("🚀 Script bắt đầu chạy! Coins hiện tại:", initialCoins)
+while true do
+    task.wait(60) -- Kiểm tra mỗi 60 giây
+    local currentCoins = getLuckyCoins()
+    print("🔄 LuckyCoins cập nhật: Trước =", prevCoins, ", Hiện tại =", currentCoins)
 
--- Chạy script A hoặc B trong một task riêng để không chặn luồng chính
-if initialCoins >= 10000000 then
-    print("🚀 LuckyCoins >= 10M, chạy Script A.")
-    runScript(scriptA_URL)
-else
-    print("🔥 LuckyCoins < 10M, chạy Script B.")
-    runScript(scriptB_URL)
-end
-
--- Theo dõi thay đổi của LuckyCoins
-task.spawn(function()
-    local prevCoins = initialCoins
-
-    while true do
-        task.wait(60) -- Kiểm tra mỗi 60 giây
-        local currentCoins = getLuckyCoins()
-
-        print("🔄 LuckyCoins cập nhật: Trước =", prevCoins, ", Hiện tại =", currentCoins)
-
-        -- Nếu Coins thay đổi, reset bộ đếm thời gian
-        if currentCoins ~= prevCoins then
-            lastChangeTime = os.time()
+    -- Nếu Coins tăng lên, kiểm tra đạt mốc 50M chưa
+    if currentCoins > prevCoins then
+        print("📈 Coins đang tăng!")
+        if currentCoins >= 50000000 then
+            print("🎉 Coins đạt 50M! Chạy Script JoinLow...")
+            runScript(scriptJoinLow_URL)
+            break
         end
+    end
 
-        -- Nếu từ trên 10M xuống dưới 1M → Chạy scriptCD
-        if initialAbove10M and currentCoins <= 1000000 then
-            print("⚠️ Coins ban đầu trên 10M nhưng đã giảm xuống dưới 1M! Chạy Script C/D...")
-            runScript(scriptCD_URL)
-            initialAbove10M = false
-        end
-
-        -- Nếu từ dưới 1M tăng lên trên 50M → Chạy scriptCD
-        if initialBelow1M and currentCoins >= 50000000 then
-            print("🎉 Coins ban đầu dưới 1M nhưng đã tăng lên trên 50M! Chạy Script C/D...")
-            runScript(scriptCD_URL)
-            initialBelow1M = false
-        end
-
-        -- Nếu Coins dưới 1M và không tăng lên ít nhất 1M trong 3 phút → Chạy scriptCD
+    -- Nếu Coins giảm xuống, kiểm tra đạt mốc 1M chưa
+    if currentCoins < prevCoins then
+        print("📉 Coins đang giảm!")
         if currentCoins <= 1000000 then
-            if not lastBelow1MTime then
-                lastBelow1MTime = os.time()
-            elseif os.time() - lastBelow1MTime >= 180 and (currentCoins - prevCoins < 1000000) then
-                print("⏳ Coins dưới 1M và không tăng lên ít nhất 1M trong 3 phút! Chạy Script C/D...")
-                runScript(scriptCD_URL)
-                lastBelow1MTime = os.time()
-            end
-        else
-            lastBelow1MTime = nil -- Reset nếu vượt qua 1M
-        end
-
-        -- Nếu quá 10 phút mà Coins không thay đổi, ít nhất 3M thì chạy scriptCD
-        if os.time() - lastChangeTime >= 600 and currentCoins >= 3000000 then
-            print("⏳ 10 phút không có thay đổi và Coins >= 3M! Chạy Script C/D...")
-            runScript(scriptCD_URL)
-            lastChangeTime = os.time()
-        end
-
-        prevCoins = currentCoins
-    end
-end)
-local RS = game:GetService("ReplicatedStorage")
-local Save = require(RS.Library.Client.Save) 
-
--- Hàm lấy số lượng LuckyCoins
-local function getLuckyCoins()
-    local Inventory = Save.Get().Inventory
-    for _, v in pairs(Inventory.Currency) do 
-        if v.id == "LuckyCoins" then
-            return v._am
+            print("⚠️ Coins giảm về 1M! Chạy Script JoinLow...")
+            runScript(scriptJoinLow_URL)
+            break
         end
     end
-    return 0
-end
 
--- Hàm chạy script từ URL
-local function runScript(url)
-    local success, err = pcall(function()
-        loadstring(game:HttpGet(url))()
-    end)
-    if success then
-        print("✅ Đã chạy script từ:", url)
-    else
-        print("⚠️ Lỗi khi chạy script:", err)
+    -- Nếu Coins không thay đổi trong 5 phút, chạy JoinLow và đợi 2 phút rồi kick
+    if os.time() - lastChangeTime >= 300 then
+        print("⏳ Coins không thay đổi trong 5 phút! Chạy Script JoinLow...")
+        runScript(scriptJoinLow_URL)
+        task.wait(120)
+        print("🚨 Không có thay đổi! Kick người chơi...")
+        game.Players.LocalPlayer:Kick("Heo")
+        break
     end
-end
 
--- URLs của các script
-local scriptA_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events-Heo"
-local scriptB_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events-Raid"
-
--- Kiểm tra lần đầu tiên và chạy Script A hoặc B
-local luckyCoins = getLuckyCoins()
-
-if luckyCoins >= 10000000 then
-    print("🚀 LuckyCoins >= 10M, chạy Script A.")
-    runScript(scriptA_URL)
-else
-    print("🔥 LuckyCoins < 10M, chạy Script B.")
-    runScript(scriptB_URL)
+    -- Cập nhật trạng thái
+    if currentCoins ~= prevCoins then
+        lastChangeTime = os.time()
+    end
+    prevCoins = currentCoins
 end
