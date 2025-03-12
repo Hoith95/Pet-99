@@ -60,9 +60,9 @@ task.spawn(function()
             initialAbove10M = false
         end
 
-        -- Nếu từ khi bắt đầu script, Coins < 1M mà giờ vượt qua 10M → Chạy scriptCD
-        if initialBelow1M and currentCoins >= 10000000 then
-            print("🎉 Coins ban đầu dưới 1M nhưng đã tăng lên trên 10M! Chạy Script C/D...")
+        -- Nếu từ khi bắt đầu script, Coins < 1M mà giờ vượt qua 50M → Chạy scriptCD
+        if initialBelow1M and currentCoins >= 50000000 then
+            print("🎉 Coins ban đầu dưới 1M nhưng đã tăng lên trên 50M! Chạy Script C/D...")
             runScript(scriptCD_URL)
             initialBelow1M = false
         end
