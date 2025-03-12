@@ -37,6 +37,8 @@ _G.GMAIL_DELAY  = 0
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Fishing"))()
 end
 
-spawn(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-COINS"))()
-end)
+if _G.COINS10M then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events-Heo"))()
+elseif _G.COINS0M then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events-Raid"))()
+end
