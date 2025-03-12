@@ -27,16 +27,20 @@ end
 -- URL của Script C/D
 local scriptCD_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"
 
+-- Trạng thái Coins khi bắt đầu chạy script
+local initialCoins = getLuckyCoins()
+local initialAbove10M = initialCoins >= 10000000
+local initialBelow1M = initialCoins <= 1000000
+
 -- Trạng thái hiện tại của Coins
-local isAbove10M = false
-local isBelow1M = false
 local lastChangeTime = os.time()  -- Lưu thời điểm cuối cùng Coins thay đổi
 local lastBelow1MTime = nil  -- Thời gian khi Coins xuống dưới 1M
 
+print("🚀 Script bắt đầu chạy! Coins hiện tại:", initialCoins)
+
 -- Theo dõi thay đổi của LuckyCoins
 task.spawn(function()
-    local prevCoins = getLuckyCoins()
-    print("🚀 Bắt đầu theo dõi LuckyCoins. Coins hiện tại:", prevCoins)
+    local prevCoins = initialCoins
 
     while true do
         task.wait(60) -- Kiểm tra mỗi 60 giây
@@ -49,53 +53,38 @@ task.spawn(function()
             lastChangeTime = os.time()
         end
 
-        -- Nếu trước đó trên 10M nhưng giờ dưới 1M thì chạy scriptCD
-        if isAbove10M and currentCoins <= 1000000 then
-            print("⚠️ Coins giảm xuống dưới 1M! Chạy Script C/D...")
+        -- Nếu từ khi bắt đầu script, Coins > 10M mà giờ xuống dưới 1M → Chạy scriptCD
+        if initialAbove10M and currentCoins <= 1000000 then
+            print("⚠️ Coins ban đầu trên 10M nhưng đã giảm xuống dưới 1M! Chạy Script C/D...")
             runScript(scriptCD_URL)
-            isAbove10M = false
-            isBelow1M = true
-            lastBelow1MTime = os.time() -- Lưu thời gian xuống dưới 1M
+            initialAbove10M = false
         end
 
-        -- Nếu trước đó dưới 1M nhưng giờ vượt qua 10M thì chạy scriptCD
-        if isBelow1M and currentCoins >= 10000000 then
-            print("🎉 Coins tăng lên trên 10M! Chạy Script C/D...")
+        -- Nếu từ khi bắt đầu script, Coins < 1M mà giờ vượt qua 10M → Chạy scriptCD
+        if initialBelow1M and currentCoins >= 10000000 then
+            print("🎉 Coins ban đầu dưới 1M nhưng đã tăng lên trên 10M! Chạy Script C/D...")
             runScript(scriptCD_URL)
-            isAbove10M = true
-            isBelow1M = false
-            lastBelow1MTime = nil
-        end
-
-        -- Nếu quá 10 phút mà Coins không thay đổi, chạy scriptCD
-        if os.time() - lastChangeTime >= 600 then
-            print("⏳ 10 phút không có thay đổi! Chạy Script C/D...")
-            runScript(scriptCD_URL)
-            lastChangeTime = os.time()
+            initialBelow1M = false
         end
 
         -- Nếu Coins dưới 1M và trong 3 phút không tăng lên ít nhất 1M, chạy scriptCD
-        if isBelow1M and lastBelow1MTime and os.time() - lastBelow1MTime >= 180 then
-            if currentCoins - prevCoins < 1000000 then
+        if currentCoins <= 1000000 then
+            if not lastBelow1MTime then
+                lastBelow1MTime = os.time() -- Lưu thời gian khi xuống dưới 1M
+            elseif os.time() - lastBelow1MTime >= 180 and (currentCoins - prevCoins < 1000000) then
                 print("⏳ Coins dưới 1M và không tăng lên ít nhất 1M trong 3 phút! Chạy Script C/D...")
                 runScript(scriptCD_URL)
-                lastBelow1MTime = os.time() -- Reset thời gian
+                lastBelow1MTime = os.time()
             end
+        else
+            lastBelow1MTime = nil -- Reset nếu vượt qua 1M
         end
 
-        -- Cập nhật trạng thái
-        if currentCoins >= 10000000 then
-            isAbove10M = true
-            isBelow1M = false
-        elseif currentCoins <= 1000000 then
-            if not isBelow1M then
-                lastBelow1MTime = os.time() -- Lưu thời gian khi lần đầu xuống dưới 1M
-            end
-            isBelow1M = true
-            isAbove10M = false
-        else
-            isBelow1M = false
-            lastBelow1MTime = nil
+        -- Nếu quá 10 phút mà Coins không thay đổi, ít nhất 3M thì chạy scriptCD
+        if os.time() - lastChangeTime >= 600 and currentCoins >= 3000000 then
+            print("⏳ 10 phút không có thay đổi và Coins >= 3M! Chạy Script C/D...")
+            runScript(scriptCD_URL)
+            lastChangeTime = os.time()
         end
 
         prevCoins = currentCoins
