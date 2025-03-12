@@ -14,7 +14,7 @@ getgenv().Settings = {
             ["Huge Arcane Dominus Card"] = {Price = "+1%", Priority = true, AllTypes = true},
             ["Titanic Cupcake Pegasus Card"] = {Price = "+1%", Priority = true, AllTypes = true},
             ["Titanic Signature BIG Maskot Card"] = {Price = "+1%", Priority = true, AllTypes = true},
-	    ["Lucky Gift"] = {Price = "+1%", Priority = true},
+	    ["Lucky Gift"] = {Price = 69683, Priority = true},
 	    ["Love Gift"] = {Price = "+1%", Priority = true},
 	    ["Retro Pack"] = {Price = "+1%", Priority = true},
 	    ["Nightmare Pack"] = {Price = "+1%", Priority = true},
