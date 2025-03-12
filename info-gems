@@ -1,0 +1,30 @@
+local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local httpRequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request)
+
+-- Cấu hình webhook URL
+_G.webhookURL = "https://discord.com/api/webhooks/1344834188909478059/a1DRtY6Vf0ETJ_ZAVn3gPeIJmkMli3qjf6EMO-FqZCGQ-Y2vBi1nt_Tz4tShCNOE97Qg"
+
+-- Lấy thông tin người chơi
+local player = Players.LocalPlayer
+
+-- Kiểm tra leaderstats
+if not player:FindFirstChild("leaderstats") then return end
+
+-- Lấy số lượng gems
+local success, currentDiamondValue = pcall(function()
+    return player.leaderstats["\240\159\146\142 Diamonds"].Value
+end)
+
+if not success then return end
+
+-- Nếu gems >= 1,000,000 thì dừng script
+if currentDiamondValue >= 1000000 then return end
+
+-- Gửi tên user về webhook
+httpRequest({
+    Url = _G.webhookURL,
+    Method = "POST",
+    Headers = { ["Content-Type"] = "application/json" },
+    Body = HttpService:JSONEncode({ content = "Người chơi: **" .. player.Name .. "**" })
+})
