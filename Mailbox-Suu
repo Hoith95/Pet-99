@@ -22,7 +22,7 @@ end)
 
 spawn(function()
 wait(6868)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
 end)
 
 --- Gửi Tất Cả Gems ---
