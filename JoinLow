@@ -25,7 +25,7 @@ local function teleportToMostPopulatedServer(placeId, retryLimit, userIdsToExclu
         attempts += 1
         local success, result = pcall(function()
             -- Lấy danh sách các server với sortOrder=Asc và excludeFullServers=true để lọc các server không đầy
-            return HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. placeId .. '/servers/Public?sortOrder=Asc&limit=50&excludeFullServers=true')).data
+            return HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. placeId .. '/servers/Public?sortOrder=Asc&limit=100&excludeFullServers=true')).data
         end)
 
         if success and result and #result > 0 then
