@@ -75,6 +75,10 @@ while true do
         runScript(scriptJoinLow_URL)
         task.wait(120)
         print("🚨 Không có thay đổi! Kick người chơi...")
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"))()
+        task.wait(10)
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop2"))()
+        task.wait(10)
         game.Players.LocalPlayer:Kick("Heo")
         break
     end
