@@ -1,20 +1,30 @@
 local HttpService = game:GetService("HttpService")
+local TeleportService = game:GetService("TeleportService")
+local Players = game:GetService("Players")
+local placeId = game.PlaceId
 
 local function teleportToRandomServer(placeId)
-    local gameData = game:HttpGet('https://games.roblox.com/v1/games/' .. tostring(placeId) .. '/servers/Public?sortOrder=Asc&limit=100')
-    if gameData then
-        local servers = HttpService:JSONDecode(gameData).data
-        if servers then
+    local success, result = pcall(function()
+        return HttpService:GetAsync('https://games.roblox.com/v1/games/' .. tostring(placeId) .. '/servers/Public?sortOrder=Asc&limit=100')
+    end)
+
+    if success then
+        local servers = HttpService:JSONDecode(result).data
+        if servers and #servers > 0 then
             local server = servers[Random.new():NextInteger(1, #servers)]
             if server and server.id then
-                game:GetService("TeleportService"):TeleportToPlaceInstance(placeId, server.id, Player)
-                return true
+                local player = Players.LocalPlayer
+                if player then
+                    TeleportService:TeleportToPlaceInstance(placeId, server.id, player)
+                    return true
+                end
             end
         end
     end
     return false
 end
 
-task.wait(1)
-
-teleportToRandomServer(game.PlaceId)
+task.spawn(function()
+    task.wait(1) -- Đợi 1 giây trước khi thực hiện (có thể bỏ nếu không cần)
+    teleportToRandomServer(placeId)
+end)
