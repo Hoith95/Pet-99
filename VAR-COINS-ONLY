@@ -1,0 +1,85 @@
+local RS = game:GetService("ReplicatedStorage")
+local Save = require(RS.Library.Client.Save)
+
+-- Hàm lấy số lượng LuckyCoins
+local function getLuckyCoins()
+    local Inventory = Save.Get().Inventory
+    for _, v in pairs(Inventory.Currency) do 
+        if v.id == "LuckyCoins" then
+            return v._am
+        end
+    end
+    return 0
+end
+
+-- Hàm chạy script từ URL
+local function runScript(url)
+    task.spawn(function()
+        local success, err = pcall(function()
+            loadstring(game:HttpGet(url))()
+        end)
+        if success then
+            print("✅ Đã chạy script từ:", url)
+        else
+            print("⚠️ Lỗi khi chạy script:", err)
+        end
+    end)
+end
+
+-- URLs của các script đổi server
+local scriptJoinLow_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"
+local scriptHop1_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"
+local scriptHop2_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"
+
+-- Hàm đổi server nếu Coins không thay đổi trong 25 phút
+local function changeServer()
+    local initialServerId = game.JobId  -- Lưu ServerId hiện tại
+    print("🔄 Đang thực hiện JoinLow...")
+    runScript(scriptJoinLow_URL)
+    task.wait(30)
+
+    if game.JobId ~= initialServerId then return end  -- Nếu đã đổi server thì dừng
+
+    print("⚠️ JoinLow thất bại! Thử phương án 2...")
+    runScript(scriptHop1_URL)
+    task.wait(10)
+
+    if game.JobId ~= initialServerId then return end
+
+    print("⚠️ Phương án 2 thất bại! Thử phương án 3...")
+    runScript(scriptHop2_URL)
+    task.wait(10)
+
+    if game.JobId ~= initialServerId then return end
+
+    print("🚨 Không có thay đổi! Kick người chơi...")
+    game.Players.LocalPlayer:Kick("Heo")
+end
+
+-- 🕰 Đợi 5 phút trước khi kiểm tra sự thay đổi
+task.wait(300)
+
+-- Lấy số Coins ban đầu
+local prevCoins = getLuckyCoins()
+local lastChangeTime = os.time()
+
+print("🚀 Script bắt đầu chạy! Coins ban đầu:", prevCoins)
+
+-- Kiểm tra liên tục
+while true do
+    task.wait(60)  -- Kiểm tra mỗi 60 giây
+    local currentCoins = getLuckyCoins()
+
+    if currentCoins ~= prevCoins then
+        lastChangeTime = os.time()  -- Reset thời gian nếu có thay đổi
+    end
+
+    -- Nếu Coins không thay đổi trong 25 phút (1500 giây)
+    if os.time() - lastChangeTime >= 1500 then
+        print("⏳ Coins không thay đổi trong 25 phút! Tiến hành đổi server...")
+        changeServer()
+        break
+    end
+
+    prevCoins = currentCoins
+end
