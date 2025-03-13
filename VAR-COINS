@@ -1,5 +1,5 @@
 local RS = game:GetService("ReplicatedStorage")
-local Save = require(RS.Library.Client.Save)
+local Save = require(RS.Library.Client.Save) 
 
 -- Hàm lấy số lượng LuckyCoins
 local function getLuckyCoins()
@@ -26,10 +26,10 @@ local function runScript(url)
     end)
 end
 
--- URL của các script
+-- 🛠 Các URL script
 local scriptJoinLow_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"
-local scriptHop1_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"
-local scriptHop2_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"
+local serverHop1_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"
+local serverHop2_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"
 
 -- 🛠 Lấy lượng Coins ban đầu
 local initialCoins = getLuckyCoins()
@@ -46,58 +46,73 @@ task.wait(300)
 local prevCoins = initialCoins
 local lastChangeTime = os.time()
 
--- Hàm xử lý khi cần đổi server
-local function changeServer()
-    runScript(scriptJoinLow_URL)
-    task.wait(30)
-
-    -- Nếu vẫn chưa đổi server, thử phương án 2
-    if getLuckyCoins() == prevCoins then
-        print("⚠️ JoinLow thất bại! Thử phương án 2...")
-        runScript(scriptHop1_URL)
-        task.wait(10)
-    end
-
-    -- Nếu phương án 2 cũng thất bại, thử phương án 3
-    if getLuckyCoins() == prevCoins then
-        print("⚠️ Phương án 2 thất bại! Thử phương án 3...")
-        runScript(scriptHop2_URL)
-        task.wait(10)
-    end
-
-    -- Nếu cả 3 phương án đều thất bại, kick người chơi
-    if getLuckyCoins() == prevCoins then
-        print("🚨 Không có thay đổi! Kick người chơi...")
-        game.Players.LocalPlayer:Kick("Heo")
-    end
-end
-
 while true do
     task.wait(60) -- Kiểm tra mỗi 60 giây
     local currentCoins = getLuckyCoins()
     print("🔄 LuckyCoins cập nhật: Trước =", prevCoins, ", Hiện tại =", currentCoins)
 
-    -- Nếu Coins thay đổi (tăng hoặc giảm)
-    if currentCoins ~= prevCoins then
-        lastChangeTime = os.time() -- Reset thời gian không thay đổi
+    -- 🛑 Nếu Coins đã trên 50M ngay từ đầu, không làm gì cả, chỉ theo dõi
+    if initialCoins >= 50000000 then
+        print("✅ Coins ban đầu đã trên 50M, chỉ theo dõi!")
+    else
+        -- Nếu Coins tăng lên, kiểm tra đạt mốc 50M chưa
+        if currentCoins > prevCoins then
+            print("📈 Coins đang tăng!")
+            if currentCoins >= 50000000 then
+                print("🎉 Coins đạt 50M! Thử đổi server...")
+                runScript(scriptJoinLow_URL)
+                task.wait(30)
+                if getLuckyCoins() == currentCoins then
+                    print("⚠️ Không đổi được server, thử phương án khác...")
+                    runScript(serverHop1_URL)
+                    task.wait(10)
+                    runScript(serverHop2_URL)
+                    task.wait(10)
+                    game.Players.LocalPlayer:Kick("Heo")
+                end
+                break
+            end
+        end
 
-        if currentCoins >= 50000000 then
-            print("🎉 Coins đạt 50M! Tiến hành đổi server...")
-            changeServer()
-            break
-        elseif currentCoins <= 1000000 then
-            print("⚠️ Coins giảm về 1M! Tiến hành đổi server...")
-            changeServer()
-            break
+        -- Nếu Coins giảm xuống, kiểm tra đạt mốc 1M chưa
+        if currentCoins < prevCoins then
+            print("📉 Coins đang giảm!")
+            if currentCoins <= 1000000 then
+                print("⚠️ Coins giảm về 1M! Thử đổi server...")
+                runScript(scriptJoinLow_URL)
+                task.wait(30)
+                if getLuckyCoins() == currentCoins then
+                    print("⚠️ Không đổi được server, thử phương án khác...")
+                    runScript(serverHop1_URL)
+                    task.wait(10)
+                    runScript(serverHop2_URL)
+                    task.wait(10)
+                    game.Players.LocalPlayer:Kick("Heo")
+                end
+                break
+            end
         end
     end
 
-    -- Nếu Coins không thay đổi trong 5 phút, chạy JoinLow
+    -- Nếu Coins không thay đổi trong 5 phút, chạy JoinLow và đợi 2 phút rồi kick
     if os.time() - lastChangeTime >= 300 then
-        print("⏳ Coins không thay đổi trong 5 phút! Tiến hành đổi server...")
-        changeServer()
+        print("⏳ Coins không thay đổi trong 5 phút! Thử đổi server...")
+        runScript(scriptJoinLow_URL)
+        task.wait(30)
+        if getLuckyCoins() == currentCoins then
+            print("⚠️ Không đổi được server, thử phương án khác...")
+            runScript(serverHop1_URL)
+            task.wait(10)
+            runScript(serverHop2_URL)
+            task.wait(10)
+            game.Players.LocalPlayer:Kick("Heo")
+        end
         break
     end
 
+    -- Cập nhật trạng thái
+    if currentCoins ~= prevCoins then
+        lastChangeTime = os.time()
+    end
     prevCoins = currentCoins
 end
