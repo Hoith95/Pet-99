@@ -33,28 +33,27 @@ local scriptHop2_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/Se
 
 -- Hàm xử lý khi cần đổi server
 local function changeServer()
+    local initialServerId = game.JobId  -- Lưu ServerId hiện tại
+    print("🔄 Đang thực hiện JoinLow...")
     runScript(scriptJoinLow_URL)
     task.wait(30)
 
-    -- Nếu vẫn chưa đổi server, thử phương án 2
-    if getLuckyCoins() == prevCoins then
-        print("⚠️ JoinLow thất bại! Thử phương án 2...")
-        runScript(scriptHop1_URL)
-        task.wait(10)
-    end
+    if game.JobId ~= initialServerId then return end -- Nếu đã đổi server thì dừng
 
-    -- Nếu phương án 2 cũng thất bại, thử phương án 3
-    if getLuckyCoins() == prevCoins then
-        print("⚠️ Phương án 2 thất bại! Thử phương án 3...")
-        runScript(scriptHop2_URL)
-        task.wait(10)
-    end
+    print("⚠️ JoinLow thất bại! Thử phương án 2...")
+    runScript(scriptHop1_URL)
+    task.wait(10)
 
-    -- Nếu cả 3 phương án đều thất bại, kick người chơi
-    if getLuckyCoins() == prevCoins then
-        print("🚨 Không có thay đổi! Kick người chơi...")
-        game.Players.LocalPlayer:Kick("Heo")
-    end
+    if game.JobId ~= initialServerId then return end
+
+    print("⚠️ Phương án 2 thất bại! Thử phương án 3...")
+    runScript(scriptHop2_URL)
+    task.wait(10)
+
+    if game.JobId ~= initialServerId then return end
+
+    print("🚨 Không có thay đổi! Kick người chơi...")
+    game.Players.LocalPlayer:Kick("Heo")
 end
 
 -- 🛠 Lấy lượng Coins ban đầu
@@ -71,7 +70,7 @@ task.wait(300)
 -- 🔄 Theo dõi sự thay đổi của Coins
 local prevCoins = initialCoins
 local lastChangeTime = os.time()
-local hasReached50M = false -- Biến kiểm soát đã chạm 50M lần đầu chưa
+local hasReached50M = false
 
 while true do
     task.wait(60) -- Kiểm tra mỗi 60 giây
@@ -81,8 +80,8 @@ while true do
     -- Nếu Coins tăng lên
     if currentCoins > prevCoins then
         print("📈 Coins đang tăng!")
-
-        -- Chỉ đổi server khi đạt 50M lần đầu, không đổi nếu đang giảm từ 50M xuống
+        
+        -- Chỉ đổi server khi đạt 50M lần đầu tiên
         if currentCoins >= 50000000 and not hasReached50M then
             print("🎉 Coins đạt 50M! Tiến hành đổi server...")
             hasReached50M = true
@@ -91,11 +90,11 @@ while true do
         end
     end
 
-    -- Nếu Coins giảm xuống, kiểm tra đạt mốc 1M chưa
+    -- Nếu Coins giảm xuống
     if currentCoins < prevCoins then
         print("📉 Coins đang giảm!")
 
-        -- Chỉ đổi server khi giảm về 1M, không đổi nếu đang giảm từ 50M xuống
+        -- Chỉ đổi server khi giảm về 1M
         if currentCoins <= 1000000 then
             print("⚠️ Coins giảm về 1M! Tiến hành đổi server...")
             changeServer()
