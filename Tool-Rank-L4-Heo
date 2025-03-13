@@ -1,11 +1,11 @@
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/WaitForGameLoad"))()
 
 spawn(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-COINS"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-COINS-ONLY"))()
 end)
 
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/World3Teleport"))()
-game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World1Teleport"):InvokeServer()
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World3Teleport"):InvokeServer()
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPU-LOW"))()
 --task.wait(5)
@@ -35,17 +35,5 @@ _G.GMAIL_ITEMS = {
 _G.GMAIL_RECEIVERS = {"tachi43fi", "Yel_lyvx", "dieuminhf6iy", "phamlamqglc", "buihuuquev","leduongra0f"}
 _G.GMAIL_DELAY  = 0
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Fishing"))()
-end
-
-while not (_G.COINS10M or _G.COINS0M) do
-    print("⏳ Đang chờ trạng thái COINS10M hoặc COINS0M...")
-    task.wait(1) -- Chờ 1 giây trước khi kiểm tra lại
-end
-
-if _G.COINS10M then
-    print("🚀 Phát hiện _G.COINS10M = true → Chạy Script A")
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events-Heo"))()
-elseif _G.COINS0M then
-    print("🔥 Phát hiện _G.COINS0M = true → Chạy Script B")
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events-Raid"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events"))()
 end
