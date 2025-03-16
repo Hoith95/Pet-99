@@ -17,17 +17,22 @@ _G.GAUTO_RAID = false
 _G.GSKIP_RAID_EGG = true
 _G.GUSE_BOOSTS = false
 
+_G.GRESET_UPGRADES = true
 _G.GEVENT_UPGRADES = {
-   "LuckyRaidDamage",
-   "LuckyRaidAttackSpeed",
-   "LuckyRaidPets",
-   "LuckyRaidEggCost",
-   "LuckyRaidMoreCurrency",
-   "LuckyRaidBetterLoot",
-   "LuckyRaidTitanicChest",
-   "LuckyRaidHugeChest",
-   "LuckyRaidXP",
-   "LuckyRaidPetSpeed",
+"LuckyRaidDamage",
+"LuckyRaidAttackSpeed",
+"LuckyRaidPets",
+"LuckyRaidEggCost",
+--"LuckyRaidMoreCurrency",
+"LuckyRaidBetterLoot",
+"LuckyRaidTitanicChest",
+"LuckyRaidHugeChest",
+--"LuckyRaidXP",
+--"LuckyRaidPetSpeed",
+"LuckyRaidBossDamage",
+--"LuckyRaidKeyDrops",
+"LuckyRaidBossHugeChances",
+"LuckyRaidBossTitanicChances",
 }
 
 _G.GGFX_MODE = 1
