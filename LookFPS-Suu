@@ -6,6 +6,7 @@ end
 
 -- Đánh dấu script đã được chạy
 _G.LOOKFPS5 = true
+_G.LOOKFPS_STOP = false  -- Biến để dừng script an toàn
 
 spawn(function()
     -- Cấu hình FPS có thể thay đổi dễ dàng
@@ -21,6 +22,11 @@ spawn(function()
 
     -- Chờ script1 hoàn thành
     while not _G.script1Done do
+        if _G.LOOKFPS_STOP then
+            print("Dừng script: Đang thoát vòng lặp chờ...")
+            _G.LOOKFPS5 = nil
+            return
+        end
         print("Script 1 chưa hoàn thành, đang chờ...")
         task.wait(1)
     end
@@ -34,6 +40,13 @@ spawn(function()
 
     -- Vòng lặp kiểm tra FPS liên tục
     while true do
+        -- Kiểm tra nếu có yêu cầu dừng script
+        if _G.LOOKFPS_STOP then
+            print("Script đang dừng lại...")
+            _G.LOOKFPS5 = nil
+            return
+        end
+
         task.wait()  -- Kiểm tra FPS mỗi giây
         local elapsedTime = tick() - startTime
         local currentFpsCap = getfpscap()
