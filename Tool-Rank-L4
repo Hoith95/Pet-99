@@ -22,11 +22,11 @@ local Save = require(game:GetService("ReplicatedStorage").Library.Client.Save)
 local rank = Save.Get().Rank
 
 if rank < 11 then
-script_key="MwpgreoxkMbqtBRseeXTeaehFyvfaVmK";
+script_key="qMItSjMvdbNznlvZjHQNkjQAOEzTglMR";
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank"))()
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-Fast"))()
 else
-script_key="MwpgreoxkMbqtBRseeXTeaehFyvfaVmK";
+script_key="qMItSjMvdbNznlvZjHQNkjQAOEzTglMR";
 _G.GDRY_RUN = false
 _G.DISABLE_OVERLAY = true
 
