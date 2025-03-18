@@ -1,11 +1,25 @@
 spawn(function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/AntiAFK2"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/AntiAFK2"))()
 end)
+
 task.wait(15)
+
+local username = game.Players.LocalPlayer.Name  -- Lấy tên user
+
+local scriptURL
+
+if username == "concobjtuu" or username == "lagwuadiss" then
+    scriptURL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/TOOL-PLAZA-SUU"
+else
+    scriptURL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/TOOL-PLAZA-HEO"
+end
+
 local success, err = pcall(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TOOL-PLAZA-SUU"))()
+    loadstring(game:HttpGet(scriptURL))()
 end)
+
 task.wait(30)
+
 if not success and tostring(err):find("HTTP 429") then
     print("Gặp lỗi HTTP 429, chuyển sang script thay thế...")
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza"))()
