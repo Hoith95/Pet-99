@@ -1,4 +1,4 @@
-script_key="luverOebtFQCftoJADJajSnXIuXGYyqz";
+script_key="xKMeQnyThCdQGYtobjhnteYUytfKTyUL";
 getgenv().Settings = {
     Seller = {
         Active = true,
