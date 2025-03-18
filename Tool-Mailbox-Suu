@@ -14,3 +14,8 @@ end)
 spawn(function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Notifier"))()
 end)
+
+spawn(function()
+wait(183)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS"))()
+end)
