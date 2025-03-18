@@ -6,8 +6,9 @@ end
 
 -- Đánh dấu script đã được chạy
 _G.MAILBOX = true
+_G.MAILBOX_STOP = false  -- Biến để dừng script an toàn
 
-print("Auto MailBox sẽ bắt đầu gửi thư trong 60 giay nữa.")
+print("Auto MailBox sẽ bắt đầu gửi thư trong 60 giây nữa.")
 
 getgenv().AutoMail = {
     ['Items'] = {
@@ -43,7 +44,6 @@ getgenv().AutoMail = {
         ['Void Key'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
         ['Tech Key'] = { Class = "Misc", MinAmount = 200, Amount = "Max" },
         ['Crystal Key'] = { Class = "Misc", MinAmount = 200, Amount = "Max" },
-        --['Love Cow'] = { Class = "Pet", MinAmount = 100, AllVariants = true, Amount = "Max" }, 
     },
     ['Loop Interval'] = 60,
     ['Users'] = {"lagwuadiss", "concobjtuu"},
@@ -58,6 +58,13 @@ local Network = require(Client.Network)
 local SaveModule = require(Client.Save)
 
 while task.wait(AutoMail['Loop Interval'] or 60) do
+    -- Kiểm tra nếu có yêu cầu dừng script
+    if _G.MAILBOX_STOP then
+        print("Script Auto MailBox đang dừng lại...")
+        _G.MAILBOX = nil
+        return
+    end
+
     local Queue = {}
     local AnyItemsSent = false  
 
@@ -107,22 +114,22 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
 
         if v._lk then
             while not Unlocked do
-                Unlocked, err = Network.Invoke("Locking_SetLocked", uid, false) task.wait(0.1)
+                Unlocked, err = Network.Invoke("Locking_SetLocked", uid, false) 
+                task.wait(0.1)
             end
         end
 
         local User = AutoMail['Users'][math.random(1, #AutoMail['Users'])]
         while not Mailed do
-            Mailed, err = Network.Invoke("Mailbox: Send", User, "Bless", Data.Class, uid, amountToSend) task.wait(0.1)
+            Mailed, err = Network.Invoke("Mailbox: Send", User, "Bless", Data.Class, uid, amountToSend) 
+            task.wait(0.1)
         end
 
         AnyItemsSent = true
-
-        -- 📝 Giữ nguyên print() cũ
         print("Đã gửi " .. amountToSend .. " vật phẩm " .. v.id .. " cho người dùng: " .. User)
     end
 
     if not AnyItemsSent then
-        --print("Không có vật phẩm nào đủ điều kiện để gửi.")
+        print("Không có vật phẩm nào đủ điều kiện để gửi.")
     end
 end
