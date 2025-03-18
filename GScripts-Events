@@ -17,7 +17,7 @@ _G.GDO_BOSSES = true
 _G.GHEROIC_BOSSES  = false
 _G.GAUTO_RAID = false
 _G.GSKIP_RAID_EGG = true
-_G.GUSE_BOOSTS = false
+_G.GUSE_BOOSTS = true
 
 _G.GRESET_UPGRADES = true
 _G.GEVENT_UPGRADES = {
