@@ -10,7 +10,7 @@ game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPU-LOW"))()
 --task.wait(5)
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
 
 -- Chờ đến khi trạng thái shared.script1Done là true
 while not _G.script1Done do
