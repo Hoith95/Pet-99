@@ -3,7 +3,6 @@ if _G.WEBHOOKS then
     warn("Script đã được chạy trước đó!")
     return -- Dừng script nếu đã chạy
 end
-
 -- Đánh dấu script đã được chạy
 _G.WEBHOOKS = true
 
