@@ -41,6 +41,8 @@ local function handleServerHop()
         -- Chạy script ServerHop
         local success, result = pcall(function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza"))()
+            wait(30)
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
         end)
         
         if not success then
@@ -69,6 +71,8 @@ local function checkDiamonds()
     if currentDiamonds == initialDiamonds then
         print("Số lượng kim cương không thay đổi, thực hiện lại ServerHop.")
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza"))()
+        wait(30)
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
     else
         print("Số lượng kim cương đã thay đổi, không thực hiện ServerHop.")
     end
