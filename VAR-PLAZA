@@ -1,7 +1,5 @@
 -- Đảm bảo game đã tải xong và player đã có leaderstats
-repeat
-    wait()
-until game:IsLoaded() and game.Players.LocalPlayer:FindFirstChild("leaderstats")
+repeat wait() until game:IsLoaded() and game.Players.LocalPlayer:FindFirstChild("leaderstats")
 
 -- Lấy dịch vụ Players
 local players = game:GetService("Players")
@@ -11,7 +9,8 @@ local initialDiamonds = leaderstats["\240\159\146\142 Diamonds"].Value
 -- Danh sách các UserId cần tránh
 local userIdsToExclude = {
     7904858667, 7904852865, 7904850849, 7904859675, 7904858196, 7853562570, 7838261047, 7838249507, 
-    7650948141, 7625727360, 7625728569, 7577830958, 7224814975, 7224796491, 7224792106, 7225011556, 7225041011, 7224781183, 7853562570
+    7650948141, 7625727360, 7625728569, 7577830958, 7224814975, 7224796491, 7224792106, 7225011556, 
+    7225041011, 7224781183, 7853562570
 }
 
 -- Hàm kiểm tra người chơi cần tránh
@@ -37,19 +36,18 @@ local function handleServerHop()
         else
             print("Số người chơi trong server ít hơn hoặc bằng 10 và không có người chơi cần tránh, chạy ServerHop.")
         end
-        
+
         -- Chạy script ServerHop
         local success, result = pcall(function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza"))()
             wait(30)
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
         end)
-        
+
         if not success then
             warn("Lỗi khi chạy ServerHop: " .. result)
         end
     else
-        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Mailbox: Claim All"):InvokeServer()
         print("Số người chơi trong server quá nhiều (> 10), chờ 3 phút và kiểm tra lại.")
         task.wait(180) -- Chờ 3 phút
         handleServerHop() -- Thực hiện lại kiểm tra
@@ -58,16 +56,11 @@ end
 
 -- Kiểm tra số lượng kim cương sau 1 giờ
 local function checkDiamonds()
-    -- In ra số lượng kim cương ban đầu
     print("Số lượng kim cương hiện có ban đầu: " .. initialDiamonds)
 
-    -- Chờ 1 giờ (3600 giây)
-    wait(3600)
+    wait(3600) -- Chờ 1 giờ
 
-    -- Kiểm tra lại số lượng kim cương sau 1 giờ
     local currentDiamonds = leaderstats["\240\159\146\142 Diamonds"].Value
-
-    -- Nếu số lượng kim cương không thay đổi, thực hiện lại ServerHop
     if currentDiamonds == initialDiamonds then
         print("Số lượng kim cương không thay đổi, thực hiện lại ServerHop.")
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza"))()
@@ -78,11 +71,23 @@ local function checkDiamonds()
     end
 end
 
--- Chạy cả 2 tác vụ song song: kiểm tra người chơi và số lượng kim cương
-task.spawn(function()
-    handleServerHop()
-end)
+-- Nhận toàn bộ thư trong Mailbox mỗi 3 phút
+local function claimMailbox()
+    while true do
+        task.wait(180) -- Chờ 3 phút
+        local success, result = pcall(function()
+            game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("Mailbox: Claim All"):InvokeServer()
+        end)
+        
+        if success then
+            print("Đã nhận toàn bộ thư trong Mailbox.")
+        else
+            warn("Lỗi khi nhận thư trong Mailbox: " .. result)
+        end
+    end
+end
 
-task.spawn(function()
-    checkDiamonds()
-end)
+-- Chạy các tác vụ song song
+task.spawn(handleServerHop)
+task.spawn(checkDiamonds)
+task.spawn(claimMailbox)
