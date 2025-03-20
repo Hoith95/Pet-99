@@ -6,7 +6,6 @@ spawn(function()
 end)
 
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/World3Teleport"))()
-game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World1Teleport"):InvokeServer()
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPU-LOW"))()
 --task.wait(5)
@@ -26,6 +25,7 @@ script_key="hHJqncRPZjHqdvDxwJcwwDmpwstZQtrA";
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank"))()
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-Fast"))()
 else
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World1Teleport"):InvokeServer()
 script_key = "hHJqncRPZjHqdvDxwJcwwDmpwstZQtrA";
 task.wait(60)
 _G.GDRY_RUN = false
