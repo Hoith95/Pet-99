@@ -53,6 +53,7 @@ _G.GPOTIONS_MAX_TIER = 99
 --_G.GENCHANTS = {}
 --_G.GENCHANTS = {"Lucky Eggs","Lucky Eggs","Huge Hunter","Criticals", "Coins","Tap Power","Treasure Hunter"}
 --_G.GENCHANTS = {"Lucky Eggs","Strong Pets","Criticals","Huge Hunter","Lucky Eggs","Treasure Hunter","Tap Power"}
-_G.GENCHANTS = {"Coins","Lucky Eggs","Criticals","Huge Hunter","Tap Power","Strong Pets","Treasure Hunter","Diamonds","Lucky Eggs"}
+--_G.GENCHANTS = {"Coins","Lucky Eggs","Criticals","Huge Hunter","Tap Power","Strong Pets","Treasure Hunter","Diamonds","Lucky Eggs"}
+_G.GENCHANTS = {"Criticals","Lucky Eggs","Criticals","Diamonds","Tap Power","Strong Pets","Treasure Hunter","Diamonds","Lucky Eggs"}
 --_G.GENCHANTS = {"Coins","Coins", "Strong Pets", "Criticals","Treasure Hunter","Criticals","Strong Pets","Coins","Lucky Eggs", "Diamonds","Tap Power"}
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/ba2dcad2127dcfc04301dfe52ce6c61c.lua"))()
