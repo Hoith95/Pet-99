@@ -6,19 +6,19 @@ end
 
 -- Đánh dấu script đã được chạy
 _G.LOOKFPS5 = true
-_G.LOOKFPS_STOP = false  -- Biến để dừng script an toàn
+_G.LOOKFPS_STOP = true  -- Biến để dừng script an toàn
 
 spawn(function()
     -- Cấu hình FPS có thể thay đổi dễ dàng
     _G.fpsSettings = {
-        default = 5,  -- FPS mặc định khi bắt đầu
+        default = 4,  -- FPS mặc định khi bắt đầu
         allowedFps = {3, 4, 5, 6, 7, 8},  -- Các mức FPS hợp lệ
         timeMarks = {18000, 36000},  -- Mốc thời gian (5 giờ, 10 giờ)
-        fpsLevels = {5, 5}  -- Mức FPS tương ứng với từng mốc thời gian
+        fpsLevels = {4, 4}  -- Mức FPS tương ứng với từng mốc thời gian
     }
 
     -- Biến để thay đổi FPS ngay lập tức
-    _G.overrideFps = 5
+    _G.overrideFps = 4
 
     -- Chờ script1 hoàn thành
     while not _G.script1Done do
