@@ -1,18 +1,4 @@
-local TeleportService = game:GetService("TeleportService")
-local Players = game:GetService("Players")
-local placeId = 8737899170
 
-spawn(function()
-    -- Kiểm tra nếu người chơi đã ở trong placeId
-    if game.PlaceId ~= placeId then
-        -- Nếu không, thực hiện chuyển server
-        local player = Players.LocalPlayer
-        if player then
-            TeleportService:Teleport(placeId, player)
-        else
-            warn("Không thể tìm thấy người chơi!")
-        end
-    else
-        print("Người chơi đã ở trong placeId hiện tại, bỏ qua việc chuyển server.")
-    end
-end)
+local TeleportService = game:GetService("TeleportService")
+local placeId = 8737899170
+TeleportService:Teleport(placeId, game.Players.LocalPlayer)
