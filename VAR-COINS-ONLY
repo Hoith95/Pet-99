@@ -31,7 +31,7 @@ local scriptJoinLow_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main
 local scriptHop1_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"
 local scriptHop2_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"
 
--- Hàm đổi server nếu Coins không thay đổi trong 10 phút
+-- Hàm đổi server nếu Coins không thay đổi trong 15 phút
 local function changeServer()
     local initialServerId = game.JobId  -- Lưu ServerId hiện tại
     print("🔄 Đang thực hiện JoinLow...")
@@ -74,9 +74,9 @@ while true do
         lastChangeTime = os.time()  -- Reset thời gian nếu có thay đổi
     end
 
-    -- Nếu Coins không thay đổi trong 10 phút (600 giây)
-    if os.time() - lastChangeTime >= 600 then
-        print("⏳ Coins không thay đổi trong 10 phút! Tiến hành đổi server...")
+    -- Nếu Coins không thay đổi trong 15 phút (900 giây)
+    if os.time() - lastChangeTime >= 900 then
+        print("⏳ Coins không thay đổi trong 15 phút! Tiến hành đổi server...")
         changeServer()
         break
     end
