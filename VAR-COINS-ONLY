@@ -27,8 +27,8 @@ local function runScript(url)
 end
 
 -- URLs của các script đổi server
-local scriptJoinLow_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"
-local scriptHop1_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop3"
+local scriptJoinLow_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop2"
+local scriptHop1_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"
 local scriptHop2_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"
 
 -- Hàm đổi server nếu Coins không thay đổi trong 15 phút
