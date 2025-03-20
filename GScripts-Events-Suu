@@ -6,16 +6,16 @@ _G.GEVENT_FPS  = 4
 _G.GLOOTBOXES = {"Locked Hype Egg"}
 
 _G.GDO_LUCKY_WORLD_EVENT = true
-_G.GRAID_FOR_COINS = true
+_G.GRAID_FOR_COINS = false
 _G.GMAX_RAID_LEVEL = 99999
-_G.GRAID_TIMEOUT_MINUTES = 10
-_G.GHATCH_LOBBY = true
+_G.GRAID_TIMEOUT_MINUTES = 15
+_G.GHATCH_LOBBY = false
 _G.GMAKE_LUCKY_GIFTS = true
 _G.GUSE_LEPRECHAUN_KEYS = true
 
 _G.GDO_BOSSES = true
-_G.GHEROIC_BOSSES  = false
-_G.GAUTO_RAID = false
+_G.GHEROIC_BOSSES  = true
+_G.GAUTO_RAID = true
 _G.GSKIP_RAID_EGG = true
 _G.GUSE_BOOSTS = true
 
@@ -25,14 +25,14 @@ _G.GEVENT_UPGRADES = {
 "LuckyRaidAttackSpeed",
 "LuckyRaidPets",
 "LuckyRaidEggCost",
---"LuckyRaidMoreCurrency",
+"LuckyRaidMoreCurrency",
 "LuckyRaidBetterLoot",
 "LuckyRaidTitanicChest",
 "LuckyRaidHugeChest",
---"LuckyRaidXP",
---"LuckyRaidPetSpeed",
+"LuckyRaidXP",
+"LuckyRaidPetSpeed",
 "LuckyRaidBossDamage",
---"LuckyRaidKeyDrops",
+"LuckyRaidKeyDrops",
 "LuckyRaidBossHugeChances",
 "LuckyRaidBossTitanicChances",
 }
