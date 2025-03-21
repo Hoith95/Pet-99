@@ -4,7 +4,7 @@ getgenv().Settings = {
         Active = true,
         ["Items"] = {
 	    ["All Titanics"] = {Price = "+1%", AllTypes = true},
-            ["Titanic Signature BIG Maskot"] = {Price = 9000000000, Priority = true, AllTypes = true},
+            ["Titanic Signature BIG Maskot"] = {Price = 8000000000, Priority = true, AllTypes = true},
             ["All Huges"] = {Price = "+1%", AllTypes = true},
             ["Huge Arcade Dog Card"] = {Price = "+1%", Priority = true, AllTypes = true},
             ["Huge Blurred Axolotl Card"] = {Price = "+5%", Priority = true, AllTypes = true},
