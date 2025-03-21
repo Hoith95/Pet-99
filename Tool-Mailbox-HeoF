@@ -17,7 +17,7 @@ end)
 
 spawn(function()
 wait(183)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS"))()
 end)
 
 spawn(function()
