@@ -16,17 +16,6 @@ end)
 
 _G.script1Done = true
 
-local Save = require(game:GetService("ReplicatedStorage").Library.Client.Save)
-local rank = Save.Get().Rank
-
-if rank < 11 then
-script_key="hHJqncRPZjHqdvDxwJcwwDmpwstZQtrA";
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank"))()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-Fast"))()
-task.wait(5)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-ALL"))()
-else
-game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World1Teleport"):InvokeServer()
 script_key = "hHJqncRPZjHqdvDxwJcwwDmpwstZQtrA";
 task.wait(5)
 _G.GDRY_RUN = false
@@ -39,4 +28,3 @@ _G.GMAIL_RECEIVERS = {"tachi43fi", "Yel_lyvx", "dieuminhf6iy", "phamlamqglc", "b
 _G.GMAIL_DELAY  = 0
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Fishing"))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events-ALL"))()
-end
