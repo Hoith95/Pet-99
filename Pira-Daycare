@@ -1,1 +1,10 @@
+-- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
+if _G.DAYCARE then
+    warn("Script đã được chạy trước đó!")
+    return -- Dừng script nếu đã chạy
+end
+
+-- Đánh dấu script đã được chạy
+_G.DAYCARE = true
+
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/f420cbd8fa65c531f13fd0d569bc3300.lua"))()
