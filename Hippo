@@ -1,0 +1,40 @@
+getgenv().Configuration = {
+    ['Auto Mail'] = {
+        ['Items'] = {
+            ['Lootbox'] = {
+                ['Lucky Gift'] = { ['Amount'] = 15 },
+                ['Mega Enchant Chest'] = { ['Amount'] = 1 },
+                ['Mega Potion Chest'] = { ['Amount'] = 1 },
+                ['Mega Ultimate Chest'] = { ['Amount'] = 1 },
+                ['Mega Charm Chest'] = { ['Amount'] = 1 },
+            },
+            ['Misc'] = {
+                ['Leprechaun Key'] = { ['Amount'] = 50 },
+            },
+            ["Currency"] = {
+                ["Diamonds"] = { ['Amount'] = 10000000 },
+            },
+        },
+        ['Mail All Huges'] = true,
+        ['Usernames'] = {"tachi43fi", "Yel_lyvx", "dieuminhf6iy", "phamlamqglc", "buihuuquev","leduongra0f"},
+    },
+    ["Webhook"] = {
+        ["UserID"] = "",
+        ["WebhookURL"] = "",
+    },
+    ['Event'] = {
+        ['Raid Settings'] = {
+            ['Enabled'] = true,
+            ['Max Difficulty'] = 5000,
+            ['Max Raid Time'] = 30,
+            ['Egg Multiplier'] = 200,
+            ['Raid Bosses'] = {true, true, false}, -- Enabled, Heroic, Use Required Item Doors
+            ['Leave Breakables'] = {"LuckyRaidMassiveChest", "LuckyRaidPotOfGoldChest"}, -- LuckyRaidMediumChest, etc
+        },
+        ['Craft Gift'] = true,
+        ['Upgrades'] = { "LuckyRaidXP", "LuckyRaidPets", "LuckyRaidDamage", "LuckyRaidAttackSpeed" },
+    },
+    --['Debug'] = {},
+    ['Equip Enchants'] = {},
+}
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/b0dec084ff36c27d9dc119ad6b094544.lua"))()
