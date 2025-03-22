@@ -22,6 +22,6 @@ end)
 
 spawn(function()
 wait(33983)
-setfpscap(60)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
+--setfpscap(60)
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
 end)
