@@ -5,30 +5,14 @@ spawn(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-COINS-ONLY"))()
 end)
 
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/World3Teleport"))()
-
 spawn(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPU-LOW"))()
 end)
 
---task.wait(5)
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-CoreGui"))()
-
 _G.script1Done = true
 
-local Save = require(game:GetService("ReplicatedStorage").Library.Client.Save)
-local rank = Save.Get().Rank
-
-if rank < 11 then
-script_key="hHJqncRPZjHqdvDxwJcwwDmpwstZQtrA";
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank"))()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-Fast"))()
-task.wait(5)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-ALL"))()
-else
-game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World1Teleport"):InvokeServer()
 script_key = "hHJqncRPZjHqdvDxwJcwwDmpwstZQtrA";
-task.wait(5)
+task.wait(30)
 _G.GDRY_RUN = false
 _G.DISABLE_OVERLAY = true
 
@@ -37,6 +21,4 @@ _G.GMAIL_ITEMS = {
 }
 _G.GMAIL_RECEIVERS = {"lagwuadiss", "concobjtuu"}
 _G.GMAIL_DELAY  = 0
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Fishing"))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events-ALL"))()
-end
