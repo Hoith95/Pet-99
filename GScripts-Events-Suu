@@ -7,18 +7,21 @@ _G.GLOOTBOXES = {"Locked Hype Egg"}
 
 _G.GDO_LUCKY_WORLD_EVENT = true
 _G.GRAID_FOR_COINS = false
-_G.GMAX_RAID_LEVEL = 99999
-_G.GRAID_TIMEOUT_MINUTES = 10
+_G.GMAX_RAID_LEVEL = 5000
+_G.GRAID_TIMEOUT_MINUTES = 20
 _G.GHATCH_LOBBY = false
 _G.GMAKE_LUCKY_GIFTS = true
 _G.GUSE_LEPRECHAUN_KEYS = true
 
-_G.GDO_BOSSES = true
-_G.GHEROIC_BOSSES  = true
+_G.GDO_BOSSES = {1}
+_G.GHEROIC_BOSSES  = {1}
+_G.GRAID_MAX_BREAKABLE_HEALTH = "8q"
+
 _G.GAUTO_RAID = true
 _G.GUSE_BOOSTS = true
 _G.GSKIP_RAID_EGG = false
 _G.GMINUTE_HATCH_RAID_EGG = true
+_G.GMIN_MULTIPLIER = 200
 _G.GAUTO_UPGRADE_PETS = true
 _G.GDISABLE_MINUTE_HATCH = false
 
@@ -57,6 +60,7 @@ _G.GPOTIONS_MAX_TIER = 99
 --_G.GENCHANTS = {"Lucky Eggs","Lucky Eggs","Huge Hunter","Criticals", "Coins","Tap Power","Treasure Hunter"}
 --_G.GENCHANTS = {"Lucky Eggs","Strong Pets","Criticals","Huge Hunter","Lucky Eggs","Treasure Hunter","Tap Power"}
 --_G.GENCHANTS = {"Coins","Lucky Eggs","Criticals","Huge Hunter","Tap Power","Strong Pets","Treasure Hunter","Diamonds","Lucky Eggs"}
-_G.GENCHANTS = {"Criticals","Lucky Eggs","Criticals","Diamonds","Tap Power","Strong Pets","Treasure Hunter","Diamonds","Lucky Eggs"}
+_G.GENCHANTS = {"Criticals","Lucky Eggs","Huge Hunter","Strong Pets","Tap Power","Diamonds","Treasure Hunter","Diamonds","Lucky Eggs"}
+--_G.GENCHANTS = {"Criticals","Lucky Eggs","Criticals","Diamonds","Tap Power","Strong Pets","Treasure Hunter","Diamonds","Lucky Eggs"}
 --_G.GENCHANTS = {"Coins","Coins", "Strong Pets", "Criticals","Treasure Hunter","Criticals","Strong Pets","Coins","Lucky Eggs", "Diamonds","Tap Power"}
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/34915da4ad87a5028e1fd64efbe3543f.lua"))()
