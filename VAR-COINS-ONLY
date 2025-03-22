@@ -31,7 +31,7 @@ local scriptJoinLow_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main
 local scriptHop1_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"
 local scriptHop2_URL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-W1"
 
--- Hàm đổi server nếu Coins không thay đổi trong 20 phút
+-- Hàm đổi server nếu Coins không thay đổi trong 25 phút
 local function changeServer()
     local initialServerId = game.JobId  -- Lưu ServerId hiện tại
     print("🔄 Đang thực hiện JoinLow...")
@@ -56,30 +56,39 @@ local function changeServer()
     game.Players.LocalPlayer:Kick("Heo")
 end
 
--- 🕰 Đợi 5 phút trước khi kiểm tra sự thay đổi
-task.wait(300)
-
--- Lấy số Coins ban đầu
+-- 🛠 Lấy số Coins ban đầu
 local prevCoins = getLuckyCoins()
-local lastChangeTime = os.time()
-
 print("🚀 Script bắt đầu chạy! Coins ban đầu:", prevCoins)
 
--- Kiểm tra liên tục
-while true do
-    task.wait(60)  -- Kiểm tra mỗi 60 giây
-    local currentCoins = getLuckyCoins()
+-- 🕰 Đợi 5 phút trước khi kiểm tra sự thay đổi
+task.wait(300)  
 
-    if currentCoins ~= prevCoins then
-        lastChangeTime = os.time()  -- Reset thời gian nếu có thay đổi
-    end
+local currentCoins = getLuckyCoins()
 
-    -- Nếu Coins không thay đổi trong 20 phút (1200 giây)
-    if os.time() - lastChangeTime >= 1200 then
-        print("⏳ Coins không thay đổi trong 20 phút! Tiến hành đổi server...")
-        changeServer()
-        break
-    end
-
+if currentCoins == prevCoins then
+    print("⏳ Coins không thay đổi sau 5 phút! Tiến hành đổi server ngay...")
+    changeServer()
+else
+    print("📈 Coins có thay đổi! Bắt đầu theo dõi 25 phút...")
     prevCoins = currentCoins
+    local lastChangeTime = os.time()
+
+    -- Kiểm tra liên tục mỗi 60 giây
+    while true do
+        task.wait(60)
+        currentCoins = getLuckyCoins()
+
+        if currentCoins ~= prevCoins then
+            lastChangeTime = os.time()  -- Reset thời gian nếu có thay đổi
+        end
+
+        -- Nếu Coins không thay đổi trong 25 phút
+        if os.time() - lastChangeTime >= 1500 then 
+            print("⏳ Coins không thay đổi trong 25 phút! Tiến hành đổi server...") 
+            changeServer()
+            break
+        end
+
+        prevCoins = currentCoins
+    end
 end
