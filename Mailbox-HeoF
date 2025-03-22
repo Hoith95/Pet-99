@@ -17,7 +17,7 @@ spawn(function()
 end)
 
 spawn(function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Huge-Webhook"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Huge-Webhook"))()
 end)
 
 --- Gửi Mail ---
@@ -27,7 +27,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/M
 end)
 
 spawn(function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Pira-Daycare"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Pira-Daycare"))()
 end)
 
 spawn(function()
