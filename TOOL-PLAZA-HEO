@@ -4,7 +4,6 @@ getgenv().Settings = {
         Active = true,
         ["Items"] = {
 	    ["All Titanics"] = {Price = "+1%", AllTypes = true},
-            ["Titanic Signature BIG Maskot"] = {Price = 8000000000, Priority = true, AllTypes = true},
             ["All Huges"] = {Price = "+1%", AllTypes = true},
             ["Huge Arcade Dog Card"] = {Price = "+1%", Priority = true, AllTypes = true},
             ["Huge Blurred Axolotl Card"] = {Price = "+5%", Priority = true, AllTypes = true},
@@ -15,6 +14,8 @@ getgenv().Settings = {
             ["Huge Arcane Dominus Card"] = {Price = "+1%", Priority = true, AllTypes = true},
             ["Titanic Cupcake Pegasus Card"] = {Price = "+1%", Priority = true, AllTypes = true},
             ["Titanic Signature BIG Maskot Card"] = {Price = "+1%", Priority = true, AllTypes = true},
+	    ["Emerald Gem"] = {Price = "+1%", Priority = true},
+	    ["Rainbow Gem"] = {Price = "+10%", Priority = true},
 	    ["Lucky Gift"] = {Price = "+15%", Priority = true},
 	    ["Love Gift"] = {Price = "+1%", Priority = true},
 	    ["Retro Pack"] = {Price = "+1%", Priority = true},
