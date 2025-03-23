@@ -1,11 +1,9 @@
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/WaitForGameLoad"))()
 
-spawn(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-COINS-ONLY"))()
-end)
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World3Teleport"):InvokeServer()
 
 spawn(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPU-LOW"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPU-LOW"))()
 end)
 
 _G.script1Done = true
@@ -20,4 +18,4 @@ _G.GMAIL_ITEMS = {
 }
 _G.GMAIL_RECEIVERS = {"lagwuadiss", "concobjtuu"}
 _G.GMAIL_DELAY  = 0
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events-ALL"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events2-ALL"))()
