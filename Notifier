@@ -39,17 +39,6 @@ local function formatTime(seconds)
     return string.format("%02d:%02d:%02d", hours, minutes, remainingSeconds)
 end
 
--- Hàm lấy số lượng Lucky Coins
-local function getLuckyCoins()
-    local Inventory = SaveModule.Get().Inventory
-    for _, v in pairs(Inventory.Currency) do 
-        if v.id == "LuckyCoins" then
-            return v._am
-        end
-    end
-    return 0
-end
-
 -- Lấy PlayerGui của người chơi hiện tại.
 local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
@@ -60,53 +49,40 @@ screenGui.Parent = playerGui
 
 -- Tạo một Frame làm nền cho các thông báo.
 local backgroundFrame = Instance.new("Frame")
-backgroundFrame.Size = UDim2.new(1, 0, 1, 0)
-backgroundFrame.BackgroundColor3 = Color3.new(0, 0, 0)
-backgroundFrame.BackgroundTransparency = 1
-backgroundFrame.Position = UDim2.new(0, 0, 0, -70)
-backgroundFrame.BorderSizePixel = 0
+backgroundFrame.Size = UDim2.new(1, 0, 1, 0) -- Phủ 45% màn hình theo chiều dọc
+backgroundFrame.BackgroundColor3 = Color3.new(0, 0, 0) -- Màu nền đen
+backgroundFrame.BackgroundTransparency = 1 -- Nền trong suốt
+backgroundFrame.Position = UDim2.new(0, 0, 0, -70) -- Vị trí bắt đầu từ góc trên bên trái
+backgroundFrame.BorderSizePixel = 0 -- Không có viền
 backgroundFrame.Parent = screenGui
 
--- Tạo một TextLabel để hiển thị số lượng Diamonds.
+-- Tạo một TextLabel để hiển thị thông báo số lượng Diamonds.
 local diamondLabel = Instance.new("TextLabel", backgroundFrame)
 diamondLabel.Name = "DiamondLabel"
 diamondLabel.Text = "Đang cập nhật Diamonds..."
 diamondLabel.Size = UDim2.new(1, 0, 1/6, 0)
-diamondLabel.Position = UDim2.new(0, 0, 4.2/6, 0)
-diamondLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-diamondLabel.BackgroundTransparency = 0.5
+diamondLabel.Position = UDim2.new(0, 0, 4.8/6, 0)  -- Đặt thông báo số lượng Diamonds lên trên
+diamondLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Màu nền đen
+diamondLabel.BackgroundTransparency = 0.5 -- Nền trong suốt
 diamondLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 diamondLabel.BorderSizePixel = 0
 diamondLabel.TextScaled = true
 
--- Tạo một TextLabel để hiển thị số lượng Lucky Coins.
-local luckyCoinLabel = Instance.new("TextLabel", backgroundFrame)
-luckyCoinLabel.Name = "LuckyCoinLabel"
-luckyCoinLabel.Text = "Đang cập nhật Lucky Coins..."
-luckyCoinLabel.Size = UDim2.new(1, 0, 1/6, 0)
-luckyCoinLabel.Position = UDim2.new(0, 0, 5/6, 0) -- Đặt dưới DiamondLabel
-luckyCoinLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-luckyCoinLabel.BackgroundTransparency = 0.5
-luckyCoinLabel.TextColor3 = Color3.fromRGB(255, 255, 0) -- Màu chữ vàng
-luckyCoinLabel.Font = Enum.Font.GothamBold
-luckyCoinLabel.BorderSizePixel = 0
-luckyCoinLabel.TextScaled = true
-
--- Tạo một TextLabel để hiển thị thời gian chạy.
+-- Tạo một TextLabel để hiển thị thông báo thời gian chạy.
 local timeLabel = Instance.new("TextLabel", backgroundFrame)
 timeLabel.Name = "TimeLabel"
 timeLabel.Text = "TIMES: 00:00:00"
 timeLabel.Size = UDim2.new(1, 0, 1/6, 0)
-timeLabel.Position = UDim2.new(0, 0, 5.8/6, 0)
-timeLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-timeLabel.BackgroundTransparency = 0.5
-timeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+timeLabel.Position = UDim2.new(0, 0, 5.8/6, 0)  -- Đặt thông báo thời gian chạy xuống dưới
+timeLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Màu nền đen
+timeLabel.BackgroundTransparency = 0.5 -- Nền trong suốt
+timeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Màu chữ trắng
 timeLabel.Font = Enum.Font.GothamBold
 timeLabel.BorderSizePixel = 0
 timeLabel.TextScaled = true
 
--- Định nghĩa hàm cập nhật thông báo số lượng Diamonds và Lucky Coins.
-local startTime = tick()
+-- Định nghĩa hàm cập nhật thông báo số lượng Diamonds.
+local startTime = tick()  -- Lấy thời gian hiện tại khi script bắt đầu
 
 -- Tạo một luồng mới để cập nhật thông báo.
 task.spawn(function()
@@ -115,14 +91,7 @@ task.spawn(function()
         diamondLabel.Text = "GEMS: " .. Formatint(currentDiamondValue)
         diamondLabel.TextColor3 = Color3.fromRGB(0, 128, 255)
         diamondLabel.Font = Enum.Font.GothamBold
-
-        local currentLuckyCoins = getLuckyCoins()
-        luckyCoinLabel.Text = "COINS: " .. Formatint(currentLuckyCoins)
-        luckyCoinLabel.TextColor3 = Color3.fromRGB(255, 255, 0) -- Màu chữ vàng
-        luckyCoinLabel.Font = Enum.Font.GothamBold
-
-        timeLabel.Text = "TIMES: " .. formatTime(tick() - startTime)
-
-        task.wait(1)
+        timeLabel.Text = "TIMES: " .. formatTime(tick() - startTime)  -- Cập nhật thời gian chạy theo định dạng Giờ:Phút:Giây
+        task.wait(1)  -- Cập nhật mỗi giây
     end
 end)
