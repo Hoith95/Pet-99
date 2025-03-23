@@ -1,4 +1,5 @@
 _G.script1Done = true
+_G.MAILBOX_STOP = true
 
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza-MinPlayers"))()
 
@@ -21,9 +22,11 @@ spawn(function()
 end)
 
 --- Gửi Mail ---
+_G.MAILBOX_STOP = true
+
 spawn(function()
 wait(15)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Heo"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Heo"))()
 end)
 
 spawn(function()
