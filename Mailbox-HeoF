@@ -1,5 +1,5 @@
 _G.script1Done = true
-_G.MAILBOX_STOP = true
+--_G.MAILBOX_STOP = true
 
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza-MinPlayers"))()
 
