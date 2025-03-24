@@ -2,6 +2,7 @@ _G.script2Done = true
 _G.Event1Done = true
 
 spawn(function()
+wait(183)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS"))()
 end)
 
