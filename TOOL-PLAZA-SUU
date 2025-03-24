@@ -16,7 +16,7 @@ getgenv().Settings = {
             ["Titanic Signature BIG Maskot Card"] = {Price = "+1%", Priority = true, AllTypes = true},
 	    ["Rainbow Gem"] = {Price = "+1%", Priority = true},
 	    ["Amethyst Gem"] = {Price = "+1%", Priority = true},
-	    ["Emerald Gem"] = {Price = 69696, Priority = true},
+	    ["Emerald Gem"] = {Price = "+1%", Priority = true},
 	    ["Ruby Gem"] = {Price = "+5%", Priority = true},
 	    ["Sapphire Gem"] = {Price = "+5%", Priority = true},
 	    ["Lucky Gift"] = {Price = "+15%", Priority = true},
