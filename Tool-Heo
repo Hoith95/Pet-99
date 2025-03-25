@@ -3,7 +3,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/W
 game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World3Teleport"):InvokeServer()
 
 spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPU-LOW"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPU-LOW"))()
 end)
 
 _G.script1Done = true
