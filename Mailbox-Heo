@@ -51,7 +51,7 @@ getgenv().AutoMail = {
         ['Crystal Key'] = { Class = "Misc", MinAmount = 200, Amount = "Max" },
     },
     ['Loop Interval'] = 60,
-    ['Users'] = {"tachi43fi", "Yel_lyvx", "dieuminhf6iy", "phamlamqglc", "buihuuquev", "leduongra0f"},
+    ['Users'] = {"Lena_Kollerz", "longz_tato", "xuan_verok", "Angeles_Castrex", "Lina_Lambartx", "Vincenzo_Corradinix", "Finn_Dekkerx", "Lia_Liux", "Lincoln_Scottx"},
 }
 
 repeat task.wait() until game:IsLoaded()
