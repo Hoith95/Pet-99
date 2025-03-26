@@ -8,7 +8,7 @@ local username = game.Players.LocalPlayer.Name  -- Lấy tên user
 
 local scriptURL
 
-if username == "concobjtuu" or username == "lagwuadiss" then
+if username == "Dwi_Sunx" or username == "Fiko_Sungx" or username == "tkm_newz" or username == "Fara_Liux" or username == "Adi_Sukox" then
     scriptURL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/TOOL-PLAZA-SUU"
 else
     scriptURL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/TOOL-PLAZA-HEO"
