@@ -1,24 +1,24 @@
 -- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
-if _G.LOOKFPS10 then
+if _G.LOOKFPSX then
     warn("Script đã được chạy trước đó!")
     return -- Dừng script nếu đã chạy
 end
 
 -- Đánh dấu script đã được chạy
-_G.LOOKFPS10 = true
+_G.LOOKFPSX = true
 _G.LOOKFPS_STOP = false  -- Biến để dừng script an toàn
 
 spawn(function()
     -- Cấu hình FPS có thể thay đổi dễ dàng
     _G.fpsSettings = {
-        default = 10,  -- FPS mặc định khi bắt đầu
-        allowedFps = {10},  -- Các mức FPS hợp lệ
+        default = 7,  -- FPS mặc định khi bắt đầu
+        allowedFps = {7},  -- Các mức FPS hợp lệ
         timeMarks = {18000, 36000},  -- Mốc thời gian (5 giờ, 10 giờ)
-        fpsLevels = {10, 10}  -- Mức FPS tương ứng với từng mốc thời gian
+        fpsLevels = {7, 7}  -- Mức FPS tương ứng với từng mốc thời gian
     }
 
     -- Biến để thay đổi FPS ngay lập tức
-    _G.overrideFps = 10
+    _G.overrideFps = 7
 
     -- Chờ script1 hoàn thành
     while not _G.script1Done do
