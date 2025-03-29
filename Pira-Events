@@ -2,6 +2,6 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/W
 
 _G.script1Done = true
 _G.script2Done = true
-_G.Event1Done = true
+_G.EventDone = true
 
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/8b810254a48d29099a962e99b2291c45.lua"))()
