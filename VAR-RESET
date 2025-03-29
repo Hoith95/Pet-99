@@ -5,10 +5,10 @@ spawn(function()
             break
         else
             -- Nếu _G.EventDone không phải là true, chạy loadstring
-            setfpscap(15)
+            --setfpscap(15)
             --game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World1Teleport"):InvokeServer()
             --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop2"))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop2"))()
         end
         wait(1)
     end
