@@ -1,5 +1,5 @@
 _G.script2Done = true
-_G.Event1Done = true
+_G.EventDone = true
 
 _G.GEVENT_FPS  = 5
 spawn(function()
