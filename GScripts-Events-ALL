@@ -7,6 +7,7 @@ _G.GDO_MINING_EVENT = true
 _G.GBUY_DIAMOND_PICKAXE = true
 _G.GMINING_EVENT_MAX_AUTO_CRAFT_RECIPE = 4
 _G.GMINING_EVENT_ZONE_TO = 5
+_G.GTELEPORT_MINING = true
 _G.GEVENT_UPGRADES = {
     "MiningEventLessPetsRequiredToComboThem",
     --"MiningEventIncreaseTierUpChance",
