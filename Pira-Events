@@ -20,7 +20,6 @@ wait(120)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X"))()
 end)
 
-wait(5)
 getgenv().Config = {
     ["AreaToFarm"] = 6,
 }
