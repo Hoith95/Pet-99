@@ -1,8 +1,3 @@
--- Đảm bảo game đã tải xong và player đã có leaderstats
-repeat
-    wait()
-until game:IsLoaded() and game.Players.LocalPlayer:FindFirstChild("leaderstats")
-
 -- Lấy dịch vụ Players
 local players = game:GetService("Players")
 local leaderstats = game.Players.LocalPlayer.leaderstats
