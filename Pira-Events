@@ -1,3 +1,5 @@
+task.wait(10)
+
 spawn(function()
 wait(10)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-GEMS"))()
