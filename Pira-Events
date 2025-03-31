@@ -1,15 +1,9 @@
-task.wait(10)
-
 spawn(function()
 wait(10)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-GEMS"))()
 end)
 
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/WaitForGameLoad"))()
-
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-10259.70, 4.17, -7301.34)
-task.wait(5)
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(24349.02, 16.23, -16519.92)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/WaitForGameLoad"))()
 
 _G.script1Done = true
 _G.script2Done = true
