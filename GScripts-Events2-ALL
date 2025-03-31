@@ -14,8 +14,8 @@ _G.GBUY_DIAMOND_PICKAXE = true
 _G.GMINING_EVENT_MAX_AUTO_CRAFT_RECIPE = 5
 _G.GMINING_EVENT_ZONE_TO = 8
 _G.GEVENT_UPGRADES = {
-    "MiningEventLessPetsRequiredToComboThem",
-    --"MiningEventIncreaseTierUpChance",
+    "MiningEventLessPetsRequiredToComboThem2",
+    --"MiningEventIncreaseTierUpChance2",
 }
 _G.GRANK_FIRST = true
 _G.GZONE_TO = 999
