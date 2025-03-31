@@ -1,3 +1,5 @@
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/WaitForGameLoad"))()
+
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-10259.70, 4.17, -7301.34)
 
 _G.script1Done = true
