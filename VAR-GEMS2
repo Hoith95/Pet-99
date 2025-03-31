@@ -12,7 +12,7 @@ local players = game:GetService("Players")
 local leaderstats = game.Players.LocalPlayer.leaderstats
 local initialDiamonds = leaderstats["\240\159\146\142 Diamonds"].Value
 
--- Kiểm tra số lượng kim cương sau 10 phút
+-- Kiểm tra số lượng kim cương sau 5 phút
 local function checkDiamonds()
     while true do
         -- In ra số lượng kim cương ban đầu
