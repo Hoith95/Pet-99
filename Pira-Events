@@ -1,5 +1,3 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/WaitForGameLoad"))()
-
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-10259.70, 4.17, -7301.34)
 
 _G.script1Done = true
@@ -13,6 +11,6 @@ end)
 
 wait(5)
 getgenv().Config = {
-    ["AreaToFarm"] = 5,
+    ["AreaToFarm"] = 6,
 }
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/8b810254a48d29099a962e99b2291c45.lua"))()
