@@ -1,5 +1,9 @@
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/WaitForGameLoad"))()
 
+spawn(function()
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World3Teleport"):InvokeServer()
+end)
+
 _G.script1Done = true
 _G.script2Done = true
 _G.EventDone = true
