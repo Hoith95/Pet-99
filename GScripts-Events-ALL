@@ -19,7 +19,7 @@ _G.GEVENT_UPGRADES = {
 }
 
 _G.GAUTO_ENCHANT_PICKAXE = true
-_G.GPICKAXE_ENCHANTS_COUNT = 3
+_G.GPICKAXE_ENCHANTS_COUNT = 2
 _G.GPICKAXE_ENCHANTS = {
     ["Diamond Farmer"] = 5,
     ["Fortune"] = 5,
