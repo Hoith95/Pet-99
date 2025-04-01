@@ -11,14 +11,14 @@ _G.LOOKFPS_STOP = false  -- Biến để dừng script an toàn
 spawn(function()
     -- Cấu hình FPS có thể thay đổi dễ dàng
     _G.fpsSettings = {
-        default = 20,  -- FPS mặc định khi bắt đầu
-        allowedFps = {20},  -- Các mức FPS hợp lệ
+        default = 12,  -- FPS mặc định khi bắt đầu
+        allowedFps = {12},  -- Các mức FPS hợp lệ
         timeMarks = {18000, 36000},  -- Mốc thời gian (5 giờ, 10 giờ)
-        fpsLevels = {20, 20}  -- Mức FPS tương ứng với từng mốc thời gian
+        fpsLevels = {12, 12}  -- Mức FPS tương ứng với từng mốc thời gian
     }
 
     -- Biến để thay đổi FPS ngay lập tức
-    _G.overrideFps = 20
+    _G.overrideFps = 12
 
     -- Chờ script1 hoàn thành
     while not _G.script1Done do
