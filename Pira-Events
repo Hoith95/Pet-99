@@ -9,7 +9,7 @@ end)
 
 getgenv().Config = {
     ["Farming"] = {
-        ["AreaToFarm"] = 8,
+        ["AreaToFarm"] = 5,
         ["StartAtBottom"] = true,
         ["AutoCraft"] = false, -- Autocraft Onyx Gems // After max cheaper upgrade is bought
     },
