@@ -17,9 +17,9 @@ getgenv().Config = {
     },
     ["Pickaxe"] = {
         ["AutoEnchant"] = true, -- Enchants ur best Pickaxe
-        ["GetAllEnchants"] = false,
+        ["GetAllEnchants"] = true,
         ["PickaxeEnchants"] = {
-            ["Fortune"] = 5, -- This will stop at Fortune 3, 4, 5
+            ["Fortune"] = 4, -- This will stop at Fortune 3, 4, 5
             ["Diamond Farmer"] = 5, -- This will stop at Diamond Farmer 5
         },
     }
