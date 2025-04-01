@@ -17,6 +17,26 @@ _G.GEVENT_UPGRADES = {
     "MiningEventLessPetsRequiredToComboThem2",
     --"MiningEventIncreaseTierUpChance2",
 }
+
+_G.GAUTO_ENCHANT_PICKAXE = true
+_G.GPICKAXE_ENCHANTS_COUNT = 2
+_G.GPICKAXE_ENCHANTS = {
+    --["Lucky"] = 5,
+    ["Fortune"] = 5,
+    ["Power Ball"] = 4,
+    --["Gravity"] = 2,
+    --["XRay"] = 1,
+    --["Explosive"] = 5,
+    --["Fracture"] = 5,
+    --["Lightning"] = 5,
+    --["More Coins"] = 5,
+    --["Replenish"] = 5,
+    --["Player Speed"] = 5,
+    ["Diamond Farmer"] = 5,
+    ["Gem Upgrade"] = 4,
+    --["Damage"] = 5
+}
+
 _G.GRANK_FIRST = true
 _G.GZONE_TO = 999
 _G.GREBIRTH_TO = 9
