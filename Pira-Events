@@ -1,10 +1,3 @@
-spawn(function()
-wait(10)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-GEMS"))()
-end)
-
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/WaitForGameLoad"))()
-
 _G.script1Done = true
 _G.script2Done = true
 _G.EventDone = true
@@ -15,6 +8,19 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/L
 end)
 
 getgenv().Config = {
-    ["AreaToFarm"] = 6 -- Farms this area after ruby pickaxe is unlocked
+    ["Farming"] = {
+        ["AreaToFarm"] = 8,
+        ["StartAtBottom"] = true,
+        ["AutoCraft"] = false, -- Autocraft Onyx Gems // After max cheaper upgrade is bought
+    },
+    ["Pickaxe"] = {
+        ["AutoEnchant"] = true, -- Enchants ur best Pickaxe
+        ["GetAllEnchants"] = false,
+        ["PickaxeEnchants"] = {
+            ["Fortune"] = 4, -- This will stop at Fortune 3, 4, 5
+            ["Diamond Farmer"] = 4, -- This will stop at Diamond Farmer 5
+            ["Power Ball"] = 4,
+        },
+    }
 }
-loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/8b810254a48d29099a962e99b2291c45.lua"))()
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/d0b7e7eced327afcbf466e8c5ad296f8.lua"))()
