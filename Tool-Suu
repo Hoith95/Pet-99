@@ -1,21 +1,37 @@
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/WaitForGameLoad"))()
 
-game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World3Teleport"):InvokeServer()
+local Save = require(game:GetService("ReplicatedStorage").Library.Client.Save)
 
-spawn(function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPU-LOW"))()
-end)
+-- Biến kiểm tra rank
+_G.Rank33 = nil  
 
-_G.script1Done = true
+-- Hàm kiểm tra rank
+local function CheckRank()
+    local rank = Save.Get().Rank
+    if rank >= 33 then
+        _G.Rank33 = true
+    else
+        _G.Rank33 = false
+    end
+end
 
-script_key = "hHJqncRPZjHqdvDxwJcwwDmpwstZQtrA";
-task.wait(30)
-_G.GDRY_RUN = false
-_G.DISABLE_OVERLAY = true
+-- Chạy kiểm tra rank ngay sau khi script khởi động
+CheckRank()
 
-_G.GMAIL_ITEMS = {
-  ["Send all Diamonds"] = {Class = "Currency", Id = "Diamonds", KeepAmount = "5m", MinAmount = "500m"},
-}
-_G.GMAIL_RECEIVERS = {"Dwi_Sunx", "Fiko_Sungx", "tkm_newz", "Fara_Liux", "Adi_Sukox"}
-_G.GMAIL_DELAY  = 0
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events2-ALL"))()
+-- Chạy script tương ứng
+if _G.Rank33 == true then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Pira-Events"))()
+    print("Đang chạy Script 1 vì Rank >= 33")
+
+elseif _G.Rank33 == false then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Tool-SuuF"))()
+    print("Đang chạy Script 2 vì Rank < 33")
+
+else
+    -- Kiểm tra sau 60 giây nếu _G.Rank33 vẫn chưa xác định
+    task.wait(60)
+    if _G.Rank33 == nil then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Tool-SuuF"))()
+        print("Không thể xác định Rank, chạy Script 3")
+    end
+end
