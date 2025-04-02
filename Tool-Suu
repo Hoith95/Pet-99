@@ -1,21 +1,24 @@
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/WaitForGameLoad"))()
 
-game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World3Teleport"):InvokeServer()
-
-spawn(function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPU-LOW"))()
-end)
-
 _G.script1Done = true
 
-script_key = "hHJqncRPZjHqdvDxwJcwwDmpwstZQtrA";
-task.wait(30)
-_G.GDRY_RUN = false
-_G.DISABLE_OVERLAY = true
+repeat task.wait(1) until game.Players.LocalPlayer ~= nil
 
-_G.GMAIL_ITEMS = {
-  ["Send all Diamonds"] = {Class = "Currency", Id = "Diamonds", KeepAmount = "5m", MinAmount = "500m"},
-}
-_G.GMAIL_RECEIVERS = {"Dwi_Sunx", "Fiko_Sungx", "tkm_newz", "Fara_Liux", "Adi_Sukox"}
-_G.GMAIL_DELAY  = 0
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events2-ALL"))()
+local accName = game:GetService("Players").LocalPlayer.Name
+
+-- Tải danh sách tài khoản từ GitHub
+local allowedUsers = loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/AllowedUsers"))()
+
+-- Chuyển danh sách thành dạng key-value để kiểm tra nhanh hơn
+local allowedAccounts = {}
+for _, user in ipairs(allowedUsers) do
+    allowedAccounts[user] = true
+end
+
+if allowedAccounts[accName] then
+    print("Đủ Rank: " .. accName)
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Pira-Events"))()
+else
+    print("Chưa Đủ Rank!")
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Tool-SuuF"))()
+end
