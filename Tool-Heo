@@ -1,13 +1,3 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/WaitForGameLoad"))()
-
-game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World3Teleport"):InvokeServer()
-
-spawn(function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPU-LOW"))()
-end)
-
-_G.script1Done = true
-
 local Save = require(game:GetService("ReplicatedStorage").Library.Client.Save)
 
 -- Biến kiểm tra rank
