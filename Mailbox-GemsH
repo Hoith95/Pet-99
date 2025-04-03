@@ -1,5 +1,12 @@
-print("Auto MailBox Gems sẽ chạy sau 60 giay...")
 task.wait(60)
+local Save = require(game:GetService("ReplicatedStorage").Library.Client.Save)
+local rank = Save.Get().Rank
+
+if rank < 33 then
+    print("Số Rank không đủ dừng script.")
+    return -- Dừng script tại đây
+else
+print("Đủ Rank Auto MailBox Gems sẽ chạy...")
 local function getCurrentDiamondValue()
     return game.Players.LocalPlayer.leaderstats["\240\159\146\142 Diamonds"].Value
 end
@@ -39,3 +46,4 @@ getgenv().Settings = {
 
 -- Tải script từ URL
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/86847850c3165379f5be2d9d071eaccb.lua"))()
+end
