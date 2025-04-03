@@ -6,8 +6,8 @@ end
 local currentDiamondValue = getCurrentDiamondValue()
 print("Số lượng kim cương hiện tại là: " .. currentDiamondValue)
 
--- Kiểm tra nếu số lượng kim cương nhỏ hơn 5000000
-if currentDiamondValue < 5000000 then
+-- Kiểm tra nếu số lượng kim cương nhỏ hơn 50000000
+if currentDiamondValue < 50000000 then
     print("Số lượng kim cương không đủ.")
     return -- Dừng script tại đây
 end
@@ -20,9 +20,7 @@ getgenv().Settings = {
     Mailing = {
         ["Diamonds"] = {Class = "Currency", Amount = adjustedDiamondValue},
     },
-    Users = {
-        "Tru_BatGioi",
-    },
+    Users = {"Lena_Kollerz", "longz_tato", "xuan_verok", "Angeles_Castrex", "Lina_Lambartx", "Vincenzo_Corradinix", "Finn_Dekkerx", "Lia_Liux", "Lincoln_Scottx"},
     ["Split Items Evenly"] = false, -- False -> it will send the Amount per account.
     ["Only Online Accounts"] = false,
 }
