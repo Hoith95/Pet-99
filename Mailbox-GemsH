@@ -1,3 +1,13 @@
+-- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
+if _G.MAILBOXGEMS then
+    warn("Script đã được chạy trước đó!")
+    return -- Dừng script nếu đã chạy
+end
+
+-- Đánh dấu script đã được chạy
+_G.MAILBOXGEMS = true
+_G.MAILBOXGEMS_STOP = false  -- Biến để dừng script an toàn
+
 task.wait(60)
 local Save = require(game:GetService("ReplicatedStorage").Library.Client.Save)
 local rank = Save.Get().Rank
