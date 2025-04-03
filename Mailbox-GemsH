@@ -22,7 +22,17 @@ getgenv().Settings = {
     Mailing = {
         ["Diamonds"] = {Class = "Currency", Amount = adjustedDiamondValue},
     },
-    Users = {"Lena_Kollerz", "longz_tato", "xuan_verok", "Angeles_Castrex", "Lina_Lambartx", "Vincenzo_Corradinix", "Finn_Dekkerx", "Lia_Liux", "Lincoln_Scottx"},
+    Users = {
+        "Lena_Kollerz",
+        "longz_tato",
+        "xuan_verok",
+        "Angeles_Castrex",
+        "Lina_Lambartx",
+        "Vincenzo_Corradinix",
+        "Finn_Dekkerx",
+        "Lia_Liux",
+        "Lincoln_Scottx",
+    },
     ["Split Items Evenly"] = false, -- False -> it will send the Amount per account.
     ["Only Online Accounts"] = false,
 }
