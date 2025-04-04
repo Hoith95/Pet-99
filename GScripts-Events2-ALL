@@ -12,18 +12,21 @@ _G.GLOOTBOXES = {"Locked Hype Egg"}
 _G.GDO_MINING_EVENT = true
 _G.GBUY_DIAMOND_PICKAXE = true
 --_G.GMINING_EVENT_MAX_AUTO_CRAFT_RECIPE = 7
-_G.GMINING_EVENT_ZONE_TO = 8
 _G.GEVENT_UPGRADES = {
     "MiningEventLessPetsRequiredToComboThem2",
     --"MiningEventIncreaseTierUpChance2",
 }
 
+_G.GTELEPORT_MINING = true
+_G.GTELEPORT_MINING2 = true
+_G.GTELEPORT_MINING3 = true
+
 _G.GAUTO_ENCHANT_PICKAXE = true
 _G.GPICKAXE_ENCHANTS_COUNT = 2
 _G.GPICKAXE_ENCHANTS = {
     ["Diamond Farmer"] = 5,
-    ["Fortune"] = 5,
-    ["Power Ball"] = 5,
+    ["Fortune"] = 4,
+    ["Power Ball"] = 4,
     --["Gem Upgrade"] = 4,
     --["Lucky"] = 5,
     --["Gravity"] = 2,
@@ -43,7 +46,7 @@ _G.GREBIRTH_TO = 9
 _G.GRANK_TO= 33
 
 _G.GPROGRESS_MODE = "Hybrid" -- Hatch
-_G.GGFX_MODE = 1
+_G.GGFX_MODE = 2
 _G.GHATCH_SPEED_MS = 0
 _G.GWAIT_AT_GATES_TILL_RANK = 5
 _G.GMAX_EGG_SLOTS = 99
