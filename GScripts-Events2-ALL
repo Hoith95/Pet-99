@@ -1,10 +1,10 @@
 _G.script2Done = true
 _G.EventDone = true
 
-_G.GEVENT_FPS  = 12
+_G.GEVENT_FPS  = 15
 spawn(function()
 wait(90)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X2"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X"))()
 end)
 
 _G.GLOOTBOXES = {"Locked Hype Egg"}
@@ -12,6 +12,7 @@ _G.GLOOTBOXES = {"Locked Hype Egg"}
 _G.GDO_MINING_EVENT = true
 _G.GBUY_DIAMOND_PICKAXE = true
 --_G.GMINING_EVENT_MAX_AUTO_CRAFT_RECIPE = 7
+_G.GMINING_EVENT_ZONE_TO = 6
 _G.GEVENT_UPGRADES = {
     "MiningEventLessPetsRequiredToComboThem2",
     --"MiningEventIncreaseTierUpChance2",
