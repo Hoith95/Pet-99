@@ -4,7 +4,7 @@ _G.EventDone = true
 _G.GEVENT_FPS  = 15
 spawn(function()
 wait(90)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X2"))()
 end)
 
 _G.GLOOTBOXES = {"Locked Hype Egg"}
