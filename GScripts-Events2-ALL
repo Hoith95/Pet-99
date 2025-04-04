@@ -18,7 +18,7 @@ _G.GEVENT_UPGRADES = {
     --"MiningEventIncreaseTierUpChance2",
 }
 
-_G.GTELEPORT_MINING = true
+_G.GTELEPORT_MINING = false
 _G.GTELEPORT_MINING2 = true
 _G.GTELEPORT_MINING3 = true
 
