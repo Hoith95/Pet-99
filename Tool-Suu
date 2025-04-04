@@ -17,7 +17,8 @@ end
 
 if allowedAccounts[accName] then
     print("Đủ Rank: " .. accName)
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Pira-Events"))()
+    --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Pira-Events"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Tool-SuuF"))()
 else
     print("Chưa Đủ Rank!")
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Tool-SuuF"))()
