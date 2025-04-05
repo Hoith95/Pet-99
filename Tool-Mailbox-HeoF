@@ -3,13 +3,13 @@
 spawn(function()
     while true do
         wait(360)  -- chờ 360 giây (6 phút)
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-HeoF"))()
+        --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-HeoF"))()
     end
 end)
 
 spawn(function()
 wait(30)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge"))()
 end)
 
 spawn(function()
