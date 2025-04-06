@@ -9,37 +9,23 @@ end)
 
 _G.GLOOTBOXES = {"Locked Hype Egg"}
 
-_G.GDO_MINING_EVENT = true
-_G.GBUY_DIAMOND_PICKAXE = true
---_G.GMINING_EVENT_MAX_AUTO_CRAFT_RECIPE = 7
-_G.GMINING_EVENT_ZONE_TO = 6
+_G.GDO_CONVEYOR_INSTANCE = true
+_G.GCONVEYOR_RESET_UPGRADES = true
+_G.GCONVEYOR_MAX_PETS_LEVEL = 141
+_G.GCONVEYOR_MAX_PETS_TO_BUY = 9 --max 18
+
 _G.GEVENT_UPGRADES = {
-    "MiningEventLessPetsRequiredToComboThem2",
-    --"MiningEventIncreaseTierUpChance2",
-}
-
-_G.GTELEPORT_MINING = false
-_G.GTELEPORT_MINING2 = true
-_G.GTELEPORT_MINING3 = true
-_G.GMINING_EVENT_NEXT_BLOCK_DIRECTION = "Random" -- or "Top", or "Random"(Default)
-
-_G.GAUTO_ENCHANT_PICKAXE = true
-_G.GPICKAXE_ENCHANTS_COUNT = 2
-_G.GPICKAXE_ENCHANTS = {
-    ["Diamond Farmer"] = 5,
-    ["Fortune"] = 4,
-    ["Power Ball"] = 4,
-    --["Gem Upgrade"] = 4,
-    --["Lucky"] = 5,
-    --["Gravity"] = 2,
-    --["XRay"] = 1,
-    --["Explosive"] = 5,
-    --["Fracture"] = 5,
-    --["Lightning"] = 5,
-    --["More Coins"] = 5,
-    --["Replenish"] = 5,
-    --["Player Speed"] = 5,
-    --["Damage"] = 5
+"ConveyorBetterChestLoot",
+"ConveyorHugeChest",
+"ConveyorTitanicChest",
+"ConveyorBetterDrops",
+"ConveyorMoreDamage",
+"ConveyorMoreCoins",
+"ConveyorBetterEggChance",
+"ConveyorFasterConveyor",
+"ConveyorMoreBreakables",
+"ConveyorBreakableHugeChance",
+"ConveyorFasterBreakableSpawning"
 }
 
 _G.GRANK_FIRST = true
