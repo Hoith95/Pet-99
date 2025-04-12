@@ -26,6 +26,9 @@ getgenv().GEVENT_UPGRADES = {
 "ConveyorMoreBreakables",
 "ConveyorBreakableHugeChance",
 "ConveyorFasterBreakableSpawning",
+"ConveyorEasierSlimeMachine",
+"ConveyorMoreGiftBags",
+"ConveyorMoreSlimeTokens",
 }
 
 _G.GRANK_FIRST = true
