@@ -1,20 +1,20 @@
 _G.script2Done = true
 _G.EventDone = true
 
-_G.GEVENT_FPS  = 10
 spawn(function()
 wait(90)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X2"))()
 end)
 
-_G.GLOOTBOXES = {"Locked Hype Egg"}
+getgenv().GEVENT_FPS  = 10
+getgenv().GLOOTBOXES = {"Locked Hype Egg"}
 
-_G.GDO_CONVEYOR_INSTANCE = true
-_G.GCONVEYOR_RESET_UPGRADES = false
-_G.GCONVEYOR_MAX_PETS_LEVEL = 149
-_G.GCONVEYOR_MAX_PETS_TO_BUY = 18 --max 18
+getgenv().GDO_CONVEYOR_INSTANCE = true
+getgenv().GCONVEYOR_MAX_PETS_LEVEL = 141
+getgenv().GCONVEYOR_MAX_PETS_TO_BUY = 2
+getgenv().GCONVEYOR_RESET_UPGRADES = false
 
-_G.GEVENT_UPGRADES = {
+getgenv().GEVENT_UPGRADES = {
 "ConveyorBetterChestLoot",
 "ConveyorHugeChest",
 "ConveyorTitanicChest",
@@ -25,7 +25,7 @@ _G.GEVENT_UPGRADES = {
 "ConveyorFasterConveyor",
 "ConveyorMoreBreakables",
 "ConveyorBreakableHugeChance",
-"ConveyorFasterBreakableSpawning"
+"ConveyorFasterBreakableSpawning",
 }
 
 _G.GRANK_FIRST = true
