@@ -4,22 +4,20 @@ print("Kiểm tra trạng thái Script 1...")
 -- Chờ đến khi trạng thái _G.script2Done là true
 while not _G.script2Done do
     print("Script 1 chưa hoàn thành, đang chờ...")
-    task.wait(1) -- Chờ 1 giây trước khi kiểm tra lại
+    task.wait(1)
 end
 
--- Khi trạng thái là true, thực thi Script Notifier
 print("Script 1 đã hoàn thành. Bắt đầu chạy Script Notifier...")
 
 task.wait(68)
 
--- Yêu cầu các module cần thiết từ ReplicatedStorage để sử dụng trong script.
 local SaveModule = require(game.ReplicatedStorage.Library.Client.Save)
 
--- Bộ chuyển đổi số lượng Diamonds
+-- Bộ chuyển đổi số lượng
 local Formatint = function(int)
     local Suffix = {"", "k", "M", "B", "T", "Qd", "Qn", "Sx", "Sp", "Oc", "No", "De", "UDe", "DDe", "TDe", "QdDe", "QnDe", "SxDe", "SpDe", "OcDe", "NoDe", "Vg", "UVg", "DVg", "TVg", "QdVg", "QnVg", "SxVg", "SpVg", "OcVg", "NoVg", "Tg", "UTg", "DTg", "TTg", "QdTg", "QnTg", "SxTg", "SpTg", "OcTg", "NoTg", "QdAg", "QnAg", "SxAg", "SpAg", "OcAg", "NoAg", "e141", "e144", "e147", "e150", "e153", "e156", "e159", "e162", "e165", "e168", "e171", "e174", "e177", "e180", "e183", "e186", "e189", "e192", "e195", "e198", "e201", "e204", "e207", "e210", "e213", "e216", "e219", "e222", "e225", "e228", "e231", "e234", "e237", "e240", "e243", "e246", "e249", "e252", "e255", "e258", "e261", "e264", "e267", "e270", "e273", "e276", "e279", "e282", "e285", "e288", "e291", "e294", "e297", "e300", "e303"}
     local Index = 1
-    
+
     if int < 999 then 
         return int
     end
@@ -30,68 +28,94 @@ local Formatint = function(int)
     return string.format("%.2f%s", int, Suffix[Index])
 end
 
--- Hàm định dạng thời gian từ giây sang giờ:phút:giây
+-- Định dạng thời gian
 local function formatTime(seconds)
     local hours = math.floor(seconds / 3600)
     local minutes = math.floor((seconds % 3600) / 60)
     local remainingSeconds = math.floor(seconds % 60)
-    
+
     return string.format("%02d:%02d:%02d", hours, minutes, remainingSeconds)
 end
 
--- Lấy PlayerGui của người chơi hiện tại.
+-- Lấy số lượng FactoryCoins
+local function getFactoryCoins()
+    local Inventory = SaveModule.Get().Inventory
+    for _, v in pairs(Inventory.Currency) do 
+        if v.id == "FactoryCoins" then
+            return v._am
+        end
+    end
+    return 0
+end
+
+-- UI hiển thị
 local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
--- Tạo một ScreenGui mới để hiển thị thông báo.
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "NotificationGui"
 screenGui.Parent = playerGui
 
--- Tạo một Frame làm nền cho các thông báo.
 local backgroundFrame = Instance.new("Frame")
-backgroundFrame.Size = UDim2.new(1, 0, 1, 0) -- Phủ 45% màn hình theo chiều dọc
-backgroundFrame.BackgroundColor3 = Color3.new(0, 0, 0) -- Màu nền đen
-backgroundFrame.BackgroundTransparency = 1 -- Nền trong suốt
-backgroundFrame.Position = UDim2.new(0, 0, 0, -70) -- Vị trí bắt đầu từ góc trên bên trái
-backgroundFrame.BorderSizePixel = 0 -- Không có viền
+backgroundFrame.Size = UDim2.new(1, 0, 1, 0)
+backgroundFrame.BackgroundColor3 = Color3.new(0, 0, 0)
+backgroundFrame.BackgroundTransparency = 1
+backgroundFrame.Position = UDim2.new(0, 0, 0, -70)
+backgroundFrame.BorderSizePixel = 0
 backgroundFrame.Parent = screenGui
 
--- Tạo một TextLabel để hiển thị thông báo số lượng Diamonds.
+-- Diamonds
 local diamondLabel = Instance.new("TextLabel", backgroundFrame)
 diamondLabel.Name = "DiamondLabel"
 diamondLabel.Text = "Đang cập nhật Diamonds..."
 diamondLabel.Size = UDim2.new(1, 0, 1/6, 0)
-diamondLabel.Position = UDim2.new(0, 0, 4.8/6, 0)  -- Đặt thông báo số lượng Diamonds lên trên
-diamondLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Màu nền đen
-diamondLabel.BackgroundTransparency = 0.5 -- Nền trong suốt
+diamondLabel.Position = UDim2.new(0, 0, 4.2/6, 0)
+diamondLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+diamondLabel.BackgroundTransparency = 0.5
 diamondLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 diamondLabel.BorderSizePixel = 0
 diamondLabel.TextScaled = true
+diamondLabel.Font = Enum.Font.GothamBold
 
--- Tạo một TextLabel để hiển thị thông báo thời gian chạy.
+-- FactoryCoins
+local factoryCoinLabel = Instance.new("TextLabel", backgroundFrame)
+factoryCoinLabel.Name = "FactoryCoinLabel"
+factoryCoinLabel.Text = "Đang cập nhật Factory Coins..."
+factoryCoinLabel.Size = UDim2.new(1, 0, 1/6, 0)
+factoryCoinLabel.Position = UDim2.new(0, 0, 5/6, 0)
+factoryCoinLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+factoryCoinLabel.BackgroundTransparency = 0.5
+factoryCoinLabel.TextColor3 = Color3.fromRGB(0, 255, 0) -- ✅ Xanh lá cây
+factoryCoinLabel.Font = Enum.Font.GothamBold
+factoryCoinLabel.BorderSizePixel = 0
+factoryCoinLabel.TextScaled = true
+
+-- Thời gian
 local timeLabel = Instance.new("TextLabel", backgroundFrame)
 timeLabel.Name = "TimeLabel"
 timeLabel.Text = "TIMES: 00:00:00"
 timeLabel.Size = UDim2.new(1, 0, 1/6, 0)
-timeLabel.Position = UDim2.new(0, 0, 5.8/6, 0)  -- Đặt thông báo thời gian chạy xuống dưới
-timeLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Màu nền đen
-timeLabel.BackgroundTransparency = 0.5 -- Nền trong suốt
-timeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)  -- Màu chữ trắng
+timeLabel.Position = UDim2.new(0, 0, 5.8/6, 0)
+timeLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+timeLabel.BackgroundTransparency = 0.5
+timeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 timeLabel.Font = Enum.Font.GothamBold
 timeLabel.BorderSizePixel = 0
 timeLabel.TextScaled = true
 
--- Định nghĩa hàm cập nhật thông báo số lượng Diamonds.
-local startTime = tick()  -- Lấy thời gian hiện tại khi script bắt đầu
+-- Cập nhật UI liên tục
+local startTime = tick()
 
--- Tạo một luồng mới để cập nhật thông báo.
 task.spawn(function()
     while true do
-        local currentDiamondValue = game.Players.LocalPlayer.leaderstats["\240\159\146\142 Diamonds"].Value
+        local currentDiamondValue = game.Players.LocalPlayer.leaderstats["💎 Diamonds"].Value
         diamondLabel.Text = "GEMS: " .. Formatint(currentDiamondValue)
         diamondLabel.TextColor3 = Color3.fromRGB(0, 128, 255)
         diamondLabel.Font = Enum.Font.GothamBold
-        timeLabel.Text = "TIMES: " .. formatTime(tick() - startTime)  -- Cập nhật thời gian chạy theo định dạng Giờ:Phút:Giây
-        task.wait(1)  -- Cập nhật mỗi giây
+
+        local currentFactoryCoins = getFactoryCoins()
+        factoryCoinLabel.Text = "COINS: " .. Formatint(currentFactoryCoins)
+
+        timeLabel.Text = "TIMES: " .. formatTime(tick() - startTime)
+        task.wait(1)
     end
 end)
