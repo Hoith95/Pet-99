@@ -18,7 +18,7 @@ getgenv().AutoMail = {
         ['Huge Machine Egg 4'] = { Class = "Egg", Amount = 1 },
         ['Huge Machine Egg 5'] = { Class = "Egg", Amount = 1 },
         ['Doodle Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
-        ['Slime Gift'] = { Class = "Lootbox", MinAmount = 100, Amount = "Max" },
+        ['Slime Gift'] = { Class = "Lootbox", MinAmount = 1000, Amount = "Max" },
         --['Insta Plant Capsule'] = { Class = "Misc", MinAmount = 20, Amount = "Max" },
         --['Seed Bag'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
         --['Mini Pinata'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
