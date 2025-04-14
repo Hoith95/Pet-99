@@ -12,6 +12,7 @@ getgenv().Settings = {
         ["Items"] = {
 	    ["All Titanics"] = {Price = "+1%", AllTypes = true},
             ["All Huges"] = {Price = "+1%", AllTypes = true, Priority = true},
+	    ["Huge Rave Slime"] = {Price = 686868683, Priority = true},
             ["Huge Arcade Dog Card"] = {Price = "+1%", Priority = true, AllTypes = true},
             ["Huge Blurred Axolotl Card"] = {Price = "+5%", Priority = true, AllTypes = true},
             ["Huge Nightmare Dog Card"] = {Price = "+1%", Priority = true, AllTypes = true},
