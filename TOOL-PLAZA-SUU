@@ -10,9 +10,14 @@ getgenv().Settings = {
     Seller = {
         Active = true,
         ["Items"] = {
-	    ["All Titanics"] = {Price = "+1%", AllTypes = true},
-            ["All Huges"] = {Price = "+1%", AllTypes = true, Priority = true},
+	    ["All Titanics"] = {Price = "+1%", AllTypes = true, Priority = true},
+            ["Huge Ooze Cat"] = {Price = "+1%", AllTypes = true, Priority = true},
+            ["Huge Jelly Kitsune"] = {Price = "+1%", AllTypes = true, Priority = true},
+            ["Huge Sticky Lamb"] = {Price = "+1%", AllTypes = true, Priority = true},
+            ["Huge Slimezilla"] = {Price = "+1%", AllTypes = true, Priority = true},
+            ["Huge Chroma Doodle Axolotl"] = {Price = "+1%", AllTypes = true, Priority = true},
 	    ["Huge Rave Slime"] = {Price = 186868683},
+            ["All Huges"] = {Price = "+1%", AllTypes = true, Priority = true},
             ["Huge Arcade Dog Card"] = {Price = "+1%", Priority = true, AllTypes = true},
             ["Huge Blurred Axolotl Card"] = {Price = "+5%", Priority = true, AllTypes = true},
             ["Huge Nightmare Dog Card"] = {Price = "+1%", Priority = true, AllTypes = true},
