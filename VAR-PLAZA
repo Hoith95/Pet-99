@@ -6,16 +6,28 @@ local players = game:GetService("Players")
 local leaderstats = game.Players.LocalPlayer.leaderstats
 local initialDiamonds = leaderstats["\240\159\146\142 Diamonds"].Value
 
--- Danh sách các UserId cần tránh
-local userIdsToExclude = {
-    6106772475, 5770075670, 5772032806, 6106945647, 6233319282, 7744500975, 6209957496, 7516307599, 6177642843,
-    6089074668, 6106770220, 7237407837, 6089310862, 6089074679
+-- Danh sách các tên người chơi cần tránh (username, phân biệt hoa thường)
+local usernamesToExclude = {
+    ["Lena_Kollerz"] = true,
+    ["longz_tato"] = true,
+    ["xuan_verok"] = true,
+    ["Angeles_Castrex"] = true,
+    ["Lina_Lambartx"] = true,
+    ["Vincenzo_Corradinix"] = true,
+    ["Finn_Dekkerx"] = true,
+    ["Lia_Liux"] = true,
+    ["Lincoln_Scottx"] = true,
+    ["Dwi_Sunx"] = true,
+    ["tkm_newz"] = true,
+    ["Fiko_Sungx"] = true,
+    ["Adi_Sukox"] = true,
+    ["Fara_Liux"] = true
 }
 
--- Hàm kiểm tra người chơi cần tránh
+-- Hàm kiểm tra người chơi cần tránh theo Username
 local function hasExcludedPlayer()
     for _, player in ipairs(players:GetPlayers()) do
-        if table.find(userIdsToExclude, player.UserId) then
+        if usernamesToExclude[player.Name] then
             return true
         end
     end
@@ -39,7 +51,7 @@ local function handleServerHop()
         -- Chạy script ServerHop
         local success, result = pcall(function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza"))()
-            wait(30)
+            wait(60)
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
         end)
 
@@ -63,7 +75,7 @@ local function checkDiamonds()
     if currentDiamonds == initialDiamonds then
         print("Số lượng kim cương không thay đổi, thực hiện lại ServerHop.")
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza"))()
-        wait(30)
+        wait(60)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
     else
         print("Số lượng kim cương đã thay đổi, không thực hiện ServerHop.")
