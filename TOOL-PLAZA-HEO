@@ -11,7 +11,6 @@ getgenv().Settings = {
         Active = true,
         ["Items"] = {
 	    ["All Titanics"] = {Price = "+1%", AllTypes = true, Priority = true},
-	    ["Rainbow Titanic Ooze Cat"] = {Price = 26868686868, Priority = true},
             ["Huge Ooze Cat"] = {Price = "+1%", AllTypes = true, Priority = true},
             ["Huge Jelly Kitsune"] = {Price = "+1%", AllTypes = true, Priority = true},
             ["Huge Sticky Lamb"] = {Price = "+1%", AllTypes = true, Priority = true},
