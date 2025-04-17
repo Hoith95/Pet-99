@@ -1,7 +1,7 @@
 _G.script1Done = true
 
 spawn(function()
-wait(183)
+wait(30)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-PLAZA"))()
 end)
 
