@@ -6,32 +6,32 @@ wait(90)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X2"))()
 end)
 
-_G.GLOOTBOXES = {"Locked Hype Egg"}
+getgenv().GLOOTBOXES = {"Locked Hype Egg"}
 
-_G.GPROGRESS_MODE = "Hybrid" -- Hatch
-_G.GGFX_MODE = 1
-_G.GRANK_TO = 99
-_G.GZONE_TO = 299
-_G.GREBIRTH_TO = 99
-_G.GHATCH_SPEED_MS = 0
-_G.GWAIT_AT_GATES_TILL_RANK = 5
-_G.GMAX_EGG_SLOTS = 99
-_G.GMAX_EQUIP_SLOTS = 99
-_G.GHOLD_GIFTS = false
-_G.GHOLD_BUNDLES = false
-_G.GCONSUME_SEED_BAGS = true
-_G.GOPEN_ITEMS_IN_BULK = true
-_G.GMAX_ZONE_UPGRADE_COST = 300000
-_G.GCOLLECT_FREE_ITEMS = true
-_G.GIGNORE_ALL_INSTANCES = true
-_G.GIGNORE_SLEDRACE = false
-_G.GDO_DOODLE_BATTLE = true
-_G.GUSE_SPRINKLERS = true
-_G.GUSE_ULTIMATES = {"Chest Spell","Ground Pound"}
-_G.GUSE_FLAGS = {"Fortune Flag","Diamonds Flag","Coins Flag"}
-_G.GEVENT_ITEMS_TO_USE = {"Mini Pinata","Party Box","Mini Lucky Block"}
-_G.GFRUITS = {"Watermelon","Candycane","Apple","Rainbow","Pineapple","Orange","Banana"}
-_G.GPOTIONS = {"Coins","Lucky","The Cocktail","Huge","Treasure Hunter","Walkspeed","Diamonds","Damage"}
-_G.GPOTIONS_MAX_TIER = 99
-_G.GENCHANTS = {"Criticals","Treasure Hunter","Diamonds","Lucky Eggs","Huge Hunter","Fortune","Strong Pets"}
+getgenv().GPROGRESS_MODE = "Hybrid" -- Hatch
+getgenv().GGFX_MODE = 1
+getgenv().GRANK_TO = 99
+getgenv().GZONE_TO = 299
+getgenv().GREBIRTH_TO = 99
+getgenv().GHATCH_SPEED_MS = 0
+getgenv().GWAIT_AT_GATES_TILL_RANK = 5
+getgenv().GMAX_EGG_SLOTS = 99
+getgenv().GMAX_EQUIP_SLOTS = 99
+getgenv().GHOLD_GIFTS = false
+getgenv().GHOLD_BUNDLES = false
+getgenv().GCONSUME_SEED_BAGS = true
+getgenv().GOPEN_ITEMS_IN_BULK = true
+getgenv().GMAX_ZONE_UPGRADE_COST = 300000
+getgenv().GCOLLECT_FREE_ITEMS = true
+getgenv().GIGNORE_ALL_INSTANCES = true
+getgenv().GIGNORE_SLEDRACE = false
+getgenv().GDO_DOODLE_BATTLE = true
+getgenv().GUSE_SPRINKLERS = true
+getgenv().GUSE_ULTIMATES = {"Chest Spell","Ground Pound"}
+getgenv().GUSE_FLAGS = {"Fortune Flag","Diamonds Flag","Coins Flag"}
+getgenv().GEVENT_ITEMS_TO_USE = {"Mini Pinata","Party Box","Mini Lucky Block"}
+getgenv().GFRUITS = {"Watermelon","Candycane","Apple","Rainbow","Pineapple","Orange","Banana"}
+getgenv().GPOTIONS = {"Coins","Lucky","The Cocktail","Huge","Treasure Hunter","Walkspeed","Diamonds","Damage"}
+getgenv().GPOTIONS_MAX_TIER = 99
+getgenv().GENCHANTS = {"Criticals","Treasure Hunter","Diamonds","Lucky Eggs","Huge Hunter","Fortune","Strong Pets"}
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/ba2dcad2127dcfc04301dfe52ce6c61c.lua"))()
