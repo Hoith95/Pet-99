@@ -8,13 +8,13 @@ _G.script1Done = true
 
 script_key = "hHJqncRPZjHqdvDxwJcwwDmpwstZQtrA";
 task.wait(30)
-_G.GDRY_RUN = false
-_G.DISABLE_OVERLAY = true
+getgenv().GDRY_RUN = false
+getgenv().DISABLE_OVERLAY = true
 
-_G.GMAIL_ITEMS = {
+getgenv().GMAIL_ITEMS = {
   ["Send all Diamonds"] = {Class = "Currency", Id = "Diamonds", KeepAmount = "5m", MinAmount = "10m"},
 }
-_G.GMAIL_RECEIVERS = {"Dwi_Sunx", "Fiko_Sungx", "tkm_newz", "Fara_Liux", "Adi_Sukox"}
-_G.GMAIL_DELAY  = 0
+getgenv().GMAIL_RECEIVERS = {"Dwi_Sunx", "Fiko_Sungx", "tkm_newz", "Fara_Liux", "Adi_Sukox"}
+getgenv().GMAIL_DELAY  = 0
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-ALL"))()
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events2-ALL"))()
