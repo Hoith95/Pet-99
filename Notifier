@@ -37,11 +37,11 @@ local function formatTime(seconds)
     return string.format("%02d:%02d:%02d", hours, minutes, remainingSeconds)
 end
 
--- Lấy số lượng FactoryCoins
-local function getFactoryCoins()
+-- Lấy số lượng EasterCoins
+local function getEasterCoins()
     local Inventory = SaveModule.Get().Inventory
     for _, v in pairs(Inventory.Currency) do 
-        if v.id == "FactoryCoins" then
+        if v.id == "EasterCoins" then
             return v._am
         end
     end
@@ -76,18 +76,18 @@ diamondLabel.BorderSizePixel = 0
 diamondLabel.TextScaled = true
 diamondLabel.Font = Enum.Font.GothamBold
 
--- FactoryCoins
-local factoryCoinLabel = Instance.new("TextLabel", backgroundFrame)
-factoryCoinLabel.Name = "FactoryCoinLabel"
-factoryCoinLabel.Text = "Đang cập nhật Factory Coins..."
-factoryCoinLabel.Size = UDim2.new(1, 0, 1/6, 0)
-factoryCoinLabel.Position = UDim2.new(0, 0, 5/6, 0)
-factoryCoinLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-factoryCoinLabel.BackgroundTransparency = 0.5
-factoryCoinLabel.TextColor3 = Color3.fromRGB(0, 255, 0) -- ✅ Xanh lá cây
-factoryCoinLabel.Font = Enum.Font.GothamBold
-factoryCoinLabel.BorderSizePixel = 0
-factoryCoinLabel.TextScaled = true
+-- EasterCoins
+local easterCoinLabel = Instance.new("TextLabel", backgroundFrame)
+easterCoinLabel.Name = "EasterCoinLabel"
+easterCoinLabel.Text = "Đang cập nhật Easter Coins..."
+easterCoinLabel.Size = UDim2.new(1, 0, 1/6, 0)
+easterCoinLabel.Position = UDim2.new(0, 0, 5/6, 0)
+easterCoinLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+easterCoinLabel.BackgroundTransparency = 0.5
+easterCoinLabel.TextColor3 = Color3.fromRGB(255, 105, 180) -- 🌸 Màu hồng
+easterCoinLabel.Font = Enum.Font.GothamBold
+easterCoinLabel.BorderSizePixel = 0
+easterCoinLabel.TextScaled = true
 
 -- Thời gian
 local timeLabel = Instance.new("TextLabel", backgroundFrame)
@@ -112,8 +112,8 @@ task.spawn(function()
         diamondLabel.TextColor3 = Color3.fromRGB(0, 128, 255)
         diamondLabel.Font = Enum.Font.GothamBold
 
-        local currentFactoryCoins = getFactoryCoins()
-        factoryCoinLabel.Text = "COINS: " .. Formatint(currentFactoryCoins)
+        local currentEasterCoins = getEasterCoins()
+        easterCoinLabel.Text = "COINS: " .. Formatint(currentEasterCoins)
 
         timeLabel.Text = "TIMES: " .. formatTime(tick() - startTime)
         task.wait(1)
