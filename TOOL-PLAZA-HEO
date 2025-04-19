@@ -15,6 +15,7 @@ getgenv().Settings = {
 	    ["Shiny Huge Chocolate Bunny"] = {Price = 2500000000, Priority = true},
 	    ["Golden Huge Chocolate Bunny"] = {Price = 1500000000, Priority = true},
             ["Huge Chocolate Bunny"] = {Price = 1000000000, Priority = true},
+            ["Huge Easter Lamb"] = {Price = 16800000, Priority = true},
             ["All Huges"] = {Price = "+1%", AllTypes = true, Priority = true},
             ["Huge Arcade Dog Card"] = {Price = "+1%", Priority = true, AllTypes = true},
             ["Huge Blurred Axolotl Card"] = {Price = "+5%", Priority = true, AllTypes = true},
