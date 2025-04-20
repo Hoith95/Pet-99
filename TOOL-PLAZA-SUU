@@ -22,6 +22,7 @@ getgenv().Settings = {
 	    ["Rainbow Huge Rave Slime"] = {Price = 68686868, Priority = true},
 	    ["Shiny Huge Rave Slime"] = {Price = 58686868, Priority = true},
 	    ["Golden Huge Rave Slime"] = {Price = 45686868, Priority = true},
+	    ["Huge Marshmallow Kitsune"] = {Price = "+1%", AllTypes = true, Priority = true},
             ["All Huges"] = {Price = "+1%", AllTypes = true},
             ["Huge Arcade Dog Card"] = {Price = "+1%", Priority = true, AllTypes = true},
             ["Huge Blurred Axolotl Card"] = {Price = "+5%", Priority = true, AllTypes = true},
