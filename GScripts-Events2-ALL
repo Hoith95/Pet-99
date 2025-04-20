@@ -10,6 +10,7 @@ getgenv().GEVENT_FPS  = 15
 getgenv().GLOOTBOXES = {"Locked Hype Egg"}
 
 getgenv().GDO_EASTER_EVENT = true
+getgenv().GAUTO_UPGRADE_PETS = true
 
 getgenv().GRANK_FIRST = true
 getgenv().GZONE_TO = 999
