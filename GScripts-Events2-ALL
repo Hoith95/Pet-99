@@ -21,7 +21,8 @@ getgenv().GGFX_MODE = 1
 
 getgenv().GHATCH_SPEED_MS = 0
 getgenv().GHATCH_GOLDEN_EGGS = false
-getgenv().GMAX_HATCH = 30
+getgenv().GCLEAR_FAVORITE_PETS = true
+getgenv().GMAX_HATCH = 99
 
 getgenv().GWAIT_AT_GATES_TILL_RANK = 5
 getgenv().GMAX_EGG_SLOTS = 99
@@ -44,5 +45,5 @@ getgenv().GPOTIONS = {"Coins","Lucky","The Cocktail","Huge","Treasure Hunter","W
 getgenv().GPOTIONS_MAX_TIER = 99
 --getgenv().GENCHANTS = {"Criticals","Lucky Eggs","Huge Hunter","Diamonds","Treasure Hunter","Strong Pets","Tap Power","Diamonds","Lucky Eggs"}
 --getgenv().GENCHANTS = {"Criticals","Lucky Eggs","Huge Hunter","Tap Power","Strong Pets","Super Lightning","Treasure Hunter","Diamonds","Lucky Eggs"}
-getgenv().GENCHANTS = {"Criticals","Lucky Eggs","Huge Hunter","Tap Power","Coins","Strong Pets","Lucky Eggs"}
+getgenv().GENCHANTS = {"Criticals","Lucky Eggs","Huge Hunter","Tap Power","Coins","Strong Pets"}
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/ba2dcad2127dcfc04301dfe52ce6c61c.lua"))()
