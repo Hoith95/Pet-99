@@ -1,8 +1,10 @@
 spawn(function()
     while true do
         --game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(9345.02, 211.24, -11318.07)
-        --MAPS 99
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-64.89, 159.77, 6430.60)
+    --MAPS 99
+        --game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-64.89, 159.77, 6430.60)
+    -- EVENT
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1427, 16.47, -22469)
         wait(368)  -- Chờ 368 giây để tiếp tục spam ngay lập tức
     end
 end)
