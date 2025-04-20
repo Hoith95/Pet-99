@@ -1,0 +1,68 @@
+-- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
+if _G.EQPETS then
+    warn("Script đã được chạy trước đó!")
+    return -- Dừng script nếu đã chạy
+end
+
+-- Đánh dấu script đã được chạy
+_G.EQPETS = true
+
+game:GetService("ReplicatedStorage").Network.Pets_ToggleFavoriteMode:FireServer()
+task.wait(1)
+
+-- Trang Bị Pet Rainbow Easter Angelus
+task.wait(1)
+local ohString3 = "c3792b7d950945a4906b17dd5fba5fdc"
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
+
+-- Trang Bị Pet Rainbow Easter Dominus
+task.wait(1)
+local ohString2 = "ae6865c0f3c44bc2b2938704bf885bf3"
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
+
+-- Trang Bị Pet Rainbow The Easter Bunny
+task.wait(1)
+local ohString1 = "9b081ef55cda47199aef70e1b04447c9"
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
+game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
