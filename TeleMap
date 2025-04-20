@@ -1,3 +1,12 @@
+-- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
+if _G.TELEMAP then
+    warn("Script đã được chạy trước đó!")
+    return -- Dừng script nếu đã chạy
+end
+
+-- Đánh dấu script đã được chạy
+_G.TELEMAP = true
+
 spawn(function()
     while true do
         --game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(9345.02, 211.24, -11318.07)
