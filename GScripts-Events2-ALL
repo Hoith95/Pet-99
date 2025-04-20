@@ -18,7 +18,11 @@ getgenv().GRANK_TO= 33
 
 getgenv().GPROGRESS_MODE = "Hybrid" -- Hatch
 getgenv().GGFX_MODE = 1
+
 getgenv().GHATCH_SPEED_MS = 0
+getgenv().GHATCH_GOLDEN_EGGS = false
+getgenv().GMAX_HATCH = 30
+
 getgenv().GWAIT_AT_GATES_TILL_RANK = 5
 getgenv().GMAX_EGG_SLOTS = 99
 getgenv().GMAX_EQUIP_SLOTS = 99
