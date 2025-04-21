@@ -1,0 +1,51 @@
+local Players = game:GetService("Players")
+
+-- Danh sách các tên người chơi cần tránh (username, phân biệt hoa thường)
+local usernamesToExclude = {
+    ["Lena_Kollerz"] = true,
+    ["longz_tato"] = true,
+    ["xuan_verok"] = true,
+    ["Angeles_Castrex"] = true,
+    ["Lina_Lambartx"] = true,
+    ["Vincenzo_Corradinix"] = true,
+    ["Finn_Dekkerx"] = true,
+    ["Lia_Liux"] = true,
+    ["Lincoln_Scottx"] = true,
+    ["Dwi_Sunx"] = true,
+    ["tkm_newz"] = true,
+    ["Fiko_Sungx"] = true,
+    ["Adi_Sukox"] = true,
+    ["Fara_Liux"] = true
+}
+
+-- Hàm kiểm tra và ServerHop nếu phát hiện người cần tránh
+local function checkAndHop()
+    for _, player in ipairs(Players:GetPlayers()) do
+        if usernamesToExclude[player.Name] then
+            print("Có người chơi cần tránh, chạy ServerHop.")
+
+            local success, result = pcall(function()
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza"))()
+                wait(60)
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
+            end)
+
+            if not success then
+                warn("Lỗi khi thực hiện ServerHop: " .. result)
+            end
+
+            return -- Dừng vòng lặp nếu đã hop
+        end
+    end
+
+    print("Không có người chơi cần tránh trong server.")
+end
+
+-- Kiểm tra ban đầu
+checkAndHop()
+
+-- Lặp lại kiểm tra mỗi 5 phút
+while true do
+    task.wait(300) -- 5 phút
+    checkAndHop()
+end
