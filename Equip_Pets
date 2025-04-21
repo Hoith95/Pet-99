@@ -7,62 +7,59 @@ end
 -- Đánh dấu script đã được chạy
 _G.EQPETS = true
 
-game:GetService("ReplicatedStorage").Network.Pets_ToggleFavoriteMode:FireServer()
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Network = ReplicatedStorage.Network
+
+-- Bật chế độ yêu thích
+Network.Pets_ToggleFavoriteMode:FireServer()
 task.wait(1)
 
--- Trang Bị Pet Rainbow Easter Angelus
-task.wait(1)
-local ohString3 = "c3792b7d950945a4906b17dd5fba5fdc"
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString3)
+-- Danh sách Huge Pet theo thứ tự ưu tiên
+local hugePets = {
+    -- Rainbow
+    {id = "2d34fcae592f4d30a4c6a22b3385f4a5", count = 15, name = "Huge Basket Bunny - Rainbow"},
+    {id = "77354f7559a845b885dbcd42e510dc4c", count = 15, name = "Huge Basket Bunny - Rainbow, Shiny"},
+    {id = "45fec222946140d78c7ea8d24f89c71a", count = 15, name = "Huge Marshmallow Kitsune - Rainbow"},
 
--- Trang Bị Pet Rainbow Easter Dominus
-task.wait(1)
-local ohString2 = "ae6865c0f3c44bc2b2938704bf885bf3"
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString2)
+    -- Shiny
+    {id = "37529e150ae74f43b37a09d4580ddeb1", count = 15, name = "Huge Basket Bunny - Shiny"},
+    {id = "51b7ea4f0556457ab68c859cfb07a1ae", count = 15, name = "Huge Basket Bunny - Golden, Shiny"},
 
--- Trang Bị Pet Rainbow The Easter Bunny
-task.wait(1)
-local ohString1 = "9b081ef55cda47199aef70e1b04447c9"
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
-game:GetService("ReplicatedStorage").Network.Pets_Favorite:FireServer(ohString1)
+    -- Golden
+    {id = "d4336138d697497789c6999e16dcf17b", count = 15, name = "Huge Chocolate Bunny - Golden"},
+    {id = "46e3c0b356ec4790a4abbfcc359a4109", count = 15, name = "Huge Basket Bunny - Golden"},
+    {id = "943a1598fed94a2a96e52fa2c08e5f80", count = 15, name = "Huge Marshmallow Kitsune - Golden"},
+
+    -- Thường
+    {id = "4588866f08e34fc38c64d080d304c175", count = 15, name = "Huge Chocolate Bunny"},
+    {id = "dc5f1cf753c74fe48a2b5b22f8b35025", count = 15, name = "Huge Basket Bunny"},
+    {id = "809e55940dd9471f86afffcbfc864770", count = 15, name = "Huge Marshmallow Kitsune"},
+}
+
+-- Pet thường (trang bị sau cùng)
+local regularPets = {
+    {id = "c3792b7d950945a4906b17dd5fba5fdc", count = 15, name = "Rainbow Easter Angelus"},
+    {id = "ae6865c0f3c44bc2b2938704bf885bf3", count = 15, name = "Rainbow Easter Dominus"},
+    {id = "9b081ef55cda47199aef70e1b04447c9", count = 15, name = "Rainbow The Easter Bunny"},
+}
+
+-- Hàm trang bị danh sách pet có in log
+local function equipPets(petList)
+    for _, pet in ipairs(petList) do
+        task.wait(0.1)
+        print("🧸 Trang bị: " .. pet.name .. " x" .. pet.count)
+        for i = 1, pet.count do
+            Network.Pets_Favorite:FireServer(pet.id)
+        end
+    end
+end
+
+-- Trang bị Huge trước
+print("🚀 Bắt đầu trang bị Huge Pets...")
+equipPets(hugePets)
+
+-- Trang bị pet thường sau
+print("🎁 Trang bị các pet thường...")
+equipPets(regularPets)
+
+print("✅ Trang bị hoàn tất!")
