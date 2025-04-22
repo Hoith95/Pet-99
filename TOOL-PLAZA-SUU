@@ -41,6 +41,7 @@ getgenv().Settings = {
 	    --["Lucky Eggs 9"] = {Class = "Enchant", Price = "+1%"},
 	    --["Charm Stone"] = {Class = "Misc", Price = 20000},
 	    --["Mini Pinata"] = {Price = 45000},
+	    ["MVP Key"] = {Price = 6868868},
 	    --["Secret Key"] = {Price = 25000},
 	    --["Void Key"] = {Price = 38000},
 	    --["Tech Key"] = {Price = 25000},
