@@ -43,6 +43,7 @@ getgenv().Settings = {
 	    --["Overload"] = {Price = "+5%"},
 	    --["Royalty"] = {Price = "+5%"},
 	    --["Mini Pinata"] = {Price = 45000},
+	    ["MVP Key"] = {Price = 6868868},
 	    --["Secret Key"] = {Price = 25000},
 	    --["Void Key"] = {Price = 38000},
 	    --["Tech Key"] = {Price = 25000},
