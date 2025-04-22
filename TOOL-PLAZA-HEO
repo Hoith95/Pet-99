@@ -11,6 +11,7 @@ getgenv().Settings = {
         Active = true,
         ["Items"] = {
 	    ["All Titanics"] = {Price = "+1%", AllTypes = true, Priority = true},
+	    ["MVP Key"] = {Price = "+5", Priority = true},
 	    ["Rainbow Huge Basket Bunny"] = {Price = "+1%", Priority = true},
 	    ["Huge Basket Bunny"] = {Price = 10686868},
             --["All Huges"] = {Price = "+1%", AllTypes = true},
@@ -44,7 +45,6 @@ getgenv().Settings = {
 	    --["Overload"] = {Price = "+5%"},
 	    --["Royalty"] = {Price = "+5%"},
 	    --["Mini Pinata"] = {Price = 45000},
-	    ["MVP Key"] = {Price = 6868868},
 	    --["Secret Key"] = {Price = 25000},
 	    --["Void Key"] = {Price = 38000},
 	    --["Tech Key"] = {Price = 25000},
