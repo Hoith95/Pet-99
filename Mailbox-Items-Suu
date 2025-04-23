@@ -49,16 +49,14 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
     end
 
     local Queue = {}
-    local AnyItemsSent = false  
+    local AnyItemsSent = false
 
     for Class, Items in pairs(SaveModule.Get()['Inventory']) do
         for uid, v in pairs(Items) do
-            local PetCheck = (Class == "Pet") and string.find(v.id, "Huge")
             local Config = false
 
             for Id, Info in pairs(AutoMail['Items']) do
                 local isVariant = Info.AllVariants and string.find(v.id, Id)
-
                 local isValid = true
                 if Info.pt and Info.pt ~= v.pt then isValid = false end
                 if Info.sh and Info.sh ~= v.sh then isValid = false end
@@ -83,7 +81,8 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
                 end
             end
 
-            if Class == "Egg" or Config or PetCheck and not Queue[uid] then
+            -- ✅ Sửa chỗ này để bỏ qua Huge Pet nếu không có trong config
+            if (Class == "Egg" or Config) and not Queue[uid] then
                 Queue[uid] = { Class = Class, Info = v }
             end
         end
