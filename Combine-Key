@@ -11,9 +11,9 @@ local l_Save = require(game:GetService("ReplicatedStorage").Library.Client.Save)
 local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local keyPairs = {
-    ["Lucky Raid Boss Key"] = {
-        halves = {"Lucky Raid Boss Key Lower Half", "Lucky Raid Boss Key Upper Half"},
-        combineFunction = "LuckyRaidBossKey_Combine"
+    ["MVP Key"] = {
+        halves = {"MVP Key Lower Half", "MVP Key Upper Half"},
+        combineFunction = "MVPKey_Combine"
     },
     ["Tech Key"] = {
         halves = {"Tech Key Lower Half", "Tech Key Upper Half"},
@@ -46,19 +46,22 @@ local function checkKeys()
     end
 
     for _, data in pairs(keyPairs) do
-        if foundKeyHalves[data.halves[1]] and foundKeyHalves[data.halves[2]] then
+        local half1 = foundKeyHalves[data.halves[1]] or 0
+        local half2 = foundKeyHalves[data.halves[2]] or 0
+        local combineCount = math.min(half1, half2)
+
+        if combineCount >= 5 then
             local combineFunction = replicatedStorage.Network:FindFirstChild(data.combineFunction)
             if combineFunction then
-                combineFunction:InvokeServer(1)
+                combineFunction:InvokeServer(5)
             end
         end
     end
 end
 
-
 task.spawn(function()
     while true do
         checkKeys()
-        task.wait(1) -- Adjust interval as needed
+        task.wait(1) -- Điều chỉnh tần suất gọi nếu cần
     end
 end)
