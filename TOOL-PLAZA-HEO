@@ -11,7 +11,7 @@ getgenv().Settings = {
         Active = true,
         ["Items"] = {
 	    ["All Titanics"] = {Price = "+1%", AllTypes = true, Priority = true},
-	    ["MVP Key"] = {Price = "+5", Priority = true},
+	    ["MVP Key"] = {Price = "+1", Priority = true},
 	    ["Rainbow Huge Basket Bunny"] = {Price = "+1%", Priority = true},
 	    ["Golden Huge Basket Bunny"] = {Price = 18686868, Priority = true},
 	    ["Rainbow Huge Marshmallow Kitsune"] = {Price = "+1%", Priority = true},
