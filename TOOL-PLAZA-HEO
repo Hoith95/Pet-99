@@ -12,7 +12,7 @@ getgenv().Settings = {
         ["Items"] = {
 	    ["All Titanics"] = {Price = "+1%", AllTypes = true, Priority = true},
 	    ["MVP Key"] = {Price = "+1", Priority = true},
-            ["All Huges"] = {Price = "+5%", AllTypes = true},
+            ["All Huges"] = {Price = "+5%", AllTypes = true, Priority = true},
 	    --["Onyx Gem"] = {Price = "+1%"},
 	    --["Topaz Gem"] = {Price = "+1%"},
 	    --["Quartz Gem"] = {Price = "+1%"},
