@@ -22,7 +22,7 @@ getgenv().Settings = {
 	    --["Emerald Gem"] = {Price = "+1%"},
 	    --["Ruby Gem"] = {Price = "+1%"},
 	    --["Sapphire Gem"] = {Price = "+1%"},
-	    --["Slime Gift"] = {Price = "+15%"},
+	    ["Slime Gift"] = {Price = "+1%"},
 	    ["Lucky Gift"] = {Price = "+15%", Priority = true},
 	    ["Love Gift"] = {Price = "+1%", Priority = true},
 	    ["Retro Pack"] = {Price = "+1%", Priority = true},
