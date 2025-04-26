@@ -18,7 +18,7 @@ getgenv().GEVENT_UPGRADES = {
     { Id = "EasterChestMorePoints", MaxTier = 25 },
     { Id = "EasterChestDamage", MaxTier = 30 },
     { Id = "EasterChestBetterLoot", MaxTier = 9 },
-    { Id = "EasterChestLevel", MaxTier = 30 },
+    { Id = "EasterChestLevel", MaxTier = 29 },
     { Id = "EasterRainbowChestChance", MaxTier = 25 },
     { Id = "EasterShinyChestChance", MaxTier = 25 },
     { Id = "EasterGoldChestChance", MaxTier = 25 },
