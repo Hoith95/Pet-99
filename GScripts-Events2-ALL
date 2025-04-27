@@ -12,9 +12,9 @@ getgenv().GLOOTBOXES = {"Locked Hype Egg"}
 getgenv().GDO_EASTER_EVENT = true
 getgenv().GAUTO_UPGRADE_PETS = true
 getgenv().GDO_SECRET_ROOM = false
-getgenv().GRESET_UPGRADES = false
+getgenv().GRESET_UPGRADES = true
 getgenv().GEVENT_UPGRADES = {
-    { Id = "EasterEggLevel", MaxTier = 9 },
+    { Id = "EasterEggLevel", MaxTier = 0 },
     { Id = "EasterChestMorePoints", MaxTier = 25 },
     { Id = "EasterChestDamage", MaxTier = 30 },
     { Id = "EasterChestBetterLoot", MaxTier = 9 },
