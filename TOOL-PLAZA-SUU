@@ -22,7 +22,7 @@ getgenv().Settings = {
             ["Rainbow Huge Spring Bee"] = {Price = 200000000, Priority = true},
             ["Shiny Huge Spring Bee"] = {Price = 183000000, Priority = true},
             ["Golden Huge Spring Bee"] = {Price = 168000000, Priority = true},
-            ["All Huges"] = {Price = "+5%", AllTypes = true},
+            ["All Huges"] = {Price = "+3%", AllTypes = true},
 	    --["Onyx Gem"] = {Price = "+1%"},
 	    --["Topaz Gem"] = {Price = "+1%"},
 	    --["Quartz Gem"] = {Price = "+1%"},
