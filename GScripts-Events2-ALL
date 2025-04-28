@@ -12,16 +12,16 @@ getgenv().GLOOTBOXES = {"Locked Hype Egg"}
 getgenv().GDO_EASTER_EVENT = true
 getgenv().GAUTO_UPGRADE_PETS = true
 getgenv().GDO_SECRET_ROOM = false
-getgenv().GRESET_UPGRADES = false
+getgenv().GRESET_UPGRADES = true
 getgenv().GEVENT_UPGRADES = {
     { Id = "EasterEggLevel", MaxTier = 0 },
-    { Id = "EasterChestMorePoints", MaxTier = 25 },
-    { Id = "EasterChestDamage", MaxTier = 30 },
     { Id = "EasterChestBetterLoot", MaxTier = 9 },
-    { Id = "EasterChestLevel", MaxTier = 29 },
-    { Id = "EasterRainbowChestChance", MaxTier = 25 },
-    { Id = "EasterShinyChestChance", MaxTier = 25 },
-    { Id = "EasterGoldChestChance", MaxTier = 25 },
+    { Id = "EasterChestMorePoints", MaxTier = 18 },
+    { Id = "EasterChestDamage", MaxTier = 20 },
+    { Id = "EasterChestLevel", MaxTier = 37 },
+    --{ Id = "EasterRainbowChestChance", MaxTier = 25 },
+    --{ Id = "EasterShinyChestChance", MaxTier = 25 },
+    --{ Id = "EasterGoldChestChance", MaxTier = 25 },
 }
 
 getgenv().GRANK_FIRST = true
@@ -50,7 +50,7 @@ getgenv().GIGNORE_ALL_INSTANCES = true
 getgenv().GIGNORE_SLEDRACE = false
 getgenv().GDO_DOODLE_BATTLE = true
 getgenv().GUSE_SPRINKLERS = true
-getgenv().GUSE_ULTIMATES = {"Chest Spell","Ground Pound"}
+getgenv().GUSE_ULTIMATES = {"Pet Surge", "Chest Spell","Ground Pound"}
 getgenv().GUSE_FLAGS = {"Fortune Flag","Diamonds Flag","Coins Flag"}
 getgenv().GEVENT_ITEMS_TO_USE = {"Mini Pinata","Party Box","Mini Lucky Block"}
 getgenv().GFRUITS = {"Watermelon","Candycane","Apple","Rainbow","Pineapple","Orange","Banana"}
