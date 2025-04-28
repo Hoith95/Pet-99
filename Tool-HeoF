@@ -12,7 +12,7 @@ getgenv().GDRY_RUN = false
 getgenv().DISABLE_OVERLAY = true
 
 getgenv().GMAIL_ITEMS = {
-  ["Send all Diamonds"] = {Class = "Currency", Id = "Diamonds", KeepAmount = "5m", MinAmount = "10m"},
+  ["Send all Diamonds"] = {Class = "Currency", Id = "Diamonds", KeepAmount = "5m", MinAmount = "20m"},
 }
 getgenv().GMAIL_RECEIVERS = {"Lena_Kollerz", "longz_tato", "xuan_verok", "Angeles_Castrex", "Lina_Lambartx", "Vincenzo_Corradinix", "Finn_Dekkerx", "Lia_Liux", "Lincoln_Scottx"}
 getgenv().GMAIL_DELAY  = 0
