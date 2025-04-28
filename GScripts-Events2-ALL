@@ -19,9 +19,9 @@ getgenv().GEVENT_UPGRADES = {
     { Id = "EasterChestMorePoints", MaxTier = 17 },
     { Id = "EasterChestDamage", MaxTier = 20 },
     { Id = "EasterChestLevel", MaxTier = 37 },
-    --{ Id = "EasterRainbowChestChance", MaxTier = 25 },
-    --{ Id = "EasterShinyChestChance", MaxTier = 25 },
-    --{ Id = "EasterGoldChestChance", MaxTier = 25 },
+    --{ Id = "EasterRainbowChestChance", MaxTier = 15 },
+    --{ Id = "EasterShinyChestChance", MaxTier = 15 },
+    --{ Id = "EasterGoldChestChance", MaxTier = 15 },
 }
 
 getgenv().GRANK_FIRST = true
@@ -35,7 +35,7 @@ getgenv().GGFX_MODE = 1
 getgenv().GHATCH_SPEED_MS = 0
 getgenv().GHATCH_GOLDEN_EGGS = false
 getgenv().GCLEAR_FAVORITE_PETS = false
-getgenv().GMAX_HATCH = 68
+getgenv().GMAX_HATCH = 50
 
 getgenv().GWAIT_AT_GATES_TILL_RANK = 5
 getgenv().GMAX_EGG_SLOTS = 99
