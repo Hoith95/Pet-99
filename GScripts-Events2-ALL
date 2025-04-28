@@ -16,7 +16,7 @@ getgenv().GRESET_UPGRADES = true
 getgenv().GEVENT_UPGRADES = {
     { Id = "EasterEggLevel", MaxTier = 0 },
     { Id = "EasterChestBetterLoot", MaxTier = 9 },
-    { Id = "EasterChestMorePoints", MaxTier = 16 },
+    { Id = "EasterChestMorePoints", MaxTier = 17 },
     { Id = "EasterChestDamage", MaxTier = 20 },
     { Id = "EasterChestLevel", MaxTier = 37 },
     --{ Id = "EasterRainbowChestChance", MaxTier = 25 },
