@@ -35,7 +35,7 @@ getgenv().GGFX_MODE = 1
 getgenv().GHATCH_SPEED_MS = 0
 getgenv().GHATCH_GOLDEN_EGGS = false
 getgenv().GCLEAR_FAVORITE_PETS = false
-getgenv().GMAX_HATCH = 50
+getgenv().GMAX_HATCH = 68
 
 getgenv().GWAIT_AT_GATES_TILL_RANK = 5
 getgenv().GMAX_EGG_SLOTS = 99
