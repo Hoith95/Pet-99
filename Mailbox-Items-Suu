@@ -21,7 +21,7 @@ getgenv().AutoMail = {
         ['Slime Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
         ['Titanic Easter Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
         ['Huge Easter Gift'] = { Class = "Lootbox", MinAmount = 50, Amount = "Max" },
-        --['Insta Plant Capsule'] = { Class = "Misc", MinAmount = 1, Amount = "Max" },
+        ['Insta Plant Capsule'] = { Class = "Misc", MinAmount = 1, Amount = "Max" },
         ['MVP Key'] = { Class = "Misc", MinAmount = 1, Amount = "Max" },
         --['Easter Secret Key'] = { Class = "Misc", MinAmount = 500, Amount = "Max" },
         --['Seed Bag'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
