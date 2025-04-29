@@ -15,13 +15,13 @@ getgenv().GDO_SECRET_ROOM = false
 getgenv().GRESET_UPGRADES = false
 getgenv().GEVENT_UPGRADES = {
     { Id = "EasterEggLevel", MaxTier = 0 },
+    { Id = "EasterChestLevel", MaxTier = 36 },
+    { Id = "EasterRainbowChestChance", MaxTier = 25 },
+    { Id = "EasterShinyChestChance", MaxTier = 25 },
+    { Id = "EasterChestMorePoints", MaxTier = 25 },
+    { Id = "EasterChestDamage", MaxTier = 30 },
     { Id = "EasterChestBetterLoot", MaxTier = 9 },
-    { Id = "EasterChestMorePoints", MaxTier = 17 },
-    { Id = "EasterChestDamage", MaxTier = 20 },
-    { Id = "EasterChestLevel", MaxTier = 37 },
-    { Id = "EasterRainbowChestChance", MaxTier = 13 },
-    { Id = "EasterShinyChestChance", MaxTier = 13 },
-    { Id = "EasterGoldChestChance", MaxTier = 13 },
+    { Id = "EasterGoldChestChance", MaxTier = 25 },
 }
 
 getgenv().GRANK_FIRST = true
