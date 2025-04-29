@@ -1,0 +1,48 @@
+-- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
+if _G.EUPGD then
+    warn("Script đã được chạy trước đó!")
+    return -- Dừng script nếu đã chạy
+end
+
+-- Đánh dấu script đã được chạy
+_G.EUPGD = true
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Network = ReplicatedStorage:WaitForChild("Network")
+local purchaseEvent = Network:WaitForChild("EventUpgrades: Purchase")
+
+-- Hàm thực hiện nâng cấp, dừng nếu gặp lỗi
+local function purchaseUpgrade(upgradeName, times, delay)
+	for i = 1, times do
+		local success, result = pcall(function()
+			return purchaseEvent:InvokeServer(upgradeName)
+		end)
+
+		if not success or result == false then
+			warn(`Failed to upgrade {upgradeName} at attempt {i}: {result}`)
+			break
+		end
+
+		task.wait(delay or 0.5)
+	end
+end
+
+-- Reset
+Network:WaitForChild("EasterUpgrades_Reset"):InvokeServer()
+task.wait(3)
+
+-- Danh sách nâng cấp và số lần mua
+local upgradeList = {
+	{ name = "EasterChestBetterLoot", times = 9 },
+	{ name = "EasterChestLevel", times = 36 },
+	{ name = "EasterChestDamage", times = 20 },
+	{ name = "EasterChestMorePoints", times = 18 },
+	{ name = "EasterGoldChestChance", times = 13 },
+	{ name = "EasterRainbowChestChance", times = 13 },
+	{ name = "EasterShinyChestChance", times = 13 },
+}
+
+-- Tiến hành nâng cấp lần lượt
+for _, upgrade in ipairs(upgradeList) do
+	purchaseUpgrade(upgrade.name, upgrade.times)
+end
