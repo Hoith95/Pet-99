@@ -12,8 +12,8 @@ getgenv().Settings = {
         ["Items"] = {
 	    ["All Titanics"] = {Price = "+1%", AllTypes = true, Priority = true},
 	    ["MVP Key"] = {Price = "+1", Priority = true},
-	    ["Easter Secret Key"] = {Price = "+9", Priority = true},
-	    ["Titanic Easter Gift"] = {Price = "+5%", Priority = true},
+	    ["Easter Secret Key"] = {Price = "+5", Priority = true},
+	    ["Titanic Easter Gift"] = {Price = "+9%", Priority = true},
 	    ["Huge Easter Gift"] = {Price = "+1%", Priority = true},
             ["Huge Easter Fox"] = {Price = 13686868, Priority = true},
             ["Golden Huge Easter Fox"] = {Price = 14686868, Priority = true},
