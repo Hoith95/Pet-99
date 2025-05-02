@@ -17,6 +17,8 @@ getgenv().Settings = {
 	    ["Huge Easter Gift"] = {Price = "+1%", Priority = true},
             ["Huge Easter Fox"] = {Price = 13686868, Priority = true},
             ["Golden Huge Easter Fox"] = {Price = 14686868, Priority = true},
+            ["Huge Ooze Cat"] = {Price = "+1%", Priority = true},
+            ["Golden Huge Ooze Cat"] = {Price = "+1%", Priority = true},
             ["Huge Basket Bunny"] = {Price = "+1%", AllTypes = true, Priority = true},
             ["Huge Easter Lamb"] = {Price = "+1%", AllTypes = true, Priority = true},
             ["Huge Chocolate Bunny"] = {Price = "+1%", AllTypes = true, Priority = true},
