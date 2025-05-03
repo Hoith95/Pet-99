@@ -9,21 +9,6 @@ end)
 getgenv().GEVENT_FPS  = 15
 getgenv().GLOOTBOXES = {"Locked Hype Egg"}
 
-getgenv().GDO_EASTER_EVENT = true
-getgenv().GAUTO_UPGRADE_PETS = true
-getgenv().GDO_SECRET_ROOM = false
-getgenv().GRESET_UPGRADES = false
-getgenv().GEVENT_UPGRADES = {
-    --{ Id = "EasterEggLevel", MaxTier = 0 },
-    --{ Id = "EasterChestLevel", MaxTier = 36 },
-    { Id = "EasterRainbowChestChance", MaxTier = 25 },
-    { Id = "EasterShinyChestChance", MaxTier = 25 },
-    { Id = "EasterChestMorePoints", MaxTier = 25 },
-    { Id = "EasterChestDamage", MaxTier = 30 },
-    { Id = "EasterChestBetterLoot", MaxTier = 9 },
-    { Id = "EasterGoldChestChance", MaxTier = 25 },
-}
-
 getgenv().GRANK_FIRST = true
 getgenv().GZONE_TO = 999
 getgenv().GREBIRTH_TO = 9
@@ -59,5 +44,6 @@ getgenv().GPOTIONS_MAX_TIER = 99
 --getgenv().GENCHANTS = {"Criticals","Lucky Eggs","Huge Hunter","Diamonds","Treasure Hunter","Strong Pets","Tap Power","Diamonds","Lucky Eggs"}
 --getgenv().GENCHANTS = {"Criticals","Lucky Eggs","Huge Hunter","Tap Power","Strong Pets","Super Lightning","Treasure Hunter","Diamonds","Lucky Eggs"}
 --getgenv().GENCHANTS = {"Criticals","Lucky Eggs","Huge Hunter","Tap Power","Coins","Strong Pets"}
-getgenv().GENCHANTS = {"Criticals","Lucky Eggs","Huge Hunter","Tap Power","Tap Power","Coins"}
+--getgenv().GENCHANTS = {"Criticals","Lucky Eggs","Huge Hunter","Tap Power","Tap Power","Coins"}
+getgenv().GENCHANTS = {"Lucky Eggs","Lucky Eggs","Huge Hunter","Shiny Hunter","Diamonds","Treasure Hunter"}
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/ba2dcad2127dcfc04301dfe52ce6c61c.lua"))()
