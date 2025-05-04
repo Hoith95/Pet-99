@@ -10,21 +10,35 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local purchaseEvent = ReplicatedStorage.Network.EventBoatMerchant_Purchase
 local spawnEvent = ReplicatedStorage.Network.Boats_RequestSpawn
 
--- Danh sách thuyền ưu tiên từ cao đến thấp
 local boats = {"Boat 5", "Boat 4", "Boat 3", "Boat 2", "Boat 1"}
+local spawned = false
 
 for _, boatName in ipairs(boats) do
     local success, result = pcall(function()
         return purchaseEvent:InvokeServer(boatName)
     end)
 
-    if success and result == true then -- Kiểm tra mua thành công
+    if success and result == true then
         wait(1)
         spawnEvent:InvokeServer(boatName)
-        print("Đã mua và gọi thuyền: " .. boatName)
-        break -- Dừng lại sau khi đã thành công với loại cao nhất có thể
+        print("✅ Đã mua và gọi thuyền: " .. boatName)
+        spawned = true
+        break
     else
-        print("Không thể mua: " .. boatName)
+        print("⚠️ Không thể mua: " .. boatName)
+    end
+end
+
+-- Nếu không mua được cái nào, thử gọi luôn (có thể đã sở hữu rồi)
+if not spawned then
+    for _, boatName in ipairs(boats) do
+        local success = pcall(function()
+            spawnEvent:InvokeServer(boatName)
+        end)
+        if success then
+            print("🚢 Đã gọi thuyền đã sở hữu: " .. boatName)
+            break
+        end
     end
 end
 
