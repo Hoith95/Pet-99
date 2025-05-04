@@ -10,7 +10,8 @@ getgenv().Settings = {
     Seller = {
         Active = true,
         ["Items"] = {
-	    ["All Titanics"] = {Price = "+1%", AllTypes = true, Priority = true},
+	    ["All Titanics"] = {Price = "+1%", AllTypes = true},
+	    ["Titanic Leafy Seahorse"] = {Price = 12500000000, Priority = true},
 	    ["MVP Key"] = {Price = "+1", Priority = true},
 	    --["Easter Secret Key"] = {Price = "+5", Priority = true},
 	    ["Titanic Easter Gift"] = {Price = "+9%", Priority = true},
