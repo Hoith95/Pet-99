@@ -1,10 +1,9 @@
 -- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
 if _G.TELEEVFISH then
     warn("Script đã được chạy trước đó!")
-    return -- Dừng script nếu đã chạy
+    return
 end
 
--- Đánh dấu script đã được chạy
 _G.TELEEVFISH = true
 
 -- Gọi thuyền
@@ -15,14 +14,27 @@ game:GetService("ReplicatedStorage").Network.Boats_RequestSpawn:InvokeServer(unp
 
 wait(10)
 
--- Danh sách các vị trí có thể dịch chuyển
-local positions = {
-    CFrame.new(11728, 4.16, 212),
-    CFrame.new(12339, 4.16, 456),
-    CFrame.new(12786, 4.16, -377),
-    CFrame.new(11974, 4.16, -159)
+-- Danh sách vị trí gốc
+local basePositions = {
+    Vector3.new(11728, 4.16, 212),
+    Vector3.new(12339, 4.16, 456),
+    Vector3.new(12786, 4.16, -377),
+    Vector3.new(11974, 4.16, -159)
 }
 
--- Dịch chuyển đến một vị trí ngẫu nhiên
-local randomIndex = math.random(1, #positions)
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = positions[randomIndex]
+-- Hàm thay chữ số cuối cùng bằng số ngẫu nhiên từ 1 đến 9
+local function replaceLastDigit(value)
+    local prefix = math.floor(value / 10) * 10
+    local newDigit = math.random(1, 9)
+    return prefix + newDigit
+end
+
+-- Chọn vị trí và chỉnh sửa trục X, Z
+local basePos = basePositions[math.random(1, #basePositions)]
+local finalX = replaceLastDigit(basePos.X)
+local finalY = 4.16 -- giữ nguyên
+local finalZ = replaceLastDigit(basePos.Z)
+
+-- Dịch chuyển
+local finalPosition = CFrame.new(finalX, finalY, finalZ)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = finalPosition
