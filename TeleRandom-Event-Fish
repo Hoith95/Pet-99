@@ -13,6 +13,7 @@ local spawnEvent = ReplicatedStorage.Network.Boats_RequestSpawn
 local boats = {"Boat 5", "Boat 4", "Boat 3", "Boat 2", "Boat 1"}
 local spawned = false
 
+-- Thử mua và gọi thuyền từ cao xuống thấp
 for _, boatName in ipairs(boats) do
     local success, result = pcall(function()
         return purchaseEvent:InvokeServer(boatName)
@@ -29,16 +30,15 @@ for _, boatName in ipairs(boats) do
     end
 end
 
--- Nếu không mua được cái nào, thử gọi luôn (có thể đã sở hữu rồi)
+-- Nếu không mua được cái nào, gọi Boat 1 như lựa chọn cuối
 if not spawned then
-    for _, boatName in ipairs(boats) do
-        local success = pcall(function()
-            spawnEvent:InvokeServer(boatName)
-        end)
-        if success then
-            print("🚢 Đã gọi thuyền đã sở hữu: " .. boatName)
-            break
-        end
+    local success = pcall(function()
+        spawnEvent:InvokeServer("Boat 1")
+    end)
+    if success then
+        print("🚢 Gọi Boat 1 vì không mua được thuyền nào")
+    else
+        warn("❌ Không thể gọi Boat 1")
     end
 end
 
