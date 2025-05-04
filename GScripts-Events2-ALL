@@ -11,7 +11,7 @@ getgenv().GLOOTBOXES = {"Locked Hype Egg"}
 
 getgenv().GDO_FISHING_EVENT = true
 
-getgenv().GRANK_FIRST = true
+--getgenv().GRANK_FIRST = true
 getgenv().GZONE_TO = 999
 getgenv().GREBIRTH_TO = 9
 getgenv().GRANK_TO= 33
