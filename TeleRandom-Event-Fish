@@ -1,10 +1,10 @@
 -- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
-if _G.TELEEVFISH then
+if _G.TELEEVFISHING then
     warn("Script đã được chạy trước đó!")
     return
 end
 
-_G.TELEEVFISH = true
+_G.TELEEVFISHING = true
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local purchaseEvent = ReplicatedStorage.Network.EventBoatMerchant_Purchase
