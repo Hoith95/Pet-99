@@ -1,3 +1,12 @@
+-- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
+if _G.DAYGIFTFREE then
+    warn("Script đã được chạy trước đó!")
+    return -- Dừng script nếu đã chạy
+end
+
+-- Đánh dấu script đã được chạy
+_G.DAYGIFTFREE = true
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Network = ReplicatedStorage:WaitForChild("Network")
 local redeemEvent = Network:FindFirstChild("Redeem Free Gift")
