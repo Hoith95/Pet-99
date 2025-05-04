@@ -46,17 +46,17 @@ wait(1)
 
 -- Danh sách vị trí gốc
 local basePositions = {
-    Vector3.new(11728, 4.16, 212),
-    Vector3.new(12339, 4.16, 456),
-    Vector3.new(12786, 4.16, -377),
-    Vector3.new(11974, 4.16, -159)
+    Vector3.new(13634, 4.16, 104),
+    Vector3.new(12872, 4.16, -315),
+    Vector3.new(12968, 4.16, -1229),
+    Vector3.new(13424, 4.16, -1208)
 }
 
--- Hàm thay chữ số cuối cùng bằng số ngẫu nhiên từ 1 đến 9
-local function replaceLastDigit(value)
-    local prefix = math.floor(value / 10) * 10
-    local newDigit = math.random(1, 9)
-    return prefix + newDigit
+-- Hàm thay chữ số cuối cùng bằng số ngẫu nhiên từ 1 đến 68
+local function replaceLastNumber(value)
+    local base = math.floor(value / 100) * 100
+    local newSuffix = math.random(1, 68)
+    return base + newSuffix
 end
 
 -- Chọn vị trí và chỉnh sửa trục X, Z
