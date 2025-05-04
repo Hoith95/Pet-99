@@ -1,10 +1,10 @@
 -- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
-if _G.TELEEVFISHING then
+if _G.TELEEVFISHING2 then
     warn("Script đã được chạy trước đó!")
     return
 end
 
-_G.TELEEVFISHING = true
+_G.TELEEVFISHING2 = true
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local purchaseEvent = ReplicatedStorage.Network.EventBoatMerchant_Purchase
@@ -53,7 +53,7 @@ local basePositions = {
 }
 
 -- Hàm thay chữ số cuối cùng bằng số ngẫu nhiên từ 1 đến 68
-local function replaceLastNumber(value)
+local function replaceLastDigit(value)
     local base = math.floor(value / 100) * 100
     local newSuffix = math.random(1, 68)
     return base + newSuffix
