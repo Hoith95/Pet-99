@@ -7,6 +7,7 @@ end
 -- Đánh dấu script đã được chạy
 _G.TELEEVFISH = true
 
+-- Gọi thuyền
 local args = {
     [1] = "Boat 1"
 }
@@ -14,6 +15,7 @@ game:GetService("ReplicatedStorage").Network.Boats_RequestSpawn:InvokeServer(unp
 
 wait(10)
 
+-- Danh sách các vị trí có thể dịch chuyển
 local positions = {
     CFrame.new(11728, 4.16, 212),
     CFrame.new(12339, 4.16, 456),
@@ -21,17 +23,6 @@ local positions = {
     CFrame.new(11974, 4.16, -159)
 }
 
-spawn(function()
-    local lastIndex = 0
-    while true do
-        local newIndex
-        repeat
-            newIndex = math.random(1, #positions)
-        until newIndex ~= lastIndex
-
-        lastIndex = newIndex
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = positions[newIndex]
-
-        wait(368)
-    end
-end)
+-- Dịch chuyển đến một vị trí ngẫu nhiên
+local randomIndex = math.random(1, #positions)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = positions[randomIndex]
