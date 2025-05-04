@@ -5,14 +5,19 @@ if _G.TELEEVFISH then
 end
 
 _G.TELEEVFISH = true
-
+-- Mua thuyền
+local args = {
+    [1] = "Boat 1"
+}
+game:GetService("ReplicatedStorage").Network.EventBoatMerchant_Purchase:InvokeServer(unpack(args))
+wait(3)
 -- Gọi thuyền
 local args = {
     [1] = "Boat 1"
 }
 game:GetService("ReplicatedStorage").Network.Boats_RequestSpawn:InvokeServer(unpack(args))
 
-wait(10)
+wait(3)
 
 -- Danh sách vị trí gốc
 local basePositions = {
