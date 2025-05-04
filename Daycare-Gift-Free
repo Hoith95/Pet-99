@@ -1,0 +1,43 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Network = ReplicatedStorage:WaitForChild("Network")
+local redeemEvent = Network:FindFirstChild("Redeem Free Gift")
+local claimEvent = Network:FindFirstChild("Daycare: Claim")
+local enrollEvent = Network:FindFirstChild("Daycare: Enroll")
+
+-- ID và thời gian gửi (tùy theo từng acc có thể khác)
+local enrollArgs = {
+    [1] = {
+        ["aa2c55e75f7b480fa7eb203a17b07494"] = 30
+    }
+}
+
+while true do
+    -- Nhận quà từ 1 đến 12
+    if redeemEvent then
+        for i = 1, 12 do
+            pcall(function()
+                redeemEvent:InvokeServer(i)
+            end)
+            wait(0.5)
+        end
+    end
+
+    -- Claim Daycare
+    if claimEvent then
+        pcall(function()
+            claimEvent:InvokeServer()
+        end)
+    end
+
+    wait(1)
+
+    -- Enroll lại vào Daycare
+    if enrollEvent then
+        pcall(function()
+            enrollEvent:InvokeServer(unpack(enrollArgs))
+        end)
+    end
+
+    -- Chờ 1 giờ 30 phút
+    wait(5400)
+end
