@@ -5,19 +5,30 @@ if _G.TELEEVFISH then
 end
 
 _G.TELEEVFISH = true
--- Mua thuyền
-local args = {
-    [1] = "Boat 1"
-}
-game:GetService("ReplicatedStorage").Network.EventBoatMerchant_Purchase:InvokeServer(unpack(args))
-wait(3)
--- Gọi thuyền
-local args = {
-    [1] = "Boat 1"
-}
-game:GetService("ReplicatedStorage").Network.Boats_RequestSpawn:InvokeServer(unpack(args))
 
-wait(3)
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local purchaseEvent = ReplicatedStorage.Network.EventBoatMerchant_Purchase
+local spawnEvent = ReplicatedStorage.Network.Boats_RequestSpawn
+
+-- Danh sách thuyền ưu tiên từ cao đến thấp
+local boats = {"Boat 5", "Boat 4", "Boat 3", "Boat 2", "Boat 1"}
+
+for _, boatName in ipairs(boats) do
+    local success, result = pcall(function()
+        return purchaseEvent:InvokeServer(boatName)
+    end)
+
+    if success and result == true then -- Kiểm tra mua thành công
+        wait(1)
+        spawnEvent:InvokeServer(boatName)
+        print("Đã mua và gọi thuyền: " .. boatName)
+        break -- Dừng lại sau khi đã thành công với loại cao nhất có thể
+    else
+        print("Không thể mua: " .. boatName)
+    end
+end
+
+wait(1)
 
 -- Danh sách vị trí gốc
 local basePositions = {
