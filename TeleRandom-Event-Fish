@@ -1,0 +1,37 @@
+-- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
+if _G.TELEEVFISH then
+    warn("Script đã được chạy trước đó!")
+    return -- Dừng script nếu đã chạy
+end
+
+-- Đánh dấu script đã được chạy
+_G.TELEEVFISH = true
+
+local args = {
+    [1] = "Boat 1"
+}
+game:GetService("ReplicatedStorage").Network.Boats_RequestSpawn:InvokeServer(unpack(args))
+
+wait(10)
+
+local positions = {
+    CFrame.new(11728, 4.16, 212),
+    CFrame.new(12339, 4.16, 456),
+    CFrame.new(12786, 4.16, -377),
+    CFrame.new(11974, 4.16, -159)
+}
+
+spawn(function()
+    local lastIndex = 0
+    while true do
+        local newIndex
+        repeat
+            newIndex = math.random(1, #positions)
+        until newIndex ~= lastIndex
+
+        lastIndex = newIndex
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = positions[newIndex]
+
+        wait(368)
+    end
+end)
