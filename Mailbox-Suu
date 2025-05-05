@@ -14,7 +14,7 @@ spawn(function()
 end)
 
 spawn(function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Daycare-Gift-Free"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Daycare-Gift-Free"))()
 end)
 
 spawn(function()
