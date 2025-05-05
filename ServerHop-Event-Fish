@@ -7,14 +7,32 @@ local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
--- Kiểm tra số lượng người chơi hiện tại
+-- ✅ Kiểm tra số lượng người chơi hiện tại (có fallback nếu GetPlayers() lỗi)
 local function isPlayerCountValid()
-    local count = #Players:GetPlayers()
+    local count
+    local success, result = pcall(function()
+        return #Players:GetPlayers()
+    end)
+
+    if success and result then
+        count = result
+    else
+        -- Fallback: đếm số lượng Player từ Players:GetChildren()
+        local tempCount = 0
+        for _, player in ipairs(Players:GetChildren()) do
+            if player:IsA("Player") then
+                tempCount += 1
+            end
+        end
+        count = tempCount
+        warn("⚠️ Fallback GetPlayers(): số lượng đếm được:", count)
+    end
+
     print("👥 Số lượng người chơi hiện tại:", count)
     return count >= 2 and count <= 5
 end
 
--- Hop server đến server ít người, bắt đầu từ server thứ 3
+-- ✅ Hop server đến server ít người (từ server thứ 3 trở đi)
 local function teleportToLeastPopulatedServer(placeId, runScriptOnJoin, retryLimit)
     retryLimit = retryLimit or MAX_RETRIES
     local attempts = 0
@@ -65,11 +83,11 @@ local function teleportToLeastPopulatedServer(placeId, runScriptOnJoin, retryLim
     return false
 end
 
--- Check xem vừa teleport sang không
+-- ✅ Kiểm tra nếu player vừa được teleport từ nơi khác
 local tpInfo = TeleportService:GetLocalPlayerTeleportData()
 local resumedFromTeleport = tpInfo and tpInfo.customData
 
--- Nếu vừa từ lần teleport đầu tiên sang:
+-- 🟡 Nếu vừa từ lần teleport đầu tiên sang:
 if resumedFromTeleport == "NOSCRIPT" then
     print("🔁 Vừa teleport lần 1 sang, chờ 15s rồi kiểm tra số lượng người chơi...")
     task.wait(WAIT_BEFORE_RECHECK)
@@ -83,14 +101,14 @@ if resumedFromTeleport == "NOSCRIPT" then
     end
 end
 
--- Nếu vừa từ lần teleport thứ 2 sang:
+-- 🟢 Nếu vừa từ lần teleport thứ 2 sang:
 if resumedFromTeleport == "RUNSCRIPT" then
     print("✅ Đã hop lần 2. Tiến hành load script.")
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/WaitForGameLoad"))()
     return
 end
 
--- Nếu là lần chạy đầu tiên
+-- 🔵 Nếu là lần chạy đầu tiên
 if isPlayerCountValid() then
     print("✅ Server hiện tại đã phù hợp, không cần hop.")
     return
