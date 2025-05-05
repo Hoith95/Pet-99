@@ -8,27 +8,7 @@ spawn(function()
 end)
 
 spawn(function()
-    for i = 1, 5 do
-        -- Từ lần thứ 2 trở đi mới kiểm tra số lượng người chơi
-        if i > 1 then
-            local success, playerCount = pcall(function()
-                return #game:GetService("Players"):GetPlayers()
-            end)
-
-            if success and playerCount >= 2 and playerCount <= 5 then
-                warn("⛔ Server hiện có từ 2 đến 5 người. Dừng chạy script.")
-                break
-            end
-        end
-
-        -- Thực thi script
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-Fish"))()
-
-        -- Nếu chưa đến lần cuối thì đợi 30 giây
-        if i < 5 then
-            wait(30)
-        end
-    end
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-Fish"))()
 end)
 
 spawn(function()
