@@ -1,3 +1,4 @@
+setfpscap(5)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/WaitForGameLoad"))()
 
 _G.script1Done = true
