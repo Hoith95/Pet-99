@@ -9,7 +9,7 @@ _G.EGGEVENT = true
 
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(13441, 6.97, -592)
 wait(1)
-ocal Eggs = game.Players.LocalPlayer.PlayerScripts.Scripts.Game['Egg Opening Frontend']getsenv(Eggs).PlayEggAnimation = function() return end
+local Eggs = game.Players.LocalPlayer.PlayerScripts.Scripts.Game['Egg Opening Frontend']getsenv(Eggs).PlayEggAnimation = function() return end
 wait(1)
 local args = {
     [1] = "91761f03549e4211981cbc7940da0aa0",
