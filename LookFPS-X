@@ -18,7 +18,7 @@ spawn(function()
     }
 
     -- Biến để thay đổi FPS ngay lập tức
-    _G.overrideFps = 15
+    _G.overrideFps = 12
 
     -- Chờ script1 hoàn thành
     while not _G.script1Done do
