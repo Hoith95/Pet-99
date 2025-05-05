@@ -1,3 +1,12 @@
+-- Vòng lặp này đợi cho đến khi trò chơi được tải hoàn toàn.
+repeat task.wait() until game:IsLoaded()
+local LocalPlayer = game:GetService('Players').LocalPlayer
+repeat task.wait() until not LocalPlayer.PlayerGui:FindFirstChild('__INTRO')
+
+repeat
+    wait()
+until game:IsLoaded()
+
 local PLACE_ID = 95635359880599
 local MAX_RETRIES = 15
 local WAIT_BEFORE_RECHECK = 15
