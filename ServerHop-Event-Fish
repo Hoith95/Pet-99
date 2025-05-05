@@ -1,13 +1,23 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/WaitForGameLoad"))()
+local PLACE_ID = 95635359880599
+local MAX_RETRIES = 15
+local WAIT_BEFORE_RECHECK = 15
 
 local HttpService = game:GetService("HttpService")
 local TeleportService = game:GetService("TeleportService")
-local Player = game:GetService("Players").LocalPlayer
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
 
-local function teleportToLeastPopulatedServer(placeId, retryLimit)
-    retryLimit = retryLimit or 5
+-- Kiểm tra số lượng người chơi hiện tại
+local function isPlayerCountValid()
+    local count = #Players:GetPlayers()
+    print("👥 Số lượng người chơi hiện tại:", count)
+    return count >= 2 and count <= 5
+end
+
+-- Hop server đến server ít người, bắt đầu từ server thứ 3
+local function teleportToLeastPopulatedServer(placeId, runScriptOnJoin, retryLimit)
+    retryLimit = retryLimit or MAX_RETRIES
     local attempts = 0
-    local minPlayers = 1
 
     while attempts < retryLimit do
         attempts += 1
@@ -18,49 +28,73 @@ local function teleportToLeastPopulatedServer(placeId, retryLimit)
         if success and result and #result > 2 then
             local validServers = {}
             for _, server in ipairs(result) do
-                if server.playing >= minPlayers and server.playing < server.maxPlayers then
+                if server.playing > 0 and server.playing < server.maxPlayers then
                     table.insert(validServers, server)
                 end
             end
 
             if #validServers > 2 then
-                -- Bỏ qua 2 server đầu tiên và chọn server có ít người nhất từ phần còn lại
                 table.sort(validServers, function(a, b)
                     return a.playing < b.playing
                 end)
 
-                local selectedServer = validServers[3]  -- Bắt đầu từ server thứ 3 sau khi sort theo số người ít
+                local selectedServer = validServers[3]
+                local teleportData = runScriptOnJoin and "RUNSCRIPT" or "NOSCRIPT"
 
-                local teleportSuccess, teleportError = pcall(function()
-                    TeleportService:TeleportToPlaceInstance(placeId, selectedServer.id, Player)
+                local teleportSuccess, teleportErr = pcall(function()
+                    TeleportService:TeleportToPlaceInstance(placeId, selectedServer.id, LocalPlayer, { customData = teleportData })
                 end)
 
                 if teleportSuccess then
-                    print("Teleport thành công đến server:", selectedServer.id)
+                    print("✅ Teleport thành công đến server:", selectedServer.id)
                     return true
                 else
-                    warn("Teleport thất bại, thử lại... (Lỗi: " .. tostring(teleportError) .. ")")
+                    warn("⚠️ Teleport thất bại (Lần " .. attempts .. "): " .. tostring(teleportErr))
                 end
             else
-                print("Không đủ server hợp lệ để chọn từ server thứ 3.")
+                warn("Không đủ server hợp lệ (cần tối thiểu 3 server).")
             end
         else
-            warn("Không thể lấy danh sách server hợp lệ! Thử lại lần " .. attempts)
+            warn("❌ Không thể lấy danh sách server (lần " .. attempts .. ")")
         end
 
         task.wait(5)
     end
 
-    warn("Không thể teleport sau " .. retryLimit .. " lần thử!")
+    warn("⛔ Teleport thất bại sau " .. retryLimit .. " lần thử!")
     return false
 end
 
--- Kiểm tra số lượng người chơi hiện tại
-local currentPlayerCount = #game:GetService("Players"):GetPlayers()
+-- Check xem vừa teleport sang không
+local tpInfo = TeleportService:GetLocalPlayerTeleportData()
+local resumedFromTeleport = tpInfo and tpInfo.customData
 
-if currentPlayerCount <= 1 or currentPlayerCount > 5 then
-    task.wait(3)
-    teleportToLeastPopulatedServer(95635359880599, 25)
+-- Nếu vừa từ lần teleport đầu tiên sang:
+if resumedFromTeleport == "NOSCRIPT" then
+    print("🔁 Vừa teleport lần 1 sang, chờ 15s rồi kiểm tra số lượng người chơi...")
+    task.wait(WAIT_BEFORE_RECHECK)
+    if isPlayerCountValid() then
+        print("✅ Số lượng người chơi phù hợp sau lần hop đầu. Dừng script.")
+        return
+    else
+        print("🔁 Tiếp tục hop lần 2, lần này sẽ chạy script sau khi vào.")
+        teleportToLeastPopulatedServer(PLACE_ID, true)
+        return
+    end
+end
+
+-- Nếu vừa từ lần teleport thứ 2 sang:
+if resumedFromTeleport == "RUNSCRIPT" then
+    print("✅ Đã hop lần 2. Tiến hành load script.")
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/WaitForGameLoad"))()
+    return
+end
+
+-- Nếu là lần chạy đầu tiên
+if isPlayerCountValid() then
+    print("✅ Server hiện tại đã phù hợp, không cần hop.")
+    return
 else
-    print("Số lượng người chơi hiện tại từ 2 đến 5. Không chạy script.")
+    print("❌ Server không phù hợp. Bắt đầu hop lần đầu...")
+    teleportToLeastPopulatedServer(PLACE_ID, false)
 end
