@@ -40,7 +40,7 @@ local function teleportToLeastPopulatedServer(placeId, runScriptOnJoin, retryLim
     while attempts < retryLimit do
         attempts += 1
         local success, result = pcall(function()
-            return HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. placeId .. '/servers/Public?sortOrder=Asc&limit=100&excludeFullServers=true')).data
+            return HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. placeId .. '/servers/Public?sortOrder=Asc&limit=50&excludeFullServers=true')).data
         end)
 
         if success and result and #result > 2 then
