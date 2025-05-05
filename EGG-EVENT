@@ -1,11 +1,14 @@
 -- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
-if _G.EGGEVENT then
+if _G.EGGEVENTS then
     warn("Script đã được chạy trước đó!")
     return -- Dừng script nếu đã chạy
 end
 
 -- Đánh dấu script đã được chạy
-_G.EGGEVENT = true
+_G.EGGEVENTS = true
+
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(13441, 6.97, -592)
+wait(1)
 
 -- Tắt animation mở trứng để tăng tốc
 local Eggs = game.Players.LocalPlayer.PlayerScripts.Scripts.Game['Egg Opening Frontend']
