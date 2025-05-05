@@ -7,21 +7,25 @@ end
 -- Đánh dấu script đã được chạy
 _G.EGGEVENTS = true
 
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(13441, 6.97, -592)
+-- Lấy vị trí hiện tại của nhân vật
+local humanoidRootPart = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+local currentPos = humanoidRootPart.Position
+
+-- Dịch chuyển đến vị trí mở trứng
+humanoidRootPart.CFrame = CFrame.new(13441, 6.97, -592)
 wait(1)
 
 -- Tắt animation mở trứng để tăng tốc
-local Eggs = game.Players.LocalPlayer.PlayerScripts.Scripts.Game['Egg Opening Frontend']
-getsenv(Eggs).PlayEggAnimation = function() return end
+local Eggs = game.Players.LocalPlayer.PlayerScripts.Scripts.Game:FindFirstChild("Egg Opening Frontend")
+if Eggs then
+    getsenv(Eggs).PlayEggAnimation = function() return end
+end
 
--- Bật auto mở trứng
-_G.AutoOpen = true
+-- Số lượng trứng muốn mở
+local EggAmount = 50
 
--- Số lượng trứng muốn mở mỗi lần (số, không phải chuỗi): 1, 3, hoặc 8
-local EggAmount = 20
-
--- Hàm tìm trứng có tên dài nhất (dạng hash ID)
-function find_hashed_egg()
+-- Hàm tìm trứng có tên dài nhất (hash ID)
+local function find_hashed_egg()
     local eggsFolder = workspace:FindFirstChild("__THINGS") and workspace.__THINGS:FindFirstChild("CustomEggs")
     if not eggsFolder then
         warn("Không tìm thấy thư mục CustomEggs.")
@@ -30,35 +34,33 @@ function find_hashed_egg()
 
     local longestName = ""
     for _, v in pairs(eggsFolder:GetChildren()) do
-        if not v:IsA("Model") then continue end
-        if #v.Name > #longestName then
+        if v:IsA("Model") and #v.Name > #longestName then
             longestName = v.Name
         end
     end
 
-    if longestName == "" then
-        warn("Không tìm được trứng hợp lệ.")
-        return nil
-    end
-
-    return longestName
+    return longestName ~= "" and longestName or nil
 end
 
--- Vòng lặp auto open với cấu trúc args mới
-while _G.AutoOpen and task.wait() do
-    local eggID = find_hashed_egg()
-    if eggID then
-        local args = {
-            [1] = eggID,
-            [2] = EggAmount
-        }
+-- Mở trứng một lần
+local eggID = find_hashed_egg()
+if eggID then
+    local args = {
+        [1] = eggID,
+        [2] = EggAmount
+    }
 
-        local success, result = pcall(function()
-            return game:GetService("ReplicatedStorage").Network.CustomEggs_Hatch:InvokeServer(unpack(args))
-        end)
+    local success, result = pcall(function()
+        return game:GetService("ReplicatedStorage").Network.CustomEggs_Hatch:InvokeServer(unpack(args))
+    end)
 
-        if not success then
-            warn("Lỗi khi gọi Hatch:", result)
-        end
+    if not success then
+        warn("Lỗi khi gọi Hatch:", result)
     end
 end
+
+-- Chờ chút để hoàn tất (tuỳ game có thể cần điều chỉnh thời gian)
+wait(2)
+
+-- Quay về vị trí cũ
+humanoidRootPart.CFrame = CFrame.new(currentPos)
