@@ -2,11 +2,11 @@ _G.script2Done = true
 _G.EventDone = true
 
 spawn(function()
-wait(90)
+wait(30)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X"))()
 end)
 
-getgenv().GEVENT_FPS  = 12
+getgenv().GEVENT_FPS  = 15
 getgenv().GLOOTBOXES = {"Locked Hype Egg"}
 
 getgenv().GDO_FISHING_EVENT = true
