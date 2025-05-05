@@ -31,7 +31,7 @@ local function isPlayerCountValid()
     return count >= 2 and count <= 5
 end
 
--- ✅ Hop server ít người (có phân trang cursor, bỏ 2 server đầu)
+-- ✅ Hop server ít người (có phân trang cursor, sắp xếp và chọn ngẫu nhiên)
 local function teleportToLeastPopulatedServer(placeId, runScriptOnJoin, retryLimit)
     retryLimit = retryLimit or MAX_RETRIES
     local attempts = 0
@@ -72,7 +72,12 @@ local function teleportToLeastPopulatedServer(placeId, runScriptOnJoin, retryLim
                 return a.playing < b.playing
             end)
 
-            local selectedServer = validServers[3]
+            local topServers = {}
+            for i = 1, math.min(30, #validServers) do
+                table.insert(topServers, validServers[i])
+            end
+
+            local selectedServer = topServers[math.random(1, #topServers)]
             local teleportData = runScriptOnJoin and "RUNSCRIPT" or "NOSCRIPT"
 
             local teleportSuccess, teleportErr = pcall(function()
