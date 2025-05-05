@@ -8,7 +8,12 @@ spawn(function()
 end)
 
 spawn(function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-Fish"))()
+    for i = 1, 5 do
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-Fish"))()
+        if i < 5 then
+            wait(30)
+        end
+    end
 end)
 
 spawn(function()
