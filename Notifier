@@ -1,4 +1,6 @@
--- Script 2: Chờ trạng thái hoàn thành và thực thi
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+
 print("Kiểm tra trạng thái Script 1...")
 
 -- Chờ đến khi trạng thái _G.script2Done là true
@@ -17,7 +19,6 @@ local SaveModule = require(game.ReplicatedStorage.Library.Client.Save)
 local Formatint = function(int)
     local Suffix = {"", "k", "M", "B", "T", "Qd", "Qn", "Sx", "Sp", "Oc", "No", "De", "UDe", "DDe", "TDe", "QdDe", "QnDe", "SxDe", "SpDe", "OcDe", "NoDe", "Vg", "UVg", "DVg", "TVg", "QdVg", "QnVg", "SxVg", "SpVg", "OcVg", "NoVg", "Tg", "UTg", "DTg", "TTg", "QdTg", "QnTg", "SxTg", "SpTg", "OcTg", "NoTg", "QdAg", "QnAg", "SxAg", "SpAg", "OcAg", "NoAg", "e141", "e144", "e147", "e150", "e153", "e156", "e159", "e162", "e165", "e168", "e171", "e174", "e177", "e180", "e183", "e186", "e189", "e192", "e195", "e198", "e201", "e204", "e207", "e210", "e213", "e216", "e219", "e222", "e225", "e228", "e231", "e234", "e237", "e240", "e243", "e246", "e249", "e252", "e255", "e258", "e261", "e264", "e267", "e270", "e273", "e276", "e279", "e282", "e285", "e288", "e291", "e294", "e297", "e300", "e303"}
     local Index = 1
-
     if int < 999 then 
         return int
     end
@@ -33,7 +34,6 @@ local function formatTime(seconds)
     local hours = math.floor(seconds / 3600)
     local minutes = math.floor((seconds % 3600) / 60)
     local remainingSeconds = math.floor(seconds % 60)
-
     return string.format("%02d:%02d:%02d", hours, minutes, remainingSeconds)
 end
 
@@ -49,12 +49,14 @@ local function getFishingEvent()
 end
 
 -- UI hiển thị
-local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
 
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "NotificationGui"
+screenGui.ResetOnSpawn = false
 screenGui.Parent = playerGui
 
+-- Nền chính
 local backgroundFrame = Instance.new("Frame")
 backgroundFrame.Size = UDim2.new(1, 0, 1, 0)
 backgroundFrame.BackgroundColor3 = Color3.new(0, 0, 0)
@@ -71,12 +73,12 @@ diamondLabel.Size = UDim2.new(1, 0, 1/6, 0)
 diamondLabel.Position = UDim2.new(0, 0, 4.2/6, 0)
 diamondLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 diamondLabel.BackgroundTransparency = 0.5
-diamondLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-diamondLabel.BorderSizePixel = 0
+diamondLabel.TextColor3 = Color3.fromRGB(0, 128, 255)
 diamondLabel.TextScaled = true
+diamondLabel.BorderSizePixel = 0
 diamondLabel.Font = Enum.Font.GothamBold
 
--- FishingEvent
+-- Fishing Event
 local fishingEventLabel = Instance.new("TextLabel", backgroundFrame)
 fishingEventLabel.Name = "FishingEventLabel"
 fishingEventLabel.Text = "Đang cập nhật Fishing Event..."
@@ -84,10 +86,10 @@ fishingEventLabel.Size = UDim2.new(1, 0, 1/6, 0)
 fishingEventLabel.Position = UDim2.new(0, 0, 5/6, 0)
 fishingEventLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 fishingEventLabel.BackgroundTransparency = 0.5
-fishingEventLabel.TextColor3 = Color3.fromRGB(0, 255, 255) -- 💎 Xanh lam sáng
-fishingEventLabel.Font = Enum.Font.GothamBold
-fishingEventLabel.BorderSizePixel = 0
+fishingEventLabel.TextColor3 = Color3.fromRGB(0, 255, 255)
 fishingEventLabel.TextScaled = true
+fishingEventLabel.BorderSizePixel = 0
+fishingEventLabel.Font = Enum.Font.GothamBold
 
 -- Thời gian
 local timeLabel = Instance.new("TextLabel", backgroundFrame)
@@ -98,24 +100,47 @@ timeLabel.Position = UDim2.new(0, 0, 5.8/6, 0)
 timeLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 timeLabel.BackgroundTransparency = 0.5
 timeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-timeLabel.Font = Enum.Font.GothamBold
-timeLabel.BorderSizePixel = 0
 timeLabel.TextScaled = true
+timeLabel.BorderSizePixel = 0
+timeLabel.Font = Enum.Font.GothamBold
 
--- Cập nhật UI liên tục
+-- 🟢 FPS Display (Xanh lá đậm, góc phải trên cùng)
+local fpsLabel = Instance.new("TextLabel", screenGui)
+fpsLabel.Name = "FPSLabel"
+fpsLabel.Size = UDim2.new(0, 118, 0, 38)
+fpsLabel.Position = UDim2.new(1, -120, 0, -55)
+fpsLabel.BackgroundColor3 = Color3.fromRGB(0, 128, 0)
+fpsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+fpsLabel.Font = Enum.Font.GothamBold
+fpsLabel.TextSize = 38
+fpsLabel.Text = "FPS: ..."
+fpsLabel.BackgroundTransparency = 0
+fpsLabel.BorderSizePixel = 0
+
+-- ⏱ Cập nhật UI liên tục
 local startTime = tick()
-
 task.spawn(function()
     while true do
-        local currentDiamondValue = game.Players.LocalPlayer.leaderstats["💎 Diamonds"].Value
-        diamondLabel.Text = "GEMS: " .. Formatint(currentDiamondValue)
-        diamondLabel.TextColor3 = Color3.fromRGB(0, 128, 255)
-        diamondLabel.Font = Enum.Font.GothamBold
+        local diamonds = Players.LocalPlayer.leaderstats["💎 Diamonds"].Value
+        diamondLabel.Text = "GEMS: " .. Formatint(diamonds)
 
-        local currentFishingEvent = getFishingEvent()
-        fishingEventLabel.Text = "COINS: " .. Formatint(currentFishingEvent)
-
+        fishingEventLabel.Text = "COINS: " .. Formatint(getFishingEvent())
         timeLabel.Text = "TIMES: " .. formatTime(tick() - startTime)
         task.wait(1)
+    end
+end)
+
+-- 🔄 Cập nhật FPS mỗi giây
+local lastUpdate = tick()
+local frameCount = 0
+
+RunService.RenderStepped:Connect(function()
+    frameCount += 1
+    local now = tick()
+    if now - lastUpdate >= 1 then
+        local fps = frameCount / (now - lastUpdate)
+        fpsLabel.Text = string.format("FPS: %d", fps + 0.5)
+        frameCount = 0
+        lastUpdate = now
     end
 end)
