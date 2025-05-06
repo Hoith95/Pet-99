@@ -1,0 +1,105 @@
+-- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
+if _G.VAREQPETS then
+    warn("Script đã được chạy trước đó!")
+    return -- Dừng script nếu đã chạy
+end
+
+-- Đánh dấu script đã được chạy
+_G.VAREQPETS = true
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local PetsFolder = workspace:WaitForChild("__THINGS"):WaitForChild("Pets")
+local Network = ReplicatedStorage:WaitForChild("Network")
+
+-- Hàm đếm số lượng pet có tên là số
+local function getEquippedPetCount()
+    local count = 0
+    for _, pet in pairs(PetsFolder:GetChildren()) do
+        if tonumber(pet.Name) then
+            count += 1
+        end
+    end
+    return count
+end
+
+-- Bắt đầu logic
+local count = getEquippedPetCount()
+
+-- Nếu đúng 15 → dừng luôn
+if count == 15 then
+    print("Pet đang trang bị đã đủ 15. Dừng script.")
+    return
+end
+
+-- Nếu > 15 → xử lý luôn
+if count > 15 then
+    warn("Số pet đang trang bị lớn hơn 15, tiến hành xử lý.")
+
+    Network.Pets_ToggleFavoriteMode:FireServer()
+    task.wait(1)
+
+    Network.Pets_SetTeamIndex:FireServer(2)
+    task.wait(1)
+
+    Network.Pets_SetTeamIndex:FireServer(1)
+    task.wait(1)
+
+    Network.Pets_ToggleFavoriteMode:FireServer()
+    task.wait(1)
+
+    count = getEquippedPetCount()
+    if count == 15 then
+        print("Đã xử lý xong và trang bị đúng 15 pet. Kết thúc.")
+    else
+        warn("Đã thử xử lý nhưng số pet vẫn không đúng sau khi giảm từ >15.")
+    end
+    return
+end
+
+-- Nếu = 0 → tiến hành trang bị
+if count == 0 then
+    Network.Pets_SetTeamIndex:FireServer(2)
+    task.wait(1)
+
+    Network.Pets_ToggleFavoriteMode:FireServer()
+    task.wait(1)
+
+    count = getEquippedPetCount()
+    if count == 15 then
+        print("Đã trang bị đúng 15 pet. Kết thúc.")
+        return
+    elseif count == 0 then
+        Network.Pets_ToggleFavoriteMode:FireServer()
+        task.wait(1)
+
+        count = getEquippedPetCount()
+        if count == 15 then
+            print("Đã trang bị đúng 15 pet sau lần toggle thứ 2. Kết thúc.")
+            return
+        elseif count > 15 then
+            warn("Sau khi toggle lại, số pet > 15 → tiến hành xử lý.")
+
+            Network.Pets_ToggleFavoriteMode:FireServer()
+            task.wait(1)
+
+            Network.Pets_SetTeamIndex:FireServer(2)
+            task.wait(1)
+
+            Network.Pets_SetTeamIndex:FireServer(1)
+            task.wait(1)
+
+            Network.Pets_ToggleFavoriteMode:FireServer()
+            task.wait(1)
+
+            count = getEquippedPetCount()
+            if count == 15 then
+                print("Đã xử lý xong và trang bị đúng 15 pet. Kết thúc.")
+                return
+            else
+                warn("Đã thử mọi bước nhưng số pet vẫn không đúng.")
+            end
+        end
+    end
+else
+    print("Số pet đang trang bị hiện tại:", count)
+end
