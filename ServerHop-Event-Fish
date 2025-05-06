@@ -35,7 +35,7 @@ local function isPlayerCountValid()
     end
 
     print("👥 Số lượng người chơi hiện tại:", count)
-    return count >= 2 and count <= 5
+    return count >= 2 and count <= 9
 end
 
 -- ✅ Hop server ít người (có phân trang cursor, sắp xếp và chọn ngẫu nhiên)
