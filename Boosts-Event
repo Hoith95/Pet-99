@@ -1,0 +1,66 @@
+-- Vòng lặp này đợi cho đến khi trò chơi được tải hoàn toàn.
+repeat task.wait() until game:IsLoaded()
+local LocalPlayer = game:GetService('Players').LocalPlayer
+repeat
+    wait()
+until game:IsLoaded()
+
+-- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
+if _G.VARBOOST then
+    warn("Script đã được chạy trước đó!")
+    return -- Dừng script nếu đã chạy
+end
+
+-- Đánh dấu script đã được chạy
+_G.VARBOOST = true
+
+local player = game.Players.LocalPlayer
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local network = replicatedStorage:WaitForChild("Network")
+
+-- Hàm kiểm tra và dùng boost nếu cần
+local function checkAndUseBoosts()
+	local boostsFolder = player:WaitForChild("PlayerGui"):WaitForChild("Main"):WaitForChild("Boosts")
+
+	local hasXPScroll = false
+	local hasSpeedScroll = false
+
+	for _, boost in pairs(boostsFolder:GetChildren()) do
+		local name = boost.Name
+		if name == "Effects_Fishing XP Scroll" then
+			hasXPScroll = true
+		elseif name == "Effects_Fishing Speed Scroll" then
+			hasSpeedScroll = true
+		end
+	end
+
+	-- Xử lý Fishing XP Scroll
+	if not hasXPScroll then
+		print("❌ Không có Fishing XP Scroll. Đang sử dụng...")
+		local args = {
+			[1] = "c8ea556cc73c426ab2a7899d0700272f", -- Fishing XP Scroll ID
+			[2] = 1
+		}
+		network.Consumables_Consume:InvokeServer(unpack(args))
+	else
+		print("🎣 Fishing XP Scroll đang hoạt động.")
+	end
+
+	-- Xử lý Fishing Speed Scroll
+	if not hasSpeedScroll then
+		print("❌ Không có Fishing Speed Scroll. Đang sử dụng...")
+		local args = {
+			[1] = "4ea2472dc1794bfb84489aa4d3b447f3", -- Fishing Speed Scroll ID
+			[2] = 1
+		}
+		network.Consumables_Consume:InvokeServer(unpack(args))
+	else
+		print("⚡ Fishing Speed Scroll đang hoạt động.")
+	end
+end
+
+-- Lặp vĩnh viễn mỗi 2 phút
+while true do
+	checkAndUseBoosts()
+	task.wait(120) -- chờ 2 phút
+end
