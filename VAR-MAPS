@@ -40,6 +40,6 @@ task.spawn(function()
                 end
             end
         end
-        task.wait(3) -- đợi 0.5 giây trước khi kiểm tra tiếp để tránh lag
+        task.wait(1) -- đợi 1 giây trước khi kiểm tra tiếp để tránh lag
     end
 end)
