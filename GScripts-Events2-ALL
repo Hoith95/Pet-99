@@ -7,7 +7,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/L
 end)
 
 getgenv().GEVENT_FPS  = 12
-getgenv().GLOOTBOXES = {"Locked Hype Egg"}
+getgenv().GLOOTBOXES = {"Locked Hype Egg", "Deep Sea Treasure Chest"}
 
 getgenv().GDO_FISHING_EVENT = true
 getgenv().GUSE_BOOSTS = true
