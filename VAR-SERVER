@@ -14,7 +14,7 @@ for _, targetPlayerId in ipairs(targetPlayerIds) do
     if targetPlayer then
         print("Bạn đang ở cùng server với người chơi có ID " .. targetPlayerId .. "!")
         -- Kích hoạt teleport
-        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World3Teleport"):InvokeServer()
+        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World4Teleport"):InvokeServer()
         targetPlayerFound = true
         break
     end
