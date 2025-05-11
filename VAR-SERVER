@@ -2,7 +2,7 @@
 local players = game:GetService("Players")
 
 -- Các ID người chơi mà bạn muốn kiểm tra
-local targetPlayerIds = {8093428457, 7975811269, 8099678154, 7816208938, 8105296366}
+local targetPlayerIds = {8093428457, 7975811269, 8099678154, 7816208938, 8111062833, 8105296366}
 
 -- Kiểm tra xem người chơi có tham gia trong cùng server với một trong các targetPlayerId hay không
 local targetPlayerFound = false
