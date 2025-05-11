@@ -15,6 +15,10 @@ local keyPairs = {
         halves = {"MVP Key Lower Half", "MVP Key Upper Half"},
         combineFunction = "MVPKey_Combine"
     },
+    ["Fantasy Key"] = {
+        halves = {"Fantasy Key Lower Half", "Fantasy Key Upper Half"},
+        combineFunction = "FantasyKey_Combine"
+    },
     ["Tech Key"] = {
         halves = {"Tech Key Lower Half", "Tech Key Upper Half"},
         combineFunction = "TechKey_Combine"
