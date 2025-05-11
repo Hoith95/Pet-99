@@ -1,0 +1,52 @@
+-- Vòng lặp này đợi cho đến khi trò chơi được tải hoàn toàn.
+repeat task.wait() until game:IsLoaded()
+local LocalPlayer = game:GetService('Players').LocalPlayer
+repeat
+    wait()
+until game:IsLoaded()
+
+-- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
+if _G.VARMAPS then
+    warn("Script đã được chạy trước đó!")
+    return -- Dừng script nếu đã chạy
+end
+
+-- Đánh dấu script đã được chạy
+_G.VARMAPS = true
+
+-- Danh sách các vị trí cần kiểm tra
+local targetPositions = {
+    Vector3.new(-14311, 16.46, -415),
+    Vector3.new(-14320, 16.46, -415)
+}
+
+-- Bán kính kiểm tra
+local checkRadius = 15
+
+-- Vị trí dịch chuyển đến
+local teleportPosition = CFrame.new(-14291, 16.46, -359)
+
+-- Tham chiếu đến nhân vật
+local player = game.Players.LocalPlayer
+
+-- Hàm kiểm tra khoảng cách giữa 2 Vector3
+local function isWithinRadius(pos1, pos2, radius)
+    return (pos1 - pos2).Magnitude <= radius
+end
+
+-- Kiểm tra liên tục (chạy trong một thread riêng)
+task.spawn(function()
+    while true do
+        local character = player.Character
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            local currentPosition = character.HumanoidRootPart.Position
+            for _, targetPos in ipairs(targetPositions) do
+                if isWithinRadius(currentPosition, targetPos, checkRadius) then
+                    character.HumanoidRootPart.CFrame = teleportPosition
+                    break
+                end
+            end
+        end
+        task.wait(3) -- đợi 0.5 giây trước khi kiểm tra tiếp để tránh lag
+    end
+end)
