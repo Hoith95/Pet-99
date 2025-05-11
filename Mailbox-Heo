@@ -31,9 +31,11 @@ getgenv().AutoMail = {
         --['Seed Bag'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
         --['Mini Pinata'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
         --['Secret Key'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
+        ['Fantasy Key'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
         --['Void Key'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
         --['Tech Key'] = { Class = "Misc", MinAmount = 200, Amount = "Max" },
         --['Crystal Key'] = { Class = "Misc", MinAmount = 200, Amount = "Max" },
+        ['Fantasy Spinny Wheel Ticket'] = { Class = "Misc", MinAmount = 100, Amount = "Max" },
     },
     ['Loop Interval'] = 60,
     ['Users'] = {
