@@ -1,0 +1,80 @@
+-- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
+if _G.VARTIMETRIAL then
+    warn("Script đã được chạy trước đó!")
+    return -- Dừng script nếu đã chạy
+end
+
+-- Đánh dấu script đã được chạy
+_G.VARTIMETRIAL = true
+
+local player = game.Players.LocalPlayer
+local radius = 15
+
+-- Vị trí kiểm tra
+local checkPosition = Vector3.new(-14291, 16.46, -359)
+
+-- Vị trí khởi đầu
+local initialTeleport = CFrame.new(-14225, 16.68, -355)
+
+-- Vị trí kết thúc sau 2p30s
+local finalTeleport = CFrame.new(-15289, 16.46, 335)
+
+-- Các vị trí dịch chuyển
+local teleportSequence1 = {
+    CFrame.new(-15208, 16.71, 345),
+    CFrame.new(-15153, 16.71, 201),
+    CFrame.new(-15064, 16.71, 321),
+    CFrame.new(-14926, 16.71, 418),
+    CFrame.new(-14943, 16.71, 239),
+}
+
+local teleportSequence2 = {
+    unpack(teleportSequence1),
+    CFrame.new(-15066, 16.71, 477)
+}
+
+-- Hàm kiểm tra trong bán kính
+local function isWithinRadius(pos1, pos2, radius)
+    return (pos1 - pos2).Magnitude <= radius
+end
+
+-- Hàm thực hiện dịch chuyển theo danh sách
+local function teleportSequence(sequence)
+    for _, cframe in ipairs(sequence) do
+        local character = player.Character
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            character.HumanoidRootPart.CFrame = cframe
+            task.wait(0.3)
+        end
+    end
+end
+
+-- Kiểm tra và thực thi
+task.spawn(function()
+    while true do
+        local character = player.Character
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            local currentPos = character.HumanoidRootPart.Position
+            if isWithinRadius(currentPos, checkPosition, radius) then
+                -- Dịch chuyển đến điểm khởi đầu
+                character.HumanoidRootPart.CFrame = initialTeleport
+                task.wait(9)
+
+                -- Bắt đầu tính thời gian
+                local startTime = tick()
+                local duration = 150 -- 2 phút 30 giây
+
+                -- Lặp đến khi hết thời gian
+                while tick() - startTime < duration do
+                    teleportSequence(teleportSequence1)
+                    teleportSequence(teleportSequence2)
+                end
+
+                -- Dịch chuyển đến vị trí kết thúc
+                character.HumanoidRootPart.CFrame = finalTeleport
+                break -- Kết thúc script
+            end
+        end
+        task.wait(0.5)
+    end
+end)
