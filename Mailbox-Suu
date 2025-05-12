@@ -10,6 +10,10 @@ _G.script1Done = true
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-RESET"))()
 
 spawn(function()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial"))()
+end)
+
+spawn(function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-MAPS"))()
 end)
 
