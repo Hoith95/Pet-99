@@ -51,7 +51,7 @@ getgenv().Settings = {
 	    --["Emerald Gem"] = {Price = "+1%"},
 	    --["Ruby Gem"] = {Price = "+1%"},
 	    --["Sapphire Gem"] = {Price = "+1%"},
-	    --["Slime Gift"] = {Price = "+1%"},
+	    ["Time Trial Gift"] = {Price = "+1%"},
 	    ["Hellfire Gift"] = {Price = "+1%"},
 	    ["Doodle Gift"] = {Price = "+5"},
 	    ["Huge Machine Egg 4"] = {Price = "+5%"},
