@@ -27,6 +27,7 @@ getgenv().AutoMail = {
         ['Huge Sea Dragon Card'] = { Class = "Card", MinAmount = 1, Amount = "Max" },
         ['Fantasy Fragment'] = { Class = "Misc", MinAmount = 1, Amount = "Max" },
         ['Insta Plant Capsule'] = { Class = "Misc", MinAmount = 100, Amount = "Max" },
+        ['Diamond'] = { Class = "Seed", MinAmount = 200, Amount = "Max" },
         --['MVP Key'] = { Class = "Misc", MinAmount = 1, Amount = "Max" },
         ['MVP Key Lower Half'] = { Class = "Misc", MinAmount = 200, Amount = "Max" },
         ['MVP Key Upper Half'] = { Class = "Misc", MinAmount = 40, Amount = "Max" },
