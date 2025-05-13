@@ -14,9 +14,10 @@ getgenv().GRANK_TO = 99
 getgenv().GZONE_TO = 299
 getgenv().GREBIRTH_TO = 99
 
-getgenv().GHATCH_SPEED_MS = 0
+getgenv().GAUTO_UPGRADE_PETS = false
 getgenv().GHATCH_GOLDEN_EGGS = false
 getgenv().GCLEAR_FAVORITE_PETS = true
+getgenv().GHATCH_SPEED_MS = 0
 getgenv().GMAX_HATCH = 99
 
 getgenv().GWAIT_AT_GATES_TILL_RANK = 5
