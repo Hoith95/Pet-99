@@ -60,7 +60,7 @@ getgenv().Settings = {
 	    ["Hype Egg 2"] = {Price = "+15%"},
 	    --["Magic Shard"] = {Class = "Misc", Price = 65000},
 	    --["Lucky Eggs 9"] = {Class = "Enchant", Price = "+1%"},
-	    ["Charm Stone"] = {Price = "+1%", Priority = true},
+	    ["Charm Stone"] = {Price = "+1%"},
 	    ["Overload"] = {Price = "+1%", Priority = true},
 	    ["Royalty"] = {Price = "+1%", Priority = true},
 	    --["Mini Pinata"] = {Price = 45000},
