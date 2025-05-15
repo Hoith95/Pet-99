@@ -37,7 +37,7 @@ getgenv().Settings = {
             --["Huge Anglerfish"] = {Price = "+1%", Priority = true},
             --["Golden Huge Anglerfish"] = {Price = "+1%", Priority = true},
             --["Rainbow Huge Easter Fox"] = {Price = "+1%", Priority = true},
-            --["Huge Spring Bee"] = {Price = 19999999, Priority = true},
+            ["Golden Huge Spring Bee"] = {Price = 68999999, Priority = true},
             --["Huge Rave Slime"] = {Price = 19999999, Priority = true},
             --["Huge Easter Lamb"] = {Price = "+1%", AllTypes = true, Priority = true},
             --["Huge Chocolate Bunny"] = {Price = "+1%", AllTypes = true, Priority = true},
