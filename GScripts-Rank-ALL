@@ -23,7 +23,7 @@ getgenv().GAUTO_UPGRADE_PETS = false
 getgenv().GHATCH_GOLDEN_EGGS = false
 getgenv().GCLEAR_FAVORITE_PETS = true
 getgenv().GHATCH_SPEED_MS = 0
-getgenv().GMAX_HATCH = 99
+getgenv().GMAX_HATCH = 1
 
 getgenv().GWAIT_AT_GATES_TILL_RANK = 5
 getgenv().GMAX_EGG_SLOTS = 99
@@ -44,6 +44,7 @@ getgenv().GEVENT_ITEMS_TO_USE = {"Mini Pinata","Party Box","Mini Lucky Block"}
 getgenv().GFRUITS = {"Watermelon","Candycane","Apple","Rainbow","Pineapple","Orange","Banana"}
 getgenv().GPOTIONS = {"Coins","Lucky","The Cocktail","Huge","Treasure Hunter","Walkspeed","Diamonds","Damage"}
 getgenv().GPOTIONS_MAX_TIER = 99
-getgenv().GENCHANTS = {"Criticals","Treasure Hunter","Diamonds","Lucky Eggs","Huge Hunter","Tap Power","Strong Pets"}
+getgenv().GENCHANTS = {"Criticals","Treasure Hunter","Diamonds","Coins","Tap Power","Strong Pets"}
+--getgenv().GENCHANTS = {"Criticals","Treasure Hunter","Diamonds","Lucky Eggs","Huge Hunter","Tap Power","Strong Pets"}
 --getgenv().GENCHANTS = {"Lucky Eggs","Lucky Eggs","Huge Hunter","Shiny Hunter","Diamonds","Treasure Hunter"}
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/ba2dcad2127dcfc04301dfe52ce6c61c.lua"))()
