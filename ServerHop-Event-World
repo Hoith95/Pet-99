@@ -1,143 +1,146 @@
 -- Vòng lặp này đợi cho đến khi trò chơi được tải hoàn toàn.
 repeat task.wait() until game:IsLoaded()
 local LocalPlayer = game:GetService('Players').LocalPlayer
-repeat
-    wait()
-until game:IsLoaded()
+repeat wait() until game:IsLoaded()
 
-local PLACE_ID = 119454325063278
-local MAX_RETRIES = 5
-local WAIT_BEFORE_RECHECK = 5
+-- 🔍 Kiểm tra nếu đang ở đúng Place ID
+local targetPlaceId = 119454325063278
 
-local HttpService = game:GetService("HttpService")
-local TeleportService = game:GetService("TeleportService")
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
--- ✅ Kiểm tra số lượng người chơi hiện tại (có fallback nếu GetPlayers() lỗi)
-local function isPlayerCountValid()
-    local count
-    local success, result = pcall(function()
-        return #Players:GetPlayers()
-    end)
-
-    if success and result then
-        count = result
-    else
-        local tempCount = 0
-        for _, player in ipairs(Players:GetChildren()) do
-            if player:IsA("Player") then
-                tempCount += 1
-            end
-        end
-        count = tempCount
-        warn("⚠️ Fallback GetPlayers(): số lượng đếm được:", count)
-    end
-
-    print("👥 Số lượng người chơi hiện tại:", count)
-    return count >= 2 and count <= 5
-end
-
--- ✅ Hop server ít người (có phân trang cursor, sắp xếp và chọn ngẫu nhiên)
-local function teleportToLeastPopulatedServer(placeId, runScriptOnJoin, retryLimit)
-    retryLimit = retryLimit or MAX_RETRIES
-    local attempts = 0
-    local cursor = nil
-
-    while attempts < retryLimit do
-        attempts += 1
-        local validServers = {}
-        local pagesChecked = 0
-
-        repeat
-            pagesChecked += 1
-            local url = 'https://games.roblox.com/v1/games/' .. placeId .. '/servers/Public?sortOrder=Asc&limit=100'
-            if cursor then url = url .. '&cursor=' .. cursor end
-
-            local success, result = pcall(function()
-                return HttpService:JSONDecode(game:HttpGet(url))
-            end)
-
-            if success and result and result.data then
-                for _, server in ipairs(result.data) do
-                    if server.playing > 0 and server.playing < server.maxPlayers then
-                        table.insert(validServers, server)
-                    end
-                end
-                cursor = result.nextPageCursor
-            else
-                warn("❌ Không thể lấy server page (lần " .. attempts .. "), cursor:", tostring(cursor))
-                cursor = nil
-                break
-            end
-
-            task.wait(0.5)
-        until #validServers >= 3 or not cursor or pagesChecked >= 5
-
-        if #validServers >= 3 then
-            table.sort(validServers, function(a, b)
-                return a.playing < b.playing
-            end)
-
-            local topServers = {}
-            for i = 1, math.min(30, #validServers) do
-                table.insert(topServers, validServers[i])
-            end
-
-            local selectedServer = topServers[math.random(1, #topServers)]
-            local teleportData = runScriptOnJoin and "RUNSCRIPT" or "NOSCRIPT"
-
-            local teleportSuccess, teleportErr = pcall(function()
-                TeleportService:TeleportToPlaceInstance(placeId, selectedServer.id, LocalPlayer, { customData = teleportData })
-            end)
-
-            if teleportSuccess then
-                print("✅ Teleport thành công đến server:", selectedServer.id)
-                return true
-            else
-                warn("⚠️ Teleport thất bại (Lần " .. attempts .. "): " .. tostring(teleportErr))
-            end
-        else
-            warn("🔁 Không tìm được đủ server hợp lệ. Thử lại...")
-        end
-
-        task.wait(5)
-    end
-
-    warn("⛔ Teleport thất bại sau " .. retryLimit .. " lần thử!")
-    return false
-end
-
--- ✅ Kiểm tra nếu player vừa được teleport từ nơi khác
-local tpInfo = TeleportService:GetLocalPlayerTeleportData()
-local resumedFromTeleport = tpInfo and tpInfo.customData
-
--- 🟡 Nếu vừa từ lần teleport đầu tiên sang:
-if resumedFromTeleport == "NOSCRIPT" then
-    print("🔁 Vừa teleport lần 1 sang, chờ 15s rồi kiểm tra số lượng người chơi...")
-    task.wait(WAIT_BEFORE_RECHECK)
-    if isPlayerCountValid() then
-        print("✅ Số lượng người chơi phù hợp sau lần hop đầu. Dừng script.")
-        return
-    else
-        print("🔁 Tiếp tục hop lần 2, lần này sẽ chạy script sau khi vào.")
-        teleportToLeastPopulatedServer(PLACE_ID, true)
-        return
-    end
-end
-
--- 🟢 Nếu vừa từ lần teleport thứ 2 sang:
-if resumedFromTeleport == "RUNSCRIPT" then
-    print("✅ Đã hop lần 2. Tiến hành load script.")
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/WaitForGameLoad"))()
-    return
-end
-
--- 🔵 Nếu là lần chạy đầu tiên
-if isPlayerCountValid() then
-    print("✅ Server hiện tại đã phù hợp, không cần hop.")
-    return
+if game.PlaceId == targetPlaceId then
+    print("✅ Nhân vật đang ở trong Place ID: " .. targetPlaceId)
 else
-    print("❌ Server không phù hợp. Bắt đầu hop lần đầu...")
-    teleportToLeastPopulatedServer(PLACE_ID, false)
+    print("❌ Nhân vật KHÔNG ở trong Place ID: " .. targetPlaceId)
+    print("Hiện tại đang ở Place ID: " .. game.PlaceId)
+
+    -- Nếu không ở đúng place, thì tiếp tục chạy các phần sau
+    local PLACE_ID = targetPlaceId
+    local MAX_RETRIES = 5
+    local WAIT_BEFORE_RECHECK = 5
+
+    local HttpService = game:GetService("HttpService")
+    local TeleportService = game:GetService("TeleportService")
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
+
+    local function isPlayerCountValid()
+        local count
+        local success, result = pcall(function()
+            return #Players:GetPlayers()
+        end)
+
+        if success and result then
+            count = result
+        else
+            local tempCount = 0
+            for _, player in ipairs(Players:GetChildren()) do
+                if player:IsA("Player") then
+                    tempCount += 1
+                end
+            end
+            count = tempCount
+            warn("⚠️ Fallback GetPlayers(): số lượng đếm được:", count)
+        end
+
+        print("👥 Số lượng người chơi hiện tại:", count)
+        return count >= 2 and count <= 5
+    end
+
+    local function teleportToLeastPopulatedServer(placeId, runScriptOnJoin, retryLimit)
+        retryLimit = retryLimit or MAX_RETRIES
+        local attempts = 0
+        local cursor = nil
+
+        while attempts < retryLimit do
+            attempts += 1
+            local validServers = {}
+            local pagesChecked = 0
+
+            repeat
+                pagesChecked += 1
+                local url = 'https://games.roblox.com/v1/games/' .. placeId .. '/servers/Public?sortOrder=Asc&limit=100'
+                if cursor then url = url .. '&cursor=' .. cursor end
+
+                local success, result = pcall(function()
+                    return HttpService:JSONDecode(game:HttpGet(url))
+                end)
+
+                if success and result and result.data then
+                    for _, server in ipairs(result.data) do
+                        if server.playing > 0 and server.playing < server.maxPlayers then
+                            table.insert(validServers, server)
+                        end
+                    end
+                    cursor = result.nextPageCursor
+                else
+                    warn("❌ Không thể lấy server page (lần " .. attempts .. "), cursor:", tostring(cursor))
+                    cursor = nil
+                    break
+                end
+
+                task.wait(0.5)
+            until #validServers >= 3 or not cursor or pagesChecked >= 5
+
+            if #validServers >= 3 then
+                table.sort(validServers, function(a, b)
+                    return a.playing < b.playing
+                end)
+
+                local topServers = {}
+                for i = 1, math.min(30, #validServers) do
+                    table.insert(topServers, validServers[i])
+                end
+
+                local selectedServer = topServers[math.random(1, #topServers)]
+                local teleportData = runScriptOnJoin and "RUNSCRIPT" or "NOSCRIPT"
+
+                local teleportSuccess, teleportErr = pcall(function()
+                    TeleportService:TeleportToPlaceInstance(placeId, selectedServer.id, LocalPlayer, { customData = teleportData })
+                end)
+
+                if teleportSuccess then
+                    print("✅ Teleport thành công đến server:", selectedServer.id)
+                    return true
+                else
+                    warn("⚠️ Teleport thất bại (Lần " .. attempts .. "): " .. tostring(teleportErr))
+                end
+            else
+                warn("🔁 Không tìm được đủ server hợp lệ. Thử lại...")
+            end
+
+            task.wait(5)
+        end
+
+        warn("⛔ Teleport thất bại sau " .. retryLimit .. " lần thử!")
+        return false
+    end
+
+    local tpInfo = TeleportService:GetLocalPlayerTeleportData()
+    local resumedFromTeleport = tpInfo and tpInfo.customData
+
+    if resumedFromTeleport == "NOSCRIPT" then
+        print("🔁 Vừa teleport lần 1 sang, chờ 15s rồi kiểm tra số lượng người chơi...")
+        task.wait(WAIT_BEFORE_RECHECK)
+        if isPlayerCountValid() then
+            print("✅ Số lượng người chơi phù hợp sau lần hop đầu. Dừng script.")
+            return
+        else
+            print("🔁 Tiếp tục hop lần 2, lần này sẽ chạy script sau khi vào.")
+            teleportToLeastPopulatedServer(PLACE_ID, true)
+            return
+        end
+    end
+
+    if resumedFromTeleport == "RUNSCRIPT" then
+        print("✅ Đã hop lần 2. Tiến hành load script.")
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/WaitForGameLoad"))()
+        return
+    end
+
+    if isPlayerCountValid() then
+        print("✅ Server hiện tại đã phù hợp, không cần hop.")
+        return
+    else
+        print("❌ Server không phù hợp. Bắt đầu hop lần đầu...")
+        teleportToLeastPopulatedServer(PLACE_ID, false)
+    end
 end
