@@ -3,14 +3,13 @@ _G.EventDone = true
 
 spawn(function()
 wait(90)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X2"))()
 end)
 
-getgenv().GEVENT_FPS  = 12
+getgenv().GEVENT_FPS  = 10
 getgenv().GLOOTBOXES = {"Locked Hype Egg", "Deep Sea Treasure Chest"}
 
-getgenv().GDO_FISHING_EVENT = true
-getgenv().GUSE_BOOSTS = true
+getgenv().GDO_FARMING_WORLD = true
 
 --getgenv().GRANK_FIRST = true
 getgenv().GZONE_TO = 999
