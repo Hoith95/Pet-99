@@ -1,5 +1,5 @@
 spawn(function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-World"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-World"))()
 end)
 
 -- Vòng lặp này đợi cho đến khi trò chơi được tải hoàn toàn.
