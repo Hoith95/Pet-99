@@ -10,7 +10,7 @@ end
 
 print("Script 1 đã hoàn thành. Bắt đầu chạy Script Notifier...")
 
-task.wait(68)
+task.wait(83)
 
 local SaveModule = require(game.ReplicatedStorage.Library.Client.Save)
 
