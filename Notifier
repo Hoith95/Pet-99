@@ -121,6 +121,8 @@ task.spawn(function()
             coinText = "COINS: " .. Formatint(getCurrencyAmount("FishingEvent"))
         elseif game.PlaceId == 140403681187145 then
             coinText = "COINS: " .. Formatint(getCurrencyAmount("FantasyCoins"))
+        elseif game.PlaceId == 119454325063278 then
+            coinText = "COINS: " .. Formatint(getCurrencyAmount("FarmingCoins"))
         end
         currencyLabel.Text = coinText
 
