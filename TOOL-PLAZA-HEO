@@ -15,6 +15,7 @@ getgenv().Settings = {
 	    --["Titanic Captain Octopus"] = {Price = "+1%", Priority = true},
 	    --["Titanic Kraken"] = {Price = "+1%", Priority = true},
 	    ["MVP Key"] = {Price = "+1%", Priority = true},
+	    ["Pixel Prism"] = {Price = "+1%", Priority = true},
 	    ["Pixel Rainbow Gem"] = {Price = "+1%", Priority = true},
 	    ["Fantasy Key"] = {Price = "+1", Priority = true},
 	    ["Fantasy Spinny Wheel Ticket"] = {Price = "+5", Priority = true},
