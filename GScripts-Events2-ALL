@@ -10,7 +10,7 @@ getgenv().GEVENT_FPS  = 5
 getgenv().GLOOTBOXES = {"Locked Hype Egg", "Deep Sea Treasure Chest"}
 
 getgenv().GDO_FARMING_WORLD = true
-getgenv().GFARMING_WORLD_MAX_AUTO_CRAFT_RECIPE = 2
+getgenv().GFARMING_WORLD_MAX_AUTO_CRAFT_RECIPE = 5
 getgenv().GEVENT_UPGRADES = 
 {
 "FarmingHugeChance",
