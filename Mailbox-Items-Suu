@@ -18,7 +18,7 @@ getgenv().AutoMail = {
         ['Huge Machine Egg 4'] = { Class = "Egg", Amount = 1 },
         ['Huge Machine Egg 5'] = { Class = "Egg", Amount = 1 },
         ['Pixel Prism'] = { Class = "Misc", MinAmount = 5, Amount = "Max" },
-        --['Pixel Rainbow Gem'] = { Class = "Misc", MinAmount = 5, Amount = "Max" },
+        --['Pixel Rainbow Gem'] = { Class = "Misc", MinAmount = 1, Amount = "Max" },
         --['Pixel Rainbow Shard'] = { Class = "Misc", MinAmount = 20, Amount = "Max" },
         --['Pixel Rainbow Dust'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
         ['Time Trial Gift'] = { Class = "Lootbox", MinAmount = 5, Amount = "Max" },
