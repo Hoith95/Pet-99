@@ -34,7 +34,7 @@ getgenv().AutoMail = {
         ['Diamond'] = { Class = "Seed", MinAmount = 200, Amount = "Max" },
         --['MVP Key'] = { Class = "Misc", MinAmount = 1, Amount = "Max" },
         ['MVP Key Lower Half'] = { Class = "Misc", MinAmount = 200, Amount = "Max" },
-        ['MVP Key Upper Half'] = { Class = "Misc", MinAmount = 30, Amount = "Max" },
+        ['MVP Key Upper Half'] = { Class = "Misc", MinAmount = 20, Amount = "Max" },
         --['Easter Secret Key'] = { Class = "Misc", MinAmount = 500, Amount = "Max" },
         ['Charm Stone'] = { Class = "Misc", MinAmount = 500, Amount = "Max" },
         ['Royalty'] = { Class = "Charm", MinAmount = 1, Amount = "Max" },
