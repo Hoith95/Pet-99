@@ -1,0 +1,55 @@
+getgenv().GetInfo = {
+    ['Mini Lucky Block'] = true,     -- chính xác
+}
+
+local Client = game:GetService("ReplicatedStorage").Library.Client
+local SaveModule = require(Client.Save)
+
+-- Hàm kiểm tra item.id có khớp với keyword nào không
+local function matchesFilter(id)
+    for keyword in pairs(getgenv().GetInfo) do
+        if string.find(string.lower(id), string.lower(keyword)) then
+            return true
+        end
+    end
+    return false
+end
+
+-- Hàm lấy UID của Mini Lucky Block
+local function getMiniLuckyBlockUID()
+    local Inventory = SaveModule.Get().Inventory
+    for Class, Items in pairs(Inventory) do
+        for uid, item in pairs(Items) do
+            local itemId = item.id or ""
+            if matchesFilter(itemId) then
+                return uid
+            end
+        end
+    end
+    return nil
+end
+
+-- Lấy UID Mini Lucky Block
+local miniLuckyBlockUID = getMiniLuckyBlockUID()
+if not miniLuckyBlockUID then
+    warn("Không tìm thấy Mini Lucky Block trong inventory.")
+    return
+else
+    print("Tìm thấy Mini Lucky Block UID:", miniLuckyBlockUID)
+end
+
+-- Gọi server liên tục để tiêu thụ Mini Lucky Block
+spawn(function()
+    while true do
+        wait(0.1)
+        local args = {
+            [1] = miniLuckyBlockUID
+        }
+        local success, err = pcall(function()
+            game:GetService("ReplicatedStorage").Network.MiniLuckyBlock_Consume:InvokeServer(unpack(args))
+        end)
+        if not success then
+            warn("Lỗi khi gọi MiniLuckyBlock_Consume:", err)
+        end
+    end
+end)
