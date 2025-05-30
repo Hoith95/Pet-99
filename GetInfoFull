@@ -1,0 +1,43 @@
+repeat task.wait() until game:IsLoaded()
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+repeat task.wait() until not LocalPlayer.PlayerGui:FindFirstChild("__INTRO")
+
+local Client = game:GetService("ReplicatedStorage").Library.Client
+local SaveModule = require(Client.Save)
+
+local Inventory = SaveModule.Get().Inventory
+local log = {}
+
+table.insert(log, "=== THÔNG TIN CHI TIẾT VẬT PHẨM TRONG KHO ===")
+
+-- Hàm serialize bảng thành chuỗi
+local function tableToString(tbl, indent)
+    indent = indent or ""
+    local str = ""
+    for k, v in pairs(tbl) do
+        local key = tostring(k)
+        local value = ""
+        if type(v) == "table" then
+            value = "\n" .. tableToString(v, indent .. "  ")
+        else
+            value = tostring(v)
+        end
+        str = str .. indent .. key .. ": " .. value .. "\n"
+    end
+    return str
+end
+
+for Class, Items in pairs(Inventory) do
+    table.insert(log, ">>> CLASS: " .. Class)
+    for uid, item in pairs(Items) do
+        table.insert(log, string.format("- UID: %s", uid))
+        table.insert(log, tableToString(item, "    "))
+    end
+end
+
+-- Ghi ra file
+local content = table.concat(log, "\n")
+writefile("InventoryLog.txt", content)
+
+print("✅ Đã xuất toàn bộ thông tin chi tiết của vật phẩm vào file InventoryLog.txt")
