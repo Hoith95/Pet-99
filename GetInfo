@@ -1,0 +1,42 @@
+repeat task.wait() until game:IsLoaded()
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+repeat task.wait() until not LocalPlayer.PlayerGui:FindFirstChild("__INTRO")
+
+-- 🎯 Danh sách tên hoặc từ khoá muốn lọc (viết hoa thường không phân biệt)
+getgenv().GetInfo = {
+    ['Pixel Rainbow Gem'] = true,     -- chính xác
+    ['Huge'] = true,                  -- sẽ bắt mọi item chứa chữ "Huge"
+    ['Egg'] = true,                   -- sẽ bắt mọi item chứa chữ "Egg"
+}
+
+local Client = game:GetService("ReplicatedStorage").Library.Client
+local SaveModule = require(Client.Save)
+
+print("=== THÔNG TIN VẬT PHẨM ĐƯỢC LỌC (CÓ PHẦN TÊN TRÙNG) ===")
+
+local Inventory = SaveModule.Get().Inventory
+local Filter = getgenv().GetInfo
+
+-- Hàm kiểm tra item.id có khớp với keyword nào không
+local function matchesFilter(id)
+    for keyword in pairs(Filter) do
+        if string.find(string.lower(id), string.lower(keyword)) then
+            return true
+        end
+    end
+    return false
+end
+
+for Class, Items in pairs(Inventory) do
+    for uid, item in pairs(Items) do
+        local itemId = item.id or "Không rõ"
+        local amount = item._am or 1
+        local locked = item._lk and "🔒" or "🔓"
+
+        if matchesFilter(itemId) then
+            print(string.format(">>> CLASS: %s", Class))
+            print(string.format(" - ID: %s | Số lượng: %s | Khoá: %s | UID: %s", itemId, amount, locked, uid))
+        end
+    end
+end
