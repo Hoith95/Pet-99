@@ -49,7 +49,8 @@ getgenv().AutoMail = {
     },
     ['Loop Interval'] = 60,
     ['Users'] = {
-        "Dwi_Sunx", "Fiko_Sungx", "tkm_newz", "Fara_Liux", "Adi_Sukox"
+        "Dwi_Sunx", "Fiko_Sungx", "tkm_newz", "Fara_Liux", "Adi_Sukox",
+        "hahoaawbnk", "Anois_Bonnetx"
     },
     ['UserItemPreferences'] = {
         ['hahoaawbnk'] = {'Insta Plant Capsule', 'Diamond'},
@@ -78,7 +79,6 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
     for Class, Items in pairs(SaveModule.Get()['Inventory']) do
         for uid, v in pairs(Items) do
             local Config = false
-
             for Id, Info in pairs(AutoMail['Items']) do
                 local isVariant = Info.AllVariants and string.find(v.id, Id)
                 local isValid = true
@@ -90,14 +90,10 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
 
                 if (Id == v.id or isVariant) and Info.Class == Class and isValid then
                     if Info.MinAmount then
-                        if itemAmount >= Info.MinAmount then
-                            Config = true
-                        end
+                        if itemAmount >= Info.MinAmount then Config = true end
                     else
                         if Info.Amount == "Max" then
-                            if itemAmount > 0 then
-                                Config = true
-                            end
+                            if itemAmount > 0 then Config = true end
                         elseif Info.Amount <= itemAmount then
                             Config = true
                         end
@@ -112,46 +108,73 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
     end
 
     for uid, Data in pairs(Queue) do
-        local Unlocked = false
-        local Mailed = false
         local v = Data.Info
+        local itemId = v.id
         local amountToSend = tonumber(v._am) or 1
+        local User = nil
 
-        if v._lk then
-            while not Unlocked do
-                Unlocked, err = Network.Invoke("Locking_SetLocked", uid, false)
-                task.wait(0.1)
-            end
-        end
-
-        -- Tìm user ưu tiên nếu có
+        -- Tìm xem có user nào được chỉ định cho item này không
         local preferredUsers = {}
-        for _, username in pairs(AutoMail['Users']) do
-            local prefs = AutoMail['UserItemPreferences'] and AutoMail['UserItemPreferences'][username]
-            if prefs then
-                for _, itemName in ipairs(prefs) do
-                    if itemName == v.id then
-                        table.insert(preferredUsers, username)
-                        break
-                    end
+        for username, prefs in pairs(AutoMail['UserItemPreferences'] or {}) do
+            for _, itemName in ipairs(prefs) do
+                if itemName == itemId then
+                    table.insert(preferredUsers, username)
+                    break
                 end
             end
         end
 
-        local User
-        if #preferredUsers > 0 then
+        local isRestrictedItem = #preferredUsers > 0
+        if isRestrictedItem then
+            -- Chỉ gửi item cho user được chỉ định
             User = preferredUsers[math.random(1, #preferredUsers)]
         else
-            User = AutoMail['Users'][math.random(1, #AutoMail['Users'])]
+            -- Nếu item nằm trong danh sách ưu tiên nhưng không được ai chọn → bỏ qua
+            local restrictedItem = false
+            for _, prefs in pairs(AutoMail['UserItemPreferences']) do
+                for _, itemName in ipairs(prefs) do
+                    if itemName == itemId then
+                        restrictedItem = true
+                        break
+                    end
+                end
+                if restrictedItem then break end
+            end
+            if restrictedItem then
+                continue -- bỏ qua item này
+            end
+
+            -- Item bình thường → gửi cho user ngẫu nhiên không có config riêng
+            local generalUsers = {}
+            for _, u in ipairs(AutoMail['Users']) do
+                if not AutoMail['UserItemPreferences'][u] then
+                    table.insert(generalUsers, u)
+                end
+            end
+            if #generalUsers == 0 then
+                continue -- không có ai phù hợp
+            end
+            User = generalUsers[math.random(1, #generalUsers)]
         end
 
-        while not Mailed do
-            Mailed, err = Network.Invoke("Mailbox: Send", User, "Bless", Data.Class, uid, amountToSend)
+        -- Unlock nếu bị khóa
+        if v._lk then
+            while true do
+                local unlocked = Network.Invoke("Locking_SetLocked", uid, false)
+                if unlocked then break end
+                task.wait(0.1)
+            end
+        end
+
+        -- Gửi thư
+        while true do
+            local success = Network.Invoke("Mailbox: Send", User, "Bless", Data.Class, uid, amountToSend)
+            if success then break end
             task.wait(0.1)
         end
 
         AnyItemsSent = true
-        print("Đã gửi " .. amountToSend .. " vật phẩm " .. v.id .. " cho người dùng: " .. User)
+        print("Đã gửi " .. amountToSend .. " vật phẩm " .. itemId .. " cho người dùng: " .. User)
     end
 
     if not AnyItemsSent then
