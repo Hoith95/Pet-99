@@ -9,6 +9,7 @@ _G.MAILBOX = true
 _G.MAILBOX_STOP = false  -- Biến để dừng script an toàn
 
 print("Auto MailBox sẽ bắt đầu gửi thư trong 60 giây nữa.")
+task.wait(60)  -- Đảm bảo chờ đúng 60 giây trước khi thực thi
 
 getgenv().AutoMail = {
     ['Items'] = {
@@ -66,7 +67,7 @@ local Client = game:GetService('ReplicatedStorage').Library.Client
 local Network = require(Client.Network)
 local SaveModule = require(Client.Save)
 
-while task.wait(AutoMail['Loop Interval'] or 60) do
+while task.wait(AutoMail['Loop Interval']) do
     if _G.MAILBOX_STOP then
         print("Script Auto MailBox đang dừng lại...")
         _G.MAILBOX = nil
@@ -80,7 +81,11 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
         for uid, v in pairs(Items) do
             local Config = false
             for Id, Info in pairs(AutoMail['Items']) do
-                local isVariant = Info.AllVariants and string.find(v.id, Id)
+                local isVariant = false
+                if Info.AllVariants and Id == "All Huges" then
+                    isVariant = string.match(v.id, "^Huge ") or string.match(v.id, "^Titanic ")
+                end
+
                 local isValid = true
                 if Info.pt and Info.pt ~= v.pt then isValid = false end
                 if Info.sh and Info.sh ~= v.sh then isValid = false end
@@ -113,7 +118,6 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
         local amountToSend = tonumber(v._am) or 1
         local User = nil
 
-        -- Tìm xem có user nào được chỉ định cho item này không
         local preferredUsers = {}
         for username, prefs in pairs(AutoMail['UserItemPreferences'] or {}) do
             for _, itemName in ipairs(prefs) do
@@ -126,10 +130,8 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
 
         local isRestrictedItem = #preferredUsers > 0
         if isRestrictedItem then
-            -- Chỉ gửi item cho user được chỉ định
             User = preferredUsers[math.random(1, #preferredUsers)]
         else
-            -- Nếu item nằm trong danh sách ưu tiên nhưng không được ai chọn → bỏ qua
             local restrictedItem = false
             for _, prefs in pairs(AutoMail['UserItemPreferences']) do
                 for _, itemName in ipairs(prefs) do
@@ -141,10 +143,9 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
                 if restrictedItem then break end
             end
             if restrictedItem then
-                continue -- bỏ qua item này
+                continue
             end
 
-            -- Item bình thường → gửi cho user ngẫu nhiên không có config riêng
             local generalUsers = {}
             for _, u in ipairs(AutoMail['Users']) do
                 if not AutoMail['UserItemPreferences'][u] then
@@ -152,12 +153,11 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
                 end
             end
             if #generalUsers == 0 then
-                continue -- không có ai phù hợp
+                continue
             end
             User = generalUsers[math.random(1, #generalUsers)]
         end
 
-        -- Unlock nếu bị khóa
         if v._lk then
             while true do
                 local unlocked = Network.Invoke("Locking_SetLocked", uid, false)
@@ -166,7 +166,6 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
             end
         end
 
-        -- Gửi thư
         while true do
             local success = Network.Invoke("Mailbox: Send", User, "Bless", Data.Class, uid, amountToSend)
             if success then break end
