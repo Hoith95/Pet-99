@@ -53,6 +53,10 @@ getgenv().AutoMail = {
         "Angeles_Castrex", "Lina_Lambartx", "Vincenzo_Corradinix",
         "Finn_Dekkerx", "Lia_Liux", "Lincoln_Scottx"
     },
+    ['UserItemPreferences'] = {
+        ['nguyenviva301'] = {'Insta Plant Capsule', 'Diamond'},
+        ['killer7149'] = {'MVP Key Lower Half', 'MVP Key Upper Half'},
+    }
 }
 
 repeat task.wait() until game:IsLoaded()
@@ -64,7 +68,6 @@ local Network = require(Client.Network)
 local SaveModule = require(Client.Save)
 
 while task.wait(AutoMail['Loop Interval'] or 60) do
-    -- Kiểm tra nếu có yêu cầu dừng script
     if _G.MAILBOX_STOP then
         print("Script Auto MailBox đang dừng lại...")
         _G.MAILBOX = nil
@@ -104,7 +107,6 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
                 end
             end
 
-            -- ✅ Sửa chỗ này để bỏ qua Huge Pet nếu không có trong config
             if (Class == "Egg" or Config) and not Queue[uid] then
                 Queue[uid] = { Class = Class, Info = v }
             end
@@ -115,18 +117,38 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
         local Unlocked = false
         local Mailed = false
         local v = Data.Info
-        local amountToSend = tonumber(v._am) or 1  
+        local amountToSend = tonumber(v._am) or 1
 
         if v._lk then
             while not Unlocked do
-                Unlocked, err = Network.Invoke("Locking_SetLocked", uid, false) 
+                Unlocked, err = Network.Invoke("Locking_SetLocked", uid, false)
                 task.wait(0.1)
             end
         end
 
-        local User = AutoMail['Users'][math.random(1, #AutoMail['Users'])]
+        -- Tìm user ưu tiên nếu có
+        local preferredUsers = {}
+        for _, username in pairs(AutoMail['Users']) do
+            local prefs = AutoMail['UserItemPreferences'] and AutoMail['UserItemPreferences'][username]
+            if prefs then
+                for _, itemName in ipairs(prefs) do
+                    if itemName == v.id then
+                        table.insert(preferredUsers, username)
+                        break
+                    end
+                end
+            end
+        end
+
+        local User
+        if #preferredUsers > 0 then
+            User = preferredUsers[math.random(1, #preferredUsers)]
+        else
+            User = AutoMail['Users'][math.random(1, #AutoMail['Users'])]
+        end
+
         while not Mailed do
-            Mailed, err = Network.Invoke("Mailbox: Send", User, "Bless", Data.Class, uid, amountToSend) 
+            Mailed, err = Network.Invoke("Mailbox: Send", User, "Bless", Data.Class, uid, amountToSend)
             task.wait(0.1)
         end
 
