@@ -158,4 +158,3 @@ while task.wait(AutoMail['Loop Interval'] or 60) do
         print("Không có vật phẩm nào đủ điều kiện để gửi.")
     end
 end
-end
