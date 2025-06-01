@@ -6,20 +6,17 @@ wait(90)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X2"))()
 end)
 
-getgenv().GEVENT_FPS  = 8
-getgenv().GLOOTBOXES = {"Locked Hype Egg", "Deep Sea Treasure Chest"}
+getgenv().GEVENT_FPS  = 5
+getgenv().GLOOTBOXES = {"Locked Hype Egg"}
 
-getgenv().GDO_FARMING_WORLD = true
-getgenv().GFARMING_WORLD_MAX_AUTO_CRAFT_RECIPE = 5
-getgenv().GEVENT_UPGRADES = 
-{
-"FarmingHugeChance",
-"FarmingTitanicChance",
-"FarmingPixelRainbowLuck",
-"FarmingGoldHatchChance",
-"FarmingRainbowHatchChance",
-"FarmingShinyHatchChance"}
-
+getgenv().GDO_BASKETBALL_EVENT = true
+getgenv().GEVENT_UPGRADES = {
+"CriticalThrowChance",
+"TrickshotThrowChance",
+--"YeetOrbsReach",--not needed
+"YeetOrbStrength",
+"BetterYeetEgg"
+}
 --getgenv().GRANK_FIRST = true
 getgenv().GZONE_TO = 999
 getgenv().GREBIRTH_TO = 9
