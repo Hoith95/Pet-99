@@ -120,7 +120,7 @@ task.spawn(function()
         if game.PlaceId == 95635359880599 then
             coinText = "COINS: " .. Formatint(getCurrencyAmount("FishingEvent"))
         elseif game.PlaceId == 140403681187145 then
-            coinText = "COINS: " .. Formatint(getCurrencyAmount("FantasyCoins"))
+            coinText = "COINS: " .. Formatint(getCurrencyAmount("BasketballCoins"))
         elseif game.PlaceId == 119454325063278 then
             coinText = "COINS: " .. Formatint(getCurrencyAmount("FarmingCoins"))
         end
