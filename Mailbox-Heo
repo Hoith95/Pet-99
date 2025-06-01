@@ -21,7 +21,7 @@ getgenv().AutoMail = {
         ['Pixel Prism'] = { Class = "Misc", MinAmount = 1, Amount = "Max" },
         --['Pixel Rainbow Gem'] = { Class = "Misc", MinAmount = 15, Amount = "Max" },
         --['Pixel Rainbow Shard'] = { Class = "Misc", MinAmount = 20, Amount = "Max" },
-        --['Pixel Rainbow Dust'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
+        --['Pixel Rainbow Dust'] = { Class = "Misc", MinAmount = 150, Amount = "Max" },
         ['Time Trial Gift'] = { Class = "Lootbox", MinAmount = 5, Amount = "Max" },
         --['Deep Sea Treasure Chest'] = { Class = "Lootbox", MinAmount = 5, Amount = "Max" },
         ['Basketball Gift'] = { Class = "Lootbox", MinAmount = 50, Amount = "Max" },
