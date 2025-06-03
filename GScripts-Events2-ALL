@@ -10,6 +10,7 @@ getgenv().GEVENT_FPS  = 5
 getgenv().GLOOTBOXES = {"Locked Hype Egg"}
 
 getgenv().GDO_BASKETBALL_EVENT = true
+getgenv().GUSE_BOOSTS = true
 getgenv().GEVENT_UPGRADES = {
 "CriticalThrowChance",
 "TrickshotThrowChance",
