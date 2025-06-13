@@ -6,15 +6,32 @@ end)
 
 _G.script1Done = true
 
-script_key = "hHJqncRPZjHqdvDxwJcwwDmpwstZQtrA";
-task.wait(30)
-getgenv().GDRY_RUN = false
+do
+    local defaultKey = "hHJqncRPZjHqdvDxwJcwwDmpwstZQtrA"     -- fallback
+    if _G.Line1 then
+        script_key="IgJZDHuVeiCsdHaakZzHZJdhqLkgVrxg";       -- Line 1
+    elseif _G.Line2 then
+        script_key="fpAiAhNtXhwOUUeKHzlHcvYOQHhsWSHN";       -- Line 2
+    elseif _G.Line3 then
+        script_key="zyASrVQpIdOqcyKBqFDFPADvHlhCTDVo";       -- Line 3
+    elseif _G.Line4 then
+        script_key="PBgqFQESzNhuTfgQatfaWcLbqQSoMvXK";       -- Line 4
+    else
+        script_key = defaultKey                               -- không cờ nào
+    end
+end
+getgenv().GDRY_RUN       = false
 getgenv().DISABLE_OVERLAY = true
 
 getgenv().GMAIL_ITEMS = {
-  ["Send all Diamonds"] = {Class = "Currency", Id = "Diamonds", KeepAmount = "5m", MinAmount = "20m"},
+    ["Send all Diamonds"] = {
+        Class      = "Currency",
+        Id         = "Diamonds",
+        KeepAmount = "5m",
+        MinAmount  = "20m",
+    },
 }
 getgenv().GMAIL_RECEIVERS = {"Dwi_Sunx", "Fiko_Sungx", "tkm_newz", "Fara_Liux", "Adi_Sukox"}
-getgenv().GMAIL_DELAY  = 0
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-ALL"))()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events2-ALL"))()
+getgenv().GMAIL_DELAY = 0
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-ALL"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Events2-ALL"))()
