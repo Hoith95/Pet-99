@@ -13,9 +13,9 @@ do
     elseif _G.Line2 then
         script_key="fpAiAhNtXhwOUUeKHzlHcvYOQHhsWSHN";       -- Line 2
     elseif _G.Line3 then
-        script_key="zyASrVQpIdOqcyKBqFDFPADvHlhCTDVo";       -- Line 3
+        script_key="PBgqFQESzNhuTfgQatfaWcLbqQSoMvXK";       -- Line 3
     elseif _G.Line4 then
-        script_key="PBgqFQESzNhuTfgQatfaWcLbqQSoMvXK";       -- Line 4
+        script_key="zyASrVQpIdOqcyKBqFDFPADvHlhCTDVo";       -- Line 4
     else
         script_key = defaultKey                               -- không cờ nào
     end
