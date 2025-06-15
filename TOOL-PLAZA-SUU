@@ -30,6 +30,7 @@ getgenv().Settings = {
 	    --["Fantasy Fragment"] = {Price = "+9", Priority = true},
 	    ["Huge Sea Dragon Card"] = {Price = "+9%", Priority = true},
 	    --["Deep Sea Treasure Chest"] = {Price = "+5%", Priority = true},
+	    ["Tower Defense Gift"] = {Price = "+1%", Priority = true},
 	    ["Basketball Gift"] = {Price = "+1%", Priority = true},
 	    ["Titanic Easter Gift"] = {Price = "+9%", Priority = true},
 	    ["Huge Easter Gift"] = {Price = "+1%", Priority = true},
