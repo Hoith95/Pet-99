@@ -2,22 +2,15 @@ _G.script2Done = true
 _G.EventDone = true
 
 spawn(function()
-wait(90)
+wait(30)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X5"))()
 end)
 
 getgenv().GEVENT_FPS  = 5
 getgenv().GLOOTBOXES = {"Locked Hype Egg"}
 
-getgenv().GDO_BASKETBALL_EVENT = true
-getgenv().GUSE_BOOSTS = true
-getgenv().GEVENT_UPGRADES = {
-"CriticalThrowChance",
-"TrickshotThrowChance",
---"YeetOrbsReach",--not needed
-"YeetOrbStrength",
-"BetterYeetEgg"
-}
+getgenv().GDO_TOWER_DEFENSE = true
+
 --getgenv().GRANK_FIRST = true
 getgenv().GZONE_TO = 999
 getgenv().GREBIRTH_TO = 9
@@ -56,4 +49,5 @@ getgenv().GPOTIONS_MAX_TIER = 99
 --getgenv().GENCHANTS = {"Criticals","Lucky Eggs","Huge Hunter","Tap Power","Coins","Strong Pets"}
 --getgenv().GENCHANTS = {"Criticals","Lucky Eggs","Huge Hunter","Tap Power","Tap Power","Coins"}
 getgenv().GENCHANTS = {"Lucky Eggs","Lucky Eggs","Huge Hunter","Shiny Hunter","Diamonds","Treasure Hunter"}
-loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/ba2dcad2127dcfc04301dfe52ce6c61c.lua"))()
+--loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/ba2dcad2127dcfc04301dfe52ce6c61c.lua"))()
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/34915da4ad87a5028e1fd64efbe3543f.lua"))()
