@@ -12,9 +12,9 @@ getgenv().GLOOTBOXES = {"Locked Hype Egg"}
 getgenv().GDO_TOWER_DEFENSE = true
 
 --getgenv().GRANK_FIRST = true
-getgenv().GZONE_TO = 999
-getgenv().GREBIRTH_TO = 9
-getgenv().GRANK_TO= 33
+--getgenv().GZONE_TO = 999
+--getgenv().GREBIRTH_TO = 9
+--getgenv().GRANK_TO= 33
 
 getgenv().GPROGRESS_MODE = "Hybrid" -- Hatch
 getgenv().GGFX_MODE = 1
