@@ -7,8 +7,13 @@ game:GetService("ReplicatedStorage").Network:FindFirstChild("Login Streaks: Clai
 end)
 
 spawn(function()
-wait(30)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X2"))()
+    wait(30)
+    if _G.FPS5 == true then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X5"))()
+    else
+        -- Script mặc định nếu không có _G.FPS5
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X2"))()
+    end
 end)
 
 getgenv().GLOOTBOXES = {"Locked Hype Egg", "Slime Gift", "Deep Sea Treasure Chest"}
