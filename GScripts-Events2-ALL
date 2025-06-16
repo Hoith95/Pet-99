@@ -3,10 +3,10 @@ _G.EventDone = true
 
 spawn(function()
 wait(30)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X2"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X5"))()
 end)
 
-getgenv().GEVENT_FPS  = 6
+getgenv().GEVENT_FPS  = 5
 getgenv().GLOOTBOXES = {"Locked Hype Egg"}
 
 getgenv().GDO_TOWER_DEFENSE = true
