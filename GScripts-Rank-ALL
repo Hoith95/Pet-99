@@ -8,7 +8,7 @@ end)
 
 spawn(function()
 wait(30)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X5"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X2"))()
 end)
 
 getgenv().GLOOTBOXES = {"Locked Hype Egg", "Slime Gift", "Deep Sea Treasure Chest"}
