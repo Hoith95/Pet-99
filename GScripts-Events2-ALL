@@ -19,7 +19,7 @@ getgenv().GREBIRTH_TO = 9
 getgenv().GRANK_TO= 33
 
 getgenv().GPROGRESS_MODE = "Hybrid" -- Hatch
-getgenv().GGFX_MODE = 2
+getgenv().GGFX_MODE = 1
 
 getgenv().GHATCH_SPEED_MS = 0
 getgenv().GHATCH_GOLDEN_EGGS = false
