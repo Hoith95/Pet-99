@@ -54,11 +54,11 @@ getgenv().AutoMail = {
     ['Loop Interval'] = 60,
     ['Users'] = {
         "Dwi_Sunx", "Fiko_Sungx", "tkm_newz", "Fara_Liux", "Adi_Sukox",
-        "hahoaawbnk", "Anois_Bonnetx"
+        "hahoaawbnk"
     },
     ['UserItemPreferences'] = {
         ['hahoaawbnk'] = {'Insta Plant Capsule', 'Diamond'},
-        ['Anois_Bonnetx'] = {'MVP Key Lower Half', 'MVP Key Upper Half'},
+        ['hahoaawbnk'] = {'MVP Key Lower Half', 'MVP Key Upper Half'},
     }
 }
 
