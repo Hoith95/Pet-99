@@ -16,8 +16,7 @@ end)
 getgenv().GLOOTBOXES = {"Locked Hype Egg"}
 
 getgenv().GDO_TOWER_DEFENSE = true
-getgenv().GTOWER_DEFENSE_FUSE_PET = "Torpedo Cat"
-getgenv().GTOWER_DEFENSE_INFINITY_PET = {"Zeus Bear","Rich Corgi","Torpedo Cat","Tech Samurai Axolotl","Frostbyte Griffin","Demolition Panda"}
+getgenv().GTOWER_DEFENSE_INFINITY_PET = {"Mechanical Griffin","Zeus Bear","Rich Corgi","TNT Capybara","Nuclear Dominus","Arcade Angelus","Nightmare Cyclops","Forged Armadillo","Comet Dragon","Electric Eel","Shadow Pegasus","Torpedo Cat","Frostbyte Griffin","Tech Samurai Axolotl","Demolition Panda"}
 
 --getgenv().GRANK_FIRST = true
 getgenv().GZONE_TO = 999
