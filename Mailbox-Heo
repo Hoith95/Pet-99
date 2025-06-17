@@ -55,11 +55,11 @@ getgenv().AutoMail = {
     ['Users'] = {
         "Lena_Kollerz", "longz_tato", "xuan_verok",
         "Angeles_Castrex", "Lina_Lambartx", "Vincenzo_Corradinix",
-        "Finn_Dekkerx", "Lia_Liux", "Lincoln_Scottx", "nguyenviva301", "killer7149"
+        "Finn_Dekkerx", "Lia_Liux", "Lincoln_Scottx", "nguyenviva301"
     },
     ['UserItemPreferences'] = {
         ['nguyenviva301'] = {'Insta Plant Capsule', 'Diamond'},
-        ['killer7149'] = {'MVP Key Lower Half', 'MVP Key Upper Half'},
+        ['nguyenviva301'] = {'MVP Key Lower Half', 'MVP Key Upper Half'},
     }
 }
 
