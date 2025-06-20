@@ -10,8 +10,10 @@ spawn(function()
     wait(30)
     if _G.FPS7 == true then
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X7"))()
+    elseif _G.FPS4 == true then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X4"))()
     else
-        -- Script mặc định nếu không có _G.FPS5
+        -- Mặc định: LookFPS-X5
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X5"))()
     end
 end)
