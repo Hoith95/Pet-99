@@ -13,6 +13,11 @@ spawn(function()
     end
 end)
 
+spawn(function()
+wait(20)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/x2-SetSpeed"))()
+end)
+
 getgenv().GLOOTBOXES = {"Locked Hype Egg"}
 
 getgenv().GDO_TOWER_DEFENSE = true
