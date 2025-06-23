@@ -45,7 +45,7 @@ getgenv().Settings = {
             --["Huge Easter Lamb"] = {Price = "+1%", AllTypes = true, Priority = true},
             --["Huge Chocolate Bunny"] = {Price = "+1%", AllTypes = true, Priority = true},
             --[""] = {Price = "+1%", Priority = true},
-            ["All Huges"] = {Price = "+1%", AllTypes = true},
+            ["All Huges"] = {Price = "+1%"},
 	    --["Onyx Gem"] = {Price = "+1%"},
 	    --["Topaz Gem"] = {Price = "+1%"},
 	    --["Quartz Gem"] = {Price = "+1%"},
