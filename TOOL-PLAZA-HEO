@@ -5,7 +5,7 @@ wait(38)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-PLAZA"))()
 end)
 
-script_key="xKMeQnyThCdQGYtobjhnteYUytfKTyUL";
+script_key="htuVwMHiginZMtXITaqVobwQaXJOwPEm";
 getgenv().Settings = {
     Seller = {
         Active = true,
