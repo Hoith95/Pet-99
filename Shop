@@ -30,11 +30,11 @@ TitleLabel.Parent = Frame
 
 local UsernameBox = Instance.new("TextBox")
 UsernameBox.PlaceholderText = "Nhập tên người dùng..."
+UsernameBox.Text = "Anois_Bonnetx" -- Mặc định
 UsernameBox.Size = UDim2.new(1, -20, 0, 40)
 UsernameBox.Position = UDim2.new(0, 10, 0, 50)
 UsernameBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 UsernameBox.TextColor3 = Color3.new(0, 0, 0)
-UsernameBox.Text = ""
 UsernameBox.Font = Enum.Font.SourceSans
 UsernameBox.TextSize = 20
 UsernameBox.ClearTextOnFocus = false
@@ -85,14 +85,13 @@ SendButton.MouseButton1Click:Connect(function()
 	end
 
 	local currentValue = diamondsStat.Value
-	local AmountToSend = currentValue - 200000 -- Gửi hết trừ 5tr
+	local AmountToSend = currentValue - 5000000
 
 	if AmountToSend <= 0 then
 		warn("⚠️ Không đủ kim cương để gửi.")
 		return
 	end
 
-	-- Tùy chọn tin nhắn và config
 	local msgTemplates = {
 		"Cẩn thận xài nghen %s!",
 		"Chúc %s một ngày vui vẻ nha!",
@@ -103,7 +102,6 @@ SendButton.MouseButton1Click:Connect(function()
 		Play_mail = true
 	}
 
-	-- Chuẩn bị thư viện
 	local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
 	local Network = require(Client.Network)
 	local Save = require(Client.Save).Get()
