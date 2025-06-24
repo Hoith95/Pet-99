@@ -21,8 +21,9 @@ end)
 getgenv().GLOOTBOXES = {"Locked Hype Egg"}
 
 getgenv().GDO_TOWER_DEFENSE = true
+getgenv().GTOWER_DEFENSE_HARDCORE_MODE = true
 getgenv().GTOWER_DEFENSE_INFINITY_PET = {"Frostbyte Griffin","Nuclear Dominus","Electric Eel","Demolition Panda"}
-getgenv().GTOWER_DEFENSE_AMOUNT_OF_CHEAP_TOWERS_TO_PLACE_FIRST = 3
+getgenv().GTOWER_DEFENSE_AMOUNT_OF_CHEAP_TOWERS_TO_PLACE_FIRST = 7
 
 --getgenv().GRANK_FIRST = true
 getgenv().GZONE_TO = 999
