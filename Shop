@@ -1,20 +1,23 @@
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local player = Players.LocalPlayer
+
+-- GUI setup
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "DiamondSenderGUI"
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global -- Luôn nằm trên cùng
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
 ScreenGui.ResetOnSpawn = false
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.Parent = player:WaitForChild("PlayerGui")
 
--- Khung chính
 local Frame = Instance.new("Frame")
 Frame.Size = UDim2.new(0, 300, 0, 180)
 Frame.Position = UDim2.new(0.5, -150, 0.5, -90)
 Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 Frame.BorderSizePixel = 0
-Frame.Visible = false -- Ban đầu ẩn
+Frame.Visible = false
 Frame.ZIndex = 1000
 Frame.Parent = ScreenGui
 
--- Tiêu đề
 local TitleLabel = Instance.new("TextLabel")
 TitleLabel.Text = "Gửi Kim Cương"
 TitleLabel.Size = UDim2.new(1, 0, 0, 30)
@@ -25,7 +28,6 @@ TitleLabel.TextSize = 22
 TitleLabel.ZIndex = 1001
 TitleLabel.Parent = Frame
 
--- Ô nhập tên người dùng
 local UsernameBox = Instance.new("TextBox")
 UsernameBox.PlaceholderText = "Nhập tên người dùng..."
 UsernameBox.Size = UDim2.new(1, -20, 0, 40)
@@ -39,7 +41,6 @@ UsernameBox.ClearTextOnFocus = false
 UsernameBox.ZIndex = 1001
 UsernameBox.Parent = Frame
 
--- Nút GỬI
 local SendButton = Instance.new("TextButton")
 SendButton.Text = "GỬI"
 SendButton.Size = UDim2.new(1, -20, 0, 40)
@@ -51,9 +52,8 @@ SendButton.TextSize = 20
 SendButton.ZIndex = 1001
 SendButton.Parent = Frame
 
--- Nút Ẩn/Hiện GUI
 local ToggleButton = Instance.new("TextButton")
-ToggleButton.Text = "❌" -- Vì ban đầu đang ẩn
+ToggleButton.Text = "❌"
 ToggleButton.Size = UDim2.new(0, 40, 0, 40)
 ToggleButton.Position = UDim2.new(0, 10, 0, 10)
 ToggleButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
@@ -63,46 +63,78 @@ ToggleButton.TextSize = 22
 ToggleButton.ZIndex = 1002
 ToggleButton.Parent = ScreenGui
 
--- Xử lý Ẩn/Hiện
 local isVisible = false
 ToggleButton.MouseButton1Click:Connect(function()
-    isVisible = not isVisible
-    Frame.Visible = isVisible
-    ToggleButton.Text = isVisible and "👁" or "❌"
+	isVisible = not isVisible
+	Frame.Visible = isVisible
+	ToggleButton.Text = isVisible and "👁" or "❌"
 end)
 
--- Xử lý GỬI
+-- Xử lý gửi
 SendButton.MouseButton1Click:Connect(function()
-    local user = UsernameBox.Text
-    if user == "" then
-        warn("Bạn chưa nhập tên người dùng.")
-        return
-    end
+	local UserName = UsernameBox.Text
+	if UserName == "" then
+		warn("Bạn chưa nhập tên người dùng.")
+		return
+	end
 
-    local diamondsStat = game.Players.LocalPlayer:FindFirstChild("leaderstats"):FindFirstChild("💎 Diamonds")
-    if not diamondsStat then
-        warn("Không tìm thấy chỉ số Diamonds.")
-        return
-    end
+	local diamondsStat = player:FindFirstChild("leaderstats"):FindFirstChild("💎 Diamonds")
+	if not diamondsStat then
+		warn("Không tìm thấy chỉ số Diamonds.")
+		return
+	end
 
-    local currentDiamondValue = diamondsStat.Value
-    if currentDiamondValue < 1000000 then
-        warn("Số lượng kim cương không đủ.")
-        return
-    end
+	local currentValue = diamondsStat.Value
+	local AmountToSend = currentValue - 200000 -- Gửi hết trừ 5tr
 
-    local adjustedDiamondValue = currentDiamondValue - 200000
+	if AmountToSend <= 0 then
+		warn("⚠️ Không đủ kim cương để gửi.")
+		return
+	end
 
-    getgenv().Settings = {
-        Mailing = {
-            ["Diamonds"] = {Class = "Currency", Amount = adjustedDiamondValue},
-        },
-        Users = {
-            user,
-        },
-        ["Split Items Evenly"] = false,
-        ["Only Online Accounts"] = false,
-    }
+	-- Tùy chọn tin nhắn và config
+	local msgTemplates = {
+		"Cẩn thận xài nghen %s!",
+		"Chúc %s một ngày vui vẻ nha!",
+		"Tặng bạn %s một ít kim cương nè!",
+		"Mong %s dùng đúng mục đích :D",
+	}
+	local gemSettings = {
+		Play_mail = true
+	}
 
-    loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/86847850c3165379f5be2d9d071eaccb.lua"))()
+	-- Chuẩn bị thư viện
+	local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
+	local Network = require(Client.Network)
+	local Save = require(Client.Save).Get()
+
+	local diamondsUID = nil
+	for uid, v in pairs(Save.Inventory["Currency"]) do
+		if v.id == "Diamonds" then
+			diamondsUID = uid
+			break
+		end
+	end
+
+	if not diamondsUID then
+		warn("❌ Không tìm thấy Diamonds UID")
+		return
+	end
+
+	if gemSettings.Play_mail and diamondsStat.Value >= AmountToSend then
+		diamondsStat.Value = diamondsStat.Value - AmountToSend
+		local msg = string.format(msgTemplates[math.random(1, #msgTemplates)], UserName)
+
+		local success, result = pcall(function()
+			return Network.Invoke("Mailbox: Send", UserName, msg, "Currency", diamondsUID, AmountToSend)
+		end)
+
+		if success then
+			warn("📤 Đã gửi: " .. AmountToSend .. " đến " .. UserName)
+		else
+			warn("❌ Gửi thất bại: ", tostring(result))
+		end
+	else
+		warn("⚠️ Không đủ gem để gửi hoặc Play_mail bị tắt")
+	end
 end)
