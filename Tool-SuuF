@@ -8,7 +8,6 @@ _G.script1Done = true
 
 do
     local defaultKey = "hHJqncRPZjHqdvDxwJcwwDmpwstZQtrA"     -- fallback
-    local defaultKey = "hHJqncRPZjHqdvDxwJcwwDmpwstZQtrA"     -- fallback
     if _G.Line1 then
         --script_key="IgJZDHuVeiCsdHaakZzHZJdhqLkgVrxg";       -- Line 1
         script_key="nutqpLooYQJqoyGXdyQIQYuUvjRoQIfi";       -- Line 1
