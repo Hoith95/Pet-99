@@ -9,14 +9,14 @@ _G.script1Done = true
 do
     local defaultKey = "hHJqncRPZjHqdvDxwJcwwDmpwstZQtrA"     -- fallback
     if _G.Line1 then
-        script_key="IgJZDHuVeiCsdHaakZzHZJdhqLkgVrxg";       -- Line 1
-        --script_key="nutqpLooYQJqoyGXdyQIQYuUvjRoQIfi";       -- Line 1
+        --script_key="IgJZDHuVeiCsdHaakZzHZJdhqLkgVrxg";       -- Line 1
+        script_key="nutqpLooYQJqoyGXdyQIQYuUvjRoQIfi";       -- Line 1
     elseif _G.Line2 then
-        script_key="zyASrVQpIdOqcyKBqFDFPADvHlhCTDVo";       -- Line 2
-        --script_key="zQghFKSBVIBzOYhoBVyqdXianxpYMXdn";       -- Line 2
+        --script_key="zyASrVQpIdOqcyKBqFDFPADvHlhCTDVo";       -- Line 2
+        script_key="zQghFKSBVIBzOYhoBVyqdXianxpYMXdn";       -- Line 2
     elseif _G.Line3 then
-        script_key="PBgqFQESzNhuTfgQatfaWcLbqQSoMvXK";       -- Line 3
-        --script_key="rNbCKzbKLEEjXeEXYEtLeFuubVUOqCYq";       -- Line 3
+        --script_key="PBgqFQESzNhuTfgQatfaWcLbqQSoMvXK";       -- Line 3
+        script_key="rNbCKzbKLEEjXeEXYEtLeFuubVUOqCYq";       -- Line 3
     elseif _G.Line4 then
         script_key="HDYuxcdpCBScUeYhGfwpSmXppyhajreW";       -- Line 4
     else
