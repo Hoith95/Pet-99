@@ -1,0 +1,36 @@
+if _G.VARTELE then
+    warn("Script đã được chạy trước đó!")
+    return -- Dừng script nếu đã chạy
+end
+_G.VARTELE = true
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TeleportFunc = ReplicatedStorage:WaitForChild("Network"):WaitForChild("World4Teleport")
+local LocalPlayer = Players.LocalPlayer
+
+local TARGET_PLACE_ID = 140403681187145
+
+-- Hàm kiểm tra và xử lý theo yêu cầu
+task.spawn(function()
+    if game.PlaceId == TARGET_PLACE_ID then
+        -- Nếu đang ở đúng map
+        local playerCount = #Players:GetPlayers()
+        if playerCount <= 1 then
+            -- Chỉ có 1 mình -> thoát script (dừng thread)
+            return
+        else
+            -- Có người khác -> kick
+            LocalPlayer:Kick("Có người khác")
+        end
+    else
+        -- Không ở đúng map -> dịch chuyển
+        TeleportFunc:InvokeServer()
+
+        -- Chờ 3 phút
+        task.wait(180)
+
+        -- Sau đó kick
+        LocalPlayer:Kick("Dịch Chuyển Qua World 4 Thất Bại!")
+    end
+end)
