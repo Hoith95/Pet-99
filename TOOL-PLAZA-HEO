@@ -18,7 +18,7 @@ getgenv().Settings = {
 	    ["MVP Key"] = {Price = "+1%", Priority = true},
 	    --["Pixel Prism"] = {Price = "+1%", Priority = true},
 	    --["Pixel Rainbow Gem"] = {Price = "+1%", Priority = true},
-	    ["Fantasy Key"] = {Price = "+1", Priority = true},
+	    ["Fantasy Key"] = {Price = 20000, Priority = true},
 	    ["Fantasy Spinny Wheel Ticket"] = {Price = "+5", Priority = true},
 	    ["Mega Loot Chest"] = {Price = "+5", Priority = true},
 	    ["Mega Potion Chest"] = {Price = "+5", Priority = true},
