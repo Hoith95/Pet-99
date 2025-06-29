@@ -13,17 +13,15 @@ spawn(function()
     end
 end)
 
-spawn(function()
-wait(20)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/x2-SetSpeed"))()
-end)
-
 getgenv().GLOOTBOXES = {"Locked Hype Egg"}
 
-getgenv().GDO_TOWER_DEFENSE = true
-getgenv().GTOWER_DEFENSE_HARDCORE_MODE = true
-getgenv().GTOWER_DEFENSE_INFINITY_PET = {"Frostbyte Griffin","Nuclear Dominus","Electric Eel","Demolition Panda"}
-getgenv().GTOWER_DEFENSE_AMOUNT_OF_CHEAP_TOWERS_TO_PLACE_FIRST = 7
+getgenv().GDO_GYM_EVENT = true
+getgenv().GGYM_EVENT_STAT_CONFIG = {
+    ["Stamina"] = 8,
+    ["CritChance"] = 9,
+    ["Strength"] = 83,
+    ["Size"] = 1
+}
 
 --getgenv().GRANK_FIRST = true
 getgenv().GZONE_TO = 999
