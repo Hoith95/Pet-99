@@ -8,8 +8,8 @@ spawn(function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X7"))()
     else
         -- Script mặc định nếu không có _G.FPS5
-        getgenv().GEVENT_FPS  = 5
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X5"))()
+        getgenv().GEVENT_FPS  = 4
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X4"))()
     end
 end)
 
