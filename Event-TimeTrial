@@ -1,9 +1,6 @@
 -- Auto Time Trial - Có nút bấm kết thúc bằng tay
 
 task.spawn(function()
-
-    task.wait(70)
-
     if game.PlaceId ~= 140403681187145 then
         return
     end
