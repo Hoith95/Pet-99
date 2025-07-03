@@ -1,8 +1,9 @@
--- Auto chạy Time Trial 264 tổng cộng 15 lần
+-- Auto chạy Time Trial 264 nếu TotalRuns < 10
 task.spawn(function()
 	if game.PlaceId ~= 140403681187145 then return end
 
 	local player = game.Players.LocalPlayer
+	local Save = require(game.ReplicatedStorage.Library.Client.Save)
 
 	local function teleportTo(part)
 		if part and part:IsA("BasePart") then
@@ -76,14 +77,22 @@ task.spawn(function()
 		end
 	end
 
-	-- === BẮT ĐẦU CHẠY 15 VÒNG TIME TRIAL ===
-	for run = 1, 15 do
-		warn("🔁 Bắt đầu vòng " .. run)
+	-- === VÒNG LẶP DỰA TRÊN TotalRuns < 10 ===
+	while true do
+		local saveData = Save.Get()
+		local totalRuns = saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.TotalRuns or 0) or 0
+
+		if totalRuns >= 10 then
+			warn("🎯 Đã đủ 10 lượt chạy, dừng script.")
+			break
+		end
+
+		warn("🔁 Bắt đầu vòng Time Trial thứ " .. tostring(totalRuns + 1))
 
 		-- Vào cổng
 		teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
 
-		-- Đợi nhân vật đã thực sự vào trong zone
+		-- Đợi nhân vật vào trong khu vực
 		local character = player.Character or player.CharacterAdded:Wait()
 		local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
@@ -96,18 +105,18 @@ task.spawn(function()
 			task.wait(0.5)
 		end
 
-		-- Gọi logic farm Breakables
+		-- Tele đến từng Breakable
 		teleportToBreakables()
 
-		-- Đợi 10s sau khi hoàn thành
+		-- Đợi 10 giây sau khi xong
 		task.wait(10)
 
-		-- Teleport ra ngoài
+		-- Teleport ra
 		teleportTo(LeaveTeleport)
 
-		-- Nghỉ 15s trước vòng tiếp theo
+		-- Nghỉ 15 giây rồi vòng tiếp theo
 		task.wait(15)
 	end
 
-	warn("🎉 Đã hoàn thành 15 vòng Time Trial!")
+	warn("🎉 Đã hoàn tất Time Trial hoặc đạt 10 lượt.")
 end)
