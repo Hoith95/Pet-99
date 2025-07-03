@@ -35,7 +35,7 @@ task.spawn(function()
 		while true do
 			local breakable = BreakablesFolder:FindFirstChild(name)
 			if not breakable then break end
-			task.wait(0.3)
+			task.wait(0.1)
 		end
 	end
 
