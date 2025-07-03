@@ -1,5 +1,8 @@
--- Auto Time Trial cho map 264 - tự động thoát khi hoàn thành
+-- Auto Time Trial cho map 264 - đơn giản, không phân biệt kết quả
 task.spawn(function()
+
+    task.wait(5)
+
     if game.PlaceId ~= 140403681187145 then
         return
     end
@@ -7,10 +10,10 @@ task.spawn(function()
     local player = game.Players.LocalPlayer
     local Save = require(game.ReplicatedStorage.Library.Client.Save)
 
-    -- Gắn cờ để kiểm soát vòng lặp
     local stopSignal = false
+    local FARM_POSITION = CFrame.new(1556, 36, -648) -- Vị trí farm
 
-    -- Hook vào UI kết quả để biết khi nào trận đấu kết thúc
+    -- Hook TimeTrialResultUI.Show để phát hiện khi hoàn thành
     local success, timeTrialResultUI = pcall(function()
         return require(game.ReplicatedStorage.Library.Client.UI.TimeTrialResultUI)
     end)
@@ -18,7 +21,7 @@ task.spawn(function()
     if success and typeof(timeTrialResultUI) == "table" and typeof(timeTrialResultUI.Show) == "function" then
         local originalShow = timeTrialResultUI.Show
         timeTrialResultUI.Show = function(arg1)
-            warn("⏱️ Time Trial kết thúc, tự động thoát...")
+            warn("✅ Time Trial kết thúc")
             stopSignal = true
             return originalShow(arg1)
         end
@@ -26,7 +29,7 @@ task.spawn(function()
         warn("⚠️ Không thể hook vào TimeTrialResultUI.Show")
     end
 
-    -- Hàm teleport qua danh sách điểm
+    -- Dịch chuyển qua các điểm
     local function teleportSequence(player, sequence)
         for _, cframe in ipairs(sequence) do
             local character = player.Character
@@ -39,27 +42,26 @@ task.spawn(function()
         end
     end
 
-    -- Teleport đến part cụ thể
-    local function teleportTo(part)
-        if part and part:IsA("BasePart") then
-            local character = player.Character
-            if character and character:FindFirstChild("HumanoidRootPart") then
-                character.HumanoidRootPart.CFrame = part.CFrame
-            end
+    -- Dịch chuyển đến part hoặc CFrame
+    local function teleportTo(partOrCFrame)
+        local character = player.Character
+        if not character or not character:FindFirstChild("HumanoidRootPart") then return end
+
+        if typeof(partOrCFrame) == "Instance" and partOrCFrame:IsA("BasePart") then
+            character.HumanoidRootPart.CFrame = partOrCFrame.CFrame
+        elseif typeof(partOrCFrame) == "CFrame" then
+            character.HumanoidRootPart.CFrame = partOrCFrame
         end
     end
 
-    -- Kiểm tra điều kiện chạy thử
+    -- Kiểm tra còn lượt Time Trial không
     local function canRunTrial()
         local saveData = Save.Get()
-        if not saveData or not saveData.TimeTrialStats then
-            return false
-        end
-        local totalRuns = saveData.TimeTrialStats.TotalRuns or 0
-        return totalRuns < 10
+        if not saveData or not saveData.TimeTrialStats then return false end
+        return (saveData.TimeTrialStats.TotalRuns or 0) < 10
     end
 
-    -- Các vị trí teleport trong map
+    -- Danh sách các điểm dịch chuyển trong map
     local teleportSequencePoints = {
         CFrame.new(-18079, 20, -484),
         CFrame.new(-18359, 20, -560),
@@ -69,35 +71,33 @@ task.spawn(function()
         CFrame.new(-18110, 20, -658),
     }
 
-    -- Kiểm tra nhân vật đã load
-    local character = player.Character
-    if not (character and character:FindFirstChild("HumanoidRootPart")) then
-        warn("❌ Không tìm thấy nhân vật, dừng script")
-        return
-    end
-
-    -- Bắt đầu vòng lặp chính
+    -- Vòng lặp chính
     while true do
-
         if not canRunTrial() then
-            warn("🚫 Đã đủ 10 lần, dừng script")
+            warn("🚫 Đã đủ 10 lượt chạy, dừng script.")
             break
         end
 
-        stopSignal = false -- reset cờ
+        stopSignal = false
 
         -- Teleport vào Time Trial
         teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
         task.wait(5)
 
-        -- Lặp dịch chuyển liên tục cho tới khi có tín hiệu kết thúc
+        -- Dịch chuyển vòng quanh map
         while not stopSignal do
             teleportSequence(player, teleportSequencePoints)
         end
 
-        -- Sau khi xong → thoát ra ngoài
+        -- Thoát khỏi Time Trial
         teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Leave)
-        task.wait(15)
+        task.wait(5)
+
+        -- Teleport về chỗ farm (không cần phân biệt thắng/thua)
+        teleportTo(FARM_POSITION)
+        warn("🏕️ Đã quay về vị trí farm.")
+
+        task.wait(10)
     end
 
 end)
