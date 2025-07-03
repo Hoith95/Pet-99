@@ -1,112 +1,173 @@
+-- đua thời gian map 264
 task.spawn(function()
-    if game.PlaceId ~= 140403681187145 then return end
+	if game.PlaceId ~= 140403681187145 then
+		return
+	end
 
-    local player = game.Players.LocalPlayer
-    local Save = require(game.ReplicatedStorage.Library.Client.Save)
-    local TimeTrials = require(game.ReplicatedStorage.Library.Types.TimeTrials)
+	local player = game.Players.LocalPlayer
+	local Save = require(game.ReplicatedStorage.Library.Client.Save)
+	local TimeTrials = require(game.ReplicatedStorage.Library.Types.TimeTrials)
 
-    local function teleportSequence(player, sequence)
-        for _, cframe in ipairs(sequence) do
-            local character = player.Character
-            if character and character:FindFirstChild("HumanoidRootPart") then
-                character.HumanoidRootPart.CFrame = cframe
-                task.wait(0.3)  -- ⏱ chờ 0.5s giữa mỗi lần teleport
-            else
-                break
-            end
-        end
-    end
+	local function teleportTo(part)
+		if part and part:IsA("BasePart") then
+			local character = game.Players.LocalPlayer.Character
+			if character and character:FindFirstChild("HumanoidRootPart") then
+				character.HumanoidRootPart.CFrame = part.CFrame + Vector3.new(0, 5, 0)
+			end
+		end
+	end
 
-    local function teleportTo(part)
-        if part and part:IsA("BasePart") then
-            local character = player.Character
-            if character and character:FindFirstChild("HumanoidRootPart") then
-                character.HumanoidRootPart.CFrame = part.CFrame
-            end
-        end
-    end
+	local function getDuration()
+		local saveData = Save.Get()
+		if not saveData then
+			warn("Lỗi: Không lấy được dữ liệu Save\n")
+			return nil
+		end
 
-    local function getDuration()
-        local saveData = Save.Get()
-        if not saveData then
-            warn("Lỗi: Không lấy được dữ liệu save")
-            return nil
-        end
+		local timeTrialStats = saveData.TimeTrialStats
+		if not timeTrialStats then
+			warn("Không tìm thấy TimeTrialStats trong dữ liệu Save\n")
+			return 53
+		end
 
-        local timeTrialStats = saveData.TimeTrialStats
-        if not timeTrialStats then
-            warn("Không tìm thấy TimeTrialStats")
-            return 53
-        end
+		local totalRuns = timeTrialStats.TotalRuns or timeTrialStats.RemainingRuns or 0
+		warn("Số lần Total Runs: " .. tostring(totalRuns) .. "\n")
 
-        local totalRuns = timeTrialStats.TotalRuns or timeTrialStats.RemainingRuns or 0
-        warn("Số lần Total Runs: " .. tostring(totalRuns))
+		if totalRuns >= 10 then
+			warn("TotalRuns >= 10, dừng thực hiện teleport\n")
+			return nil
+		end
 
-        if totalRuns >= 10 then
-            warn("Đã đủ 10 lượt, dừng thực hiện")
-            return nil
-        end
+		local goalIndex = timeTrialStats.GoalIndex or 1
+		local duration = nil
+		local goal = TimeTrials.Goals[goalIndex]
 
-        local goalIndex = timeTrialStats.GoalIndex or 1
-        local goal = TimeTrials.Goals[goalIndex]
+		if not goal or not goal.Reward then
+			duration = 250
+		else
+			local amount = nil
+			local success, result = pcall(function()
+				return goal.Reward:GetAmount()
+			end)
+			if success then
+				amount = result
+			end
 
-        if not goal or not goal.Reward then return 250 end
+			if typeof(amount) == "number" and math.floor(amount) == amount then
+				duration = 53
+			else
+				duration = 250
+			end
+		end
+		warn("Duration được đặt là: " .. tostring(duration) .. "\n")
+		return duration
+	end
 
-        local success, amount = pcall(function()
-            return goal.Reward:GetAmount()
-        end)
+	-- === PHẦN FARM BREAKABLES ===
 
-        if success and typeof(amount) == "number" and math.floor(amount) == amount then
-            return 53
-        else
-            return 250
-        end
-    end
+	local BreakablesFolder = workspace.__THINGS.Breakables
+	local LeaveTeleport = workspace.__THINGS.Instances.TimeTrial.Teleports.Leave
 
-    local teleportSequenceAll = {
-        CFrame.new(-18079, 20, -484),
-        CFrame.new(-18359, 20, -560),
-        CFrame.new(-18306, 20, -695),
-        CFrame.new(-18222, 20, -604),
-        CFrame.new(-18221, 20, -458),
-        CFrame.new(-18110, 20, -658),
-    }
+	local function isValidBreakable(instance)
+		return instance:IsA("Model") and tonumber(instance.Name) ~= nil
+	end
 
-    local character = player.Character
-    if not (character and character:FindFirstChild("HumanoidRootPart")) then
-        warn("Character or HumanoidRootPart not found, aborting")
-        return
-    end
+	local function getCurrentBreakables()
+		local list = {}
+		for _, child in ipairs(BreakablesFolder:GetChildren()) do
+			if isValidBreakable(child) then
+				table.insert(list, child.Name)
+			end
+		end
+		return list
+	end
 
-    while true do
-        local duration = getDuration()
-        if not duration or duration <= 0 or duration == 250 then
-            warn("Duration không hợp lệ, kết thúc vòng lặp")
-            break
-        end
+	local function waitUntilBreakableGone(name)
+		while true do
+			local breakable = BreakablesFolder:FindFirstChild(name)
+			if not breakable then break end
+			task.wait(0.3)
+		end
+	end
 
-        -- Teleport vào Time Trial
-        teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
+	local function teleportToBreakables()
+		while true do
+			local breakableNames = getCurrentBreakables()
 
-        -- Chờ đến khi nhân vật vào map xác nhận theo X
-        local rootPart = character:FindFirstChild("HumanoidRootPart")
-        while rootPart do
-            local currentX = rootPart.Position.X
-            if currentX >= -18425 and currentX <= -18415 then
-                warn("Vào Time Trial thành công")
-                break
-            end
-            task.wait(0.5)
-        end
+			if #breakableNames > 0 then
+				for _, name in ipairs(breakableNames) do
+					local breakable = BreakablesFolder:FindFirstChild(name)
+					if breakable and breakable:IsA("Model") then
+						local part = breakable:FindFirstChildWhichIsA("BasePart")
+						if part then
+							teleportTo(part)
+							waitUntilBreakableGone(name)
+						end
+					end
+				end
+			else
+				local hasNew = false
+				for i = 1, 20 do
+					task.wait(1)
+					if #getCurrentBreakables() > 0 then
+						hasNew = true
+						break
+					end
+				end
 
-        local startTime = 0
-        while startTime < duration do
-            startTime += 1
-            warn("Lần teleport thứ: " .. startTime)
-            teleportSequence(player, teleportSequenceAll)
-        end
+				if not hasNew then
+					if LeaveTeleport and LeaveTeleport:IsA("BasePart") then
+						teleportTo(LeaveTeleport)
+					end
+					break
+				end
+			end
 
-        teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Leave)
-        task.wait(15)
-    end
+			task.wait(0.5)
+		end
+	end
+
+	-- === BẮT ĐẦU VÒNG LẶP TIME TRIAL ===
+
+	local character = player.Character
+	if not (character and character:FindFirstChild("HumanoidRootPart")) then
+		warn("Character or HumanoidRootPart not found, aborting\n")
+		return
+	end
+
+	while true do
+		local duration = getDuration()
+		if not duration or duration <= 0 or duration == 250 then
+			warn("Duration không hợp lệ, kết thúc vòng lặp")
+			break
+		end
+
+		-- Vào cổng
+		teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
+
+		-- Đợi cho tới khi người chơi đã vào trong (x kiểm tra)
+		local humanoidRootPart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+		while true do
+			if humanoidRootPart then
+				local currentX = humanoidRootPart.Position.X
+				if currentX >= -18425 and currentX <= -18415 then
+					warn("Đã vào zone time trial")
+					break
+				end
+			end
+			task.wait(0.5)
+		end
+
+		-- Farm breakables thay cho teleportSequence1 và 2
+		teleportToBreakables()
+
+		-- Đợi 10s sau khi hoàn thành
+		task.wait(10)
+
+		-- Teleport ra ngoài
+		teleportTo(LeaveTeleport)
+
+		-- Đợi trước vòng lặp mới
+		task.wait(15)
+	end
 end)
