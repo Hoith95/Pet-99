@@ -1,129 +1,110 @@
--- Tự động đua thời gian trong map 264
+-- Auto Time Trial - Có nút bấm kết thúc bằng tay
+
 task.spawn(function()
 
--- Chỉ chạy nếu đang ở đúng PlaceId (map 264)
+    task.wait(70)
+
     if game.PlaceId ~= 140403681187145 then
         return
     end
 
-    -- Khai báo các biến cần thiết
     local player = game.Players.LocalPlayer
     local Save = require(game.ReplicatedStorage.Library.Client.Save)
     local TimeTrials = require(game.ReplicatedStorage.Library.Types.TimeTrials)
 
-    -- Hàm dịch chuyển qua nhiều điểm liên tiếp (mỗi lần chờ 0.5 giây)
+    local running = false -- Cờ trạng thái: đang chạy hay không
+
+    -- Hàm teleport qua danh sách CFrame
     local function teleportSequence(player, sequence)
         for _, cframe in ipairs(sequence) do
             local character = player.Character
             if character and character:FindFirstChild("HumanoidRootPart") then
                 character.HumanoidRootPart.CFrame = cframe
-                task.wait(0.5) -- Thời gian chờ giữa các lần dịch chuyển
+                task.wait(0.5)
             else
                 break
             end
         end
     end
 
-    -- Hàm teleport đến một part cụ thể (thường là cổng vào/ra)
+    -- Teleport đến một part cụ thể
     local function teleportTo(part)
         if part and part:IsA("BasePart") then
-            local character = game.Players.LocalPlayer.Character
+            local character = player.Character
             if character and character:FindFirstChild("HumanoidRootPart") then
                 character.HumanoidRootPart.CFrame = part.CFrame
             end
         end
     end
 
-    -- Hàm xác định thời gian chạy đua (duration) dựa vào dữ liệu Save
-    local function getDuration()
+    -- Lấy dữ liệu save để kiểm tra số lượt chạy
+    local function canRunTrial()
         local saveData = Save.Get()
-        if not saveData then
-            warn("Lỗi: Không lấy được dữ liệu save")
-            return nil
+        if not saveData or not saveData.TimeTrialStats then
+            return false
         end
-
-        local timeTrialStats = saveData.TimeTrialStats
-        if not timeTrialStats then
-            warn("Không tìm thấy TimeTrialStats")
-            return 50 -- Mặc định nếu thiếu
-        end
-
-        local totalRuns = timeTrialStats.TotalRuns or timeTrialStats.RemainingRuns or 0
-        warn("Số lần TotalRuns: " .. tostring(totalRuns))
-
-        if totalRuns >= 10 then
-            warn("Đã đủ 10 lần, dừng script")
-            return nil
-        end
-
-        local goalIndex = timeTrialStats.GoalIndex or 1
-        local goal = TimeTrials.Goals[goalIndex]
-        local duration = nil
-
-        if not goal or not goal.Reward then
-            duration = 200
-        else
-            local amount = nil
-            local success, result = pcall(function()
-                return goal.Reward:GetAmount()
-            end)
-            if success then
-                amount = result
-            end
-
-            if typeof(amount) == "number" and math.floor(amount) == amount then
-                duration = 50
-            else
-                duration = 200
-            end
-        end
-
-        warn("Duration được đặt là: " .. tostring(duration))
-        return duration
+        local totalRuns = saveData.TimeTrialStats.TotalRuns or 0
+        return totalRuns < 10
     end
 
-    -- Chuỗi các điểm teleport hợp nhất (5 điểm chính + 1 điểm kết thúc)
+    -- Chuỗi các điểm teleport
     local teleportSequencePoints = {
         CFrame.new(-18079, 20, -484),
         CFrame.new(-18359, 20, -560),
         CFrame.new(-18306, 20, -695),
         CFrame.new(-18222, 20, -604),
         CFrame.new(-18221, 20, -458),
-        CFrame.new(-18110, 20, -658), -- Điểm cuối (trước khi thoát)
+        CFrame.new(-18110, 20, -658),
     }
 
-    -- Kiểm tra nhân vật đã load hoàn chỉnh chưa
-    local character = player.Character
-    if not (character and character:FindFirstChild("HumanoidRootPart")) then
-        warn("Không tìm thấy HumanoidRootPart, dừng script")
-        return
-    end
+    -- Tạo GUI nút “KẾT THÚC”
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "TrialControlGui"
+    screenGui.ResetOnSpawn = false
+    screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-    -- Vòng lặp chính
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0, 120, 0, 40)
+    button.Position = UDim2.new(0.5, -60, 0.9, 0)
+    button.Text = "KẾT THÚC"
+    button.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+    button.TextColor3 = Color3.new(1,1,1)
+    button.Font = Enum.Font.SourceSansBold
+    button.TextSize = 20
+    button.Parent = screenGui
+
+    local stopSignal = false
+    button.MouseButton1Click:Connect(function()
+        stopSignal = true
+        button.Text = "ĐANG THOÁT..."
+        button.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+    end)
+
+    -- Bắt đầu vòng chính
     while true do
-
-        local duration = getDuration()
-        if not duration or duration <= 0 or duration == 200 then
-            warn("Duration không hợp lệ hoặc quá lớn, dừng vòng lặp")
+        if not canRunTrial() then
+            warn("Đã đủ 10 lần hoặc không có dữ liệu, dừng script")
             break
         end
 
-        -- Teleport đến cổng vào Time Trial
-        teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
-        task.wait(5) -- Chờ game load
+        stopSignal = false
+        running = true
 
-        -- Đếm thời gian thật bằng tick()
-        local startTime = tick()
-        while tick() - startTime < duration do
+        -- Teleport vào Time Trial
+        teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
+        task.wait(5)
+
+        -- Lặp teleport liên tục cho đến khi bạn bấm nút kết thúc
+        while not stopSignal do
             teleportSequence(player, teleportSequencePoints)
         end
 
-        -- Chờ thêm 10 giây rồi thoát ra ngoài
-        task.wait(10)
+        -- Sau khi bạn bấm kết thúc → thoát khỏi Time Trial
         teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Leave)
-
-        -- Chờ 15 giây trước khi kiểm tra lại và tiếp tục
         task.wait(15)
+
+        button.Text = "KẾT THÚC"
+        button.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
     end
 
 end)
