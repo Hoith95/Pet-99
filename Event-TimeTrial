@@ -34,10 +34,11 @@ task.spawn(function()
 		while true do
 			local breakable = BreakablesFolder:FindFirstChild(name)
 			if not breakable then break end
-			task.wait(0.1)
+			task.wait(0.3)
 		end
 	end
 
+	local exitedManually = false
 	local function teleportToBreakables()
 		while true do
 			local breakableNames = getCurrentBreakables()
@@ -67,6 +68,7 @@ task.spawn(function()
 					if LeaveTeleport then
 						teleportTo(LeaveTeleport)
 						task.wait(5)
+						exitedManually = true
 					end
 					break
 				end
@@ -76,7 +78,7 @@ task.spawn(function()
 		end
 	end
 
-	local savedPosition = nil -- 🆕 Biến lưu vị trí ban đầu
+	local savedPosition = nil
 
 	while true do
 		local saveData = Save.Get()
@@ -89,7 +91,7 @@ task.spawn(function()
 
 		warn("🔁 Bắt đầu vòng Time Trial thứ " .. tostring(totalRuns + 1))
 
-		-- 🆕 Lưu vị trí hiện tại
+		-- 🧠 Lưu lại vị trí trước khi vào Trial
 		local character = player.Character or player.CharacterAdded:Wait()
 		local hrp = character:FindFirstChild("HumanoidRootPart")
 		if hrp then
@@ -124,7 +126,6 @@ task.spawn(function()
 
 				if LeaveTeleport then
 					teleportTo(LeaveTeleport)
-					warn("⬅️ Teleport ra khỏi Time Trial để thử lại")
 					task.wait(5)
 				end
 
@@ -137,11 +138,13 @@ task.spawn(function()
 			return
 		end
 
+		-- Reset cờ "ra tay thủ công"
+		exitedManually = false
+
 		teleportToBreakables()
 		task.wait(10)
 
-		-- 🆕 Sau khi hoàn tất → tele ra rồi về vị trí cũ
-		if LeaveTeleport then
+		if not exitedManually and LeaveTeleport then
 			teleportTo(LeaveTeleport)
 			warn("🚪 Đã ra khỏi Time Trial")
 			task.wait(5)
