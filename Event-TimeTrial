@@ -3,6 +3,7 @@ task.spawn(function()
 
 	local player = game.Players.LocalPlayer
 	local Save = require(game.ReplicatedStorage.Library.Client.Save)
+	local ZoneCmds = require(game.ReplicatedStorage.Library.Client.ZoneCmds)
 
 	local function teleportTo(part)
 		if part and part.CFrame then
@@ -34,7 +35,7 @@ task.spawn(function()
 		while true do
 			local breakable = BreakablesFolder:FindFirstChild(name)
 			if not breakable then break end
-			task.wait(0.1)
+			task.wait(0.3)
 		end
 	end
 
@@ -79,6 +80,24 @@ task.spawn(function()
 	end
 
 	local savedPosition = nil
+
+	-- 🧠 Lấy MaxZone hiện tại và chờ cho đến khi đạt được
+	local _, maxZoneData = ZoneCmds.GetMaxOwnedZone()
+	local requiredZoneNumber = maxZoneData and maxZoneData.ZoneNumber or 0
+
+	local function waitUntilReachZone(targetZone)
+		while true do
+			local _, currentZoneData = ZoneCmds.GetMaxOwnedZone()
+			if currentZoneData and currentZoneData.ZoneNumber >= targetZone then
+				print("✅ Đã đạt Zone " .. targetZone .. ", bắt đầu chạy Time Trial.")
+				break
+			end
+			print("⏳ Chưa đạt Zone " .. targetZone .. ", đang đợi...")
+			task.wait(5)
+		end
+	end
+
+	waitUntilReachZone(requiredZoneNumber)
 
 	while true do
 		local saveData = Save.Get()
@@ -138,7 +157,6 @@ task.spawn(function()
 			return
 		end
 
-		-- Reset cờ "ra tay thủ công"
 		exitedManually = false
 
 		teleportToBreakables()
