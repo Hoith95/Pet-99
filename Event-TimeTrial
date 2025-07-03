@@ -1,81 +1,69 @@
--- Auto Time Trial cho map 264 - phiên bản đơn giản, không claim reward, không phân biệt thắng/thua
 task.spawn(function()
-
-    task.wait(10)
-
-    if game.PlaceId ~= 140403681187145 then
-        return
-    end
+    if game.PlaceId ~= 140403681187145 then return end
 
     local player = game.Players.LocalPlayer
     local Save = require(game.ReplicatedStorage.Library.Client.Save)
+    local TimeTrials = require(game.ReplicatedStorage.Library.Types.TimeTrials)
 
-    local stopSignal = false
-    local FARM_POSITION = CFrame.new(1556, 36, -648) -- Vị trí farm
-
-    -- Hook TimeTrialResultUI.Show để phát hiện khi hoàn thành
-    local success, timeTrialResultUI = pcall(function()
-        return require(game.ReplicatedStorage.Library.Client.UI.TimeTrialResultUI)
-    end)
-
-    if success and typeof(timeTrialResultUI) == "table" and typeof(timeTrialResultUI.Show) == "function" then
-        local originalShow = timeTrialResultUI.Show
-        timeTrialResultUI.Show = function(arg1)
-            warn("✅ Time Trial kết thúc")
-            stopSignal = true
-            return originalShow(arg1)
-        end
-    else
-        warn("⚠️ Không thể hook vào TimeTrialResultUI.Show")
-    end
-
-    -- Dịch chuyển qua các điểm
     local function teleportSequence(player, sequence)
         for _, cframe in ipairs(sequence) do
             local character = player.Character
             if character and character:FindFirstChild("HumanoidRootPart") then
                 character.HumanoidRootPart.CFrame = cframe
-                task.wait(0.5)
+                task.wait(0.5)  -- ⏱ chờ 0.5s giữa mỗi lần teleport
             else
                 break
             end
         end
     end
 
-    -- Dịch chuyển đến part hoặc CFrame
-    local function teleportTo(partOrCFrame)
-        local character = player.Character
-        if not character or not character:FindFirstChild("HumanoidRootPart") then return end
-
-        if typeof(partOrCFrame) == "Instance" and partOrCFrame:IsA("BasePart") then
-            character.HumanoidRootPart.CFrame = partOrCFrame.CFrame
-        elseif typeof(partOrCFrame) == "CFrame" then
-            character.HumanoidRootPart.CFrame = partOrCFrame
-        end
-    end
-
-    -- Kiểm tra còn lượt Time Trial không, có chờ đến khi Save.Get() có dữ liệu
-    local function canRunTrial()
-        local saveData = nil
-        for i = 1, 30 do
-            saveData = Save.Get()
-            if saveData and saveData.TimeTrialStats then
-                break
+    local function teleportTo(part)
+        if part and part:IsA("BasePart") then
+            local character = player.Character
+            if character and character:FindFirstChild("HumanoidRootPart") then
+                character.HumanoidRootPart.CFrame = part.CFrame
             end
-            task.wait(1)
         end
-        if not saveData or not saveData.TimeTrialStats then
-            warn("❌ Không thể lấy TimeTrialStats từ Save.")
-            return false
-        end
-
-        local totalRuns = saveData.TimeTrialStats.TotalRuns or 0
-        warn("👉 TotalRuns hiện tại: " .. totalRuns)
-        return totalRuns < 10
     end
 
-    -- Danh sách các điểm dịch chuyển trong map
-    local teleportSequencePoints = {
+    local function getDuration()
+        local saveData = Save.Get()
+        if not saveData then
+            warn("Lỗi: Không lấy được dữ liệu save")
+            return nil
+        end
+
+        local timeTrialStats = saveData.TimeTrialStats
+        if not timeTrialStats then
+            warn("Không tìm thấy TimeTrialStats")
+            return 53
+        end
+
+        local totalRuns = timeTrialStats.TotalRuns or timeTrialStats.RemainingRuns or 0
+        warn("Số lần Total Runs: " .. tostring(totalRuns))
+
+        if totalRuns >= 10 then
+            warn("Đã đủ 10 lượt, dừng thực hiện")
+            return nil
+        end
+
+        local goalIndex = timeTrialStats.GoalIndex or 1
+        local goal = TimeTrials.Goals[goalIndex]
+
+        if not goal or not goal.Reward then return 250 end
+
+        local success, amount = pcall(function()
+            return goal.Reward:GetAmount()
+        end)
+
+        if success and typeof(amount) == "number" and math.floor(amount) == amount then
+            return 53
+        else
+            return 250
+        end
+    end
+
+    local teleportSequenceAll = {
         CFrame.new(-18079, 20, -484),
         CFrame.new(-18359, 20, -560),
         CFrame.new(-18306, 20, -695),
@@ -84,33 +72,42 @@ task.spawn(function()
         CFrame.new(-18110, 20, -658),
     }
 
-    -- Vòng lặp chính
+    local character = player.Character
+    if not (character and character:FindFirstChild("HumanoidRootPart")) then
+        warn("Character or HumanoidRootPart not found, aborting")
+        return
+    end
+
     while true do
-        if not canRunTrial() then
-            warn("🚫 Đã đủ 10 lượt chạy hoặc không thể load dữ liệu. Dừng script.")
+        local duration = getDuration()
+        if not duration or duration <= 0 or duration == 250 then
+            warn("Duration không hợp lệ, kết thúc vòng lặp")
             break
         end
 
-        stopSignal = false
-
         -- Teleport vào Time Trial
         teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
-        task.wait(5)
 
-        -- Dịch chuyển vòng quanh map
-        while not stopSignal do
-            teleportSequence(player, teleportSequencePoints)
+        -- Chờ đến khi nhân vật vào map xác nhận theo X
+        local rootPart = character:FindFirstChild("HumanoidRootPart")
+        while rootPart do
+            local currentX = rootPart.Position.X
+            if currentX >= -18425 and currentX <= -18415 then
+                warn("Vào Time Trial thành công")
+                break
+            end
+            task.wait(0.5)
         end
 
-        -- Thoát khỏi Time Trial
+        local startTime = 0
+        while startTime < duration do
+            startTime += 1
+            warn("Lần teleport thứ: " .. startTime)
+            teleportSequence(player, teleportSequenceAll)
+            task.wait(0.3)  -- nghỉ nhẹ giữa mỗi vòng lặp
+        end
+
         teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Leave)
-        task.wait(5)
-
-        -- Teleport về chỗ farm (không cần phân biệt thắng/thua)
-        teleportTo(FARM_POSITION)
-        warn("🏕️ Đã quay về vị trí farm.")
-
-        task.wait(10)
+        task.wait(15)
     end
-
 end)
