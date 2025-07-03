@@ -1,64 +1,141 @@
--- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
-if _G.VARTIMETRIAL then
-    warn("Script đã được chạy trước đó!")
-    return -- Dừng script nếu đã chạy
-end
-
--- Đánh dấu script đã được chạy
-_G.VARTIMETRIAL = true
-
-local player = game.Players.LocalPlayer
-
--- Vị trí khởi đầu
-local initialTeleport = CFrame.new(-14225, 16.68, -355)
-
--- Vị trí kết thúc sau 2p30s
-local finalTeleport = CFrame.new(-15289, 16.46, 335)
-
--- Các vị trí dịch chuyển
-local teleportSequence1 = {
-    CFrame.new(-15208, 16.71, 345),
-    CFrame.new(-15153, 16.71, 201),
-    CFrame.new(-15064, 16.71, 321),
-    CFrame.new(-14926, 16.71, 418),
-    CFrame.new(-14943, 16.71, 239),
-}
-
-local teleportSequence2 = {
-    unpack(teleportSequence1),
-    CFrame.new(-15066, 16.71, 477)
-}
-
--- Hàm thực hiện dịch chuyển theo danh sách
-local function teleportSequence(sequence)
-    for _, cframe in ipairs(sequence) do
-        local character = player.Character
-        if character and character:FindFirstChild("HumanoidRootPart") then
-            character.HumanoidRootPart.CFrame = cframe
-            task.wait(0.3)
-        end
-    end
-end
-
--- Bắt đầu thực hiện luôn
+-- Khởi chạy 1 thread riêng để không làm chậm chương trình chính
 task.spawn(function()
-    local character = player.Character
-    if character and character:FindFirstChild("HumanoidRootPart") then
-        -- Dịch chuyển đến vị trí khởi đầu
-        character.HumanoidRootPart.CFrame = initialTeleport
-        task.wait(9)
 
-        -- Bắt đầu tính thời gian
-        local startTime = tick()
-        local duration = 150 -- 2 phút 30 giây
+    -- Chờ 60 giây để đảm bảo game và các module đã load xong
+    task.wait(60)
 
-        -- Lặp đến khi hết thời gian
-        while tick() - startTime < duration do
-            teleportSequence(teleportSequence1)
-            teleportSequence(teleportSequence2)
+    -- Lấy player local (người chơi hiện tại)
+    local player = game.Players.LocalPlayer
+
+    -- Import các module liên quan đến lưu dữ liệu và hệ thống Time Trial
+    local Save = require(game.ReplicatedStorage.Library.Client.Save)
+    local TimeTrials = require(game.ReplicatedStorage.Library.Types.TimeTrials)
+
+    -- Hàm teleport qua một chuỗi các vị trí (CFrame)
+    local function teleportSequence(player, sequence)
+        for _, cframe in ipairs(sequence) do
+            local character = player.Character
+            if character and character:FindFirstChild("HumanoidRootPart") then
+                -- Teleport nhân vật đến vị trí chỉ định
+                character.HumanoidRootPart.CFrame = cframe
+                task.wait(0.3)  -- Đợi 0.3 giây giữa các lần dịch chuyển
+            else
+                break  -- Dừng nếu không tìm thấy HumanoidRootPart
+            end
+        end
+    end
+
+    -- Hàm teleport đến một part cụ thể
+    local function teleportTo(part)
+        if part and part:IsA("BasePart") then
+            local character = game.Players.LocalPlayer.Character
+            if character and character:FindFirstChild("HumanoidRootPart") then
+                character.HumanoidRootPart.CFrame = part.CFrame
+            end
+        end
+    end
+
+    -- Hàm xác định thời gian cần chạy vòng lặp trong Time Trial
+    local function getDuration()
+        local saveData = Save.Get()
+        if not saveData then
+            warn("Lỗi: Không lấy được dữ liệu Save")
+            return nil
         end
 
-        -- Dịch chuyển đến vị trí kết thúc
-        character.HumanoidRootPart.CFrame = finalTeleport
+        local timeTrialStats = saveData.TimeTrialStats
+        if not timeTrialStats then
+            warn("Không tìm thấy TimeTrialStats trong dữ liệu Save")
+            return 48  -- Mặc định là 48 nếu không có dữ liệu
+        end
+
+        local totalRuns = timeTrialStats.TotalRuns or timeTrialStats.RemainingRuns or 0
+        warn("Số lần Total Runs: " .. tostring(totalRuns))
+
+        if totalRuns >= 10 then
+            warn("TotalRuns >= 10, dừng thực hiện teleport")
+            return nil
+        end
+
+        local goalIndex = timeTrialStats.GoalIndex or 1
+        local duration = nil
+        local goal = TimeTrials.Goals[goalIndex]
+
+        if not goal or not goal.Reward then
+            duration = 120  -- Nếu không có reward, dùng 120 giây
+        else
+            local amount = nil
+            local success, result = pcall(function()
+                return goal.Reward:GetAmount()
+            end)
+            if success then
+                amount = result
+            end
+
+            -- Nếu reward là số nguyên → 48 giây, ngược lại → 120 giây
+            if typeof(amount) == "number" and math.floor(amount) == amount then
+                duration = 48
+            else
+                duration = 120
+            end
+        end
+
+        warn("Duration được đặt là: " .. tostring(duration))
+        return duration
     end
+
+    -- Danh sách các vị trí dịch chuyển chính (mô phỏng người chơi chạy quanh map)
+    local teleportSequence1 = {
+        CFrame.new(-18359, 20, -560),
+        CFrame.new(-18306, 20, -695),
+        CFrame.new(-18222, 20, -604),
+        CFrame.new(-18221, 20, -458),
+        CFrame.new(-18079, 20, -484),
+    }
+
+    -- Vị trí cuối cùng trước khi thoát Time Trial
+    local teleportSequence2 = {
+        CFrame.new(-18110, 20, -658)
+    }
+
+    -- Kiểm tra player có sẵn character và HumanoidRootPart chưa
+    local character = player.Character
+    if not (character and character:FindFirstChild("HumanoidRootPart")) then
+        warn("Character hoặc HumanoidRootPart không tồn tại, dừng script")
+        return
+    end
+
+    -- Bắt đầu vòng lặp chính
+    while true do
+
+        -- Lấy thời lượng chạy vòng
+        local duration = getDuration()
+        if not duration or duration <= 0 or duration == 120 then
+            warn("Duration <= 0 hoặc không hợp lệ, kết thúc vòng lặp")
+            break
+        end
+
+        -- Teleport đến cổng vào Time Trial
+        teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
+        task.wait(5)  -- Chờ 5 giây để vào màn
+
+        -- Lặp teleport chuỗi 1 trong thời gian tương ứng (thường là 48 giây)
+        local startTime = 0
+        while startTime < duration do
+            startTime = startTime + 1
+            warn("Số lần compo tele: " .. startTime)
+            teleportSequence(player, teleportSequence1)
+            task.wait(1)
+        end
+
+        -- Teleport đến vị trí kết thúc bên trong Time Trial
+        teleportSequence(player, teleportSequence2)
+        task.wait(10)  -- Chờ thêm 10 giây trước khi thoát
+
+        -- Teleport ra khỏi Time Trial
+        teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Leave)
+        task.wait(15)  -- Chờ 15 giây rồi bắt đầu vòng lặp mới
+
+    end
+
 end)
