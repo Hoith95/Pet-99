@@ -6,7 +6,6 @@ task.spawn(function()
 
     local player = game.Players.LocalPlayer
     local Save = require(game.ReplicatedStorage.Library.Client.Save)
-    local TimeTrials = require(game.ReplicatedStorage.Library.Types.TimeTrials)
 
     -- Gắn cờ để kiểm soát vòng lặp
     local stopSignal = false
