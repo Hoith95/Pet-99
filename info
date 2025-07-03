@@ -3,7 +3,7 @@ local Players = game:GetService("Players")
 local httpRequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request)
 
 -- Cấu hình webhook URL (đặt URL webhook của bạn tại đây)
-_G.webhookURL = "https://discord.com/api/webhooks/1344834188909478059/a1DRtY6Vf0ETJ_ZAVn3gPeIJmkMli3qjf6EMO-FqZCGQ-Y2vBi1nt_Tz4tShCNOE97Qg"
+_G.webhookURL = "https://discord.com/api/webhooks/1356162679923933335/7XMSEFJ9TVt1cQnyPCkseCwPdZPh-luEkVVjDbvVFIfTG6WlNSrVOnDOu9eP1bHqitzl"
 -- Cấu hình _G.UserID (ID người chơi bạn muốn ping)
 _G.UserID = "344054115539615745"  -- Thay thế bằng UserID thực tế của người chơi bạn muốn ping
 
