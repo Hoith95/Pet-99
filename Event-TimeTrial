@@ -1,7 +1,7 @@
--- Auto Time Trial cho map 264 - đơn giản, không phân biệt kết quả
+-- Auto Time Trial cho map 264 - phiên bản đơn giản, không claim reward, không phân biệt thắng/thua
 task.spawn(function()
 
-    task.wait(5)
+    task.wait(10)
 
     if game.PlaceId ~= 140403681187145 then
         return
@@ -54,11 +54,24 @@ task.spawn(function()
         end
     end
 
-    -- Kiểm tra còn lượt Time Trial không
+    -- Kiểm tra còn lượt Time Trial không, có chờ đến khi Save.Get() có dữ liệu
     local function canRunTrial()
-        local saveData = Save.Get()
-        if not saveData or not saveData.TimeTrialStats then return false end
-        return (saveData.TimeTrialStats.TotalRuns or 0) < 10
+        local saveData = nil
+        for i = 1, 30 do
+            saveData = Save.Get()
+            if saveData and saveData.TimeTrialStats then
+                break
+            end
+            task.wait(1)
+        end
+        if not saveData or not saveData.TimeTrialStats then
+            warn("❌ Không thể lấy TimeTrialStats từ Save.")
+            return false
+        end
+
+        local totalRuns = saveData.TimeTrialStats.TotalRuns or 0
+        warn("👉 TotalRuns hiện tại: " .. totalRuns)
+        return totalRuns < 10
     end
 
     -- Danh sách các điểm dịch chuyển trong map
@@ -74,7 +87,7 @@ task.spawn(function()
     -- Vòng lặp chính
     while true do
         if not canRunTrial() then
-            warn("🚫 Đã đủ 10 lượt chạy, dừng script.")
+            warn("🚫 Đã đủ 10 lượt chạy hoặc không thể load dữ liệu. Dừng script.")
             break
         end
 
