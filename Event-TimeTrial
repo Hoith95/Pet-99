@@ -10,7 +10,7 @@ task.spawn(function()
             local character = player.Character
             if character and character:FindFirstChild("HumanoidRootPart") then
                 character.HumanoidRootPart.CFrame = cframe
-                task.wait(0.5)  -- ⏱ chờ 0.5s giữa mỗi lần teleport
+                task.wait(0.3)  -- ⏱ chờ 0.5s giữa mỗi lần teleport
             else
                 break
             end
@@ -104,7 +104,6 @@ task.spawn(function()
             startTime += 1
             warn("Lần teleport thứ: " .. startTime)
             teleportSequence(player, teleportSequenceAll)
-            task.wait(0.3)  -- nghỉ nhẹ giữa mỗi vòng lặp
         end
 
         teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Leave)
