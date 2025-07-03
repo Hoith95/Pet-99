@@ -1,4 +1,4 @@
--- Auto chạy Time Trial 264 nếu TotalRuns < 10
+-- Auto chạy Time Trial 264 khi còn TotalRuns < 10
 task.spawn(function()
 	if game.PlaceId ~= 140403681187145 then return end
 
@@ -14,7 +14,7 @@ task.spawn(function()
 		end
 	end
 
-	-- === PHẦN FARM BREAKABLES ===
+	-- === FARM BREAKABLES ===
 	local BreakablesFolder = workspace.__THINGS.Breakables
 	local LeaveTeleport = workspace.__THINGS.Instances.TimeTrial.Teleports.Leave
 
@@ -77,7 +77,7 @@ task.spawn(function()
 		end
 	end
 
-	-- === VÒNG LẶP DỰA TRÊN TotalRuns < 10 ===
+	-- === VÒNG LẶP CHÍNH: TOTALRUNS < 10 ===
 	while true do
 		local saveData = Save.Get()
 		local totalRuns = saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.TotalRuns or 0) or 0
@@ -89,32 +89,60 @@ task.spawn(function()
 
 		warn("🔁 Bắt đầu vòng Time Trial thứ " .. tostring(totalRuns + 1))
 
-		-- Vào cổng
-		teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
+		-- Cố gắng vào Trial tối đa 3 lần nếu lỗi
+		local failedAttempts = 0
+		local MAX_ATTEMPTS = 3
+		local successEnter = false
 
-		-- Đợi nhân vật vào trong khu vực
-		local character = player.Character or player.CharacterAdded:Wait()
-		local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+		while failedAttempts < MAX_ATTEMPTS do
+			teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
+			warn("🚪 Đã teleport vào Time Trial, đang chờ Breakables...")
 
-		while true do
-			local x = humanoidRootPart.Position.X
-			if x >= -18425 and x <= -18415 then
-				warn("✅ Đã vào khu vực Time Trial")
-				break
+			local foundBreakables = false
+			for i = 1, 60 do -- 60 x 0.5s = 30s
+				if #BreakablesFolder:GetChildren() > 0 then
+					foundBreakables = true
+					break
+				end
+				task.wait(0.5)
 			end
-			task.wait(0.5)
+
+			if foundBreakables then
+				warn("✅ Breakables đã xuất hiện, bắt đầu farm")
+				successEnter = true
+				break
+			else
+				failedAttempts += 1
+				warn("❌ Không thấy Breakables (lần thử " .. failedAttempts .. ")")
+
+				if LeaveTeleport then
+					teleportTo(LeaveTeleport)
+					warn("⬅️ Teleport ra khỏi Time Trial để thử lại")
+				end
+
+				task.wait(30) -- nghỉ rồi thử lại
+			end
 		end
 
-		-- Tele đến từng Breakable
+		-- Nếu sau 3 lần vẫn lỗi thì kick khỏi game
+		if not successEnter then
+			game.Players.LocalPlayer:Kick("Tìm Breakables Méo Thấy")
+			return
+		end
+
+		-- Farm Breakables
 		teleportToBreakables()
 
-		-- Đợi 10 giây sau khi xong
+		-- Đợi 10 giây sau khi hoàn tất
 		task.wait(10)
 
 		-- Teleport ra
-		teleportTo(LeaveTeleport)
+		if LeaveTeleport then
+			teleportTo(LeaveTeleport)
+			warn("🚪 Đã ra khỏi Time Trial")
+		end
 
-		-- Nghỉ 15 giây rồi vòng tiếp theo
+		-- Nghỉ trước vòng kế tiếp
 		task.wait(15)
 	end
 
