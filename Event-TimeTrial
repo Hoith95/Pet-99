@@ -10,7 +10,7 @@ local Save = require(game.ReplicatedStorage.Library.Client.Save)
 
 local function getTimeTrialRuns()
 	local saveData = Save.Get()
-	if saveData and saveData.TimeTrialStats and type(saveData.TimeTrialStats.Daily_run) == "number" then
+	if saveData and saveData.TimeTrialStats and type(saveData.TimeTrialStats.Daily_runs) == "number" then
 		return saveData.TimeTrialStats.Daily_runs
 	end
 	return 0
@@ -164,7 +164,7 @@ local function RunTimeTrialScript()
 
 		local function getTimeTrialRuns()
 			local saveData = Save.Get()
-			if saveData and saveData.TimeTrialStats and type(saveData.TimeTrialStats.Daily_run) == "number" then
+			if saveData and saveData.TimeTrialStats and type(saveData.TimeTrialStats.Daily_runs) == "number" then
 				return saveData.TimeTrialStats.Daily_runs
 			end
 			return 0
