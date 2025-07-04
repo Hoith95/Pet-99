@@ -1,0 +1,49 @@
+-- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
+if _G.NOTI_TIME_TRIAL then
+    warn("Script đã được chạy trước đó!")
+    return -- Dừng script nếu đã chạy
+end
+
+-- Đánh dấu script đã được chạy
+_G.NOTI_TIME_TRIAL = true
+
+local Players = game:GetService("Players")
+local SaveModule = require(game.ReplicatedStorage.Library.Client.Save)
+
+-- Hàm lấy số lượt Time Trial đã hoàn thành
+local function getTimeTrialRuns()
+    local saveData = SaveModule.Get()
+    return saveData 
+        and saveData.TimeTrialStats 
+        and (saveData.TimeTrialStats.TotalRuns or 0) 
+        or 0
+end
+
+-- Tạo GUI
+local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "TimeTrialGui"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = playerGui
+
+-- Label TT:
+local timeTrialLabel = Instance.new("TextLabel", screenGui)
+timeTrialLabel.Name = "TimeTrialLabel"
+timeTrialLabel.Size = UDim2.new(0, 150, 0, 38)
+timeTrialLabel.Position = UDim2.new(1, -280, 0, -55) -- Ngay bên trái FPSLabel
+timeTrialLabel.BackgroundColor3 = Color3.fromRGB(128, 0, 128)
+timeTrialLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+timeTrialLabel.Font = Enum.Font.GothamBold
+timeTrialLabel.TextSize = 32
+timeTrialLabel.Text = "Time Trial: ..."
+timeTrialLabel.BackgroundTransparency = 0
+timeTrialLabel.BorderSizePixel = 0
+
+-- Cập nhật số lượt mỗi giây
+task.spawn(function()
+	while true do
+		local runs = getTimeTrialRuns()
+		timeTrialLabel.Text = "Time Trial: " .. tostring(runs)
+		task.wait(1)
+	end
+end)
