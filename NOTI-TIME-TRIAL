@@ -1,22 +1,22 @@
+-- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
+if _G.NOTI_TIME_TRIAL then
+    warn("Script đã được chạy trước đó!")
+    return
+end
+
+_G.NOTI_TIME_TRIAL = true
+
 local Players = game:GetService("Players")
 local SaveModule = require(game.ReplicatedStorage.Library.Client.Save)
 
--- Hàm lấy số lượt Time Trial đã hoàn thành
 local function getTimeTrialRuns()
     local saveData = SaveModule.Get()
-    return saveData 
-        and saveData.TimeTrialStats 
-        and (saveData.TimeTrialStats.Daily_run or 0) 
-        or 0
+    return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.Daily_run or 0) or 0
 end
 
--- Hàm lấy số Point hiện tại
 local function getTimeTrialPoints()
     local saveData = SaveModule.Get()
-    return saveData 
-        and saveData.TimeTrialStats 
-        and (saveData.TimeTrialStats.Points or 0) 
-        or 0
+    return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.Points or 0) or 0
 end
 
 -- Tạo GUI
@@ -26,39 +26,45 @@ screenGui.Name = "TimeTrialGui"
 screenGui.ResetOnSpawn = false
 screenGui.Parent = playerGui
 
--- Label Points
-local pointsLabel = Instance.new("TextLabel", screenGui)
-pointsLabel.Name = "PointsLabel"
-pointsLabel.Size = UDim2.new(0, 150, 0, 38)
-pointsLabel.Position = UDim2.new(1, -470, 0, -55) -- Bên trái TimeTrialLabel
-pointsLabel.BackgroundColor3 = Color3.fromRGB(0, 128, 255)
-pointsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-pointsLabel.Font = Enum.Font.GothamBold
-pointsLabel.TextSize = 32
-pointsLabel.Text = "Points: ..."
-pointsLabel.BackgroundTransparency = 0
-pointsLabel.BorderSizePixel = 0
+-- Tạo label function để dễ tái sử dụng
+local function createLabel(name, position, bgColor)
+    local label = Instance.new("TextLabel")
+    label.Name = name
+    label.AnchorPoint = Vector2.new(1, 0)
+    label.Position = position
+    label.Size = UDim2.new(0, 0, 0, 38)
+    label.BackgroundColor3 = bgColor
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.Font = Enum.Font.GothamBold
+    label.TextSize = 32
+    label.Text = "..."
+    label.BackgroundTransparency = 0
+    label.BorderSizePixel = 0
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.Parent = screenGui
+    return label
+end
 
--- Label Time Trial
-local timeTrialLabel = Instance.new("TextLabel", screenGui)
-timeTrialLabel.Name = "TimeTrialLabel"
-timeTrialLabel.Size = UDim2.new(0, 150, 0, 38)
-timeTrialLabel.Position = UDim2.new(1, -310, 0, -55) -- Bên phải PointsLabel
-timeTrialLabel.BackgroundColor3 = Color3.fromRGB(128, 0, 128)
-timeTrialLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-timeTrialLabel.Font = Enum.Font.GothamBold
-timeTrialLabel.TextSize = 32
-timeTrialLabel.Text = "Time Trial: ..."
-timeTrialLabel.BackgroundTransparency = 0
-timeTrialLabel.BorderSizePixel = 0
+local pointsLabel = createLabel("PointsLabel", UDim2.new(1, -480, 0, -55), Color3.fromRGB(0, 128, 255))
+local timeTrialLabel = createLabel("TimeTrialLabel", UDim2.new(1, -310, 0, -55), Color3.fromRGB(128, 0, 128))
 
--- Cập nhật số lượt và điểm mỗi 10 giây
+-- Hàm co giãn theo text
+local function updateLabelSize(label)
+    label.Size = UDim2.new(0, label.TextBounds.X + 20, 0, 38)
+end
+
+-- Cập nhật mỗi 10 giây
 task.spawn(function()
-	while true do
-		local runs = getTimeTrialRuns()
-		local points = getTimeTrialPoints()
-		timeTrialLabel.Text = "Time Trial: " .. tostring(runs)
-		pointsLabel.Text = "Points: " .. tostring(points)
-		task.wait(10)
-	end
+    while true do
+        local runs = getTimeTrialRuns()
+        local points = getTimeTrialPoints()
+
+        pointsLabel.Text = "Points: " .. tostring(points)
+        updateLabelSize(pointsLabel)
+
+        timeTrialLabel.Text = "Time Trial: " .. tostring(runs)
+        updateLabelSize(timeTrialLabel)
+
+        task.wait(10)
+    end
 end)
