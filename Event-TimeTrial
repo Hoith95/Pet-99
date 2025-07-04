@@ -1,236 +1,138 @@
-task.spawn(function()
-	if game.PlaceId ~= 140403681187145 then return end
+if game.PlaceId ~= 140403681187145 then return end
 
-	local player = game.Players.LocalPlayer
-	local Save = require(game.ReplicatedStorage.Library.Client.Save)
-	local ZoneCmds = require(game.ReplicatedStorage.Library.Client.ZoneCmds)
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+local LocalPlayer = Players.LocalPlayer
+local Save = require(ReplicatedStorage.Library.Client.Save)
+local TimeTrials = require(ReplicatedStorage.Library.Types.TimeTrials)
 
-	local function teleportTo(part)
-		if part and part.CFrame then
-			local character = player.Character or player.CharacterAdded:Wait()
-			if character and character:FindFirstChild("HumanoidRootPart") then
-				character.HumanoidRootPart.CFrame = part.CFrame + Vector3.new(0, 5, 0)
-			end
+local function teleportTo(part)
+	local character = LocalPlayer.Character
+	if character and character:FindFirstChild("HumanoidRootPart") and part and part:IsA("BasePart") then
+		character.HumanoidRootPart.CFrame = part.CFrame
+	end
+end
+
+local function isInsideXRegion()
+	local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+	if not hrp then return false end
+	local x = hrp.Position.X
+	return x >= -18425 and x <= -18415
+end
+
+local function waitUntilEnterRegion(timeout)
+	local start = tick()
+	while tick() - start < timeout do
+		if isInsideXRegion() then
+			warn("✅ Đã vào vùng X, bắt đầu phá Breakables...")
+			return true
+		end
+		task.wait(0.5)
+	end
+	return false
+end
+
+local function getBreakables()
+	local breakables = {}
+	for _, v in pairs(Workspace.__THINGS.Breakables:GetChildren()) do
+		if v:IsA("Model") then
+			table.insert(breakables, v)
 		end
 	end
+	return breakables
+end
 
-	local BreakablesFolder = workspace.__THINGS.Breakables
-	local LeaveTeleport = workspace.__THINGS.Instances.TimeTrial.Teleports.Leave
-
-	local function isValidBreakable(instance)
-		return instance:IsA("Model") and tonumber(instance.Name) ~= nil
-	end
-
-	local function getCurrentBreakables()
-		local list = {}
-		for _, child in ipairs(BreakablesFolder:GetChildren()) do
-			if isValidBreakable(child) then
-				table.insert(list, child.Name)
-			end
-		end
-		return list
-	end
-
-	local function waitUntilBreakableGone(name)
-		while true do
-			local breakable = BreakablesFolder:FindFirstChild(name)
-			if not breakable then break end
-			task.wait(0.1)
-		end
-	end
-
-	local function teleportToBreakables()
-		while true do
-			local breakableNames = getCurrentBreakables()
-
-			if #breakableNames > 0 then
-				for _, name in ipairs(breakableNames) do
-					local breakable = BreakablesFolder:FindFirstChild(name)
-					if breakable and breakable:IsA("Model") then
-						local part = breakable:FindFirstChildWhichIsA("BasePart")
-						if part then
-							teleportTo(part)
-							waitUntilBreakableGone(name)
-						end
-					end
-				end
-			else
-				local hasNew = false
-				for i = 1, 20 do
-					task.wait(1)
-					if #getCurrentBreakables() > 0 then
-						hasNew = true
-						break
-					end
-				end
-
-				if not hasNew then
-					if LeaveTeleport then
-						teleportTo(LeaveTeleport)
-						task.wait(5)
-					end
-					break
-				end
-			end
-
-			task.wait(0.5)
-		end
-	end
-
-	local function waitInsideXRange(maxDuration)
-		local character = player.Character or player.CharacterAdded:Wait()
-		local hrp = character:WaitForChild("HumanoidRootPart")
-		local timer = 0
-
-		while timer < maxDuration do
-			task.wait(0.5)
-			local x = hrp.Position.X
-			if x >= -18425 and x <= -18415 then
-				timer += 0.5
-			else
-				timer = 0
-			end
-		end
-
-		return false
-	end
-
-	local function confirmEnteredTrial(timeout)
-		local character = player.Character or player.CharacterAdded:Wait()
-		local hrp = character:WaitForChild("HumanoidRootPart")
-		local startTime = os.clock()
-
-		while os.clock() - startTime < timeout do
-			task.wait(0.5)
-			local x = hrp.Position.X
-			if x < -18425 or x > -18415 then
-				return true
-			end
-		end
-
-		return false
-	end
-
-	local savedPosition = nil
-	local _, maxZoneData = ZoneCmds.GetMaxOwnedZone()
-	local requiredZoneNumber = maxZoneData and maxZoneData.ZoneNumber or 0
-
-	local function waitUntilReachZone(targetZone)
-		while true do
-			local _, currentZoneData = ZoneCmds.GetMaxOwnedZone()
-			if currentZoneData and currentZoneData.ZoneNumber >= targetZone then
-				print("✅ Đã đạt Zone " .. targetZone .. ", bắt đầu chạy Time Trial.")
-				break
-			end
-			print("⏳ Chưa đạt Zone " .. targetZone .. ", đang đợi...")
-			task.wait(5)
-		end
-	end
-
-	waitUntilReachZone(requiredZoneNumber)
-
+local function teleportToBreakables()
 	while true do
-		local saveData = Save.Get()
-		local totalRuns = saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.TotalRuns or 0) or 0
+		local breakables = getBreakables()
+		if #breakables == 0 then break end
 
-		if totalRuns >= 10 then
-			warn("🎯 Đã đủ 10 lượt chạy, dừng script.")
-			break
-		end
+		for _, breakable in ipairs(breakables) do
+			local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+			if hrp and breakable and breakable:FindFirstChild("Main") then
+				hrp.CFrame = breakable.Main.CFrame + Vector3.new(0, 5, 0)
+				local name = breakable.Name
+				warn("➡️ Đang phá: " .. name)
 
-		warn("🔁 Bắt đầu vòng Time Trial thứ " .. tostring(totalRuns + 1))
-
-		local character = player.Character or player.CharacterAdded:Wait()
-		local hrp = character:FindFirstChild("HumanoidRootPart")
-		if hrp then
-			savedPosition = hrp.CFrame
-		end
-
-		local failedAttempts = 0
-		local MAX_ATTEMPTS = 3
-		local successEnter = false
-
-		while failedAttempts < MAX_ATTEMPTS do
-			teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
-			task.wait(5)
-
-			warn("🕒 Kiểm tra nhân vật đứng vùng X > 30s...")
-
-			local stuckTooLong = not waitInsideXRange(30)
-
-			if stuckTooLong then
-				failedAttempts += 1
-				warn("❌ Đứng im quá lâu trong vùng X. Lần " .. failedAttempts)
-			else
-				warn("✅ Vào vùng. Kiểm tra có di chuyển ra không...")
-				if confirmEnteredTrial(30) then
-					warn("✅ Đã di chuyển, tiếp tục Trial.")
-					successEnter = true
-					break
-				else
-					warn("❌ Nhân vật đứng yên trong vùng X sau 30s.")
-					failedAttempts += 1
-				end
+				local waitStart = tick()
+				repeat
+					task.wait(0.5)
+				until not breakable.Parent or tick() - waitStart > 10
 			end
-
-			if LeaveTeleport then
-				teleportTo(LeaveTeleport)
-				task.wait(5)
-			end
-			task.wait(30)
 		end
+	end
+end
 
-		if not successEnter then
-			game.Players.LocalPlayer:Kick("🚫 Nhân vật bị đứng im > 30s sau 3 lần thử.")
-			return
-		end
+local function restorePosition(cframe)
+	task.wait(0.5)
+	teleportTo({ CFrame = cframe })
+end
 
-		-- 🧠 Phá breakables + canh nếu vẫn bị đứng vùng X sau khi vào
-		local breakablesDone = false
+-- MAIN
+local runCount = 0
+local failedAttempts = 0
+local maxAttempts = 3
 
-		task.spawn(function()
-			teleportToBreakables()
-			breakablesDone = true
-		end)
+while runCount < 10 do
+	local savedPosition = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and LocalPlayer.Character.HumanoidRootPart.CFrame
 
-		task.spawn(function()
-			local character = player.Character or player.CharacterAdded:Wait()
-			local hrp = character:WaitForChild("HumanoidRootPart")
-			local timer = 0
+	-- Teleport vào Time Trial
+	teleportTo(Workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
+	task.wait(5)
 
-			while timer < 30 do
-				if breakablesDone then return end
-				local x = hrp.Position.X
-				if x >= -18425 and x <= -18415 then
-					timer += 0.5
-				else
-					return
-				end
-				task.wait(0.5)
-			end
-
-			warn("❌ Nhân vật vẫn đứng vùng X sau khi vào Trial > 30s")
-			if LeaveTeleport then
-				teleportTo(LeaveTeleport)
-				task.wait(5)
-			end
-			game.Players.LocalPlayer:Kick("Đứng trong Time Trial quá lâu (30s), bị lag.")
-		end)
-
-		task.wait(10)
-
-		if LeaveTeleport then
-			teleportTo(LeaveTeleport)
-			task.wait(5)
-		end
-
-		if savedPosition then
-			teleportTo({CFrame = savedPosition})
-			warn("🔙 Quay lại vị trí ban đầu.")
-		end
-
-		task.wait(15)
+	if not waitUntilEnterRegion(10) then
+		warn("❌ Không vào được vùng X.")
+		break
 	end
 
-	warn("🎉 Đã hoàn tất Time Trial hoặc đạt 10 lượt.")
-end)
+	local breakablesDone = false
+
+	-- Task kiểm tra lag
+	task.spawn(function()
+		local startTick = tick()
+		while tick() - startTick < 30 do
+			if not isInsideXRegion() then return end
+			task.wait(1)
+		end
+
+		if not breakablesDone then
+			failedAttempts += 1
+			warn("❌ Không thấy Breakables (lần thử " .. failedAttempts .. ")")
+
+			local LeaveTeleport = Workspace.__THINGS.Instances.TimeTrial.Teleports:FindFirstChild("Leave")
+			if LeaveTeleport then
+				teleportTo(LeaveTeleport)
+				task.wait(5)
+			end
+
+			task.wait(30)
+
+			if failedAttempts >= maxAttempts then
+				LocalPlayer:Kick("Tìm Breakables Méo Thấy")
+			end
+		end
+	end)
+
+	-- Task phá breakables
+	task.spawn(function()
+		teleportToBreakables()
+		breakablesDone = true
+	end)
+
+	repeat task.wait(1) until breakablesDone
+
+	-- Teleport ra
+	teleportTo(Workspace.__THINGS.Instances.TimeTrial.Teleports.Leave)
+	task.wait(5)
+
+	if savedPosition then
+		restorePosition(savedPosition)
+	end
+
+	runCount += 1
+	warn("✅ Đã hoàn thành lần chạy thứ: " .. runCount)
+	task.wait(15)
+end
+
+warn("🎉 Đã chạy đủ 10 lần. Kết thúc script.")
