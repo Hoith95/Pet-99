@@ -19,6 +19,11 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/E
 end)
 
 spawn(function()
+wait(30)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/NOTI-TIME-TRIAL"))()
+end)
+
+spawn(function()
 wait(60)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-TIME-TRIAL"))()
 end)
