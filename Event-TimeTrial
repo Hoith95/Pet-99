@@ -55,6 +55,8 @@ local function RunTimeTrialScript()
 			end
 		end
 
+		local exitedManually = false
+
 		local function teleportToBreakables()
 			while true do
 				local breakableNames = getCurrentBreakables()
@@ -83,6 +85,7 @@ local function RunTimeTrialScript()
 						if LeaveTeleport then
 							teleportTo(LeaveTeleport)
 							task.wait(5)
+							exitedManually = true
 						end
 						break
 					end
@@ -96,17 +99,17 @@ local function RunTimeTrialScript()
 			return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.Daily_run or 0) or 0
 		end
 
-		-- 🔁 Theo dõi 12 phút không tăng lượt
+		-- 🎯 Theo dõi 12 phút không giảm lượt
 		task.spawn(function()
 			local currentRuns = getTimeTrialRuns()
-			print("📊 Số lượt Time Trial đã hoàn thành: " .. currentRuns)
+			print("📊 Số lượt Time Trial còn lại: " .. currentRuns)
 
-			if currentRuns >= 10 then
-				warn("🎯 Đã đủ 10 lượt, không cần theo dõi thêm.")
+			if currentRuns <= 0 then
+				warn("🎯 Đã hết lượt, không cần theo dõi thêm.")
 				return
 			end
 
-			while currentRuns < 10 do
+			while currentRuns > 0 do
 				local startRuns = currentRuns
 				local totalTime = 0
 
@@ -117,17 +120,17 @@ local function RunTimeTrialScript()
 					totalTime += 10
 
 					currentRuns = getTimeTrialRuns()
-					if currentRuns >= 10 then
-						warn("🎉 Đã đạt 10 lượt trong khi theo dõi, kết thúc.")
+					if currentRuns <= 0 then
+						warn("🎉 Đã hết lượt trong khi theo dõi, kết thúc.")
 						return
-					elseif currentRuns > startRuns then
-						print("✅ Lượt tăng (từ " .. startRuns .. " → " .. currentRuns .. "), theo dõi lại từ đầu.")
+					elseif currentRuns < startRuns then
+						print("✅ Đã dùng thêm lượt (giảm từ " .. startRuns .. " → " .. currentRuns .. "), theo dõi lại từ đầu.")
 						break
 					end
 				end
 
 				if currentRuns == startRuns then
-					player:Kick("⏰ 12 phút rồi mà không tăng lượt Time Trial. Có thể bị AFK hoặc lỗi.")
+					player:Kick("⏰ 12 phút rồi mà không giảm lượt Time Trial. Có thể bị AFK hoặc lỗi.")
 					return
 				end
 			end
@@ -153,12 +156,12 @@ local function RunTimeTrialScript()
 
 		while true do
 			local Daily_run = getTimeTrialRuns()
-			if Daily_run >= 10 then
-				warn("🎯 Đã đủ 10 lượt chạy, dừng script.")
+			if Daily_run <= 0 then
+				warn("🎯 Đã hết 10 lượt chạy, dừng script.")
 				break
 			end
 
-			warn("🔁 Bắt đầu vòng Time Trial thứ " .. tostring(Daily_run + 1))
+			warn("🔁 Bắt đầu vòng Time Trial, còn lại: " .. tostring(Daily_run))
 
 			local character = player.Character or player.CharacterAdded:Wait()
 			local hrp = character:FindFirstChild("HumanoidRootPart")
@@ -170,7 +173,7 @@ local function RunTimeTrialScript()
 			task.wait(5)
 			warn("🚪 Đã teleport vào Time Trial, đang chuẩn bị farm...")
 
-			-- 🔍 Theo dõi vùng X song song 30s
+			-- 🛑 Theo dõi vùng X song song
 			if isInsideXRegion() then
 				task.spawn(function()
 					task.wait(30)
@@ -185,11 +188,14 @@ local function RunTimeTrialScript()
 			teleportToBreakables()
 			task.wait(10)
 
-			if LeaveTeleport then
+			local currentRunAfter = getTimeTrialRuns()
+
+			if not exitedManually and LeaveTeleport then
 				teleportTo(LeaveTeleport)
-				warn("🚪 Đã ra khỏi Time Trial")
 				task.wait(3)
 			end
+
+			warn("🎉 Hoàn thành Time Trial, còn lại: " .. tostring(currentRunAfter))
 
 			if savedPosition then
 				teleportTo({CFrame = savedPosition})
@@ -207,7 +213,7 @@ local function RunTimeTrialScript()
 			while true do
 				task.wait(300)
 				local newRun = getTimeTrialRuns()
-				if newRun == 0 then
+				if newRun == 10 or newRun == 9 then
 					warn("🔁 Daily_run đã reset → chạy lại script!")
 					_G.VAR_TIME_TRIAL = nil
 					RunTimeTrialScript()
