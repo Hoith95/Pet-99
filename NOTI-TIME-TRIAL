@@ -11,12 +11,12 @@ local SaveModule = require(game.ReplicatedStorage.Library.Client.Save)
 
 local function getTimeTrialRuns()
     local saveData = SaveModule.Get()
-    return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.Daily_run or 0) or 0
+    return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.Daily_run or 0)
 end
 
 local function getTimeTrialPoints()
     local saveData = SaveModule.Get()
-    return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.Points or 0) or 0
+    return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.Points or 0)
 end
 
 -- Tạo GUI
