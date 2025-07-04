@@ -169,7 +169,7 @@ task.spawn(function()
 
 				if LeaveTeleport then
 					teleportTo(LeaveTeleport)
-					task.wait(5)
+					task.wait(3)
 				end
 
 				task.wait(30)
@@ -186,7 +186,7 @@ task.spawn(function()
 
 				if LeaveTeleport then
 					teleportTo(LeaveTeleport)
-					task.wait(5)
+					task.wait(3)
 				end
 
 				task.wait(30)
@@ -205,7 +205,7 @@ task.spawn(function()
 		if not exitedManually and LeaveTeleport then
 			teleportTo(LeaveTeleport)
 			warn("🚪 Đã ra khỏi Time Trial")
-			task.wait(5)
+			task.wait(3)
 		end
 
 		if savedPosition then
