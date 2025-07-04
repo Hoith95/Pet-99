@@ -3,6 +3,68 @@ if _G.VAR_TIME_TRIAL then
 	return
 end
 
+-- Khởi tạo GUI Time Trial
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local Save = require(game.ReplicatedStorage.Library.Client.Save)
+
+local function getTimeTrialRuns()
+	local saveData = Save.Get()
+	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.Daily_run or 0)
+end
+
+local function getTimeTrialPoints()
+	local saveData = Save.Get()
+	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.Points or 0)
+end
+
+-- Tạo GUI
+local playerGui = player:WaitForChild("PlayerGui")
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "TimeTrialGui"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = playerGui
+
+local function createLabel(name, position, bgColor)
+	local label = Instance.new("TextLabel")
+	label.Name = name
+	label.AnchorPoint = Vector2.new(1, 0)
+	label.Position = position
+	label.Size = UDim2.new(0, 0, 0, 38)
+	label.BackgroundColor3 = bgColor
+	label.TextColor3 = Color3.fromRGB(255, 255, 255)
+	label.Font = Enum.Font.GothamBold
+	label.TextSize = 32
+	label.Text = "..."
+	label.BackgroundTransparency = 0
+	label.BorderSizePixel = 0
+	label.TextXAlignment = Enum.TextXAlignment.Left
+	label.Parent = screenGui
+	return label
+end
+
+local pointsLabel = createLabel("PointsLabel", UDim2.new(1, -480, 0, -55), Color3.fromRGB(0, 128, 255))
+local timeTrialLabel = createLabel("TimeTrialLabel", UDim2.new(1, -310, 0, -55), Color3.fromRGB(128, 0, 128))
+
+local function updateLabelSize(label)
+	label.Size = UDim2.new(0, label.TextBounds.X + 20, 0, 38)
+end
+
+task.spawn(function()
+	while true do
+		local runs = getTimeTrialRuns()
+		local points = getTimeTrialPoints()
+
+		pointsLabel.Text = "Points: " .. tostring(points)
+		updateLabelSize(pointsLabel)
+
+		timeTrialLabel.Text = "Time Trial: " .. tostring(runs)
+		updateLabelSize(timeTrialLabel)
+
+		task.wait(10)
+	end
+end)
+
 local function RunTimeTrialScript()
 	_G.VAR_TIME_TRIAL = true
 
