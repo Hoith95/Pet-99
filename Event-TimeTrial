@@ -116,14 +116,14 @@ task.spawn(function()
 
 	while true do
 		local saveData = Save.Get()
-		local totalRuns = saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.TotalRuns or 0) or 0
+		local Daily_run = saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.DailyRuns or 0) or 0
 
-		if totalRuns >= 10 then
+		if Daily_run >= 10 then
 			warn("🎯 Đã đủ 10 lượt chạy, dừng script.")
 			break
 		end
 
-		warn("🔁 Bắt đầu vòng Time Trial thứ " .. tostring(totalRuns + 1))
+		warn("🔁 Bắt đầu vòng Time Trial thứ " .. tostring(Daily_run + 1))
 
 		local character = player.Character or player.CharacterAdded:Wait()
 		local hrp = character:FindFirstChild("HumanoidRootPart")
