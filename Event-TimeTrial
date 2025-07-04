@@ -1,34 +1,37 @@
--- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
-if _G.NOTI_TIME_TRIAL then
-	warn("Script GUI đã được chạy trước đó!")
+if _G.VAR_TIME_TRIAL then
+	warn("Script đã được chạy trước đó!")
 	return
 end
 
-_G.NOTI_TIME_TRIAL = true
-
+-- Khởi tạo GUI Time Trial
 local Players = game:GetService("Players")
-local SaveModule = require(game.ReplicatedStorage.Library.Client.Save)
+local player = Players.LocalPlayer
+local Save = require(game.ReplicatedStorage.Library.Client.Save)
 
--- Hàm lấy số lượt Time Trial
 local function getTimeTrialRuns()
-	local saveData = SaveModule.Get()
-	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.DailyRuns or 0) or 0
+	local saveData = Save.Get()
+	if saveData and saveData.TimeTrialStats then
+		local usedRuns = saveData.TimeTrialStats.DailyRuns or 0
+		return math.max(0, 10 - usedRuns) -- lượt còn lại
+	end
+	return 0
 end
 
--- Hàm lấy điểm
 local function getTimeTrialPoints()
-	local saveData = SaveModule.Get()
-	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.Points or 0) or 0
+	local saveData = Save.Get()
+	if saveData and saveData.TimeTrialStats and type(saveData.TimeTrialStats.Points) == "number" then
+		return saveData.TimeTrialStats.Points
+	end
+	return 0
 end
 
 -- Tạo GUI
-local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
+local playerGui = player:WaitForChild("PlayerGui")
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "TimeTrialGui"
 screenGui.ResetOnSpawn = false
 screenGui.Parent = playerGui
 
--- Tạo label function (có anchorPoint)
 local function createLabel(name, position, anchor, bgColor)
 	local label = Instance.new("TextLabel")
 	label.Name = name
@@ -42,30 +45,30 @@ local function createLabel(name, position, anchor, bgColor)
 	label.Text = "..."
 	label.BackgroundTransparency = 0
 	label.BorderSizePixel = 0
-	label.TextXAlignment = Enum.TextXAlignment.Center
+	label.TextXAlignment = Enum.TextXAlignment.Center -- Căn giữa text
 	label.Parent = screenGui
 	return label
 end
 
--- Tạo label: Points (trái trên), Time Trial (giữa trên)
+-- 🧭 Tạo label: Points (trái trên), TimeTrial (giữa trên)
 local pointsLabel = createLabel("PointsLabel", UDim2.new(0, 10, 0, 10), Vector2.new(0, 0), Color3.fromRGB(0, 128, 255))
 local timeTrialLabel = createLabel("TimeTrialLabel", UDim2.new(0.5, 0, 0, 10), Vector2.new(0.5, 0), Color3.fromRGB(128, 0, 128))
 
--- Hàm co giãn theo nội dung
+-- Cập nhật kích thước theo text
 local function updateLabelSize(label)
 	label.Size = UDim2.new(0, label.TextBounds.X + 20, 0, 38)
 end
 
--- Cập nhật mỗi 10 giây
+-- Cập nhật GUI mỗi 10 giây
 task.spawn(function()
 	while true do
-		local runs = getTimeTrialRuns()
+		local runsLeft = getTimeTrialRuns()
 		local points = getTimeTrialPoints()
 
 		pointsLabel.Text = "Points: " .. tostring(points)
 		updateLabelSize(pointsLabel)
 
-		timeTrialLabel.Text = "Time Trial: " .. tostring(runs) .. " / 10"
+		timeTrialLabel.Text = "Time Trial: " .. tostring(runsLeft) .. " / 10"
 		updateLabelSize(timeTrialLabel)
 
 		task.wait(10)
