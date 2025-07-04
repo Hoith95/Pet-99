@@ -19,11 +19,6 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/E
 end)
 
 spawn(function()
-wait(30)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/NOTI-TIME-TRIAL"))()
-end)
-
-spawn(function()
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-MAPS"))()
 end)
 
