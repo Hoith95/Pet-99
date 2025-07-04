@@ -10,10 +10,11 @@ local Save = require(game.ReplicatedStorage.Library.Client.Save)
 
 local function getTimeTrialRuns()
 	local saveData = Save.Get()
-	return saveData 
-		and saveData.TimeTrialStats 
-		and (saveData.TimeTrialStats.DailyRuns or 0) 
-		or 0
+	if saveData and saveData.TimeTrialStats then
+		local usedRuns = saveData.TimeTrialStats.DailyRuns or 0
+		return math.max(0, 10 - usedRuns)  -- tính lượt còn lại
+	end
+	return 0
 end
 
 local function getTimeTrialPoints()
@@ -56,20 +57,26 @@ local function updateLabelSize(label)
 	label.Size = UDim2.new(0, label.TextBounds.X + 20, 0, 38)
 end
 
+-- Cập nhật GUI mỗi 10 giây
 task.spawn(function()
 	while true do
-		local runs = getTimeTrialRuns()
+		local runsLeft = getTimeTrialRuns()
 		local points = getTimeTrialPoints()
 
 		pointsLabel.Text = "Points: " .. tostring(points)
 		updateLabelSize(pointsLabel)
 
-		timeTrialLabel.Text = "Time Trial: " .. tostring(runs)
+		timeTrialLabel.Text = "Time Trial: " .. tostring(runsLeft) .. " / 10"
 		updateLabelSize(timeTrialLabel)
 
 		task.wait(10)
 	end
 end)
+
+if _G.VAR_TIME_TRIAL then
+	warn("Script đã được chạy trước đó!")
+	return
+end
 
 local function RunTimeTrialScript()
 	_G.VAR_TIME_TRIAL = true
@@ -164,44 +171,41 @@ local function RunTimeTrialScript()
 
 		local function getTimeTrialRuns()
 			local saveData = Save.Get()
-			return saveData 
-				and saveData.TimeTrialStats 
-				and (saveData.TimeTrialStats.DailyRuns or 0) 
-				or 0
+			return saveData and saveData.TimeTrialStats and saveData.TimeTrialStats.DailyRuns or 0
 		end
 
 		-- 🎯 Theo dõi 12 phút không giảm lượt
 		task.spawn(function()
 			local currentRuns = getTimeTrialRuns()
-			print("📊 Số lượt Time Trial còn lại: " .. currentRuns)
+			print("📊 Số lượt Time Trial đã dùng: " .. currentRuns)
 
-			if currentRuns <= 0 then
-				warn("🎯 Đã hết lượt, không cần theo dõi thêm.")
+			if currentRuns >= 10 then
+				warn("🎯 Đã dùng đủ 10 lượt, không cần theo dõi thêm.")
 				return
 			end
 
-			while currentRuns > 0 do
+			while currentRuns < 10 do
 				local startRuns = currentRuns
 				local totalTime = 0
 
-				print("🕒 Bắt đầu theo dõi 12 phút từ lượt thứ " .. startRuns)
+				print("🕒 Theo dõi 12 phút kể từ lượt: " .. startRuns)
 
 				while totalTime < 686 do
 					task.wait(10)
 					totalTime += 10
 
 					currentRuns = getTimeTrialRuns()
-					if currentRuns <= 0 then
-						warn("🎉 Đã hết lượt trong khi theo dõi, kết thúc.")
+					if currentRuns >= 10 then
+						warn("🎉 Đã đạt 10 lượt trong khi theo dõi.")
 						return
-					elseif currentRuns < startRuns then
-						print("✅ Đã dùng thêm lượt (giảm từ " .. startRuns .. " → " .. currentRuns .. "), theo dõi lại từ đầu.")
+					elseif currentRuns > startRuns then
+						print("✅ Đã dùng thêm lượt (tăng từ " .. startRuns .. " → " .. currentRuns .. "), theo dõi lại từ đầu.")
 						break
 					end
 				end
 
 				if currentRuns == startRuns then
-					player:Kick("⏰ 12 phút rồi mà không giảm lượt Time Trial. Có thể bị AFK hoặc lỗi.")
+					player:Kick("⏰ 12 phút rồi mà không tăng lượt Time Trial. Có thể bị AFK hoặc lỗi.")
 					return
 				end
 			end
@@ -227,12 +231,12 @@ local function RunTimeTrialScript()
 
 		while true do
 			local Daily_run = getTimeTrialRuns()
-			if Daily_run <= 0 then
-				warn("🎯 Đã hết 10 lượt chạy, dừng script.")
+			if Daily_run >= 10 then
+				warn("🎯 Đã đủ 10 lượt chạy, dừng script.")
 				break
 			end
 
-			warn("🔁 Bắt đầu vòng Time Trial, còn lại: " .. tostring(Daily_run))
+			warn("🔁 Bắt đầu vòng Time Trial, lượt hiện tại: " .. tostring(Daily_run))
 
 			local character = player.Character or player.CharacterAdded:Wait()
 			local hrp = character:FindFirstChild("HumanoidRootPart")
@@ -244,7 +248,6 @@ local function RunTimeTrialScript()
 			task.wait(5)
 			warn("🚪 Đã teleport vào Time Trial, đang chuẩn bị farm...")
 
-			-- 🛑 Theo dõi vùng X song song
 			if isInsideXRegion() then
 				task.spawn(function()
 					task.wait(30)
@@ -255,7 +258,6 @@ local function RunTimeTrialScript()
 				end)
 			end
 
-			-- 🚀 Bắt đầu farm
 			teleportToBreakables()
 			task.wait(10)
 
@@ -266,7 +268,7 @@ local function RunTimeTrialScript()
 				task.wait(3)
 			end
 
-			warn("🎉 Hoàn thành Time Trial, còn lại: " .. tostring(currentRunAfter))
+			warn("🎉 Hoàn thành Time Trial, lượt đã dùng: " .. tostring(currentRunAfter))
 
 			if savedPosition then
 				teleportTo({CFrame = savedPosition})
@@ -278,14 +280,13 @@ local function RunTimeTrialScript()
 
 		warn("🎉 Đã hoàn tất Time Trial hoặc đạt 10 lượt.")
 
-		-- ⏳ Theo dõi reset Daily_run mỗi 5 phút
 		task.spawn(function()
-			warn("🕓 Đang chờ Daily_run reset để chạy lại script...")
+			warn("🕓 Đang chờ DailyRuns reset để chạy lại script...")
 			while true do
 				task.wait(300)
 				local newRun = getTimeTrialRuns()
-				if newRun == 10 or newRun == 9 then
-					warn("🔁 Daily_run đã reset → chạy lại script!")
+				if newRun < 10 then
+					warn("🔁 DailyRuns đã reset → chạy lại script!")
 					_G.VAR_TIME_TRIAL = nil
 					RunTimeTrialScript()
 					break
