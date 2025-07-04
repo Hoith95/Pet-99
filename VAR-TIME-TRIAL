@@ -32,10 +32,10 @@ local function monitorTimeTrialProgress()
 		local startRuns = currentRuns
 		local totalTime = 0
 
-		print("🕒 Bắt đầu theo dõi 30 phút từ lượt thứ " .. startRuns)
+		print("🕒 Bắt đầu theo dõi 12 phút từ lượt thứ " .. startRuns)
 
-		-- Theo dõi trong tối đa 30 phút (1800 giây)
-		while totalTime < 1800 do
+		-- Theo dõi trong tối đa 12 phút (686 giây)
+		while totalTime < 686 do
 			task.wait(10)
 			totalTime += 10
 
@@ -51,7 +51,7 @@ local function monitorTimeTrialProgress()
 
 		-- Nếu sau 30 phút mà số lượt vẫn không đổi
 		if currentRuns == startRuns then
-			player:Kick("⏰ 30 phút rồi mà không tăng lượt Time Trial. Chắc là AFK hoặc lỗi.")
+			player:Kick("⏰ 12 phút rồi mà không tăng lượt Time Trial. Chắc là AFK hoặc lỗi.")
 			return
 		end
 	end
