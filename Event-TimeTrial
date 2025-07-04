@@ -96,7 +96,7 @@ local function RunTimeTrialScript()
 			return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.Daily_run or 0) or 0
 		end
 
-		-- 🔁 Theo dõi tiến độ song song
+		-- 🔁 Theo dõi 12 phút không tăng lượt
 		task.spawn(function()
 			local currentRuns = getTimeTrialRuns()
 			print("📊 Số lượt Time Trial đã hoàn thành: " .. currentRuns)
@@ -166,75 +166,22 @@ local function RunTimeTrialScript()
 				savedPosition = hrp.CFrame
 			end
 
-			local failedAttempts = 0
-			local MAX_ATTEMPTS = 3
-			local successEnter = false
+			teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
+			task.wait(5)
+			warn("🚪 Đã teleport vào Time Trial, đang chuẩn bị farm...")
 
-			while failedAttempts < MAX_ATTEMPTS do
-				teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
-				task.wait(5)
-				warn("🚪 Đã teleport vào Time Trial, đang chờ vùng X...")
-
-				-- ⏳ Đợi vào vùng X
-				local timeout = tick() + 10
-				while not isInsideXRegion() and tick() < timeout do
-					task.wait(0.5)
-				end
-
-				if not isInsideXRegion() then
-					failedAttempts += 1
-					warn("⚠️ Không vào vùng X trong 10s (lần thử " .. failedAttempts .. ")")
-					if LeaveTeleport then
-						teleportTo(LeaveTeleport)
-						task.wait(3)
-					end
-					task.wait(5)
-					continue
-				end
-
-				-- 🕒 Bắt đầu đếm 30s sau khi vào vùng X
-				task.wait(30)
-				if isInsideXRegion() then
-					failedAttempts += 1
-					warn("❌ Nhân vật đứng trong vùng X > 30s (lần thử " .. failedAttempts .. ")")
-					if LeaveTeleport then
-						teleportTo(LeaveTeleport)
-						task.wait(3)
-					end
+			-- 🔍 Theo dõi vùng X song song 30s
+			if isInsideXRegion() then
+				task.spawn(function()
 					task.wait(30)
-					continue
-				end
-
-				-- ✅ Kiểm tra Breakables xuất hiện
-				local foundBreakables = false
-				for i = 1, 60 do
-					if #BreakablesFolder:GetChildren() > 0 then
-						foundBreakables = true
-						break
+					if isInsideXRegion() then
+						warn("⚠️ Nhân vật đã đứng trong vùng X hơn 30s ⇒ có thể lag")
+						player:Kick("Lag trong vùng X quá 30s")
 					end
-					task.wait(0.1)
-				end
-
-				if foundBreakables then
-					warn("✅ Breakables đã xuất hiện, bắt đầu farm")
-					successEnter = true
-					break
-				else
-					failedAttempts += 1
-					warn("❌ Không thấy Breakables (lần thử " .. failedAttempts .. ")")
-					if LeaveTeleport then
-						teleportTo(LeaveTeleport)
-						task.wait(3)
-					end
-					task.wait(30)
-				end
+				end)
 			end
 
-			if not successEnter then
-				player:Kick("Tìm Breakables Méo Thấy")
-				return
-			end
-
+			-- 🚀 Bắt đầu farm
 			teleportToBreakables()
 			task.wait(10)
 
@@ -254,19 +201,19 @@ local function RunTimeTrialScript()
 
 		warn("🎉 Đã hoàn tất Time Trial hoặc đạt 10 lượt.")
 
-		-- 🕒 Theo dõi reset sau 5 phút/lần
+		-- ⏳ Theo dõi reset Daily_run mỗi 5 phút
 		task.spawn(function()
-			warn("⏳ Theo dõi reset Daily_run sau 24h...")
+			warn("🕓 Đang chờ Daily_run reset để chạy lại script...")
 			while true do
 				task.wait(300)
 				local newRun = getTimeTrialRuns()
 				if newRun == 0 then
-					warn("🔄 Daily_run đã reset về 0 → chạy lại toàn bộ script!")
+					warn("🔁 Daily_run đã reset → chạy lại script!")
 					_G.VAR_TIME_TRIAL = nil
 					RunTimeTrialScript()
 					break
 				else
-					print("🕓 Daily_run chưa reset, tiếp tục đợi...")
+					print("⏳ Vẫn chưa reset, chờ thêm...")
 				end
 			end
 		end)
