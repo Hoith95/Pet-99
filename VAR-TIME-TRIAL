@@ -1,0 +1,62 @@
+-- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
+if _G.VAR_TIME_TRIAL2 then
+    warn("Script đã được chạy trước đó!")
+    return -- Dừng script nếu đã chạy
+end
+
+-- Đánh dấu script đã được chạy
+_G.VAR_TIME_TRIAL2 = true
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local Save = require(game.ReplicatedStorage.Library.Client.Save)
+
+local function getTimeTrialRuns()
+	local saveData = Save.Get()
+	return saveData 
+		and saveData.TimeTrialStats 
+		and (saveData.TimeTrialStats.TotalRuns or 0) 
+		or 0
+end
+
+local function monitorTimeTrialProgress()
+	local currentRuns = getTimeTrialRuns()
+	print("📊 Số lượt Time Trial đã hoàn thành: " .. currentRuns)
+
+	if currentRuns >= 10 then
+		warn("🎯 Đã đủ 10 lượt, không cần theo dõi thêm.")
+		return
+	end
+
+	while currentRuns < 10 do
+		local startRuns = currentRuns
+		local totalTime = 0
+
+		print("🕒 Bắt đầu theo dõi 30 phút từ lượt thứ " .. startRuns)
+
+		-- Theo dõi trong tối đa 30 phút (1800 giây)
+		while totalTime < 1800 do
+			task.wait(10)
+			totalTime += 10
+
+			currentRuns = getTimeTrialRuns()
+			if currentRuns >= 10 then
+				warn("🎉 Đã đạt 10 lượt trong khi theo dõi, kết thúc script.")
+				return
+			elseif currentRuns > startRuns then
+				print("✅ Đã có tiến triển (tăng từ " .. startRuns .. " lên " .. currentRuns .. "), tiếp tục theo dõi thêm 30 phút.")
+				break -- bắt đầu lại chu kỳ 30 phút
+			end
+		end
+
+		-- Nếu sau 30 phút mà số lượt vẫn không đổi
+		if currentRuns == startRuns then
+			player:Kick("⏰ 30 phút rồi mà không tăng lượt Time Trial. Chắc là AFK hoặc lỗi.")
+			return
+		end
+	end
+
+	warn("🎯 Đã đủ 10 lượt, dừng giám sát.")
+end
+
+monitorTimeTrialProgress()
