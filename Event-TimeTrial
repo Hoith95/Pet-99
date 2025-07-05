@@ -88,11 +88,70 @@ task.spawn(function()
 		task.wait(10)
 	end
 end)
+
+-- Biến retry nếu bị stuck
+local _stuckRetries = 0
+local stuckMonitorThread = nil
+
+local function stopMonitorStuck()
+	if stuckMonitorThread then
+		task.cancel(stuckMonitorThread)
+		stuckMonitorThread = nil
+	end
+end
+
+-- 👁️‍🗨️ Theo dõi đứng yên
+local function startMonitorStuck(onStuckCallback)
+	if stuckMonitorThread then
+		task.cancel(stuckMonitorThread)
+	end
+
+	stuckMonitorThread = task.spawn(function()
+		local stationarySeconds = 0
+		local lastPosition = nil
+
+		while true do
+			local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+			if not hrp then task.wait(1) continue end
+
+			local currentPosition = hrp.Position
+			if lastPosition and (currentPosition - lastPosition).Magnitude < 0.5 then
+				stationarySeconds += 1
+				if stationarySeconds >= 60 then
+					warn("⚠️ Nhân vật đứng yên tại 1 vị trí 60s ⇒ xử lý stuck lần thứ " .. tostring(_stuckRetries + 1))
+					stopMonitorStuck()
+
+					_stuckRetries += 1
+					if _stuckRetries >= 3 then
+						player:Kick("Đứng yên quá 60s trong Time Trial (đã thử lại 3 lần)")
+					else
+						if workspace.__THINGS.Instances.TimeTrial.Teleports.Leave then
+							teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Leave)
+							task.wait(15)
+							if onStuckCallback then
+								onStuckCallback()
+							end
+						end
+					end
+					break
+				end
+			else
+				stationarySeconds = 0
+				lastPosition = currentPosition
+			end
+
+			task.wait(1)
+		end
+	end)
+end
 local function RunTimeTrialScript()
 	task.spawn(function()
 		if game.PlaceId ~= 140403681187145 then return end
 
 		local ZoneCmds = require(game.ReplicatedStorage.Library.Client.ZoneCmds)
+		local BreakablesFolder = workspace.__THINGS.Breakables
+		local EnterTeleport = workspace.__THINGS.Instances.TimeTrial.Teleports.Enter
+		local LeaveTeleport = workspace.__THINGS.Instances.TimeTrial.Teleports.Leave
 
 		local function teleportTo(part)
 			if part and part.CFrame then
@@ -102,50 +161,6 @@ local function RunTimeTrialScript()
 				end
 			end
 		end
-
-		-- 🧠 Theo dõi đứng yên 60s
-		local stuckMonitorThread = nil
-
-		local function startMonitorStuck()
-			if stuckMonitorThread then
-				task.cancel(stuckMonitorThread)
-			end
-
-			stuckMonitorThread = task.spawn(function()
-				local stationarySeconds = 0
-				local lastPosition = nil
-
-				while true do
-					local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-					if not hrp then task.wait(1) continue end
-
-					local currentPosition = hrp.Position
-					if lastPosition and currentPosition == lastPosition then
-						stationarySeconds += 1
-						if stationarySeconds >= 60 then
-							warn("⚠️ Nhân vật đứng yên tại 1 vị trí 60s ⇒ kick")
-							player:Kick("Đứng yên tại một vị trí quá lâu")
-							break
-						end
-					else
-						stationarySeconds = 0
-						lastPosition = currentPosition
-					end
-
-					task.wait(1)
-				end
-			end)
-		end
-
-		local function stopMonitorStuck()
-			if stuckMonitorThread then
-				task.cancel(stuckMonitorThread)
-				stuckMonitorThread = nil
-			end
-		end
-
-		local BreakablesFolder = workspace.__THINGS.Breakables
-		local LeaveTeleport = workspace.__THINGS.Instances.TimeTrial.Teleports.Leave
 
 		local function isValidBreakable(instance)
 			return instance:IsA("Model") and tonumber(instance.Name) ~= nil
@@ -197,6 +212,7 @@ local function RunTimeTrialScript()
 						if LeaveTeleport then
 							teleportTo(LeaveTeleport)
 							task.wait(5)
+							wasTeleportedOut = true
 						end
 						break
 					end
@@ -206,6 +222,8 @@ local function RunTimeTrialScript()
 		end
 
 		local savedPosition = nil
+		local wasTeleportedOut = false
+
 		local _, maxZoneData = ZoneCmds.GetMaxOwnedZone()
 		local requiredZoneNumber = maxZoneData and maxZoneData.ZoneNumber or 0
 
@@ -259,7 +277,6 @@ local function RunTimeTrialScript()
 				end
 			end
 		end)
-
 		while true do
 			local Daily_run = getRunsUsed()
 			if Daily_run >= 10 then
@@ -275,14 +292,24 @@ local function RunTimeTrialScript()
 				savedPosition = hrp.CFrame
 			end
 
-			teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
+			teleportTo(EnterTeleport)
 			task.wait(5)
 			warn("🚪 Đã teleport vào Time Trial, đang chuẩn bị farm...")
 
-			startMonitorStuck() -- 👁️‍🗨️ Theo dõi đứng yên
+			wasTeleportedOut = false -- Reset cờ
+
+			startMonitorStuck(function()
+				-- Callback nếu bị stuck → thử lại
+				warn("🔁 Thử lại farm sau khi đứng yên quá lâu (retry lần " .. tostring(_stuckRetries) .. ")")
+				startMonitorStuck(function()
+					warn("⚠️ Đứng yên tiếp tục sau khi retry")
+				end)
+				teleportToBreakables()
+				stopMonitorStuck()
+			end)
 
 			teleportToBreakables()
-			stopMonitorStuck() -- ✅ Dừng theo dõi sau khi farm
+			stopMonitorStuck()
 
 			task.wait(10)
 
@@ -291,11 +318,12 @@ local function RunTimeTrialScript()
 			if LeaveTeleport then
 				teleportTo(LeaveTeleport)
 				task.wait(3)
+				wasTeleportedOut = true
 			end
 
 			warn("🎉 Hoàn thành Time Trial, lượt đã dùng: " .. tostring(currentRunAfter))
 
-			if savedPosition then
+			if savedPosition and not wasTeleportedOut then
 				local fakePart = Instance.new("Part")
 				fakePart.Anchored = true
 				fakePart.CFrame = savedPosition
