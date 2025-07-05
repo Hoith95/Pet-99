@@ -103,15 +103,49 @@ local function RunTimeTrialScript()
 			end
 		end
 
+		-- 🧠 Theo dõi đứng yên 60s
+		local stuckMonitorThread = nil
+
+		local function startMonitorStuck()
+			if stuckMonitorThread then
+				task.cancel(stuckMonitorThread)
+			end
+
+			stuckMonitorThread = task.spawn(function()
+				local stationarySeconds = 0
+				local lastPosition = nil
+
+				while true do
+					local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+					if not hrp then task.wait(1) continue end
+
+					local currentPosition = hrp.Position
+					if lastPosition and currentPosition == lastPosition then
+						stationarySeconds += 1
+						if stationarySeconds >= 60 then
+							warn("⚠️ Nhân vật đứng yên tại 1 vị trí 60s ⇒ kick")
+							player:Kick("Đứng yên tại một vị trí quá lâu")
+							break
+						end
+					else
+						stationarySeconds = 0
+						lastPosition = currentPosition
+					end
+
+					task.wait(1)
+				end
+			end)
+		end
+
+		local function stopMonitorStuck()
+			if stuckMonitorThread then
+				task.cancel(stuckMonitorThread)
+				stuckMonitorThread = nil
+			end
+		end
+
 		local BreakablesFolder = workspace.__THINGS.Breakables
 		local LeaveTeleport = workspace.__THINGS.Instances.TimeTrial.Teleports.Leave
-
-		local function isInsideXRegion()
-			local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-			if not hrp then return false end
-			local x = hrp.Position.X
-			return x >= -18425 and x <= -18415
-		end
 
 		local function isValidBreakable(instance)
 			return instance:IsA("Model") and tonumber(instance.Name) ~= nil
@@ -189,7 +223,6 @@ local function RunTimeTrialScript()
 
 		waitUntilReachZone(requiredZoneNumber)
 		while true do
-			local exitedManually = false
 			local Daily_run = getRunsUsed()
 			if Daily_run >= 10 then
 				warn("🎯 Đã đủ 10 lượt chạy, dừng script.")
@@ -208,22 +241,16 @@ local function RunTimeTrialScript()
 			task.wait(5)
 			warn("🚪 Đã teleport vào Time Trial, đang chuẩn bị farm...")
 
-			if isInsideXRegion() then
-				task.spawn(function()
-					task.wait(30)
-					if isInsideXRegion() then
-						warn("⚠️ Nhân vật đã đứng trong vùng X hơn 30s ⇒ có thể lag")
-						player:Kick("Lag trong vùng X quá 30s")
-					end
-				end)
-			end
+			startMonitorStuck() -- 👁️‍🗨️ Bắt đầu theo dõi đứng yên
 
 			teleportToBreakables()
+			stopMonitorStuck() -- ✅ Dừng theo dõi sau khi hoàn tất farm
+
 			task.wait(10)
 
 			local currentRunAfter = getRunsUsed()
 
-			if not exitedManually and LeaveTeleport then
+			if LeaveTeleport then
 				teleportTo(LeaveTeleport)
 				task.wait(3)
 			end
@@ -266,5 +293,5 @@ local function RunTimeTrialScript()
 	end)
 end
 
--- 🚀 Gọi khởi động script chính
+-- 🚀 Gọi script chính
 RunTimeTrialScript()
