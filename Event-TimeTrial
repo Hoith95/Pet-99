@@ -222,6 +222,44 @@ local function RunTimeTrialScript()
 		end
 
 		waitUntilReachZone(requiredZoneNumber)
+
+		-- 🎯 Theo dõi 12 phút không giảm lượt
+		task.spawn(function()
+			local currentRuns = getRunsUsed()
+			print("📊 Số lượt Time Trial đã dùng: " .. currentRuns)
+
+			if currentRuns >= 10 then
+				warn("🎯 Đã dùng đủ 10 lượt, không cần theo dõi thêm.")
+				return
+			end
+
+			while currentRuns < 10 do
+				local startRuns = currentRuns
+				local totalTime = 0
+
+				print("🕒 Theo dõi 12 phút kể từ lượt: " .. startRuns)
+
+				while totalTime < 686 do
+					task.wait(10)
+					totalTime += 10
+
+					currentRuns = getRunsUsed()
+					if currentRuns >= 10 then
+						warn("🎉 Đã đạt 10 lượt trong khi theo dõi.")
+						return
+					elseif currentRuns > startRuns then
+						print("✅ Đã dùng thêm lượt (tăng từ " .. startRuns .. " → " .. currentRuns .. "), theo dõi lại từ đầu.")
+						break
+					end
+				end
+
+				if currentRuns == startRuns then
+					player:Kick("⏰ 12 phút rồi mà không tăng lượt Time Trial. Có thể bị AFK hoặc lỗi.")
+					return
+				end
+			end
+		end)
+
 		while true do
 			local Daily_run = getRunsUsed()
 			if Daily_run >= 10 then
@@ -241,10 +279,10 @@ local function RunTimeTrialScript()
 			task.wait(5)
 			warn("🚪 Đã teleport vào Time Trial, đang chuẩn bị farm...")
 
-			startMonitorStuck() -- 👁️‍🗨️ Bắt đầu theo dõi đứng yên
+			startMonitorStuck() -- 👁️‍🗨️ Theo dõi đứng yên
 
 			teleportToBreakables()
-			stopMonitorStuck() -- ✅ Dừng theo dõi sau khi hoàn tất farm
+			stopMonitorStuck() -- ✅ Dừng theo dõi sau khi farm
 
 			task.wait(10)
 
