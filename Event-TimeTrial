@@ -127,8 +127,7 @@ function RunTimeTrialScript()
 							flagLag = false
 							if Enter then teleportTo(Enter) end
 							task.wait(5)
-							warn("🔁 Restart farm sau lag")
-							teleportFarmLoop()
+							warn("🔁 Đánh dấu restart, vòng chính sẽ tự xử lý")
 							return
 						end
 					end
