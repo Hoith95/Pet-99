@@ -128,8 +128,9 @@ function RunTimeTrialScript()
 							if Leave then teleportTo(Leave) end
 							task.wait(15)
 							flagLag = false
-							if Enter then teleportTo(Enter) end
-							task.wait(5)
+							-- ⚠️ Đã bỏ dòng này theo yêu cầu
+							-- if Enter then teleportTo(Enter) end
+							-- task.wait(5)
 							warn("🔁 Đánh dấu restart, vòng chính sẽ tự xử lý")
 							return
 						end
