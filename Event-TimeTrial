@@ -57,7 +57,6 @@ local function updateLabelSize(label)
 	label.Size = UDim2.new(0, label.TextBounds.X + 20, 0, 38)
 end
 
--- Cập nhật GUI
 task.spawn(function()
 	while true do
 		pointsLabel.Text = "Điểm: " .. tostring(getTimeTrialPoints())
@@ -110,8 +109,6 @@ local function RunTimeTrialScript()
 		end
 
 		local function teleportFarmLoop()
-			local startRuns = getRunsUsed()
-
 			while true do
 				local names = getBreakables()
 				if #names > 0 then
@@ -126,29 +123,33 @@ local function RunTimeTrialScript()
 						end
 					end
 				else
-					-- Không còn rương ⇒ kiểm tra tăng lượt mỗi 5s, tối đa 20s
+					local startRuns = getRunsUsed()
 					local waited = 0
-					local done = false
+					local runsAfter = startRuns
 					while waited < 20 do
-						local cur = getRunsUsed()
-						if cur > startRuns then
+						task.wait(1)
+						waited += 1
+
+						if #getBreakables() > 0 then
+							warn("📦 Rương mới xuất hiện sau khi chờ, tiếp tục farm.")
+							break
+						end
+
+						runsAfter = getRunsUsed()
+						if runsAfter > startRuns then
 							warn("✅ Đã hoàn thành Time Trial (tăng lượt), tele ra luôn.")
 							if Leave then teleportTo(Leave) end
 							task.wait(5)
-							done = true
-							break
+							return
 						end
-						task.wait(5)
-						waited += 5
 					end
 
-					if not done then
-						warn("⏰ Không có rương mới, chờ 20s xong vẫn không tăng lượt.")
+					if #getBreakables() == 0 and runsAfter == startRuns then
+						warn("⏰ Không có rương sau 20s, kết thúc Time Trial.")
 						if Leave then teleportTo(Leave) end
 						task.wait(5)
+						return
 					end
-
-					return
 				end
 				task.wait(0.5)
 			end
@@ -160,7 +161,7 @@ local function RunTimeTrialScript()
 		warn("✅ Đã đạt Zone " .. zone .. ", bắt đầu chạy Time Trial.")
 		waitUntilReachZone(zone)
 
-		-- Theo dõi 12 phút không giảm lượt (sau khi có điểm)
+		-- Theo dõi 12 phút không tăng lượt (sau khi có điểm)
 		task.spawn(function()
 			while getTimeTrialPoints() <= 0 do task.wait(10) end
 			local cur = getRunsUsed()
@@ -215,7 +216,6 @@ local function RunTimeTrialScript()
 
 		warn("🎉 Đã hoàn tất Time Trial hoặc đạt 10 lượt.")
 
-		-- Theo dõi reset DailyRuns sau 5 phút
 		task.spawn(function()
 			while true do
 				task.wait(300)
