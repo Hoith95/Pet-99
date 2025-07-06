@@ -145,11 +145,11 @@ local function RunTimeTrialScript()
 				else
 					local startRuns = getRunsUsed()
 
-					-- Check tăng lượt?
+					-- ✅ Check thay đổi DailyRuns?
 					for i = 1, 5 do
 						task.wait(1)
-						if getRunsUsed() > startRuns then
-							warn("✅ Đã hoàn thành Time Trial (tăng lượt), tele ra luôn.")
+						if getRunsUsed() ~= startRuns then
+							warn("✅ DailyRuns đã thay đổi, tele ra luôn.")
 							if Leave then teleportTo(Leave) end
 							task.wait(5)
 							return
@@ -162,8 +162,8 @@ local function RunTimeTrialScript()
 					if #getBreakables() > 0 then
 						warn("📦 Rương xuất hiện lại, tiếp tục farm.")
 					else
-						if getRunsUsed() > startRuns then
-							warn("✅ Đã tăng lượt sau delay, kết thúc.")
+						if getRunsUsed() ~= startRuns then
+							warn("✅ DailyRuns đã thay đổi sau delay, kết thúc.")
 						else
 							warn("❌ Vẫn không có rương, kết thúc Time Trial.")
 						end
@@ -193,10 +193,10 @@ local function RunTimeTrialScript()
 					task.wait(10)
 					t += 10
 					cur = getRunsUsed()
-					if cur > start then break end
+					if cur ~= start then break end
 				end
 				if cur == start then
-					player:Kick("⏰ 12 phút không tăng lượt Time Trial.")
+					player:Kick("⏰ 12 phút không thay đổi lượt Time Trial.")
 					return
 				end
 			end
