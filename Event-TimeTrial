@@ -5,17 +5,16 @@ end
 
 _G.VAR_TIME_TRIAL = true
 
--- Khởi tạo GUI Time Trial
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local Save = require(game.ReplicatedStorage.Library.Client.Save)
 
--- Xóa GUI cũ nếu đã tồn tại
+-- Xóa GUI cũ nếu có
 local playerGui = player:WaitForChild("PlayerGui")
 local oldGui = playerGui:FindFirstChild("TimeTrialGui")
 if oldGui then oldGui:Destroy() end
 
--- Hàm lấy lượt còn lại
+-- Hàm lấy data
 local function getRunsLeft()
 	local saveData = Save.Get()
 	if saveData and saveData.TimeTrialStats then
@@ -25,13 +24,11 @@ local function getRunsLeft()
 	return 0
 end
 
--- Hàm lấy tổng lượt đã dùng
 local function getRunsUsed()
 	local saveData = Save.Get()
 	return saveData and saveData.TimeTrialStats and saveData.TimeTrialStats.DailyRuns or 0
 end
 
--- Hàm lấy số điểm Time Trial
 local function getTimeTrialPoints()
 	local saveData = Save.Get()
 	if saveData and saveData.TimeTrialStats and type(saveData.TimeTrialStats.Points) == "number" then
@@ -64,16 +61,15 @@ local function createLabel(name, position, anchor, bgColor)
 	return label
 end
 
--- 🧭 Tạo label: Points (trái trên), TimeTrial (giữa trên)
+-- 🧭 Label: Points & TimeTrial
 local pointsLabel = createLabel("PointsLabel", UDim2.new(0, 0, 0, -55), Vector2.new(0, 0), Color3.fromRGB(0, 128, 255))
 local timeTrialLabel = createLabel("TimeTrialLabel", UDim2.new(0.5, 25, 0, -55), Vector2.new(0.5, 0), Color3.fromRGB(128, 0, 128))
 
--- Cập nhật kích thước theo text
+-- Cập nhật GUI
 local function updateLabelSize(label)
 	label.Size = UDim2.new(0, label.TextBounds.X + 20, 0, 38)
 end
 
--- Cập nhật GUI mỗi 10 giây
 task.spawn(function()
 	while true do
 		local runsLeft = getRunsLeft()
@@ -88,20 +84,25 @@ task.spawn(function()
 		task.wait(10)
 	end
 end)
--- Biến retry nếu bị stuck
+
+-- Theo dõi stuck
 local _stuckRetries = 0
-local stuckMonitorThreadId = nil
+local stuckMonitorThread = nil
 
--- 👁️‍🗨️ Theo dõi đứng yên
+local function stopMonitorStuck()
+	if stuckMonitorThread then
+		pcall(function() task.cancel(stuckMonitorThread) end)
+		stuckMonitorThread = nil
+	end
+end
+
 local function startMonitorStuck(onStuckCallback)
-	local currentThreadId = tick()
-	stuckMonitorThreadId = currentThreadId
-
-	task.spawn(function()
+	stopMonitorStuck()
+	stuckMonitorThread = task.spawn(function()
 		local stationarySeconds = 0
 		local lastPosition = nil
 
-		while stuckMonitorThreadId == currentThreadId do
+		while true do
 			local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 			if not hrp then task.wait(1) continue end
 
@@ -110,32 +111,21 @@ local function startMonitorStuck(onStuckCallback)
 				stationarySeconds += 1
 				if stationarySeconds >= 60 then
 					warn("⚠️ Nhân vật đứng yên tại 1 vị trí 60s ⇒ xử lý stuck lần thứ " .. tostring(_stuckRetries + 1))
-					stuckMonitorThreadId = nil
+					stopMonitorStuck()
 
 					_stuckRetries += 1
 					if _stuckRetries >= 3 then
 						player:Kick("Đứng yên quá 60s trong Time Trial (đã thử lại 3 lần)")
 					else
-						local leaveTp = workspace.__THINGS.Instances.TimeTrial.Teleports.Leave
-						local enterTp = workspace.__THINGS.Instances.TimeTrial.Teleports.Enter
-						if leaveTp and enterTp then
-							local function teleportTo(part)
-								if part and part.CFrame then
-									local character = player.Character or player.CharacterAdded:Wait()
-									if character and character:FindFirstChild("HumanoidRootPart") then
-										character.HumanoidRootPart.CFrame = part.CFrame + Vector3.new(0, 5, 0)
-									end
-								end
-							end
+						-- Ra ngoài trước
+						local Leave = workspace.__THINGS.Instances.TimeTrial.Teleports.Leave
+						if Leave then
+							player.Character.HumanoidRootPart.CFrame = Leave.CFrame + Vector3.new(0, 5, 0)
+							task.wait(15)
+						end
 
-							teleportTo(leaveTp)
-							task.wait(2)
-							teleportTo(enterTp)
-							task.wait(2)
-
-							if onStuckCallback then
-								onStuckCallback()
-							end
+						if onStuckCallback then
+							onStuckCallback()
 						end
 					end
 					break
@@ -149,19 +139,6 @@ local function startMonitorStuck(onStuckCallback)
 		end
 	end)
 end
-
-local function stopMonitorStuck()
-	stuckMonitorThreadId = nil
-end
-
-local function teleportTo(part)
-	if part and part.CFrame then
-		local character = player.Character or player.CharacterAdded:Wait()
-		if character and character:FindFirstChild("HumanoidRootPart") then
-			character.HumanoidRootPart.CFrame = part.CFrame + Vector3.new(0, 5, 0)
-		end
-	end
-end
 local function RunTimeTrialScript()
 	task.spawn(function()
 		if game.PlaceId ~= 140403681187145 then return end
@@ -170,6 +147,15 @@ local function RunTimeTrialScript()
 		local BreakablesFolder = workspace.__THINGS.Breakables
 		local EnterTeleport = workspace.__THINGS.Instances.TimeTrial.Teleports.Enter
 		local LeaveTeleport = workspace.__THINGS.Instances.TimeTrial.Teleports.Leave
+
+		local function teleportTo(part)
+			if part and part.CFrame then
+				local character = player.Character or player.CharacterAdded:Wait()
+				if character and character:FindFirstChild("HumanoidRootPart") then
+					character.HumanoidRootPart.CFrame = part.CFrame + Vector3.new(0, 5, 0)
+				end
+			end
+		end
 
 		local function isValidBreakable(instance)
 			return instance:IsA("Model") and tonumber(instance.Name) ~= nil
@@ -206,27 +192,24 @@ local function RunTimeTrialScript()
 						end
 					end
 				else
-					local oldRuns = getRunsUsed()
-					local found = false
-
+					local hasNew = false
 					for i = 1, 20 do
 						task.wait(1)
 						if #getCurrentBreakables() > 0 then
-							found = true
+							hasNew = true
 							break
 						end
-						if getRunsUsed() > oldRuns then
-							warn("🏁 Đã hoàn thành Time Trial (TotalRuns tăng) → Rời khỏi ngay.")
-							return true
-						end
 					end
 
-					if not found then
-						warn("⏳ Không còn rương trong 20s.")
-						return false
+					if not hasNew then
+						if LeaveTeleport then
+							teleportTo(LeaveTeleport)
+							task.wait(5)
+							wasTeleportedOut = true
+						end
+						break
 					end
 				end
-
 				task.wait(0.5)
 			end
 		end
@@ -237,72 +220,138 @@ local function RunTimeTrialScript()
 		local _, maxZoneData = ZoneCmds.GetMaxOwnedZone()
 		local requiredZoneNumber = maxZoneData and maxZoneData.ZoneNumber or 0
 
-		while true do
-			local _, currentZoneData = ZoneCmds.GetMaxOwnedZone()
-			if currentZoneData and currentZoneData.ZoneNumber >= requiredZoneNumber then
-				break
+		local function waitUntilReachZone(targetZone)
+			while true do
+				local _, currentZoneData = ZoneCmds.GetMaxOwnedZone()
+				if currentZoneData and currentZoneData.ZoneNumber >= targetZone then
+					print("✅ Đã đạt Zone " .. targetZone .. ", bắt đầu chạy Time Trial.")
+					break
+				end
+				print("⏳ Chưa đạt Zone " .. targetZone .. ", đang đợi...")
+				task.wait(5)
 			end
-			task.wait(5)
 		end
 
-		-- Theo dõi 12 phút không tăng lượt, chỉ khi có điểm
+		waitUntilReachZone(requiredZoneNumber)
+		-- 🎯 Theo dõi 12 phút không giảm lượt (sau khi đã có điểm Time Trial)
 		task.spawn(function()
 			while getTimeTrialPoints() <= 0 do
+				print("🕓 Chưa có điểm Time Trial, chờ đến khi nhận được điểm rồi mới bắt đầu theo dõi 12 phút.")
 				task.wait(10)
 			end
 
-			while getRunsUsed() < 10 do
-				local before = getRunsUsed()
-				local timePassed = 0
+			local currentRuns = getRunsUsed()
+			print("📊 Số lượt Time Trial đã dùng: " .. currentRuns)
 
-				while timePassed < 686 do
+			if currentRuns >= 10 then
+				warn("🎯 Đã dùng đủ 10 lượt, không cần theo dõi thêm.")
+				return
+			end
+
+			while currentRuns < 10 do
+				local startRuns = currentRuns
+				local totalTime = 0
+
+				print("🕒 Theo dõi 12 phút kể từ lượt: " .. startRuns)
+
+				while totalTime < 686 do
 					task.wait(10)
-					timePassed += 10
-					if getRunsUsed() > before then break end
-					if getRunsUsed() >= 10 then return end
+					totalTime += 10
+
+					currentRuns = getRunsUsed()
+					if currentRuns >= 10 then
+						warn("🎉 Đã đạt 10 lượt trong khi theo dõi.")
+						return
+					elseif currentRuns > startRuns then
+						print("✅ Đã dùng thêm lượt (tăng từ " .. startRuns .. " → " .. currentRuns .. "), theo dõi lại từ đầu.")
+						break
+					end
 				end
 
-				if getRunsUsed() == before then
-					player:Kick("⏰ 12 phút rồi không tăng lượt Time Trial.")
+				if currentRuns == startRuns then
+					player:Kick("⏰ 12 phút rồi mà không tăng lượt Time Trial. Có thể bị AFK hoặc lỗi.")
 					return
 				end
 			end
 		end)
 
-		while getRunsUsed() < 10 do
-			local dailyRun = getRunsUsed()
-			warn("🔁 Bắt đầu lượt: " .. dailyRun)
+		while true do
+			local Daily_run = getRunsUsed()
+			if Daily_run >= 10 then
+				warn("🎯 Đã đủ 10 lượt chạy, dừng script.")
+				break
+			end
+
+			warn("🔁 Bắt đầu lượt: " .. tostring(Daily_run))
 
 			local character = player.Character or player.CharacterAdded:Wait()
-			if character and character:FindFirstChild("HumanoidRootPart") then
-				savedPosition = character.HumanoidRootPart.CFrame
+			local hrp = character:FindFirstChild("HumanoidRootPart")
+			if hrp then
+				savedPosition = hrp.CFrame
 			end
 
 			teleportTo(EnterTeleport)
 			task.wait(5)
+			warn("🚪 Đã teleport vào Time Trial, đang chuẩn bị farm...")
 
-			wasTeleportedOut = false
+			wasTeleportedOut = false -- Reset cờ
+
+			local retryFarm = false
 
 			startMonitorStuck(function()
-				warn("🔁 Retry sau stuck")
-				stopMonitorStuck()
-				teleportToBreakables()
+				warn("⚠️ Nhân vật đứng yên 60s → xử lý stuck")
+				if LeaveTeleport then
+					teleportTo(LeaveTeleport)
+					task.wait(2)
+				end
+				retryFarm = true
 			end)
 
-			local finished = teleportToBreakables()
+			teleportToBreakables()
 			stopMonitorStuck()
 
-			task.wait(5)
-
-			local afterRun = getRunsUsed()
-
-			if LeaveTeleport then
-				teleportTo(LeaveTeleport)
-				task.wait(3)
-				wasTeleportedOut = true
+			if retryFarm then
+				warn("🔁 Retry sau stuck")
+				teleportTo(EnterTeleport)
+				task.wait(5)
+				startMonitorStuck(function()
+					warn("⚠️ Retry lần nữa nhưng vẫn stuck")
+				end)
+				teleportToBreakables()
+				stopMonitorStuck()
 			end
 
-			warn("🎉 Đã xong Time Trial, lượt đã dùng: " .. afterRun)
+			local beforeRun = getRunsUsed()
+			local hasChest = false
+			for i = 1, 20 do
+				task.wait(1)
+				local afterRun = getRunsUsed()
+				if afterRun > beforeRun then
+					warn("✅ Hoàn thành Time Trial (TotalRuns tăng)")
+					if LeaveTeleport then
+						teleportTo(LeaveTeleport)
+						task.wait(3)
+						wasTeleportedOut = true
+					end
+					break
+				end
+				if #getCurrentBreakables() > 0 then
+					hasChest = true
+				end
+			end
+
+			if hasChest then
+				task.wait(5)
+			else
+				warn("⏳ Không có Breakables sau 20s, rời khỏi Time Trial")
+				if LeaveTeleport then
+					teleportTo(LeaveTeleport)
+					task.wait(3)
+					wasTeleportedOut = true
+				end
+			end
+
+			warn("🎉 Hoàn thành Time Trial, lượt đã dùng: " .. tostring(getRunsUsed()))
 
 			if savedPosition and not wasTeleportedOut then
 				local fakePart = Instance.new("Part")
@@ -313,21 +362,26 @@ local function RunTimeTrialScript()
 				fakePart.Parent = workspace
 				teleportTo(fakePart)
 				task.delay(1, function() fakePart:Destroy() end)
+				warn("🔙 Quay về vị trí ban đầu")
 			end
 
-			task.wait(10)
+			task.wait(15)
 		end
 
-		warn("🏁 Đạt 10 lượt Time Trial.")
+		warn("🎉 Đã hoàn tất Time Trial hoặc đạt 10 lượt.")
 
-		-- Theo dõi reset
 		task.spawn(function()
+			warn("🕓 Đang chờ DailyRuns reset để chạy lại script...")
 			while true do
 				task.wait(300)
-				if getRunsUsed() < 10 then
+				local newRun = getRunsUsed()
+				if newRun < 10 then
+					warn("🔁 DailyRuns đã reset → chạy lại script!")
 					_G.VAR_TIME_TRIAL = nil
 					RunTimeTrialScript()
 					break
+				else
+					print("⏳ Vẫn chưa reset, chờ thêm...")
 				end
 			end
 		end)
