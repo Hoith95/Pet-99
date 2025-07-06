@@ -2,6 +2,7 @@ if _G.VAR_TIME_TRIAL then
 	warn("Script đã được chạy trước đó!")
 	return
 end
+
 _G.VAR_TIME_TRIAL = true
 
 local Players = game:GetService("Players")
@@ -9,7 +10,6 @@ local player = Players.LocalPlayer
 local Save = require(game.ReplicatedStorage.Library.Client.Save)
 local playerGui = player:WaitForChild("PlayerGui")
 
--- GUI functions
 local function getRunsUsed()
 	local saveData = Save.Get()
 	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.DailyRuns or 0) or 0
@@ -62,11 +62,11 @@ task.spawn(function()
 	end
 end)
 
--- Biến trạng thái
+-- Flag restart
 local isRestarting = false
 
--- Main script
-local function RunTimeTrialScript()
+-- MAIN FUNCTION
+function RunTimeTrialScript()
 	task.spawn(function()
 		if game.PlaceId ~= 140403681187145 then return end
 
@@ -105,7 +105,6 @@ local function RunTimeTrialScript()
 		end
 
 		local function teleportFarmLoop()
-			-- Ngăn đệ quy thừa khi restart
 			if isRestarting then
 				isRestarting = false
 				return
@@ -128,7 +127,7 @@ local function RunTimeTrialScript()
 							flagLag = false
 							if Enter then teleportTo(Enter) end
 							task.wait(5)
-							warn("🔁 Đang khởi động lại quá trình farm sau khi xử lý lag...")
+							warn("🔁 Restart farm sau lag")
 							teleportFarmLoop()
 							return
 						end
@@ -154,28 +153,26 @@ local function RunTimeTrialScript()
 					end
 				else
 					local startRuns = getRunsUsed()
-
-					-- ✅ Check thay đổi DailyRuns?
 					for i = 1, 5 do
 						task.wait(1)
 						if getRunsUsed() ~= startRuns then
-							warn("✅ DailyRuns đã thay đổi, tele ra luôn.")
+							warn("✅ DailyRuns thay đổi → thoát ngay")
 							if Leave then teleportTo(Leave) end
 							task.wait(5)
 							return
 						end
 					end
 
-					warn("⏰ Không có rương mới, chờ thêm 20s kiểm tra lại...")
+					warn("⏳ Không có rương, chờ 20s...")
 					task.wait(20)
 
 					if #getBreakables() > 0 then
-						warn("📦 Rương xuất hiện lại, tiếp tục farm.")
+						warn("📦 Rương xuất hiện lại, tiếp tục")
 					else
 						if getRunsUsed() ~= startRuns then
-							warn("✅ DailyRuns đã thay đổi sau delay, kết thúc.")
+							warn("✅ DailyRuns thay đổi sau delay")
 						else
-							warn("❌ Vẫn không có rương, kết thúc Time Trial.")
+							warn("❌ Không có gì thay đổi, kết thúc")
 						end
 						if Leave then teleportTo(Leave) end
 						task.wait(5)
@@ -188,10 +185,10 @@ local function RunTimeTrialScript()
 
 		local _, zoneData = ZoneCmds.GetMaxOwnedZone()
 		local zone = zoneData and zoneData.ZoneNumber or 0
-		warn("✅ Đã đạt Zone " .. zone .. ", bắt đầu chạy Time Trial.")
+		warn("✅ Đã đạt Zone " .. zone)
 		waitUntilReachZone(zone)
 
-		-- Theo dõi 12 phút không tăng lượt
+		-- Theo dõi 12 phút không tăng
 		task.spawn(function()
 			while getTimeTrialPoints() <= 0 do task.wait(10) end
 			local cur = getRunsUsed()
@@ -212,17 +209,17 @@ local function RunTimeTrialScript()
 			end
 		end)
 
-		-- Bắt đầu vòng lặp chính
+		-- Vòng farm chính
 		while getRunsUsed() < 10 do
 			local used = getRunsUsed()
-			warn("🔁 Bắt đầu vòng Time Trial, lượt hiện tại: " .. tostring(used))
+			warn("🔁 Bắt đầu lượt: " .. tostring(used))
 
 			local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 			local savedPos = hrp and hrp.CFrame
 
 			teleportTo(Enter)
 			task.wait(5)
-			warn("🚪 Đã teleport vào Time Trial, chuẩn bị farm...")
+			warn("🚪 Vào Time Trial, bắt đầu farm")
 
 			teleportFarmLoop()
 
@@ -244,17 +241,16 @@ local function RunTimeTrialScript()
 			task.wait(15)
 		end
 
-		warn("🎉 Đã hoàn tất Time Trial hoặc đạt 10 lượt.")
+		warn("🎉 Hoàn tất Time Trial hoặc đủ 10 lượt")
 
 		-- Theo dõi reset DailyRuns
 		task.spawn(function()
 			while true do
 				task.wait(300)
 				if getRunsUsed() < 10 then
-					warn("🔁 DailyRuns reset → restart.")
+					warn("🔁 DailyRuns reset → chuẩn bị restart")
 					_G.VAR_TIME_TRIAL = nil
-					RunTimeTrialScript()
-					break
+					return
 				end
 			end
 		end)
@@ -262,3 +258,15 @@ local function RunTimeTrialScript()
 end
 
 RunTimeTrialScript()
+
+-- 🔁 TỰ ĐỘNG KHỞI CHẠY LẠI NẾU SCRIPT BỊ RESET
+task.spawn(function()
+	while true do
+		task.wait(10)
+		if not _G.VAR_TIME_TRIAL then
+			warn("⏫ Script đã reset → khởi động lại")
+			_G.VAR_TIME_TRIAL = true
+			RunTimeTrialScript()
+		end
+	end
+end)
