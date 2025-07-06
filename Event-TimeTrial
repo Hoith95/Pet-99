@@ -110,7 +110,6 @@ function RunTimeTrialScript()
 
 		local function teleportFarmLoop()
 			if isRestarting then
-				isRestarting = false
 				return
 			end
 
@@ -128,7 +127,6 @@ function RunTimeTrialScript()
 							warn("⚠️ Lag phát hiện: số lượng Breakables không đổi trong 60s.")
 							if Leave then teleportTo(Leave) end
 							task.wait(15)
-							flagLag = false
 							warn("🔁 Đánh dấu restart, vòng chính sẽ tự xử lý")
 							return
 						end
@@ -190,6 +188,14 @@ function RunTimeTrialScript()
 		waitUntilReachZone(zone)
 
 		while getRunsUsed() < 10 do
+			-- 🔥 QUAN TRỌNG: Kiểm tra restart
+			if isRestarting then
+				warn("⛔ Đã đánh dấu restart → thoát khỏi vòng chính")
+				isRestarting = false
+				_G.VAR_TIME_TRIAL = nil
+				return
+			end
+
 			local used = getRunsUsed()
 			warn("🔁 Bắt đầu lượt: " .. tostring(used))
 
@@ -197,7 +203,7 @@ function RunTimeTrialScript()
 			local savedPos = hrp and hrp.CFrame
 
 			teleportTo(Enter)
-			task.wait(5)
+			task.wait(9)
 			warn("🚪 Vào Time Trial, bắt đầu farm")
 
 			local waitTime = 0
@@ -207,12 +213,6 @@ function RunTimeTrialScript()
 			end
 
 			teleportFarmLoop()
-
-			if isRestarting then
-				warn("↪️ Bỏ lượt hiện tại vì isRestarting, kết thúc sớm")
-				_G.VAR_TIME_TRIAL = nil -- Cho phép vòng ngoài restart lại
-				return
-			end
 
 			if Leave then teleportTo(Leave) end
 			task.wait(3)
