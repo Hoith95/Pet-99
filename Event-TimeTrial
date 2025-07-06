@@ -62,6 +62,9 @@ task.spawn(function()
 	end
 end)
 
+-- Biến trạng thái
+local isRestarting = false
+
 -- Main script
 local function RunTimeTrialScript()
 	task.spawn(function()
@@ -102,6 +105,12 @@ local function RunTimeTrialScript()
 		end
 
 		local function teleportFarmLoop()
+			-- Ngăn đệ quy thừa khi restart
+			if isRestarting then
+				isRestarting = false
+				return
+			end
+
 			local flagLag = false
 
 			local function startLagMonitor()
@@ -112,6 +121,7 @@ local function RunTimeTrialScript()
 						local after = #getBreakables()
 						if before == after then
 							flagLag = true
+							isRestarting = true
 							warn("⚠️ Lag phát hiện: số lượng Breakables không đổi trong 60s.")
 							if Leave then teleportTo(Leave) end
 							task.wait(15)
