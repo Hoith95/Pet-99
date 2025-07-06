@@ -6,32 +6,19 @@ end
 _G.VAR_TIME_TRIAL = true
 
 local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local player = Players.LocalPlayer
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Save = require(ReplicatedStorage.Library.Client.Save)
 local ZoneCmds = require(ReplicatedStorage.Library.Client.ZoneCmds)
 local playerGui = player:WaitForChild("PlayerGui")
-
--- 🔢 Tự động lấy zone cao nhất từ game
-local function getMaxGameZone()
-	local max = 0
-	for _, data in pairs(ZoneCmds.Zones or {}) do
-		if data.ZoneNumber and data.ZoneNumber > max then
-			max = data.ZoneNumber
-		end
-	end
-	return max
-end
 
 local function getRunsUsed()
 	local saveData = Save.Get()
 	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.DailyRuns or 0) or 0
 end
-
 local function getRunsLeft()
 	return 10 - getRunsUsed()
 end
-
 local function getTimeTrialPoints()
 	local saveData = Save.Get()
 	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.Points or 0) or 0
@@ -53,7 +40,7 @@ local function createLabel(name, position, anchor, bgColor)
 	label.Position = position
 	label.Size = UDim2.new(0, 0, 0, 38)
 	label.BackgroundColor3 = bgColor
-	label.TextColor3 = Color3.new(1, 1, 1)
+	label.TextColor3 = Color3.new(1,1,1)
 	label.Font = Enum.Font.GothamBold
 	label.TextSize = 32
 	label.BackgroundTransparency = 0
@@ -81,10 +68,40 @@ task.spawn(function()
 	end
 end)
 
--- Restart flag
+-- 🔍 Lấy zone cao nhất từ workspace.Map4
+local function getMapMaxZone()
+	local map4 = workspace:FindFirstChild("Map4")
+	if not map4 then return 0 end
+	local maxZone = 0
+	for _, obj in ipairs(map4:GetChildren()) do
+		local num = tonumber(obj.Name)
+		if num and num > maxZone then
+			maxZone = num
+		end
+	end
+	return maxZone
+end
+
+-- ⏳ Đợi đến khi đạt zone cao nhất thì mới chạy script
+local function waitUntilReachMaxZoneThenRun()
+	local mapMaxZone = getMapMaxZone()
+	warn("📌 Zone tối đa trên bản đồ: " .. mapMaxZone)
+
+	while true do
+		local _, data = ZoneCmds.GetMaxOwnedZone()
+		local currentZone = data and data.ZoneNumber or 0
+		if currentZone >= mapMaxZone then
+			warn("✅ Đã đạt Zone tối đa (" .. currentZone .. ") → tiếp tục script")
+			RunTimeTrialScript()
+			return
+		else
+			warn("⏳ Zone hiện tại: " .. currentZone .. " < Max (" .. mapMaxZone .. "), đợi nâng cấp...")
+			task.wait(60)
+		end
+	end
+end
 local isRestarting = false
 
--- MAIN FUNCTION
 function RunTimeTrialScript()
 	task.spawn(function()
 		if game.PlaceId ~= 140403681187145 then return end
@@ -92,16 +109,6 @@ function RunTimeTrialScript()
 		local BreakablesFolder = workspace.__THINGS.Breakables
 		local Enter = workspace.__THINGS.Instances.TimeTrial.Teleports.Enter
 		local Leave = workspace.__THINGS.Instances.TimeTrial.Teleports.Leave
-
-		-- 🔐 Kiểm tra zone tối đa
-		local _, playerZoneData = ZoneCmds.GetMaxOwnedZone()
-		local maxZone = getMaxGameZone()
-		local currentZone = playerZoneData and playerZoneData.ZoneNumber or 0
-		if currentZone < maxZone then
-			warn("⛔ Bạn chưa đạt zone tối đa (" .. maxZone .. "), đang ở zone " .. currentZone .. ". Dừng script.")
-			_G.VAR_TIME_TRIAL = nil
-			return
-		end
 
 		local function teleportTo(part)
 			local character = player.Character or player.CharacterAdded:Wait()
@@ -113,7 +120,6 @@ function RunTimeTrialScript()
 		local function isBreakable(inst)
 			return inst:IsA("Model") and tonumber(inst.Name) ~= nil
 		end
-
 		local function getBreakables()
 			local t = {}
 			for _, c in ipairs(BreakablesFolder:GetChildren()) do
@@ -121,16 +127,14 @@ function RunTimeTrialScript()
 			end
 			return t
 		end
-
 		local function waitGone(name)
 			while BreakablesFolder:FindFirstChild(name) do task.wait(0.1) end
 		end
 
 		local function teleportFarmLoop()
-			if isRestarting then return end
+			if isRestarting then isRestarting = false return end
 
 			local flagLag = false
-
 			local function startLagMonitor()
 				task.spawn(function()
 					while not flagLag do
@@ -140,10 +144,10 @@ function RunTimeTrialScript()
 						if before == after then
 							flagLag = true
 							isRestarting = true
-							warn("⚠️ Lag phát hiện: số lượng Breakables không đổi trong 60s.")
+							warn("⚠️ Lag phát hiện, số lượng Breakables không đổi trong 60s")
 							if Leave then teleportTo(Leave) end
 							task.wait(15)
-							warn("🔁 Đánh dấu restart, vòng chính sẽ tự xử lý")
+							flagLag = false
 							return
 						end
 					end
@@ -184,7 +188,11 @@ function RunTimeTrialScript()
 					if #getBreakables() > 0 then
 						warn("📦 Rương xuất hiện lại, tiếp tục")
 					else
-						warn("❌ Không có gì thay đổi, kết thúc lượt")
+						if getRunsUsed() ~= startRuns then
+							warn("✅ DailyRuns thay đổi sau delay")
+						else
+							warn("❌ Không có gì thay đổi, kết thúc")
+						end
 						if Leave then teleportTo(Leave) end
 						task.wait(5)
 						return
@@ -194,15 +202,7 @@ function RunTimeTrialScript()
 			end
 		end
 
-		-- 🔁 Farm loop chính
 		while getRunsUsed() < 10 do
-			if isRestarting then
-				warn("⛔ Đã đánh dấu restart → thoát khỏi vòng chính")
-				isRestarting = false
-				_G.VAR_TIME_TRIAL = nil
-				return
-			end
-
 			local used = getRunsUsed()
 			warn("🔁 Bắt đầu lượt: " .. tostring(used))
 
@@ -210,7 +210,7 @@ function RunTimeTrialScript()
 			local savedPos = hrp and hrp.CFrame
 
 			teleportTo(Enter)
-			task.wait(9)
+			task.wait(5)
 			warn("🚪 Vào Time Trial, bắt đầu farm")
 
 			local waitTime = 0
@@ -220,6 +220,12 @@ function RunTimeTrialScript()
 			end
 
 			teleportFarmLoop()
+
+			if isRestarting then
+				warn("↪️ Restart được đánh dấu, kết thúc sớm")
+				_G.VAR_TIME_TRIAL = nil
+				return
+			end
 
 			if Leave then teleportTo(Leave) end
 			task.wait(3)
@@ -233,7 +239,7 @@ function RunTimeTrialScript()
 				part.Parent = workspace
 				teleportTo(part)
 				task.delay(1, function() part:Destroy() end)
-				warn("🔙 Quay về vị trí ban đầu")
+				warn("🔙 Quay lại vị trí ban đầu")
 			end
 
 			task.wait(15)
@@ -254,21 +260,19 @@ function RunTimeTrialScript()
 	end)
 end
 
-RunTimeTrialScript()
-
--- 🔁 TỰ ĐỘNG CHẠY LẠI
+-- ⏫ Tự động restart nếu bị reset
 task.spawn(function()
 	while true do
 		task.wait(10)
 		if not _G.VAR_TIME_TRIAL then
 			warn("⏫ Script đã reset → khởi động lại")
 			_G.VAR_TIME_TRIAL = true
-			RunTimeTrialScript()
+			waitUntilReachMaxZoneThenRun()
 		end
 	end
 end)
 
--- ⏰ 12 phút không đổi => kick
+-- ⏰ Theo dõi timeout 12 phút không có tiến triển
 task.spawn(function()
 	while getTimeTrialPoints() <= 0 do task.wait(10) end
 	while true do
@@ -285,3 +289,6 @@ task.spawn(function()
 		end
 	end
 end)
+
+-- 🔁 Bắt đầu đợi max zone và chạy
+waitUntilReachMaxZoneThenRun()
