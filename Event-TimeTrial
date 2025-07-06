@@ -9,20 +9,20 @@ local player = Players.LocalPlayer
 local Save = require(game.ReplicatedStorage.Library.Client.Save)
 local playerGui = player:WaitForChild("PlayerGui")
 
--- GUI
+-- GUI functions
 local function getRunsUsed()
 	local saveData = Save.Get()
 	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.DailyRuns or 0) or 0
 end
 local function getRunsLeft()
-	local saveData = Save.Get()
-	return saveData and saveData.TimeTrialStats and (10 - (saveData.TimeTrialStats.DailyRuns or 0)) or 0
+	return 10 - getRunsUsed()
 end
 local function getTimeTrialPoints()
 	local saveData = Save.Get()
 	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.Points or 0) or 0
 end
 
+-- GUI
 local screenGui = Instance.new("ScreenGui", playerGui)
 screenGui.Name = "TimeTrialGui"
 screenGui.ResetOnSpawn = false
@@ -61,6 +61,8 @@ task.spawn(function()
 		task.wait(10)
 	end
 end)
+
+-- Main script
 local function RunTimeTrialScript()
 	task.spawn(function()
 		if game.PlaceId ~= 140403681187145 then return end
@@ -100,10 +102,37 @@ local function RunTimeTrialScript()
 		end
 
 		local function teleportFarmLoop()
-			while true do
+			local flagLag = false
+
+			local function startLagMonitor()
+				task.spawn(function()
+					while not flagLag do
+						local before = #getBreakables()
+						task.wait(60)
+						local after = #getBreakables()
+						if before == after then
+							flagLag = true
+							warn("⚠️ Lag phát hiện: số lượng Breakables không đổi trong 60s.")
+							if Leave then teleportTo(Leave) end
+							task.wait(15)
+							flagLag = false
+							if Enter then teleportTo(Enter) end
+							task.wait(5)
+							warn("🔁 Đang khởi động lại quá trình farm sau khi xử lý lag...")
+							teleportFarmLoop()
+							return
+						end
+					end
+				end)
+			end
+
+			startLagMonitor()
+
+			while not flagLag do
 				local names = getBreakables()
 				if #names > 0 then
 					for _, n in ipairs(names) do
+						if flagLag then return end
 						local b = BreakablesFolder:FindFirstChild(n)
 						if b then
 							local p = b:FindFirstChildWhichIsA("BasePart")
@@ -115,10 +144,8 @@ local function RunTimeTrialScript()
 					end
 				else
 					local startRuns = getRunsUsed()
-					local waited = 0
-					local breakEarly = false
 
-					-- Chờ 5s kiểm tra nếu đã tăng lượt thì thoát luôn
+					-- Check tăng lượt?
 					for i = 1, 5 do
 						task.wait(1)
 						if getRunsUsed() > startRuns then
@@ -129,14 +156,17 @@ local function RunTimeTrialScript()
 						end
 					end
 
-					-- Nếu chưa tăng thì chờ thêm 20s, sau đó kiểm tra lại rương
-					warn("⏰ Không có rương mới, chờ 20s xong kiểm tra lại...")
+					warn("⏰ Không có rương mới, chờ thêm 20s kiểm tra lại...")
 					task.wait(20)
 
 					if #getBreakables() > 0 then
 						warn("📦 Rương xuất hiện lại, tiếp tục farm.")
 					else
-						warn("❌ Vẫn không có rương, kết thúc Time Trial.")
+						if getRunsUsed() > startRuns then
+							warn("✅ Đã tăng lượt sau delay, kết thúc.")
+						else
+							warn("❌ Vẫn không có rương, kết thúc Time Trial.")
+						end
 						if Leave then teleportTo(Leave) end
 						task.wait(5)
 						return
@@ -151,15 +181,15 @@ local function RunTimeTrialScript()
 		warn("✅ Đã đạt Zone " .. zone .. ", bắt đầu chạy Time Trial.")
 		waitUntilReachZone(zone)
 
+		-- Theo dõi 12 phút không tăng lượt
 		task.spawn(function()
 			while getTimeTrialPoints() <= 0 do task.wait(10) end
 			local cur = getRunsUsed()
 			if cur >= 10 then return end
-
 			while cur < 10 do
 				local start = cur
 				local t = 0
-				while t < 686 do
+				while t < 720 do
 					task.wait(10)
 					t += 10
 					cur = getRunsUsed()
@@ -172,16 +202,17 @@ local function RunTimeTrialScript()
 			end
 		end)
 
-		while true do
+		-- Bắt đầu vòng lặp chính
+		while getRunsUsed() < 10 do
 			local used = getRunsUsed()
-			if used >= 10 then break end
 			warn("🔁 Bắt đầu vòng Time Trial, lượt hiện tại: " .. tostring(used))
 
 			local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 			local savedPos = hrp and hrp.CFrame
+
 			teleportTo(Enter)
 			task.wait(5)
-			warn("🚪 Đã teleport vào Time Trial, đang chuẩn bị farm...")
+			warn("🚪 Đã teleport vào Time Trial, chuẩn bị farm...")
 
 			teleportFarmLoop()
 
@@ -205,6 +236,7 @@ local function RunTimeTrialScript()
 
 		warn("🎉 Đã hoàn tất Time Trial hoặc đạt 10 lượt.")
 
+		-- Theo dõi reset DailyRuns
 		task.spawn(function()
 			while true do
 				task.wait(300)
