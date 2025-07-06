@@ -88,31 +88,28 @@ task.spawn(function()
 		task.wait(10)
 	end
 end)
-
 -- Biến retry nếu bị stuck
 local _stuckRetries = 0
 local stuckMonitorThread = nil
-local stuckMonitorRunning = false
 
 local function stopMonitorStuck()
-	stuckMonitorRunning = false
-	stuckMonitorThread = nil
+	if stuckMonitorThread then
+		task.cancel(stuckMonitorThread)
+		stuckMonitorThread = nil
+	end
 end
 
 -- 👁️‍🗨️ Theo dõi đứng yên
 local function startMonitorStuck(onStuckCallback)
-	stuckMonitorRunning = true
-
 	if stuckMonitorThread then
-		-- Không cancel nữa, chỉ ngắt luồng bằng flag
-		stuckMonitorThread = nil
+		task.cancel(stuckMonitorThread)
 	end
 
 	stuckMonitorThread = task.spawn(function()
 		local stationarySeconds = 0
 		local lastPosition = nil
 
-		while stuckMonitorRunning do
+		while true do
 			local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 			if not hrp then task.wait(1) continue end
 
@@ -146,6 +143,7 @@ local function startMonitorStuck(onStuckCallback)
 		end
 	end)
 end
+
 local function RunTimeTrialScript()
 	task.spawn(function()
 		if game.PlaceId ~= 140403681187145 then return end
@@ -222,7 +220,6 @@ local function RunTimeTrialScript()
 				task.wait(0.5)
 			end
 		end
-
 		local savedPosition = nil
 		local wasTeleportedOut = false
 
@@ -243,8 +240,14 @@ local function RunTimeTrialScript()
 
 		waitUntilReachZone(requiredZoneNumber)
 
-		-- 🎯 Theo dõi 12 phút không giảm lượt
+		-- 🎯 Theo dõi 12 phút không giảm lượt (sau khi đã có điểm Time Trial)
 		task.spawn(function()
+			-- Đợi cho đến khi có điểm
+			while getTimeTrialPoints() <= 0 do
+				print("🕓 Chưa có điểm Time Trial, chờ đến khi nhận được điểm rồi mới bắt đầu theo dõi 12 phút.")
+				task.wait(10)
+			end
+
 			local currentRuns = getRunsUsed()
 			print("📊 Số lượt Time Trial đã dùng: " .. currentRuns)
 
@@ -279,6 +282,7 @@ local function RunTimeTrialScript()
 				end
 			end
 		end)
+
 		while true do
 			local Daily_run = getRunsUsed()
 			if Daily_run >= 10 then
