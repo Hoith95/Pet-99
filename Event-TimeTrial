@@ -22,7 +22,7 @@ local function getTimeTrialPoints()
 	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.Points or 0) or 0
 end
 
--- ✅ GUI (chống tạo trùng)
+-- GUI (chống tạo trùng)
 local screenGui = playerGui:FindFirstChild("TimeTrialGui")
 if not screenGui then
 	screenGui = Instance.new("ScreenGui")
@@ -128,9 +128,6 @@ function RunTimeTrialScript()
 							if Leave then teleportTo(Leave) end
 							task.wait(15)
 							flagLag = false
-							-- ⚠️ Đã bỏ dòng này theo yêu cầu
-							-- if Enter then teleportTo(Enter) end
-							-- task.wait(5)
 							warn("🔁 Đánh dấu restart, vòng chính sẽ tự xử lý")
 							return
 						end
@@ -223,6 +220,13 @@ function RunTimeTrialScript()
 			teleportTo(Enter)
 			task.wait(5)
 			warn("🚪 Vào Time Trial, bắt đầu farm")
+			task.wait(2)
+			-- Đợi đến khi có rương
+			local waitTime = 0
+			while #getBreakables() == 0 and waitTime < 10 do
+				task.wait(0.5)
+				waitTime += 0.5
+			end
 
 			teleportFarmLoop()
 
@@ -248,7 +252,6 @@ function RunTimeTrialScript()
 
 			task.wait(15)
 		end
-
 		warn("🎉 Hoàn tất Time Trial hoặc đủ 10 lượt")
 
 		-- Theo dõi reset DailyRuns
@@ -267,7 +270,7 @@ end
 
 RunTimeTrialScript()
 
--- 🔁 TỰ ĐỘNG KHỞI CHẠY LẠI NẾU SCRIPT BỊ RESET
+-- TỰ ĐỘNG KHỞI ĐỘNG LẠI NẾU SCRIPT BỊ RESET
 task.spawn(function()
 	while true do
 		task.wait(10)
