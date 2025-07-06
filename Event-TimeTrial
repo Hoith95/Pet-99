@@ -136,6 +136,9 @@ function RunTimeTrialScript()
 
 			startLagMonitor()
 
+			-- 🚫 Nếu lag đang xử lý, thì không tiếp tục loop
+			if isRestarting then return end
+
 			while not flagLag do
 				local names = getBreakables()
 				if #names > 0 then
@@ -221,6 +224,8 @@ function RunTimeTrialScript()
 			warn("🚪 Vào Time Trial, bắt đầu farm")
 
 			teleportFarmLoop()
+
+			if isRestarting then continue end
 
 			if Leave then teleportTo(Leave) end
 			task.wait(3)
