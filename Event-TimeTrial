@@ -22,10 +22,14 @@ local function getTimeTrialPoints()
 	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.Points or 0) or 0
 end
 
--- GUI
-local screenGui = Instance.new("ScreenGui", playerGui)
-screenGui.Name = "TimeTrialGui"
-screenGui.ResetOnSpawn = false
+-- ✅ GUI (chống tạo trùng)
+local screenGui = playerGui:FindFirstChild("TimeTrialGui")
+if not screenGui then
+	screenGui = Instance.new("ScreenGui")
+	screenGui.Name = "TimeTrialGui"
+	screenGui.ResetOnSpawn = false
+	screenGui.Parent = playerGui
+end
 
 local function createLabel(name, position, anchor, bgColor)
 	local label = Instance.new("TextLabel")
@@ -49,8 +53,8 @@ local function updateLabelSize(label)
 	label.Size = UDim2.new(0, label.TextBounds.X + 20, 0, 38)
 end
 
-local pointsLabel = createLabel("PointsLabel", UDim2.new(0, 0, 0, -55), Vector2.new(0, 0), Color3.fromRGB(0, 128, 255))
-local timeTrialLabel = createLabel("TimeTrialLabel", UDim2.new(0.5, 25, 0, -55), Vector2.new(0.5, 0), Color3.fromRGB(128, 0, 128))
+local pointsLabel = screenGui:FindFirstChild("PointsLabel") or createLabel("PointsLabel", UDim2.new(0, 0, 0, -55), Vector2.new(0, 0), Color3.fromRGB(0, 128, 255))
+local timeTrialLabel = screenGui:FindFirstChild("TimeTrialLabel") or createLabel("TimeTrialLabel", UDim2.new(0.5, 25, 0, -55), Vector2.new(0.5, 0), Color3.fromRGB(128, 0, 128))
 
 task.spawn(function()
 	while true do
@@ -65,7 +69,6 @@ end)
 -- Flag restart
 local isRestarting = false
 
--- MAIN FUNCTION
 function RunTimeTrialScript()
 	task.spawn(function()
 		if game.PlaceId ~= 140403681187145 then return end
@@ -135,9 +138,6 @@ function RunTimeTrialScript()
 			end
 
 			startLagMonitor()
-
-			-- 🚫 Nếu lag đang xử lý, thì không tiếp tục loop
-			if isRestarting then return end
 
 			while not flagLag do
 				local names = getBreakables()
@@ -225,7 +225,10 @@ function RunTimeTrialScript()
 
 			teleportFarmLoop()
 
-			if isRestarting then continue end
+			if isRestarting then
+				warn("↪️ Bỏ lượt hiện tại vì isRestarting, chuyển sang lượt mới")
+				continue
+			end
 
 			if Leave then teleportTo(Leave) end
 			task.wait(3)
