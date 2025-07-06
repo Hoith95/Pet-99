@@ -6,17 +6,32 @@ end
 _G.VAR_TIME_TRIAL = true
 
 local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local player = Players.LocalPlayer
-local Save = require(game.ReplicatedStorage.Library.Client.Save)
+local Save = require(ReplicatedStorage.Library.Client.Save)
+local ZoneCmds = require(ReplicatedStorage.Library.Client.ZoneCmds)
 local playerGui = player:WaitForChild("PlayerGui")
+
+-- 🔢 Tự động lấy zone cao nhất từ game
+local function getMaxGameZone()
+	local max = 0
+	for _, data in pairs(ZoneCmds.Zones or {}) do
+		if data.ZoneNumber and data.ZoneNumber > max then
+			max = data.ZoneNumber
+		end
+	end
+	return max
+end
 
 local function getRunsUsed()
 	local saveData = Save.Get()
 	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.DailyRuns or 0) or 0
 end
+
 local function getRunsLeft()
 	return 10 - getRunsUsed()
 end
+
 local function getTimeTrialPoints()
 	local saveData = Save.Get()
 	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.Points or 0) or 0
@@ -38,7 +53,7 @@ local function createLabel(name, position, anchor, bgColor)
 	label.Position = position
 	label.Size = UDim2.new(0, 0, 0, 38)
 	label.BackgroundColor3 = bgColor
-	label.TextColor3 = Color3.new(1,1,1)
+	label.TextColor3 = Color3.new(1, 1, 1)
 	label.Font = Enum.Font.GothamBold
 	label.TextSize = 32
 	label.BackgroundTransparency = 0
@@ -69,15 +84,24 @@ end)
 -- Restart flag
 local isRestarting = false
 
--- MAIN SCRIPT
+-- MAIN FUNCTION
 function RunTimeTrialScript()
 	task.spawn(function()
 		if game.PlaceId ~= 140403681187145 then return end
 
-		local ZoneCmds = require(game.ReplicatedStorage.Library.Client.ZoneCmds)
 		local BreakablesFolder = workspace.__THINGS.Breakables
 		local Enter = workspace.__THINGS.Instances.TimeTrial.Teleports.Enter
 		local Leave = workspace.__THINGS.Instances.TimeTrial.Teleports.Leave
+
+		-- 🔐 Kiểm tra zone tối đa
+		local _, playerZoneData = ZoneCmds.GetMaxOwnedZone()
+		local maxZone = getMaxGameZone()
+		local currentZone = playerZoneData and playerZoneData.ZoneNumber or 0
+		if currentZone < maxZone then
+			warn("⛔ Bạn chưa đạt zone tối đa (" .. maxZone .. "), đang ở zone " .. currentZone .. ". Dừng script.")
+			_G.VAR_TIME_TRIAL = nil
+			return
+		end
 
 		local function teleportTo(part)
 			local character = player.Character or player.CharacterAdded:Wait()
@@ -89,6 +113,7 @@ function RunTimeTrialScript()
 		local function isBreakable(inst)
 			return inst:IsA("Model") and tonumber(inst.Name) ~= nil
 		end
+
 		local function getBreakables()
 			local t = {}
 			for _, c in ipairs(BreakablesFolder:GetChildren()) do
@@ -96,22 +121,13 @@ function RunTimeTrialScript()
 			end
 			return t
 		end
+
 		local function waitGone(name)
 			while BreakablesFolder:FindFirstChild(name) do task.wait(0.1) end
 		end
 
-		local function waitUntilReachZone(target)
-			while true do
-				local _, data = ZoneCmds.GetMaxOwnedZone()
-				if data and data.ZoneNumber >= target then break end
-				task.wait(5)
-			end
-		end
-
 		local function teleportFarmLoop()
-			if isRestarting then
-				return
-			end
+			if isRestarting then return end
 
 			local flagLag = false
 
@@ -168,11 +184,7 @@ function RunTimeTrialScript()
 					if #getBreakables() > 0 then
 						warn("📦 Rương xuất hiện lại, tiếp tục")
 					else
-						if getRunsUsed() ~= startRuns then
-							warn("✅ DailyRuns thay đổi sau delay")
-						else
-							warn("❌ Không có gì thay đổi, kết thúc")
-						end
+						warn("❌ Không có gì thay đổi, kết thúc lượt")
 						if Leave then teleportTo(Leave) end
 						task.wait(5)
 						return
@@ -182,13 +194,8 @@ function RunTimeTrialScript()
 			end
 		end
 
-		local _, zoneData = ZoneCmds.GetMaxOwnedZone()
-		local zone = zoneData and zoneData.ZoneNumber or 0
-		warn("✅ Đã đạt Zone " .. zone)
-		waitUntilReachZone(zone)
-
+		-- 🔁 Farm loop chính
 		while getRunsUsed() < 10 do
-			-- 🔥 QUAN TRỌNG: Kiểm tra restart
 			if isRestarting then
 				warn("⛔ Đã đánh dấu restart → thoát khỏi vòng chính")
 				isRestarting = false
@@ -249,7 +256,7 @@ end
 
 RunTimeTrialScript()
 
--- 🔁 Auto restart nếu script reset
+-- 🔁 TỰ ĐỘNG CHẠY LẠI
 task.spawn(function()
 	while true do
 		task.wait(10)
@@ -261,7 +268,7 @@ task.spawn(function()
 	end
 end)
 
--- ⏰ Theo dõi 12 phút không thay đổi
+-- ⏰ 12 phút không đổi => kick
 task.spawn(function()
 	while getTimeTrialPoints() <= 0 do task.wait(10) end
 	while true do
