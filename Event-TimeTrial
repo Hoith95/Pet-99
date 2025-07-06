@@ -67,54 +67,6 @@ task.spawn(function()
 		task.wait(10)
 	end
 end)
--- Stop stuck monitor safely
-local stuckThread = nil
-local function stopMonitorStuck()
-	if stuckThread then
-		pcall(function() task.cancel(stuckThread) end)
-		stuckThread = nil
-	end
-end
-
--- Theo dõi đứng yên 60s
-local retryCount = 0
-local function startMonitorStuck(onStuck)
-	stopMonitorStuck()
-	stuckThread = task.spawn(function()
-		local stationary = 0
-		local lastPos = nil
-		while true do
-			local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-			if not hrp then task.wait(1) continue end
-			if lastPos and (hrp.Position - lastPos).Magnitude < 0.5 then
-				stationary += 1
-				if stationary >= 60 then
-					warn("⚠️ Nhân vật đứng yên tại 1 vị trí 60s ⇒ xử lý stuck lần " .. retryCount+1)
-					stopMonitorStuck()
-					retryCount += 1
-					if retryCount >= 3 then
-						player:Kick("Đứng yên quá 60s trong Time Trial (3 lần)")
-					else
-						if workspace.__THINGS.Instances.TimeTrial.Teleports.Leave then
-							local part = workspace.__THINGS.Instances.TimeTrial.Teleports.Leave
-							local character = player.Character or player.CharacterAdded:Wait()
-							if character and character:FindFirstChild("HumanoidRootPart") then
-								character.HumanoidRootPart.CFrame = part.CFrame + Vector3.new(0, 5, 0)
-							end
-							task.wait(15)
-							onStuck()
-						end
-					end
-					break
-				end
-			else
-				stationary = 0
-				lastPos = hrp.Position
-			end
-			task.wait(1)
-		end
-	end)
-end
 
 -- Main Run
 local function RunTimeTrialScript()
@@ -158,6 +110,8 @@ local function RunTimeTrialScript()
 		end
 
 		local function teleportFarmLoop()
+			local startRuns = getRunsUsed()
+
 			while true do
 				local names = getBreakables()
 				if #names > 0 then
@@ -172,27 +126,29 @@ local function RunTimeTrialScript()
 						end
 					end
 				else
-					local startRuns = getRunsUsed()
+					-- Không còn rương ⇒ kiểm tra tăng lượt mỗi 5s, tối đa 20s
 					local waited = 0
-					local breakEarly = false
-
-					for i = 1, 20 do
-						task.wait(1)
-						if #getBreakables() > 0 then breakEarly = true break end
-						waited += 1
+					local done = false
+					while waited < 20 do
+						local cur = getRunsUsed()
+						if cur > startRuns then
+							warn("✅ Đã hoàn thành Time Trial (tăng lượt), tele ra luôn.")
+							if Leave then teleportTo(Leave) end
+							task.wait(5)
+							done = true
+							break
+						end
+						task.wait(5)
+						waited += 5
 					end
 
-					local runsAfter = getRunsUsed()
-					if not breakEarly then
-						if runsAfter > startRuns then
-							warn("✅ Đã hoàn thành Time Trial (tăng lượt), tele ra luôn.")
-						else
-							warn("⏰ Không có rương mới, chờ 20s xong vẫn không tăng lượt.")
-						end
+					if not done then
+						warn("⏰ Không có rương mới, chờ 20s xong vẫn không tăng lượt.")
 						if Leave then teleportTo(Leave) end
 						task.wait(5)
-						return
 					end
+
+					return
 				end
 				task.wait(0.5)
 			end
@@ -237,14 +193,7 @@ local function RunTimeTrialScript()
 			task.wait(5)
 			warn("🚪 Đã teleport vào Time Trial, đang chuẩn bị farm...")
 
-			startMonitorStuck(function()
-				warn("🔁 Retry sau stuck")
-				teleportTo(Enter)
-				task.wait(5)
-			end)
-
 			teleportFarmLoop()
-			stopMonitorStuck()
 
 			if Leave then teleportTo(Leave) end
 			task.wait(3)
@@ -266,6 +215,7 @@ local function RunTimeTrialScript()
 
 		warn("🎉 Đã hoàn tất Time Trial hoặc đạt 10 lượt.")
 
+		-- Theo dõi reset DailyRuns sau 5 phút
 		task.spawn(function()
 			while true do
 				task.wait(300)
