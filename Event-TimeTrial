@@ -276,7 +276,7 @@ task.spawn(function()
 		task.wait(10)
 		if not _G.VAR_TIME_TRIAL then
 			warn("⏫ Script đã reset → khởi động lại")
-			_G.VAR_TIME_TRIAL = true
+			_G.VAR_TIME_TRIAL = nil
 			RunTimeTrialScript()
 		end
 	end
