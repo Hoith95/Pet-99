@@ -9,28 +9,23 @@ local player = Players.LocalPlayer
 local Save = require(game.ReplicatedStorage.Library.Client.Save)
 local playerGui = player:WaitForChild("PlayerGui")
 
--- Xóa GUI cũ
-local oldGui = playerGui:FindFirstChild("TimeTrialGui")
-if oldGui then oldGui:Destroy() end
-
--- GUI Points và Time Trial
-local function getRunsLeft()
-	local saveData = Save.Get()
-	return saveData and saveData.TimeTrialStats and (10 - (saveData.TimeTrialStats.DailyRuns or 0)) or 0
-end
+-- GUI
 local function getRunsUsed()
 	local saveData = Save.Get()
 	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.DailyRuns or 0) or 0
+end
+local function getRunsLeft()
+	local saveData = Save.Get()
+	return saveData and saveData.TimeTrialStats and (10 - (saveData.TimeTrialStats.DailyRuns or 0)) or 0
 end
 local function getTimeTrialPoints()
 	local saveData = Save.Get()
 	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.Points or 0) or 0
 end
 
-local screenGui = Instance.new("ScreenGui")
+local screenGui = Instance.new("ScreenGui", playerGui)
 screenGui.Name = "TimeTrialGui"
 screenGui.ResetOnSpawn = false
-screenGui.Parent = playerGui
 
 local function createLabel(name, position, anchor, bgColor)
 	local label = Instance.new("TextLabel")
@@ -39,7 +34,7 @@ local function createLabel(name, position, anchor, bgColor)
 	label.Position = position
 	label.Size = UDim2.new(0, 0, 0, 38)
 	label.BackgroundColor3 = bgColor
-	label.TextColor3 = Color3.fromRGB(255, 255, 255)
+	label.TextColor3 = Color3.new(1,1,1)
 	label.Font = Enum.Font.GothamBold
 	label.TextSize = 32
 	label.BackgroundTransparency = 0
@@ -50,12 +45,12 @@ local function createLabel(name, position, anchor, bgColor)
 	return label
 end
 
-local pointsLabel = createLabel("PointsLabel", UDim2.new(0, 0, 0, -55), Vector2.new(0, 0), Color3.fromRGB(0, 128, 255))
-local timeTrialLabel = createLabel("TimeTrialLabel", UDim2.new(0.5, 25, 0, -55), Vector2.new(0.5, 0), Color3.fromRGB(128, 0, 128))
-
 local function updateLabelSize(label)
 	label.Size = UDim2.new(0, label.TextBounds.X + 20, 0, 38)
 end
+
+local pointsLabel = createLabel("PointsLabel", UDim2.new(0, 0, 0, -55), Vector2.new(0, 0), Color3.fromRGB(0, 128, 255))
+local timeTrialLabel = createLabel("TimeTrialLabel", UDim2.new(0.5, 25, 0, -55), Vector2.new(0.5, 0), Color3.fromRGB(128, 0, 128))
 
 task.spawn(function()
 	while true do
@@ -66,8 +61,6 @@ task.spawn(function()
 		task.wait(10)
 	end
 end)
-
--- Main Run
 local function RunTimeTrialScript()
 	task.spawn(function()
 		if game.PlaceId ~= 140403681187145 then return end
@@ -78,11 +71,9 @@ local function RunTimeTrialScript()
 		local Leave = workspace.__THINGS.Instances.TimeTrial.Teleports.Leave
 
 		local function teleportTo(part)
-			if part and part.CFrame then
-				local character = player.Character or player.CharacterAdded:Wait()
-				if character and character:FindFirstChild("HumanoidRootPart") then
-					character.HumanoidRootPart.CFrame = part.CFrame + Vector3.new(0, 5, 0)
-				end
+			local character = player.Character or player.CharacterAdded:Wait()
+			if character and character:FindFirstChild("HumanoidRootPart") and part and part.CFrame then
+				character.HumanoidRootPart.CFrame = part.CFrame + Vector3.new(0, 5, 0)
 			end
 		end
 
@@ -125,18 +116,12 @@ local function RunTimeTrialScript()
 				else
 					local startRuns = getRunsUsed()
 					local waited = 0
-					local runsAfter = startRuns
-					while waited < 20 do
+					local breakEarly = false
+
+					-- Chờ 5s kiểm tra nếu đã tăng lượt thì thoát luôn
+					for i = 1, 5 do
 						task.wait(1)
-						waited += 1
-
-						if #getBreakables() > 0 then
-							warn("📦 Rương mới xuất hiện sau khi chờ, tiếp tục farm.")
-							break
-						end
-
-						runsAfter = getRunsUsed()
-						if runsAfter > startRuns then
+						if getRunsUsed() > startRuns then
 							warn("✅ Đã hoàn thành Time Trial (tăng lượt), tele ra luôn.")
 							if Leave then teleportTo(Leave) end
 							task.wait(5)
@@ -144,8 +129,14 @@ local function RunTimeTrialScript()
 						end
 					end
 
-					if #getBreakables() == 0 and runsAfter == startRuns then
-						warn("⏰ Không có rương sau 20s, kết thúc Time Trial.")
+					-- Nếu chưa tăng thì chờ thêm 20s, sau đó kiểm tra lại rương
+					warn("⏰ Không có rương mới, chờ 20s xong kiểm tra lại...")
+					task.wait(20)
+
+					if #getBreakables() > 0 then
+						warn("📦 Rương xuất hiện lại, tiếp tục farm.")
+					else
+						warn("❌ Vẫn không có rương, kết thúc Time Trial.")
 						if Leave then teleportTo(Leave) end
 						task.wait(5)
 						return
@@ -155,13 +146,11 @@ local function RunTimeTrialScript()
 			end
 		end
 
-		-- Đảm bảo đạt zone mới chạy
 		local _, zoneData = ZoneCmds.GetMaxOwnedZone()
 		local zone = zoneData and zoneData.ZoneNumber or 0
 		warn("✅ Đã đạt Zone " .. zone .. ", bắt đầu chạy Time Trial.")
 		waitUntilReachZone(zone)
 
-		-- Theo dõi 12 phút không tăng lượt (sau khi có điểm)
 		task.spawn(function()
 			while getTimeTrialPoints() <= 0 do task.wait(10) end
 			local cur = getRunsUsed()
@@ -183,11 +172,11 @@ local function RunTimeTrialScript()
 			end
 		end)
 
-		-- Main loop
 		while true do
 			local used = getRunsUsed()
 			if used >= 10 then break end
 			warn("🔁 Bắt đầu vòng Time Trial, lượt hiện tại: " .. tostring(used))
+
 			local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 			local savedPos = hrp and hrp.CFrame
 			teleportTo(Enter)
