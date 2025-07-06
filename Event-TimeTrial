@@ -92,25 +92,27 @@ end)
 -- Biến retry nếu bị stuck
 local _stuckRetries = 0
 local stuckMonitorThread = nil
+local stuckMonitorRunning = false
 
 local function stopMonitorStuck()
-	if stuckMonitorThread then
-		task.cancel(stuckMonitorThread)
-		stuckMonitorThread = nil
-	end
+	stuckMonitorRunning = false
+	stuckMonitorThread = nil
 end
 
 -- 👁️‍🗨️ Theo dõi đứng yên
 local function startMonitorStuck(onStuckCallback)
+	stuckMonitorRunning = true
+
 	if stuckMonitorThread then
-		task.cancel(stuckMonitorThread)
+		-- Không cancel nữa, chỉ ngắt luồng bằng flag
+		stuckMonitorThread = nil
 	end
 
 	stuckMonitorThread = task.spawn(function()
 		local stationarySeconds = 0
 		local lastPosition = nil
 
-		while true do
+		while stuckMonitorRunning do
 			local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 			if not hrp then task.wait(1) continue end
 
