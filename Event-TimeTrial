@@ -69,6 +69,7 @@ end)
 -- Restart flag
 local isRestarting = false
 
+-- MAIN SCRIPT
 function RunTimeTrialScript()
 	task.spawn(function()
 		if game.PlaceId ~= 140403681187145 then return end
@@ -188,32 +189,10 @@ function RunTimeTrialScript()
 		warn("✅ Đã đạt Zone " .. zone)
 		waitUntilReachZone(zone)
 
-		-- Theo dõi 12 phút không tăng
-		task.spawn(function()
-			while getTimeTrialPoints() <= 0 do task.wait(10) end
-			local cur = getRunsUsed()
-			if cur >= 10 then return end
-			while cur < 10 do
-				local start = cur
-				local t = 0
-				while t < 720 do
-					task.wait(10)
-					t += 10
-					cur = getRunsUsed()
-					if cur ~= start then break end
-				end
-				if cur == start then
-					player:Kick("⏰ 12 phút không thay đổi lượt Time Trial.")
-					return
-				end
-			end
-		end)
-
-		-- Vòng farm chính
 		while getRunsUsed() < 10 do
 			local used = getRunsUsed()
 			warn("🔁 Bắt đầu lượt: " .. tostring(used))
-			task.wait(3)
+
 			local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 			local savedPos = hrp and hrp.CFrame
 
@@ -231,6 +210,7 @@ function RunTimeTrialScript()
 
 			if isRestarting then
 				warn("↪️ Bỏ lượt hiện tại vì isRestarting, kết thúc sớm")
+				_G.VAR_TIME_TRIAL = nil -- Cho phép vòng ngoài restart lại
 				return
 			end
 
@@ -254,7 +234,6 @@ function RunTimeTrialScript()
 
 		warn("🎉 Hoàn tất Time Trial hoặc đủ 10 lượt")
 
-		-- Theo dõi reset DailyRuns
 		task.spawn(function()
 			while true do
 				task.wait(300)
@@ -270,14 +249,32 @@ end
 
 RunTimeTrialScript()
 
--- Tự động khởi động lại nếu bị reset
+-- 🔁 Auto restart nếu script reset
 task.spawn(function()
 	while true do
 		task.wait(10)
 		if not _G.VAR_TIME_TRIAL then
 			warn("⏫ Script đã reset → khởi động lại")
-			_G.VAR_TIME_TRIAL = nil
+			_G.VAR_TIME_TRIAL = true
 			RunTimeTrialScript()
+		end
+	end
+end)
+
+-- ⏰ Theo dõi 12 phút không thay đổi
+task.spawn(function()
+	while getTimeTrialPoints() <= 0 do task.wait(10) end
+	while true do
+		local start = getRunsUsed()
+		local t = 0
+		while t < 720 do
+			task.wait(10)
+			t += 10
+			if getRunsUsed() ~= start then break end
+		end
+		if getRunsUsed() == start then
+			player:Kick("⏰ 12 phút không thay đổi lượt Time Trial.")
+			return
 		end
 	end
 end)
