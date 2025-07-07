@@ -26,7 +26,7 @@ local function getTimeTrialPoints()
 	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.Points or 0) or 0
 end
 
--- GUI
+-- GUI hiển thị điểm và lượt
 local screenGui = playerGui:FindFirstChild("TimeTrialGui")
 if not screenGui then
 	screenGui = Instance.new("ScreenGui")
@@ -111,7 +111,6 @@ function RunTimeTrialScript()
 	task.spawn(function()
 		if game.PlaceId ~= 140403681187145 then return end
 
-
 		local BreakablesFolder = workspace.__THINGS.Breakables
 		local Enter = workspace.__THINGS.Instances.TimeTrial.Teleports.Enter
 		local Leave = workspace.__THINGS.Instances.TimeTrial.Teleports.Leave
@@ -138,12 +137,11 @@ function RunTimeTrialScript()
 		local function waitGone(name)
 			while BreakablesFolder:FindFirstChild(name) do task.wait(0.1) end
 		end
-
 		local function teleportFarmLoop()
 			if isRestarting then isRestarting = false return end
 
 			local flagLag = false
-			local breakablesTeleported = 0 -- ✅ reset mỗi lượt
+			local breakablesTeleported = 0
 
 			local function startLagMonitor()
 				task.spawn(function()
@@ -154,8 +152,7 @@ function RunTimeTrialScript()
 						if before == after then
 							flagLag = true
 							isRestarting = true
-							_G.VAR_TIME_TRIAL = nil -- ✅ cho phép auto-restart
-
+							_G.VAR_TIME_TRIAL = nil
 							warn("⚠️ Lag phát hiện: không có teleport nào trong 60s.")
 							if Leave then teleportTo(Leave) end
 							task.wait(15)
@@ -203,7 +200,7 @@ function RunTimeTrialScript()
 						end
 					end
 
-					warn("⏳ Không có rương, bắt đầu chờ tối đa 20s...")
+					warn("⏳ Không có rương, chờ tối đa 20s...")
 					local foundChest = false
 					for i = 1, 200 do
 						task.wait(0.1)
@@ -244,7 +241,6 @@ function RunTimeTrialScript()
 
 			if isRestarting then
 				warn("↪️ Restart flag true → kết thúc sớm")
-
 				_G.VAR_TIME_TRIAL = nil
 				return
 			end
@@ -261,19 +257,17 @@ function RunTimeTrialScript()
 				task.wait(300)
 				if getRunsUsed() < 10 then
 					warn("🔁 DailyRuns reset → restart")
-
 					_G.VAR_TIME_TRIAL = nil
 					return
 				end
 			end
 		end)
 	end)
-
 end
 
 RunTimeTrialScript()
 
--- 🔁 Auto restart nếu reset
+-- 🔁 Auto restart nếu script bị nil
 task.spawn(function()
 	while true do
 		task.wait(10)
@@ -285,7 +279,7 @@ task.spawn(function()
 	end
 end)
 
--- ⏰ Theo dõi 12 phút không đổi
+-- ⏰ Theo dõi 12 phút không đổi lượt
 task.spawn(function()
 	while getTimeTrialPoints() <= 0 do task.wait(10) end
 	while true do
