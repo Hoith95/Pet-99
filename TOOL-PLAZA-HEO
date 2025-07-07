@@ -23,7 +23,7 @@ getgenv().Settings = {
 	    ["Crystal Key"] = {Price = "+1%"},
 	    ["Gym Gift"] = {Price = "+1%", Priority = true},
             ["All Huges"] = {Price = "+1%", AllTypes = true},
-	    ["Time Trial Gift"] = {Price = 136868, Priority = true},
+	    ["Time Trial Gift"] = {Price = 168686, Priority = true},
 	    ["Huge Machine Egg 4"] = {Price = "+5%"},
 	    ["Huge Machine Egg 5"] = {Price = "+5%"},
 	    ["Hype Egg"] = {Price = "+1%"},
