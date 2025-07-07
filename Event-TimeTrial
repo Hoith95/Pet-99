@@ -102,10 +102,9 @@ local function waitUntilReachMaxZone()
 end
 
 waitUntilReachMaxZone()
--- Restart flag
+
 local isRestarting = false
 
--- MAIN SCRIPT
 function RunTimeTrialScript()
 	task.spawn(function()
 		if game.PlaceId ~= 140403681187145 then return end
@@ -180,6 +179,7 @@ function RunTimeTrialScript()
 					end
 				else
 					local startRuns = getRunsUsed()
+
 					for i = 1, 10 do
 						task.wait(0.1)
 						if getRunsUsed() ~= startRuns then
@@ -190,10 +190,17 @@ function RunTimeTrialScript()
 						end
 					end
 
-					warn("⏳ Không có rương, chờ 3s...")
-					task.wait(3)
+					warn("⏳ Không có rương, bắt đầu chờ tối đa 20s...")
+					local foundChest = false
+					for i = 1, 200 do
+						task.wait(0.1)
+						if #getBreakables() > 0 then
+							foundChest = true
+							break
+						end
+					end
 
-					if #getBreakables() > 0 then
+					if foundChest then
 						warn("📦 Rương xuất hiện lại, tiếp tục")
 					else
 						warn("❌ Không có gì thay đổi, kết thúc lượt")
