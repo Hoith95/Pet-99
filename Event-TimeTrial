@@ -1,5 +1,5 @@
-if _G.VAR_TT_THREAD and coroutine.status(_G.VAR_TT_THREAD) == "suspended" then
-	warn("⛔ RunTimeTrialScript đã chạy rồi (thread còn sống)!")
+if _G.VAR_TIME_TRIAL then
+	warn("Script đã được chạy trước đó!")
 	return
 end
 
@@ -105,11 +105,13 @@ end
 
 waitUntilReachMaxZone()
 
+local isRestarting = false
+
 function RunTimeTrialScript()
-	_G.VAR_TT_THREAD = coroutine.create(function()
+	task.spawn(function()
 		if game.PlaceId ~= 140403681187145 then return end
 
-		local isRestarting = false
+
 		local BreakablesFolder = workspace.__THINGS.Breakables
 		local Enter = workspace.__THINGS.Instances.TimeTrial.Teleports.Enter
 		local Leave = workspace.__THINGS.Instances.TimeTrial.Teleports.Leave
@@ -141,7 +143,7 @@ function RunTimeTrialScript()
 			if isRestarting then isRestarting = false return end
 
 			local flagLag = false
-			local breakablesTeleported = 0
+			local breakablesTeleported = 0 -- ✅ reset mỗi lượt
 
 			local function startLagMonitor()
 				task.spawn(function()
@@ -152,8 +154,8 @@ function RunTimeTrialScript()
 						if before == after then
 							flagLag = true
 							isRestarting = true
-							_G.VAR_TT_THREAD = nil
-							_G.VAR_TIME_TRIAL = nil
+							_G.VAR_TIME_TRIAL = nil -- ✅ cho phép auto-restart
+
 							warn("⚠️ Lag phát hiện: không có teleport nào trong 60s.")
 							if Leave then teleportTo(Leave) end
 							task.wait(15)
@@ -242,13 +244,14 @@ function RunTimeTrialScript()
 
 			if isRestarting then
 				warn("↪️ Restart flag true → kết thúc sớm")
-				_G.VAR_TT_THREAD = nil
+
 				_G.VAR_TIME_TRIAL = nil
 				return
 			end
 
 			if Leave then teleportTo(Leave) end
-			task.wait(14)
+			task.wait(9)
+			task.wait(5)
 		end
 
 		warn("🎉 Hoàn tất Time Trial hoặc đủ 10 lượt")
@@ -258,14 +261,14 @@ function RunTimeTrialScript()
 				task.wait(300)
 				if getRunsUsed() < 10 then
 					warn("🔁 DailyRuns reset → restart")
-					_G.VAR_TT_THREAD = nil
+
 					_G.VAR_TIME_TRIAL = nil
 					return
 				end
 			end
 		end)
 	end)
-	coroutine.resume(_G.VAR_TT_THREAD)
+
 end
 
 RunTimeTrialScript()
@@ -276,6 +279,7 @@ task.spawn(function()
 		task.wait(10)
 		if not _G.VAR_TIME_TRIAL then
 			warn("⏫ Script reset → khởi động lại")
+			_G.VAR_TIME_TRIAL = true
 			RunTimeTrialScript()
 		end
 	end
