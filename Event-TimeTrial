@@ -229,7 +229,7 @@ function RunTimeTrialScript()
 			warn("🔁 Bắt đầu lượt: " .. tostring(used))
 
 			teleportTo(Enter)
-			task.wait(9)
+			task.wait(3)
 			warn("🚪 Vào Time Trial, bắt đầu farm")
 
 			local waitTime = 0
