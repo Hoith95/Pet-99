@@ -137,11 +137,12 @@ function RunTimeTrialScript()
 		local function waitGone(name)
 			while BreakablesFolder:FindFirstChild(name) do task.wait(0.1) end
 		end
+
 		local function teleportFarmLoop()
 			if isRestarting then isRestarting = false return end
 
 			local flagLag = false
-			local breakablesTeleported = 0
+			local breakablesTeleported = 0 -- ✅ reset mỗi lượt
 
 			local function startLagMonitor()
 				task.spawn(function()
@@ -152,6 +153,7 @@ function RunTimeTrialScript()
 						if before == after then
 							flagLag = true
 							isRestarting = true
+							_G.VAR_TIME_TRIAL = nil -- ✅ cho phép auto-restart
 							warn("⚠️ Lag phát hiện: không có teleport nào trong 60s.")
 							if Leave then teleportTo(Leave) end
 							task.wait(15)
