@@ -16,9 +16,11 @@ local function getRunsUsed()
 	local saveData = Save.Get()
 	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.DailyRuns or 0) or 0
 end
+
 local function getRunsLeft()
 	return 10 - getRunsUsed()
 end
+
 local function getTimeTrialPoints()
 	local saveData = Save.Get()
 	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.Points or 0) or 0
@@ -135,22 +137,22 @@ function RunTimeTrialScript()
 		local function waitGone(name)
 			while BreakablesFolder:FindFirstChild(name) do task.wait(0.1) end
 		end
-
 		local function teleportFarmLoop()
 			if isRestarting then isRestarting = false return end
 
 			local flagLag = false
+			local breakablesTeleported = 0
 
 			local function startLagMonitor()
 				task.spawn(function()
 					while not flagLag do
-						local before = #getBreakables()
+						local before = breakablesTeleported
 						task.wait(60)
-						local after = #getBreakables()
+						local after = breakablesTeleported
 						if before == after then
 							flagLag = true
 							isRestarting = true
-							warn("⚠️ Lag phát hiện: số lượng Breakables không đổi trong 60s.")
+							warn("⚠️ Lag phát hiện: không có teleport nào trong 60s.")
 							if Leave then teleportTo(Leave) end
 							task.wait(15)
 							flagLag = false
@@ -173,19 +175,26 @@ function RunTimeTrialScript()
 							local p = b:FindFirstChildWhichIsA("BasePart")
 							if p then
 								teleportTo(p)
+								breakablesTeleported += 1
 								waitGone(n)
 							end
 						end
 					end
 				else
-					local startRuns = getRunsUsed()
+					local startPoints = getTimeTrialPoints()
+					local saveData = Save.Get()
+					local startTotalRuns = saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.TotalRuns or 0) or 0
 
 					for i = 1, 10 do
 						task.wait(0.1)
-						if getRunsUsed() ~= startRuns then
-							warn("✅ DailyRuns thay đổi → thoát")
+						local newPoints = getTimeTrialPoints()
+						local currentSave = Save.Get()
+						local newTotalRuns = currentSave and currentSave.TimeTrialStats and (currentSave.TimeTrialStats.TotalRuns or 0) or 0
+
+						if newPoints > startPoints or newTotalRuns > startTotalRuns then
+							warn("✅ Điểm hoặc TotalRuns tăng → thoát Time Trial")
 							if Leave then teleportTo(Leave) end
-							task.wait(5)
+							task.wait(9)
 							return
 						end
 					end
@@ -205,7 +214,7 @@ function RunTimeTrialScript()
 					else
 						warn("❌ Không có gì thay đổi, kết thúc lượt")
 						if Leave then teleportTo(Leave) end
-						task.wait(5)
+						task.wait(9)
 						return
 					end
 				end
@@ -217,11 +226,8 @@ function RunTimeTrialScript()
 			local used = getRunsUsed()
 			warn("🔁 Bắt đầu lượt: " .. tostring(used))
 
-			local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-			local savedPos = hrp and hrp.CFrame
-
 			teleportTo(Enter)
-			task.wait(3)
+			task.wait(9)
 			warn("🚪 Vào Time Trial, bắt đầu farm")
 
 			local waitTime = 0
@@ -239,20 +245,7 @@ function RunTimeTrialScript()
 			end
 
 			if Leave then teleportTo(Leave) end
-			task.wait(2)
-
-			if savedPos then
-				local part = Instance.new("Part")
-				part.Anchored = true
-				part.CFrame = savedPos
-				part.Transparency = 1
-				part.CanCollide = false
-				part.Parent = workspace
-				teleportTo(part)
-				task.delay(1, function() part:Destroy() end)
-				warn("🔙 Trở lại vị trí ban đầu")
-			end
-
+			task.wait(9)
 			task.wait(5)
 		end
 
