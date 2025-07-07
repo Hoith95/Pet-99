@@ -187,7 +187,7 @@ function RunTimeTrialScript()
 					local startTotalRuns = saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.TotalRuns or 0) or 0
 
 					for i = 1, 10 do
-						task.wait(0.1)
+						task.wait(1)
 						local newPoints = getTimeTrialPoints()
 						local currentSave = Save.Get()
 						local newTotalRuns = currentSave and currentSave.TimeTrialStats and (currentSave.TimeTrialStats.TotalRuns or 0) or 0
