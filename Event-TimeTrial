@@ -1,9 +1,11 @@
-if _G.VAR_TIME_TRIAL then
-	warn("Script đã được chạy trước đó!")
+-- Kiểm tra biến toàn cục
+if _G.VAR_TIME_TRIAL or _G.RESTARTING_IN_PROGRESS then
+	warn("⛔ Script đã được chạy hoặc đang restart!")
 	return
 end
 
 _G.VAR_TIME_TRIAL = true
+_G.RESTARTING_IN_PROGRESS = false
 
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
@@ -109,7 +111,6 @@ local function waitUntilReachMaxZone()
 end
 
 waitUntilReachMaxZone()
-
 local isRestarting = false
 
 function RunTimeTrialScript()
@@ -146,16 +147,15 @@ function RunTimeTrialScript()
 		local function shouldExitTimeTrial()
 			local beforePoints = getTimeTrialPoints()
 			local beforeRuns = getTotalRuns()
-
 			for i = 1, 10 do
 				task.wait(0.1)
 				if getTimeTrialPoints() > beforePoints or getTotalRuns() > beforeRuns then
 					return true
 				end
 			end
-
 			return false
 		end
+
 		local function teleportFarmLoop()
 			if isRestarting then isRestarting = false return end
 
@@ -269,8 +269,9 @@ function RunTimeTrialScript()
 		task.spawn(function()
 			while true do
 				task.wait(300)
-				if getRunsUsed() < 10 then
+				if getRunsUsed() < 10 and not _G.RESTARTING_IN_PROGRESS then
 					warn("🔁 DailyRuns reset → restart")
+					_G.RESTARTING_IN_PROGRESS = true
 					_G.VAR_TIME_TRIAL = nil
 					return
 				end
@@ -281,19 +282,22 @@ end
 
 RunTimeTrialScript()
 
--- 🔁 Auto restart nếu bị reset
+-- Auto restart nếu bị reset
 task.spawn(function()
 	while true do
 		task.wait(10)
-		if not _G.VAR_TIME_TRIAL then
+		if not _G.VAR_TIME_TRIAL and not _G.RESTARTING_IN_PROGRESS then
 			warn("⏫ Script reset → khởi động lại")
+			_G.RESTARTING_IN_PROGRESS = true
+			task.wait(1)
 			_G.VAR_TIME_TRIAL = true
+			_G.RESTARTING_IN_PROGRESS = false
 			RunTimeTrialScript()
 		end
 	end
 end)
 
--- ⏰ Theo dõi 12 phút không đổi lượt
+-- Theo dõi 12 phút không đổi lượt
 task.spawn(function()
 	while getTimeTrialPoints() <= 0 do task.wait(10) end
 	while true do
