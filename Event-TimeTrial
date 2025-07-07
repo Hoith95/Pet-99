@@ -181,6 +181,7 @@ function RunTimeTrialScript()
 						if before == after then
 							flagLag = true
 							isRestarting = true
+							_G.RESTARTING_IN_PROGRESS = true -- ✅ FIX QUAN TRỌNG
 							_G.VAR_TIME_TRIAL = nil
 							warn("⚠️ Lag phát hiện: không có teleport nào trong 60s.")
 							safeTeleportOut()
@@ -238,7 +239,6 @@ function RunTimeTrialScript()
 				task.wait(0.1)
 			end
 		end
-
 		while getRunsUsed() < 10 do
 			local used = getRunsUsed()
 			warn("🔁 Bắt đầu lượt: " .. tostring(used))
@@ -282,13 +282,12 @@ end
 
 RunTimeTrialScript()
 
--- Auto restart nếu bị reset
+-- 🔁 Auto restart nếu bị reset
 task.spawn(function()
 	while true do
 		task.wait(10)
-		if not _G.VAR_TIME_TRIAL and not _G.RESTARTING_IN_PROGRESS then
+		if not _G.VAR_TIME_TRIAL and _G.RESTARTING_IN_PROGRESS then
 			warn("⏫ Script reset → khởi động lại")
-			_G.RESTARTING_IN_PROGRESS = true
 			task.wait(1)
 			_G.VAR_TIME_TRIAL = true
 			_G.RESTARTING_IN_PROGRESS = false
@@ -297,7 +296,7 @@ task.spawn(function()
 	end
 end)
 
--- Theo dõi 12 phút không đổi lượt
+-- ⏰ Theo dõi 12 phút không đổi lượt
 task.spawn(function()
 	while getTimeTrialPoints() <= 0 do task.wait(10) end
 	while true do
