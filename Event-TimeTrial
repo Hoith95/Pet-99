@@ -40,6 +40,40 @@ if not screenGui then
 	screenGui.Parent = playerGui
 end
 
+local notifyLabel = screenGui:FindFirstChild("NotifyLabel")
+if not notifyLabel then
+	notifyLabel = Instance.new("TextLabel")
+	notifyLabel.Name = "NotifyLabel"
+	notifyLabel.Size = UDim2.new(1, 0, 1, 0)
+	notifyLabel.Position = UDim2.new(0, 0, 0, 0)
+	notifyLabel.BackgroundTransparency = 0.4
+	notifyLabel.TextColor3 = Color3.new(1, 1, 1)
+	notifyLabel.TextScaled = true
+	notifyLabel.TextWrapped = true
+	notifyLabel.Font = Enum.Font.GothamBold
+	notifyLabel.Text = ""
+	notifyLabel.ZIndex = 100
+	notifyLabel.Visible = false
+	notifyLabel.Parent = screenGui
+end
+
+local notifyColor = {
+	info = Color3.fromRGB(0, 128, 255),
+	success = Color3.fromRGB(0, 200, 0),
+	warning = Color3.fromRGB(255, 170, 0),
+	error = Color3.fromRGB(255, 0, 0),
+}
+
+local function notify(message, msgType)
+	msgType = msgType or "info"
+	notifyLabel.BackgroundColor3 = notifyColor[msgType] or Color3.fromRGB(0, 128, 255)
+	notifyLabel.Text = "⚠️ " .. message
+	notifyLabel.Visible = true
+	task.delay(3, function()
+		notifyLabel.Visible = false
+	end)
+end
+
 local function createLabel(name, position, anchor, bgColor)
 	local label = Instance.new("TextLabel")
 	label.Name = name
@@ -75,11 +109,14 @@ task.spawn(function()
 	end
 end)
 
+notify("🟢 Script Time Trial khởi động", "info")
+
 -- Chờ đạt zone tối đa
 local function getMaxZoneFromMap4()
 	local mapFolder = workspace:FindFirstChild("Map4")
 	if not mapFolder then
 		warn("❌ Không tìm thấy Map4 trong workspace.")
+		notify("❌ Không tìm thấy Map4", "error")
 		return 0
 	end
 	local maxZone = 0
@@ -101,14 +138,16 @@ local function waitUntilReachMaxZone()
 		local current = data and data.ZoneNumber or 0
 		if current >= maxMapZone then
 			warn("✅ Đã đạt Zone tối đa (" .. tostring(current) .. ")")
+			notify("✅ Đã đạt Zone tối đa", "success")
 			break
 		end
-		warn("⏳ Chưa đạt zone tối đa (" .. tostring(current) .. "/" .. tostring(maxMapZone) .. "), đợi 60s...")
+		notify("⏳ Chưa đạt Zone tối đa (" .. tostring(current) .. "/" .. tostring(maxMapZone) .. "), đợi 60s...", "warning")
 		task.wait(60)
 	end
 end
 
 waitUntilReachMaxZone()
+
 -- Theo dõi 12 phút không đổi lượt hoặc tổng Time Trial
 local monitor12minThread
 local function startMonitor12Min()
@@ -117,16 +156,19 @@ local function startMonitor12Min()
 			local startUsed = getRunsUsed()
 			local startTotal = getTotalRuns()
 			local t = 0
+			notify("⏱️ Bắt đầu theo dõi 12 phút không đổi...", "info")
 
-			while t < 720 do -- 12 phút = 720 giây
+			while t < 720 do
 				task.wait(10)
 				t += 10
 				if getRunsUsed() ~= startUsed or getTotalRuns() ~= startTotal then
-					break -- Có thay đổi → reset kiểm tra
+					notify("🔁 Có thay đổi lượt hoặc tổng Time Trial, reset theo dõi.", "info")
+					break
 				end
 			end
 
 			if getRunsUsed() == startUsed and getTotalRuns() == startTotal then
+				notify("🛑 12 phút không đổi → kick khỏi game", "error")
 				player:Kick("⏰ 12 phút không thay đổi lượt hoặc tổng Time Trial → nghi ngờ treo máy.")
 				return
 			end
@@ -135,7 +177,6 @@ local function startMonitor12Min()
 end
 
 startMonitor12Min()
-
 -- Teleport tiện lợi
 local function teleportTo(part)
 	local character = player.Character or player.CharacterAdded:Wait()
@@ -145,6 +186,7 @@ local function teleportTo(part)
 end
 
 local function safeTeleportOut()
+	notify("🚪 Teleport ra khỏi Time Trial", "warning")
 	teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Leave)
 	task.wait(9)
 end
@@ -166,10 +208,12 @@ local function startLagMonitor()
 			if (lastPosition - currentPos).Magnitude < 1 then
 				retryCount += 1
 				warn("⚠️ Đứng im " .. retryCount .. " lần")
+				notify("⚠️ Đứng im lần " .. retryCount, "warning")
 				if retryCount <= 3 then
 					safeTeleportOut()
 					return
 				else
+					notify("🛑 Lag quá lâu, bị kick khỏi game", "error")
 					player:Kick("Lag quá lâu trong Time Trial.")
 					return
 				end
@@ -181,7 +225,10 @@ local function startLagMonitor()
 	end)
 end
 
+-- Farm vòng 1 lượt
 local function teleportFarmLoop(startPoints, startRuns)
+	notify("🚀 Bắt đầu farm Time Trial", "info")
+
 	while true do
 		local names = {}
 		for _, c in ipairs(workspace.__THINGS.Breakables:GetChildren()) do
@@ -204,7 +251,8 @@ local function teleportFarmLoop(startPoints, startRuns)
 				end
 			end
 		else
-			warn("🔍 Hết rương, kiểm tra Điểm hoặc TotalRuns trong 3s...")
+			warn("🔍 Hết rương, kiểm tra Điểm hoặc TotalRuns...")
+			notify("🔍 Hết rương, đang kiểm tra tiến trình...", "info")
 			local success = false
 			for i = 1, 30 do
 				task.wait(0.1)
@@ -215,12 +263,13 @@ local function teleportFarmLoop(startPoints, startRuns)
 			end
 
 			if success then
+				notify("✅ Điểm hoặc Tổng lượt tăng → Thoát", "success")
 				warn("✅ Điểm hoặc TotalRuns tăng → Thoát Time Trial")
 				safeTeleportOut()
 				return
 			end
 
-			warn("⏳ Không có gì thay đổi, chờ 20s...")
+			notify("⏳ Không có thay đổi trong 3s, chờ 20s tiếp", "warning")
 			local foundChest = false
 			for i = 1, 200 do
 				task.wait(0.1)
@@ -237,8 +286,9 @@ local function teleportFarmLoop(startPoints, startRuns)
 			end
 
 			if foundChest then
-				warn("📦 Rương xuất hiện lại, tiếp tục")
+				notify("📦 Rương xuất hiện lại, tiếp tục farm", "info")
 			else
+				notify("❌ Hết rương và không có thay đổi, kết thúc lượt", "error")
 				warn("❌ Hết rương và không có thay đổi, kết thúc lượt")
 				safeTeleportOut()
 				return
@@ -248,6 +298,7 @@ local function teleportFarmLoop(startPoints, startRuns)
 	end
 end
 
+-- Vòng chạy 10 lượt
 function RunTimeTrialScript()
 	task.spawn(function()
 		if game.PlaceId ~= 140403681187145 then return end
@@ -258,6 +309,7 @@ function RunTimeTrialScript()
 			local startRuns = getTotalRuns()
 
 			warn("🔁 Bắt đầu lượt: " .. tostring(used))
+			notify("🔁 Bắt đầu lượt: " .. tostring(used), "info")
 
 			teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
 			task.wait(3)
@@ -273,24 +325,31 @@ function RunTimeTrialScript()
 			task.wait(5)
 
 			if lagMonitorThread then
-				task.cancel(lagMonitorThread)
+				pcall(function()
+					task.cancel(lagMonitorThread)
+				end)
 				lagMonitorThread = nil
 			end
 		end
 
 		warn("🎉 Hoàn tất Time Trial hoặc đủ 10 lượt")
+		notify("🎉 Đã hoàn tất 10 lượt Time Trial", "success")
 
 		if monitor12minThread then
-			task.cancel(monitor12minThread)
+			pcall(function()
+				task.cancel(monitor12minThread)
+			end)
 			monitor12minThread = nil
 			warn("🛑 Dừng theo dõi 12 phút không đổi lượt.")
 		end
 
+		-- Theo dõi reset DailyRuns
 		task.spawn(function()
 			while true do
 				task.wait(300)
 				if getRunsUsed() < 10 then
 					warn("🔁 DailyRuns reset → restart")
+					notify("🔁 DailyRuns reset → Restart Time Trial", "info")
 					_G.VAR_TIME_TRIAL = nil
 					startMonitor12Min()
 					RunTimeTrialScript()
