@@ -75,7 +75,7 @@ task.spawn(function()
 	end
 end)
 
--- Chờ đạt zone tối đa
+-- Wait until max zone
 local function getMaxZoneFromMap4()
 	local mapFolder = workspace:FindFirstChild("Map4")
 	if not mapFolder then
@@ -110,6 +110,7 @@ end
 
 waitUntilReachMaxZone()
 
+-- 12 phút không đổi lượt
 local monitor12minThread
 local function startMonitor12Min()
 	monitor12minThread = task.spawn(function()
@@ -132,6 +133,7 @@ end
 
 startMonitor12Min()
 
+-- Main script
 function RunTimeTrialScript()
 	task.spawn(function()
 		if game.PlaceId ~= 140403681187145 then return end
@@ -163,12 +165,12 @@ function RunTimeTrialScript()
 			while BreakablesFolder:FindFirstChild(name) do task.wait(0.1) end
 		end
 
-		local function teleportFarmLoop()
-			local function safeTeleportOut()
-				teleportTo(Leave)
-				task.wait(9)
-			end
+		local function safeTeleportOut()
+			teleportTo(Leave)
+			task.wait(9)
+		end
 
+		local function teleportFarmLoop(startPoints, startRuns)
 			while true do
 				local names = getBreakables()
 				if #names > 0 then
@@ -183,26 +185,23 @@ function RunTimeTrialScript()
 						end
 					end
 				else
-					task.wait(1)
-					-- Kiểm tra trong 5s nếu Points hoặc TotalRuns tăng
-					local beforePoints = getTimeTrialPoints()
-					local beforeRuns = getTotalRuns()
-					local increased = false
-					for i = 1, 50 do
+					warn("🔍 Hết rương, kiểm tra tăng điểm trong 3s...")
+					local success = false
+					for i = 1, 30 do
 						task.wait(0.1)
-						if getTimeTrialPoints() > beforePoints or getTotalRuns() > beforeRuns then
-							increased = true
+						if getTimeTrialPoints() > startPoints or getTotalRuns() > startRuns then
+							success = true
 							break
 						end
 					end
 
-					if increased then
+					if success then
 						warn("✅ Điểm hoặc TotalRuns tăng → thoát Time Trial")
 						safeTeleportOut()
 						return
 					end
 
-					warn("⏳ Không có rương, chờ tối đa 20s...")
+					warn("⏳ Không có gì tăng, chờ tối đa 20s...")
 					local foundChest = false
 					for i = 1, 200 do
 						task.wait(0.1)
@@ -226,6 +225,9 @@ function RunTimeTrialScript()
 
 		while getRunsUsed() < 10 do
 			local used = getRunsUsed()
+			local startPoints = getTimeTrialPoints()
+			local startRuns = getTotalRuns()
+
 			warn("🔁 Bắt đầu lượt: " .. tostring(used))
 
 			teleportTo(Enter)
@@ -238,7 +240,7 @@ function RunTimeTrialScript()
 				waitTime += 0.1
 			end
 
-			teleportFarmLoop()
+			teleportFarmLoop(startPoints, startRuns)
 			task.wait(5)
 		end
 
