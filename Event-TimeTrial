@@ -249,7 +249,7 @@ local function teleportFarmLoop(startPoints, startRuns)
 			end
 
 			if foundChest then
-				warn("📦 Rương xuất hiện lại, tiếp tục")
+				warn("📦 Rương xuất hiện lại, tiếp tục farm")
 			else
 				warn("❌ Hết rương và Điểm hoặc TotalRuns không có gì thay đổi trong 20s, kết thúc lượt")
 				safeTeleportOut()
