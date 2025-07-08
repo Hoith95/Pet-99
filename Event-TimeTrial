@@ -108,6 +108,45 @@ local function waitUntilReachMaxZone()
 	end
 end
 
+-- Teleport mới
+local function teleportIntoTimeTrial()
+	if not workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial") then
+		local hrp = player.Character and player.Character:WaitForChild("HumanoidRootPart", 5)
+		if hrp then
+			hrp.CFrame = workspace.__THINGS.Instances.TimeTrial.Teleports.Enter.CFrame
+			task.wait(9)
+			local loaded = false
+			local detectLoad = workspace.__THINGS.__INSTANCE_CONTAINER.Active.ChildAdded:Connect(function(child)
+				if child.Name == "TimeTrial" then
+					loaded = true
+				end
+			end)
+			repeat task.wait() until loaded
+			detectLoad:Disconnect()
+			task.wait(1)
+		end
+	end
+end
+
+local function teleportOutOfTimeTrial()
+	if workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial") then
+		local hrp = player.Character and player.Character:WaitForChild("HumanoidRootPart", 5)
+		if hrp then
+			hrp.CFrame = workspace.__THINGS.Instances.TimeTrial.Teleports.Leave.CFrame
+			task.wait(9)
+			local unloaded = false
+			local detectUnload = workspace.__THINGS.__INSTANCE_CONTAINER.Active.ChildRemoved:Connect(function(child)
+				if child.Name == "TimeTrial" then
+					unloaded = true
+				end
+			end)
+			repeat task.wait() until unloaded
+			detectUnload:Disconnect()
+			task.wait(1)
+		end
+	end
+end
+
 waitUntilReachMaxZone()
 -- Theo dõi 12 phút không đổi lượt hoặc tổng Time Trial
 local monitor12minThread
@@ -118,11 +157,11 @@ local function startMonitor12Min()
 			local startTotal = getTotalRuns()
 			local t = 0
 
-			while t < 720 do -- 12 phút = 720 giây
+			while t < 720 do
 				task.wait(10)
 				t += 10
 				if getRunsUsed() ~= startUsed or getTotalRuns() ~= startTotal then
-					break -- Có thay đổi → reset kiểm tra
+					break
 				end
 			end
 
@@ -135,19 +174,6 @@ local function startMonitor12Min()
 end
 
 startMonitor12Min()
-
--- Teleport tiện lợi
-local function teleportTo(part)
-	local character = player.Character or player.CharacterAdded:Wait()
-	if character and character:FindFirstChild("HumanoidRootPart") and part and part.CFrame then
-		character.HumanoidRootPart.CFrame = part.CFrame + Vector3.new(0, 5, 0)
-	end
-end
-
-local function safeTeleportOut()
-	teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Leave)
-	task.wait(9)
-end
 
 -- Luồng kiểm tra lag
 local lagMonitorThread
@@ -166,9 +192,8 @@ local function startLagMonitor()
 			if (lastPosition - currentPos).Magnitude < 1 then
 				retryCount += 1
 				warn("⚠️ Đứng im " .. retryCount .. " lần")
-
 				if retryCount <= 3 then
-					safeTeleportOut()
+					teleportOutOfTimeTrial()
 					return
 				else
 					player:Kick("Lag quá lâu trong Time Trial.")
@@ -182,6 +207,7 @@ local function startLagMonitor()
 	end)
 end
 
+-- Loop farm chest
 local function teleportFarmLoop(startPoints, startRuns)
 	while true do
 		local names = {}
@@ -197,7 +223,7 @@ local function teleportFarmLoop(startPoints, startRuns)
 				if b then
 					local p = b:FindFirstChildWhichIsA("BasePart")
 					if p then
-						teleportTo(p)
+						player.Character.HumanoidRootPart.CFrame = p.CFrame + Vector3.new(0, 5, 0)
 						while workspace.__THINGS.Breakables:FindFirstChild(n) do
 							task.wait(0.1)
 						end
@@ -217,7 +243,7 @@ local function teleportFarmLoop(startPoints, startRuns)
 
 			if success then
 				warn("✅ Điểm hoặc TotalRuns tăng → Thoát Time Trial")
-				safeTeleportOut()
+				teleportOutOfTimeTrial()
 				return
 			end
 
@@ -241,7 +267,7 @@ local function teleportFarmLoop(startPoints, startRuns)
 				warn("📦 Rương xuất hiện lại, tiếp tục")
 			else
 				warn("❌ Hết rương và không có thay đổi, kết thúc lượt")
-				safeTeleportOut()
+				teleportOutOfTimeTrial()
 				return
 			end
 		end
@@ -249,6 +275,7 @@ local function teleportFarmLoop(startPoints, startRuns)
 	end
 end
 
+-- Hàm chính
 function RunTimeTrialScript()
 	task.spawn(function()
 		if game.PlaceId ~= 140403681187145 then return end
@@ -259,7 +286,7 @@ function RunTimeTrialScript()
 			local startRuns = getTotalRuns()
 
 			warn("🔁 Bắt đầu lượt: " .. tostring(used))
-			teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
+			teleportIntoTimeTrial()
 			task.wait(3)
 
 			local waitTime = 0
