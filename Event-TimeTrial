@@ -62,14 +62,14 @@ local function updateLabelSize(label)
 	label.Size = UDim2.new(0, label.TextBounds.X + 20, 0, 38)
 end
 
-local pointsLabel = screenGui:FindFirstChild("PointsLabel") or createLabel("PointsLabel", UDim2.new(0, 0, 0, -55), Vector2.new(0, 0), Color3.fromRGB(0, 128, 255))
-local timeTrialLabel = screenGui:FindFirstChild("TimeTrialLabel") or createLabel("TimeTrialLabel", UDim2.new(0.5, 25, 0, -55), Vector2.new(0.5, 0), Color3.fromRGB(128, 0, 128))
+local pointsLabel = screenGui:FindFirstChild("PointsLabel") or createLabel("PointsLabel", UDim2.new(0, 0, 0, -60), Vector2.new(0, 0), Color3.fromRGB(0, 128, 255))
+local timeTrialLabel = screenGui:FindFirstChild("TimeTrialLabel") or createLabel("TimeTrialLabel", UDim2.new(0.5, 30, 0, -60), Vector2.new(0.5, 0), Color3.fromRGB(128, 0, 128))
 
 task.spawn(function()
 	while true do
 		pointsLabel.Text = "Điểm: " .. tostring(getTimeTrialPoints())
 		updateLabelSize(pointsLabel)
-		timeTrialLabel.Text = "Time Trial: " .. tostring(getRunsLeft()) .. " / 10"
+		timeTrialLabel.Text = "Time Trial: " .. tostring(getRunsLeft()) .. "/10"
 		updateLabelSize(timeTrialLabel)
 		task.wait(10)
 	end
@@ -216,7 +216,7 @@ local function teleportFarmLoop(startPoints, startRuns)
 				end
 			end
 		else
-			warn("🔍 Hết rương, kiểm tra tăng điểm trong 3s...")
+			warn("🔍 Hết rương, kiểm tra Điểm hoặc TotalRuns trong 3s...")
 			local success = false
 			for i = 1, 30 do  -- 30 x 0.1 = 3s
 				task.wait(0.1)
@@ -227,12 +227,12 @@ local function teleportFarmLoop(startPoints, startRuns)
 			end
 
 			if success then
-				warn("✅ Điểm hoặc TotalRuns tăng → thoát Time Trial")
+				warn("✅ Điểm hoặc TotalRuns tăng → Hoàn tất Time Trial")
 				safeTeleportOut()
 				return
 			end
 
-			warn("⏳ Không có gì tăng, chờ tối đa 20s...")
+			warn("⏳ Điểm hoặc TotalRuns không có gì tăng, chờ tối đa 20s...")
 			local foundChest = false
 			for i = 1, 200 do
 				task.wait(0.1)
@@ -251,7 +251,7 @@ local function teleportFarmLoop(startPoints, startRuns)
 			if foundChest then
 				warn("📦 Rương xuất hiện lại, tiếp tục")
 			else
-				warn("❌ Không có gì thay đổi, kết thúc lượt")
+				warn("❌ Hết rương và Điểm hoặc TotalRuns không có gì thay đổi trong 20s, kết thúc lượt")
 				safeTeleportOut()
 				return
 			end
