@@ -109,21 +109,27 @@ local function waitUntilReachMaxZone()
 end
 
 waitUntilReachMaxZone()
--- Theo dõi 12 phút không đổi lượt
+-- Theo dõi 12 phút không đổi lượt hoặc tổng Time Trial
 local monitor12minThread
 local function startMonitor12Min()
 	monitor12minThread = task.spawn(function()
-		while getTimeTrialPoints() <= 0 do task.wait(10) end
+		while getTimeTrialPoints() <= 0 and getTotalRuns() <= 0 do
+			task.wait(10)
+		end
+
 		while true do
-			local start = getRunsUsed()
+			local startUsed = getRunsUsed()
+			local startTotal = getTotalRuns()
 			local t = 0
 			while t < 720 do
 				task.wait(10)
 				t += 10
-				if getRunsUsed() ~= start then break end
+				if getRunsUsed() ~= startUsed or getTotalRuns() ~= startTotal then
+					break
+				end
 			end
-			if getRunsUsed() == start then
-				player:Kick("⏰ 12 phút không thay đổi lượt Time Trial.")
+			if getRunsUsed() == startUsed and getTotalRuns() == startTotal then
+				player:Kick("⏰ 12 phút không thay đổi lượt hoặc tổng Time Trial → nghi ngờ treo máy.")
 				return
 			end
 		end
