@@ -263,8 +263,7 @@ local function teleportFarmLoop(startPoints, startRuns)
 				warn("📦 Rương xuất hiện lại, tiếp tục")
 			else
 				warn("❌ Hết rương và không có thay đổi, kết thúc lượt")
-				lagFlag = false
-				endFlag = false
+				endFlag = true
 				safeTeleportOut()
 				return
 			end
