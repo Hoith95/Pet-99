@@ -112,7 +112,6 @@ local function teleportIntoTimeTrial()
 		local hrp = player.Character and player.Character:WaitForChild("HumanoidRootPart", 5)
 		if hrp then
 			hrp.CFrame = workspace.__THINGS.Instances.TimeTrial.Teleports.Enter.CFrame
-			task.wait(5)
 		end
 
 		local loaded = false
@@ -131,7 +130,7 @@ local function teleportIntoTimeTrial()
 			task.wait(1)
 			return true
 		end
-		task.wait(9)
+		task.wait(1)
 	end
 
 	player:Kick("⛔ Không thể vào Time Trial sau 3 lần thử.")
@@ -143,7 +142,6 @@ local function teleportOutOfTimeTrial()
 		local hrp = player.Character and player.Character:WaitForChild("HumanoidRootPart", 5)
 		if hrp then
 			hrp.CFrame = workspace.__THINGS.Instances.TimeTrial.Teleports.Leave.CFrame
-			task.wait(5)
 		end
 
 		local unloaded = false
@@ -162,7 +160,7 @@ local function teleportOutOfTimeTrial()
 			task.wait(1)
 			return true
 		end
-		task.wait(9)
+		task.wait(1)
 	end
 
 	player:Kick("⛔ Không thể thoát Time Trial sau 3 lần thử.")
@@ -221,9 +219,9 @@ end
 
 -- Loop farm rương với logic mới
 local function teleportFarmLoop(startPoints, startRuns)
-	-- Đợi rương spawn tối đa 5s
+	-- Đợi rương spawn tối đa 15s
 	local waitTime = 0
-	while #workspace.__THINGS.Breakables:GetChildren() == 0 and waitTime < 5 do
+	while #workspace.__THINGS.Breakables:GetChildren() == 0 and waitTime < 15 do
 		task.wait(0.1)
 		waitTime += 0.1
 	end
@@ -267,7 +265,11 @@ local function teleportFarmLoop(startPoints, startRuns)
 		warn("⚠️ Không phá được Breakables nào trong 10s → Tele lại Time Trial")
 		teleportOutOfTimeTrial()
 		if not teleportIntoTimeTrial() then return end
-		task.wait(3)
+		task.wait(1)
+
+		-- Gọi lại chính hàm farm này sau khi vào lại
+		teleportFarmLoop(startPoints, startRuns)
+		return
 	end
 
 	-- Tiếp tục farm bình thường
