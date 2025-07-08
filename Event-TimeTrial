@@ -112,6 +112,7 @@ local function teleportIntoTimeTrial()
 		local hrp = player.Character and player.Character:WaitForChild("HumanoidRootPart", 5)
 		if hrp then
 			hrp.CFrame = CFrame.new(-14188, 17.71, 1325)
+			task.wait(1)
 		end
 
 		local loaded = false
@@ -142,6 +143,7 @@ local function teleportOutOfTimeTrial()
 		local hrp = player.Character and player.Character:WaitForChild("HumanoidRootPart", 5)
 		if hrp then
 			hrp.CFrame = CFrame.new(-18438, 17.39, -573)
+			task.wait(1)
 		end
 
 		local unloaded = false
