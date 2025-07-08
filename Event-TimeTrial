@@ -183,6 +183,7 @@ function RunTimeTrialScript()
 						end
 					end
 				else
+					task.wait(1)
 					-- Kiểm tra trong 5s nếu Points hoặc TotalRuns tăng
 					local beforePoints = getTimeTrialPoints()
 					local beforeRuns = getTotalRuns()
