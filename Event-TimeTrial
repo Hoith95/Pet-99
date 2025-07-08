@@ -106,7 +106,7 @@ local function waitUntilReachMaxZone()
 	end
 end
 
--- Teleport in/out (có retry + kiểm tra timeout)
+-- Teleport in/out
 local function teleportIntoTimeTrial()
 	for attempt = 1, 3 do
 		local hrp = player.Character and player.Character:WaitForChild("HumanoidRootPart", 5)
@@ -168,56 +168,6 @@ local function teleportOutOfTimeTrial()
 	player:Kick("⛔ Không thể thoát Time Trial sau 3 lần thử.")
 	return false
 end
-
--- Loop farm rương với logic mới (check tăng điểm hoặc TotalRuns, đợi rương xuất hiện lại)
-local function teleportFarmLoop(startPoints, startRuns)
-	while true do
-		local breakables = workspace.__THINGS.Breakables:GetChildren()
-		if #breakables > 0 then
-			for _, c in ipairs(breakables) do
-				if c:IsA("Model") and tonumber(c.Name) then
-					local p = c:FindFirstChildWhichIsA("BasePart")
-					if p then
-						player.Character.HumanoidRootPart.CFrame = p.CFrame + Vector3.new(0, 5, 0)
-						while c.Parent do task.wait(0.1) end
-					end
-				end
-			end
-		else
-			warn("🔍 Hết rương, kiểm tra điểm/tổng run trong 3s...")
-			local success = false
-			for i = 1, 30 do
-				task.wait(0.1)
-				if getTimeTrialPoints() > startPoints or getTotalRuns() > startRuns then
-					success = true
-					break
-				end
-			end
-
-			if success then
-				warn("✅ Điểm hoặc tổng run tăng → thoát")
-				teleportOutOfTimeTrial()
-				return
-			end
-
-			warn("⏳ Không đổi, đợi 20s xem có rương lại không...")
-			for i = 1, 200 do
-				if #workspace.__THINGS.Breakables:GetChildren() > 0 then
-					warn("📦 Rương xuất hiện lại, tiếp tục farm")
-					break
-				end
-				task.wait(0.1)
-			end
-
-			if #workspace.__THINGS.Breakables:GetChildren() == 0 then
-				warn("❌ Không còn rương → thoát")
-				teleportOutOfTimeTrial()
-				return
-			end
-		end
-		task.wait(0.1)
-	end
-end
 -- Theo dõi 12 phút không đổi
 local monitor12minThread
 local function startMonitor12Min()
@@ -269,6 +219,106 @@ local function startLagMonitor()
 	end)
 end
 
+-- Loop farm rương với logic mới
+local function teleportFarmLoop(startPoints, startRuns)
+	-- Đợi rương spawn tối đa 5s
+	local waitTime = 0
+	while #workspace.__THINGS.Breakables:GetChildren() == 0 and waitTime < 5 do
+		task.wait(0.1)
+		waitTime += 0.1
+	end
+
+	-- Kiểm tra trong 10s đầu có phá được rương không
+	local farmed = false
+	local start = tick()
+
+	task.spawn(function()
+		while not farmed and tick() - start < 10 do
+			local breakables = workspace.__THINGS.Breakables:GetChildren()
+			for _, c in ipairs(breakables) do
+				if c:IsA("Model") and tonumber(c.Name) then
+					local p = c:FindFirstChildWhichIsA("BasePart")
+					if p then
+						player.Character.HumanoidRootPart.CFrame = p.CFrame + Vector3.new(0, 5, 0)
+						local timeout = 0
+						while c.Parent and timeout < 5 do
+							task.wait(0.1)
+							timeout += 0.1
+						end
+						if not c.Parent then
+							farmed = true
+							break
+						end
+					end
+				end
+			end
+			task.wait(0.1)
+		end
+	end)
+
+	local t = 0
+	while not farmed and t < 10 do
+		task.wait(0.1)
+		t += 0.1
+	end
+
+	-- Nếu không phá được cái nào → tele lại
+	if not farmed then
+		warn("⚠️ Không phá được Breakables nào trong 10s → Tele lại Time Trial")
+		teleportOutOfTimeTrial()
+		if not teleportIntoTimeTrial() then return end
+		task.wait(3)
+	end
+
+	-- Tiếp tục farm bình thường
+	while true do
+		local breakables = workspace.__THINGS.Breakables:GetChildren()
+		if #breakables > 0 then
+			for _, c in ipairs(breakables) do
+				if c:IsA("Model") and tonumber(c.Name) then
+					local p = c:FindFirstChildWhichIsA("BasePart")
+					if p then
+						player.Character.HumanoidRootPart.CFrame = p.CFrame + Vector3.new(0, 5, 0)
+						while c.Parent do task.wait(0.1) end
+					end
+				end
+			end
+		else
+			warn("🔍 Hết rương, kiểm tra điểm/tổng run trong 3s...")
+			local success = false
+			for i = 1, 30 do
+				task.wait(0.1)
+				if getTimeTrialPoints() > startPoints or getTotalRuns() > startRuns then
+					success = true
+					break
+				end
+			end
+
+			if success then
+				warn("✅ Điểm hoặc tổng run tăng → thoát")
+				teleportOutOfTimeTrial()
+				return
+			end
+
+			warn("⏳ Không đổi, đợi 20s xem có rương lại không...")
+			for i = 1, 200 do
+				if #workspace.__THINGS.Breakables:GetChildren() > 0 then
+					warn("📦 Rương xuất hiện lại, tiếp tục farm")
+					break
+				end
+				task.wait(0.1)
+			end
+
+			if #workspace.__THINGS.Breakables:GetChildren() == 0 then
+				warn("❌ Không còn rương → thoát")
+				teleportOutOfTimeTrial()
+				return
+			end
+		end
+		task.wait(0.1)
+	end
+end
+
 -- Hàm chính
 function RunTimeTrialScript()
 	task.spawn(function()
@@ -285,12 +335,6 @@ function RunTimeTrialScript()
 			warn("🔁 Bắt đầu lượt: " .. tostring(used))
 			if not teleportIntoTimeTrial() then return end
 			task.wait(3)
-
-			local waitTime = 0
-			while #workspace.__THINGS.Breakables:GetChildren() == 0 and waitTime < 5 do
-				task.wait(0.1)
-				waitTime += 0.1
-			end
 
 			startLagMonitor()
 			teleportFarmLoop(startPoints, startRuns)
@@ -314,7 +358,7 @@ function RunTimeTrialScript()
 			end)
 		end
 
-		-- Theo dõi reset DailyRuns sau khi đủ 10 lượt
+		-- Theo dõi reset DailyRuns
 		task.spawn(function()
 			while true do
 				task.wait(300)
