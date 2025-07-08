@@ -281,7 +281,7 @@ function RunTimeTrialScript()
 			local used = getRunsUsed()
 
 			-- Nghỉ 30s trước mỗi lượt mới (trừ lượt đầu tiên)
-			if used then
+			if used > 0 then
 				warn("⏸️ Nghỉ 30s trước khi bắt đầu lượt tiếp theo...")
 				task.wait(30)
 			end
