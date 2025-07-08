@@ -106,14 +106,16 @@ local function waitUntilReachMaxZone()
 	end
 end
 
--- Teleport in/out dùng tọa độ cố định
+local function teleportTo(teleportPart)
+	local hrp = player.Character and player.Character:WaitForChild("HumanoidRootPart", 5)
+	if hrp and teleportPart then
+		hrp.CFrame = teleportPart.CFrame
+	end
+end
+
 local function teleportIntoTimeTrial()
 	for attempt = 1, 3 do
-		local hrp = player.Character and player.Character:WaitForChild("HumanoidRootPart", 5)
-		if hrp then
-			hrp.CFrame = CFrame.new(-14188, 17.71, 1325)
-			task.wait(1)
-		end
+		teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
 
 		local loaded = false
 		local detectLoad = workspace.__THINGS.__INSTANCE_CONTAINER.Active.ChildAdded:Connect(function(child)
@@ -140,11 +142,7 @@ end
 
 local function teleportOutOfTimeTrial()
 	for attempt = 1, 3 do
-		local hrp = player.Character and player.Character:WaitForChild("HumanoidRootPart", 5)
-		if hrp then
-			hrp.CFrame = CFrame.new(-18438, 17.39, -573)
-			task.wait(1)
-		end
+		teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Leave)
 
 		local unloaded = false
 		local detectUnload = workspace.__THINGS.__INSTANCE_CONTAINER.Active.ChildRemoved:Connect(function(child)
@@ -168,6 +166,7 @@ local function teleportOutOfTimeTrial()
 	player:Kick("⛔ Không thể thoát Time Trial sau 3 lần thử.")
 	return false
 end
+
 -- Theo dõi 12 phút không đổi
 local monitor12minThread
 local function startMonitor12Min()
