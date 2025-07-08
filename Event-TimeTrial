@@ -1,7 +1,8 @@
 if _G.VAR_TIME_TRIAL then
-	warn("Script đã được chạy trước đó!")
+	warn("⛔ Script đã được chạy trước đó!")
 	return
 end
+
 _G.VAR_TIME_TRIAL = true
 
 local Players = game:GetService("Players")
@@ -109,6 +110,28 @@ end
 
 waitUntilReachMaxZone()
 
+local monitor12minThread
+local function startMonitor12Min()
+	monitor12minThread = task.spawn(function()
+		while getTimeTrialPoints() <= 0 do task.wait(10) end
+		while true do
+			local start = getRunsUsed()
+			local t = 0
+			while t < 720 do
+				task.wait(10)
+				t += 10
+				if getRunsUsed() ~= start then break end
+			end
+			if getRunsUsed() == start then
+				player:Kick("⏰ 12 phút không thay đổi lượt Time Trial.")
+				return
+			end
+		end
+	end)
+end
+
+startMonitor12Min()
+
 function RunTimeTrialScript()
 	task.spawn(function()
 		if game.PlaceId ~= 140403681187145 then return end
@@ -140,139 +163,105 @@ function RunTimeTrialScript()
 			while BreakablesFolder:FindFirstChild(name) do task.wait(0.1) end
 		end
 
-		local function shouldExitTimeTrial()
-			local beforePoints = getTimeTrialPoints()
-			local beforeRuns = getTotalRuns()
-
-			for i = 1, 10 do
-				task.wait(0.1)
-				if getTimeTrialPoints() > beforePoints or getTotalRuns() > beforeRuns then
-					return true
-				end
+		local function teleportFarmLoop()
+			local function safeTeleportOut()
+				teleportTo(Leave)
+				task.wait(9)
 			end
 
-			return false
-		end
+			while true do
+				local names = getBreakables()
+				if #names > 0 then
+					for _, n in ipairs(names) do
+						local b = BreakablesFolder:FindFirstChild(n)
+						if b then
+							local p = b:FindFirstChildWhichIsA("BasePart")
+							if p then
+								teleportTo(p)
+								waitGone(n)
+							end
+						end
+					end
+				else
+					-- Kiểm tra trong 5s nếu Points hoặc TotalRuns tăng
+					local beforePoints = getTimeTrialPoints()
+					local beforeRuns = getTotalRuns()
+					local increased = false
+					for i = 1, 50 do
+						task.wait(0.1)
+						if getTimeTrialPoints() > beforePoints or getTotalRuns() > beforeRuns then
+							increased = true
+							break
+						end
+					end
 
-		local function safeTeleportOut()
-			teleportTo(Leave)
-			task.wait(30)
-			warn("🔁 Đặt lại biến để khởi động lại script")
-			_G.VAR_TIME_TRIAL = nil
-		end
+					if increased then
+						warn("✅ Điểm hoặc TotalRuns tăng → thoát Time Trial")
+						safeTeleportOut()
+						return
+					end
 
-		local breakablesTeleported = 0
-		local flagLag = false
+					warn("⏳ Không có rương, chờ tối đa 20s...")
+					local foundChest = false
+					for i = 1, 200 do
+						task.wait(0.1)
+						if #getBreakables() > 0 then
+							foundChest = true
+							break
+						end
+					end
 
-		local function startLagMonitor()
-			warn("🛰️ Bắt đầu theo dõi lag (LagMonitor)")
-			task.spawn(function()
-				while not flagLag do
-					local before = breakablesTeleported
-					task.wait(60)
-					local after = breakablesTeleported
-					if before == after then
-						flagLag = true
-						warn("⚠️ Lag phát hiện: không có teleport nào trong 60s.")
+					if foundChest then
+						warn("📦 Rương xuất hiện lại, tiếp tục")
+					else
+						warn("❌ Không có gì thay đổi, kết thúc lượt")
 						safeTeleportOut()
 						return
 					end
 				end
-			end)
+				task.wait(0.1)
+			end
 		end
 
-		-- chỉ chạy đúng 1 lượt
-		local used = getRunsUsed()
-		if used >= 10 then return end
+		while getRunsUsed() < 10 do
+			local used = getRunsUsed()
+			warn("🔁 Bắt đầu lượt: " .. tostring(used))
 
-		warn("🔁 Bắt đầu lượt: " .. tostring(used))
+			teleportTo(Enter)
+			task.wait(3)
+			warn("🚪 Vào Time Trial, bắt đầu farm")
 
-		teleportTo(Enter)
-		task.wait(3)
-		warn("🚪 Vào Time Trial, bắt đầu farm")
+			local waitTime = 0
+			while #getBreakables() == 0 and waitTime < 5 do
+				task.wait(0.1)
+				waitTime += 0.1
+			end
 
-		local waitTime = 0
-		while #getBreakables() == 0 and waitTime < 5 do
-			task.wait(0.1)
-			waitTime += 0.1
+			teleportFarmLoop()
+			task.wait(5)
 		end
 
-		startLagMonitor()
+		warn("🎉 Hoàn tất Time Trial hoặc đủ 10 lượt")
 
-		while not flagLag do
-			local names = getBreakables()
-			if #names > 0 then
-				for _, n in ipairs(names) do
-					if flagLag then return end
-					local b = BreakablesFolder:FindFirstChild(n)
-					if b then
-						local p = b:FindFirstChildWhichIsA("BasePart")
-						if p then
-							teleportTo(p)
-							breakablesTeleported += 1
-							waitGone(n)
-						end
-					end
-				end
-			else
-				if shouldExitTimeTrial() then
-					warn("✅ Điểm hoặc TotalRuns tăng → thoát Time Trial")
-					safeTeleportOut()
-					return
-				end
+		if monitor12minThread then
+			task.cancel(monitor12minThread)
+			monitor12minThread = nil
+			warn("🛑 Dừng theo dõi 12 phút không đổi lượt.")
+		end
 
-				warn("⏳ Không có rương, chờ tối đa 20s...")
-				local foundChest = false
-				for i = 1, 200 do
-					task.wait(0.1)
-					if #getBreakables() > 0 then
-						foundChest = true
-						break
-					end
-				end
-
-				if foundChest then
-					warn("📦 Rương xuất hiện lại, tiếp tục")
-				else
-					warn("❌ Không có gì thay đổi, kết thúc lượt")
-					safeTeleportOut()
+		task.spawn(function()
+			while true do
+				task.wait(300)
+				if getRunsUsed() < 10 then
+					warn("🔁 DailyRuns reset → restart")
+					_G.VAR_TIME_TRIAL = nil
+					startMonitor12Min()
+					RunTimeTrialScript()
 					return
 				end
 			end
-			task.wait(0.1)
-		end
+		end)
 	end)
 end
 
 RunTimeTrialScript()
-
--- ⏰ Theo dõi 12 phút không đổi lượt
-task.spawn(function()
-	while getTimeTrialPoints() <= 0 do task.wait(10) end
-	while true do
-		local start = getRunsUsed()
-		local t = 0
-		while t < 720 do
-			task.wait(10)
-			t += 10
-			if getRunsUsed() ~= start then break end
-		end
-		if getRunsUsed() == start then
-			player:Kick("⏰ 12 phút không thay đổi lượt Time Trial.")
-			return
-		end
-	end
-end)
-
--- 🔁 Auto restart nếu bị reset
-task.spawn(function()
-	while true do
-		task.wait(10)
-		if not _G.VAR_TIME_TRIAL then
-			warn("⏫ Script reset → khởi động lại")
-			_G.VAR_TIME_TRIAL = true
-			task.wait(10)
-			RunTimeTrialScript()
-		end
-	end
-end)
