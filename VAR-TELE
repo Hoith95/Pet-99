@@ -14,6 +14,7 @@ local TARGET_PLACE_ID = 140403681187145
 -- Hàm kiểm tra và xử lý theo yêu cầu
 task.spawn(function()
     if game.PlaceId == TARGET_PLACE_ID then
+        task.wait(5)
         -- Nếu đang ở đúng map
         local playerCount = #Players:GetPlayers()
         if playerCount <= 1 then
