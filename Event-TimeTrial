@@ -2,7 +2,6 @@ if _G.VAR_TIME_TRIAL then
 	warn("⛔ Script đã được chạy trước đó!")
 	return
 end
-
 _G.VAR_TIME_TRIAL = true
 
 local Players = game:GetService("Players")
@@ -12,34 +11,25 @@ local playerGui = player:WaitForChild("PlayerGui")
 local Save = require(game.ReplicatedStorage.Library.Client.Save)
 local ZoneCmds = require(game.ReplicatedStorage.Library.Client.ZoneCmds)
 
--- Data extract
+-- Data
 local function getRunsUsed()
 	local saveData = Save.Get()
 	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.DailyRuns or 0) or 0
 end
-
-local function getRunsLeft()
-	return 10 - getRunsUsed()
-end
-
+local function getRunsLeft() return 10 - getRunsUsed() end
 local function getTimeTrialPoints()
 	local saveData = Save.Get()
 	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.Points or 0) or 0
 end
-
 local function getTotalRuns()
 	local saveData = Save.Get()
 	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.TotalRuns or 0) or 0
 end
 
 -- GUI
-local screenGui = playerGui:FindFirstChild("TimeTrialGui")
-if not screenGui then
-	screenGui = Instance.new("ScreenGui")
-	screenGui.Name = "TimeTrialGui"
-	screenGui.ResetOnSpawn = false
-	screenGui.Parent = playerGui
-end
+local screenGui = playerGui:FindFirstChild("TimeTrialGui") or Instance.new("ScreenGui", playerGui)
+screenGui.Name = "TimeTrialGui"
+screenGui.ResetOnSpawn = false
 
 local function createLabel(name, position, anchor, bgColor)
 	local label = Instance.new("TextLabel")
@@ -51,7 +41,6 @@ local function createLabel(name, position, anchor, bgColor)
 	label.TextColor3 = Color3.new(1, 1, 1)
 	label.Font = Enum.Font.GothamBold
 	label.TextSize = 32
-	label.BackgroundTransparency = 0
 	label.BorderSizePixel = 0
 	label.TextXAlignment = Enum.TextXAlignment.Center
 	label.Text = "..."
@@ -63,125 +52,108 @@ local function updateLabelSize(label)
 	label.Size = UDim2.new(0, label.TextBounds.X + 20, 0, 38)
 end
 
-local pointsLabel = screenGui:FindFirstChild("PointsLabel") or createLabel("PointsLabel", UDim2.new(0, 0, 0, -55), Vector2.new(0, 0), Color3.fromRGB(0, 128, 255))
-local timeTrialLabel = screenGui:FindFirstChild("TimeTrialLabel") or createLabel("TimeTrialLabel", UDim2.new(0.5, 30, 0, -55), Vector2.new(0.5, 0), Color3.fromRGB(128, 0, 128))
+local pointsLabel = screenGui:FindFirstChild("PointsLabel") or createLabel("PointsLabel", UDim2.new(0, 0, 0, -55), Vector2.new(0, 0), Color3.fromRGB(0,128,255))
+local timeTrialLabel = screenGui:FindFirstChild("TimeTrialLabel") or createLabel("TimeTrialLabel", UDim2.new(0.5, 30, 0, -55), Vector2.new(0.5,0), Color3.fromRGB(128, 0, 128))
 
 task.spawn(function()
 	while true do
 		pointsLabel.Text = "Điểm: " .. tostring(getTimeTrialPoints())
-		updateLabelSize(pointsLabel)
 		timeTrialLabel.Text = "Time Trial: " .. tostring(getRunsLeft()) .. "/10"
+		updateLabelSize(pointsLabel)
 		updateLabelSize(timeTrialLabel)
 		task.wait(10)
 	end
 end)
 
--- Zone check
+-- Zone
 local function getMaxZoneFromMap4()
-	local mapFolder = workspace:FindFirstChild("Map4")
-	if not mapFolder then return 0 end
+	local map = workspace:FindFirstChild("Map4")
+	if not map then return 0 end
 	local maxZone = 0
-	for _, folder in ipairs(mapFolder:GetChildren()) do
+	for _, folder in ipairs(map:GetChildren()) do
 		if folder:IsA("Folder") then
-			local zoneNumber = tonumber(folder.Name:match("^(%d+)"))
-			if zoneNumber and zoneNumber > maxZone then
-				maxZone = zoneNumber
-			end
+			local zone = tonumber(folder.Name:match("^(%d+)"))
+			if zone and zone > maxZone then maxZone = zone end
 		end
 	end
 	return maxZone
 end
 
 local function waitUntilReachMaxZone()
-	local maxMapZone = getMaxZoneFromMap4()
+	local maxZone = getMaxZoneFromMap4()
 	while true do
 		local _, data = ZoneCmds.GetMaxOwnedZone()
 		local current = data and data.ZoneNumber or 0
-		if current >= maxMapZone then
-			warn("✅ Đã đạt Zone tối đa (" .. tostring(current) .. ")")
+		if current >= maxZone then
+			warn("✅ Đã đạt Zone tối đa: " .. current)
 			break
 		end
-		warn("⏳ Chưa đạt zone tối đa (" .. tostring(current) .. "/" .. tostring(maxMapZone) .. "), đợi 60s...")
+		warn("⏳ Zone hiện tại: " .. current .. "/" .. maxZone .. " → chờ 60s")
 		task.wait(60)
 	end
 end
 
-local function teleportTo(teleportPart)
-	local hrp = player.Character and player.Character:WaitForChild("HumanoidRootPart", 5)
-	if hrp and teleportPart then
-		hrp.CFrame = teleportPart.CFrame
+-- Teleport
+local function teleportTo(part)
+	local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	if hrp and part then
+		hrp.CFrame = part.CFrame
 	end
 end
 
 local function teleportIntoTimeTrial()
-	for attempt = 1, 3 do
+	for i = 1, 3 do
 		teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
-
 		local loaded = false
-		local detectLoad = workspace.__THINGS.__INSTANCE_CONTAINER.Active.ChildAdded:Connect(function(child)
+		local detect = workspace.__THINGS.__INSTANCE_CONTAINER.Active.ChildAdded:Connect(function(child)
 			if child.Name == "TimeTrial" then loaded = true end
 		end)
-
 		local t = 0
-		while not loaded and t < 15 do
-			task.wait(0.5)
-			t += 0.5
-		end
-		detectLoad:Disconnect()
-
+		while not loaded and t < 15 do task.wait(0.5) t += 0.5 end
+		detect:Disconnect()
 		if loaded or workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial") then
 			task.wait(1)
 			return true
 		end
 		task.wait(1)
 	end
-
-	player:Kick("⛔ Không thể vào Time Trial sau 3 lần thử.")
+	player:Kick("⛔ Không thể vào Time Trial sau 3 lần.")
 	return false
 end
 
 local function teleportOutOfTimeTrial()
-	for attempt = 1, 3 do
+	for i = 1, 3 do
 		teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Leave)
-
 		local unloaded = false
-		local detectUnload = workspace.__THINGS.__INSTANCE_CONTAINER.Active.ChildRemoved:Connect(function(child)
+		local detect = workspace.__THINGS.__INSTANCE_CONTAINER.Active.ChildRemoved:Connect(function(child)
 			if child.Name == "TimeTrial" then unloaded = true end
 		end)
-
 		local t = 0
 		while not unloaded and workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial") and t < 15 do
 			task.wait(0.5)
 			t += 0.5
 		end
-		detectUnload:Disconnect()
-
+		detect:Disconnect()
 		if unloaded or not workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial") then
 			task.wait(1)
 			return true
 		end
 		task.wait(1)
 	end
-
-	player:Kick("⛔ Không thể thoát Time Trial sau 3 lần thử.")
+	player:Kick("⛔ Không thể thoát Time Trial sau 3 lần.")
 	return false
 end
 
--- Đảm bảo đã vào Time Trial sau teleport
 local function ensureInTimeTrial()
 	for attempt = 1, 3 do
-		if workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial") then
-			return true
-		end
-		warn("❌ Không tìm thấy TimeTrial sau teleport. Thử lại lần " .. attempt)
-		if not teleportIntoTimeTrial() then
-			return false
-		end
+		if workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial") then return true end
+		warn("❌ Không tìm thấy TimeTrial sau teleport. Thử lại " .. attempt)
+		if not teleportIntoTimeTrial() then return false end
 	end
 	player:Kick("⛔ Vào TimeTrial thất bại sau 3 lần retry.")
 	return false
 end
--- Theo dõi 12 phút không đổi
+-- Monitor 12 phút không đổi
 local monitor12minThread
 local function startMonitor12Min()
 	monitor12minThread = task.spawn(function()
@@ -202,26 +174,26 @@ local function startMonitor12Min()
 	end)
 end
 
--- Theo dõi đứng im (lag)
+-- Theo dõi đứng yên
 local lagMonitorThread
 local function startLagMonitor()
 	lagMonitorThread = task.spawn(function()
 		local retryCount = 0
-		local lastPosition = nil
+		local lastPos
 		while true do
 			local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 			if not hrp then task.wait(5) continue end
-			lastPosition = hrp.Position
+			lastPos = hrp.Position
 			task.wait(30)
-			local currentPos = hrp.Position
-			if (lastPosition - currentPos).Magnitude < 1 then
+			local now = hrp.Position
+			if (lastPos - now).Magnitude < 1 then
 				retryCount += 1
-				warn("⚠️ Đứng im " .. retryCount .. " lần")
+				warn("⚠️ Đứng yên lần " .. retryCount)
 				if retryCount <= 3 then
 					teleportOutOfTimeTrial()
 					return
 				else
-					player:Kick("❌ Lag quá lâu trong Time Trial.")
+					player:Kick("❌ Đứng yên quá lâu trong Time Trial.")
 					return
 				end
 			else
@@ -232,22 +204,24 @@ local function startLagMonitor()
 	end)
 end
 
--- Farm Time Trial
+-- Farm logic
 local function teleportFarmLoop(startPoints, startRuns)
-	-- Đợi rương spawn
-	local waitTime = 0
-	while #workspace.__THINGS.Breakables:GetChildren() == 0 and waitTime < 15 do
-		task.wait(0.1)
-		waitTime += 0.1
+	-- Nếu có rương ngay sau vào thì farm luôn
+	local breakables = workspace.__THINGS.Breakables:GetChildren()
+	if #breakables == 0 then
+		local t = 0
+		while #workspace.__THINGS.Breakables:GetChildren() == 0 and t < 15 do
+			task.wait(0.1)
+			t += 0.1
+		end
 	end
 
-	-- Kiểm tra phá rương trong 10s
+	-- Thử phá rương trong 10s
 	local farmed = false
 	local start = tick()
 	task.spawn(function()
 		while not farmed and tick() - start < 10 do
-			local breakables = workspace.__THINGS.Breakables:GetChildren()
-			for _, c in ipairs(breakables) do
+			for _, c in ipairs(workspace.__THINGS.Breakables:GetChildren()) do
 				if c:IsA("Model") and tonumber(c.Name) then
 					local p = c:FindFirstChildWhichIsA("BasePart")
 					if p then
@@ -274,9 +248,8 @@ local function teleportFarmLoop(startPoints, startRuns)
 		t += 0.1
 	end
 
-	-- Nếu không phá được → Tele lại
 	if not farmed then
-		warn("⚠️ Không phá được Breakables nào trong 10s → Tele lại")
+		warn("⚠️ Không phá được rương → teleport lại")
 		teleportOutOfTimeTrial()
 		if not teleportIntoTimeTrial() or not ensureInTimeTrial() then return end
 		task.wait(1)
@@ -284,7 +257,6 @@ local function teleportFarmLoop(startPoints, startRuns)
 		return
 	end
 
-	-- Tiếp tục farm
 	while true do
 		local breakables = workspace.__THINGS.Breakables:GetChildren()
 		if #breakables > 0 then
@@ -298,7 +270,7 @@ local function teleportFarmLoop(startPoints, startRuns)
 				end
 			end
 		else
-			warn("🔍 Hết rương, kiểm tra điểm/tổng run trong 3s...")
+			warn("🔍 Hết rương → kiểm tra điểm...")
 			local success = false
 			for i = 1, 30 do
 				task.wait(0.1)
@@ -309,15 +281,15 @@ local function teleportFarmLoop(startPoints, startRuns)
 			end
 
 			if success then
-				warn("✅ Điểm hoặc tổng run tăng → thoát")
+				warn("✅ Tăng điểm hoặc totalRuns → thoát")
 				teleportOutOfTimeTrial()
 				return
 			end
 
-			warn("⏳ Không đổi, đợi 20s xem có rương lại không...")
+			warn("⏳ Không đổi → chờ 20s xem rương lại không...")
 			for i = 1, 200 do
 				if #workspace.__THINGS.Breakables:GetChildren() > 0 then
-					warn("📦 Rương xuất hiện lại, tiếp tục farm")
+					warn("📦 Rương lại xuất hiện → tiếp tục farm")
 					break
 				end
 				task.wait(0.1)
@@ -333,7 +305,7 @@ local function teleportFarmLoop(startPoints, startRuns)
 	end
 end
 
--- Hàm chính
+-- Run chính
 function RunTimeTrialScript()
 	task.spawn(function()
 		if game.PlaceId ~= 140403681187145 then return end
@@ -372,12 +344,12 @@ function RunTimeTrialScript()
 			end)
 		end
 
-		-- Theo dõi reset DailyRuns
+		-- Theo dõi reset
 		task.spawn(function()
 			while true do
 				task.wait(300)
 				if getRunsUsed() < 10 then
-					warn("🔁 DailyRuns reset → restart")
+					warn("🔁 DailyRuns reset → chạy lại")
 					_G.VAR_TIME_TRIAL = nil
 					startMonitor12Min()
 					RunTimeTrialScript()
