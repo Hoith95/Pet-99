@@ -106,12 +106,12 @@ local function waitUntilReachMaxZone()
 	end
 end
 
--- Teleport in/out
+-- Teleport in/out dùng tọa độ cố định
 local function teleportIntoTimeTrial()
 	for attempt = 1, 3 do
 		local hrp = player.Character and player.Character:WaitForChild("HumanoidRootPart", 5)
 		if hrp then
-			hrp.CFrame = workspace.__THINGS.Instances.TimeTrial.Teleports.Enter.CFrame
+			hrp.CFrame = CFrame.new(-14188, 17.71, 1325)
 		end
 
 		local loaded = false
@@ -141,7 +141,7 @@ local function teleportOutOfTimeTrial()
 	for attempt = 1, 3 do
 		local hrp = player.Character and player.Character:WaitForChild("HumanoidRootPart", 5)
 		if hrp then
-			hrp.CFrame = workspace.__THINGS.Instances.TimeTrial.Teleports.Leave.CFrame
+			hrp.CFrame = CFrame.new(-18438, 17.39, -573)
 		end
 
 		local unloaded = false
