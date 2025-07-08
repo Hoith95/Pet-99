@@ -69,9 +69,6 @@ local function notify(message, msgType)
 	notifyLabel.BackgroundColor3 = notifyColor[msgType] or Color3.fromRGB(0, 128, 255)
 	notifyLabel.Text = "⚠️ " .. message
 	notifyLabel.Visible = true
-	task.delay(3, function()
-		notifyLabel.Visible = false
-	end)
 end
 
 local function createLabel(name, position, anchor, bgColor)
