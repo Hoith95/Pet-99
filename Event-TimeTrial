@@ -263,7 +263,7 @@ function RunTimeTrialScript()
 			task.wait(5)
 
 			local waitTime = 0
-			while #workspace.__THINGS.Breakables:GetChildren() == 0 and waitTime < 15 do
+			while #workspace.__THINGS.Breakables:GetChildren() == 0 and waitTime < 1 do
 				task.wait(0.1)
 				waitTime += 0.1
 			end
