@@ -6,6 +6,7 @@ end
 _G.VAR_TIME_TRIAL = true
 
 local lagFlag = false
+local endFlag = false
 local lagMonitorThread
 local increaseMonitorThread
 
@@ -204,6 +205,7 @@ local function startIncreaseMonitor(startPoints, startRuns)
 			if lagFlag then return end
 			if getTimeTrialPoints() > startPoints or getTotalRuns() > startRuns then
 				warn("✅ Điểm hoặc TotalRuns tăng → Thoát Time Trial")
+				endFlag = true
 				safeTeleportOut()
 				return
 			end
@@ -215,8 +217,8 @@ end
 -- Vòng lặp farm
 local function teleportFarmLoop(startPoints, startRuns)
 	while true do
-		if lagFlag then
-			warn("🚫 Bị lag, dừng teleportFarmLoop")
+		if lagFlag or endFlag then
+			warn("⚠️ Đã kết thúc hoặc lag, dừng teleportFarmLoop")
 			return
 		end
 
@@ -229,14 +231,14 @@ local function teleportFarmLoop(startPoints, startRuns)
 
 		if #names > 0 then
 			for _, n in ipairs(names) do
-				if lagFlag then return end
+				if lagFlag or endFlag then return end
 				local b = workspace.__THINGS.Breakables:FindFirstChild(n)
 				if b then
 					local p = b:FindFirstChildWhichIsA("BasePart")
 					if p then
 						teleportTo(p)
 						while workspace.__THINGS.Breakables:FindFirstChild(n) do
-							if lagFlag then return end
+							if lagFlag or endFlag then return end
 							task.wait(0.1)
 						end
 					end
@@ -247,7 +249,7 @@ local function teleportFarmLoop(startPoints, startRuns)
 
 			local foundChest = false
 			for i = 1, 200 do
-				if lagFlag then return end
+				if lagFlag or endFlag then return end
 				task.wait(0.1)
 				for _, c in ipairs(workspace.__THINGS.Breakables:GetChildren()) do
 					if c:IsA("Model") and tonumber(c.Name) then
