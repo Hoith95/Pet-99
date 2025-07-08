@@ -5,7 +5,9 @@ end
 
 _G.VAR_TIME_TRIAL = true
 
-local lagFlag = false -- ✅ Flag phát hiện lag
+local lagFlag = false
+local lagMonitorThread
+local increaseMonitorThread
 
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
@@ -77,7 +79,6 @@ task.spawn(function()
 	end
 end)
 
--- Zone tối đa
 local function getMaxZoneFromMap4()
 	local mapFolder = workspace:FindFirstChild("Map4")
 	if not mapFolder then
@@ -99,8 +100,11 @@ end
 local function waitUntilReachMaxZone()
 	local maxMapZone = getMaxZoneFromMap4()
 	while true do
-		local _, data = ZoneCmds.GetMaxOwnedZone()
-		local current = data and data.ZoneNumber or 0
+		local success, data = pcall(function()
+			local _, zoneData = ZoneCmds.GetMaxOwnedZone()
+			return zoneData
+		end)
+		local current = success and data and data.ZoneNumber or 0
 		if current >= maxMapZone then
 			warn("✅ Đã đạt Zone tối đa (" .. tostring(current) .. ")")
 			break
@@ -111,7 +115,6 @@ local function waitUntilReachMaxZone()
 end
 
 waitUntilReachMaxZone()
-
 -- Theo dõi 12 phút
 local monitor12minThread
 local function startMonitor12Min()
@@ -128,7 +131,9 @@ local function startMonitor12Min()
 				end
 			end
 			if getRunsUsed() == startUsed and getTotalRuns() == startTotal then
-				player:Kick("⏰ 12 phút không thay đổi lượt hoặc tổng Time Trial → nghi ngờ treo máy.")
+				pcall(function()
+					player:Kick("⏰ 12 phút không thay đổi lượt hoặc tổng Time Trial → nghi ngờ treo máy.")
+				end)
 				return
 			end
 		end
@@ -137,7 +142,7 @@ end
 
 startMonitor12Min()
 
--- Teleport
+-- Teleport helpers
 local function teleportTo(part)
 	local character = player.Character or player.CharacterAdded:Wait()
 	if character and character:FindFirstChild("HumanoidRootPart") and part and part.CFrame then
@@ -148,10 +153,17 @@ end
 local function safeTeleportOut()
 	teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Leave)
 	task.wait(9)
+	if increaseMonitorThread then
+		pcall(task.cancel, increaseMonitorThread)
+		increaseMonitorThread = nil
+	end
+	if lagMonitorThread then
+		pcall(task.cancel, lagMonitorThread)
+		lagMonitorThread = nil
+	end
 end
 
 -- Lag monitor
-local lagMonitorThread
 local function startLagMonitor()
 	lagMonitorThread = task.spawn(function()
 		local retryCount = 0
@@ -171,7 +183,9 @@ local function startLagMonitor()
 					safeTeleportOut()
 					return
 				else
-					player:Kick("Lag quá lâu trong Time Trial.")
+					pcall(function()
+						player:Kick("Lag quá lâu trong Time Trial.")
+					end)
 					return
 				end
 			else
@@ -181,14 +195,15 @@ local function startLagMonitor()
 		end
 	end)
 end
--- Luồng phụ: Theo dõi tăng điểm hoặc tổng lượt
-local increaseMonitorThread
+
+-- Theo dõi tăng điểm
 local function startIncreaseMonitor(startPoints, startRuns)
 	increaseMonitorThread = task.spawn(function()
+		warn("⏳ Bắt đầu theo dõi tăng Điểm/TotalRuns")
 		while true do
 			if lagFlag then return end
 			if getTimeTrialPoints() > startPoints or getTotalRuns() > startRuns then
-				warn("✅ Điểm hoặc TotalRuns tăng (bắt bởi luồng phụ) → Thoát Time Trial")
+				warn("✅ Điểm hoặc TotalRuns tăng → Thoát Time Trial")
 				safeTeleportOut()
 				return
 			end
@@ -197,7 +212,7 @@ local function startIncreaseMonitor(startPoints, startRuns)
 	end)
 end
 
--- Loop farm Time Trial
+-- Vòng lặp farm
 local function teleportFarmLoop(startPoints, startRuns)
 	while true do
 		if lagFlag then
@@ -228,24 +243,8 @@ local function teleportFarmLoop(startPoints, startRuns)
 				end
 			end
 		else
-			warn("🔍 Hết rương, kiểm tra 5s...")
-			local success = false
-			for i = 1, 50 do
-				if lagFlag then return end
-				task.wait(0.1)
-				if getTimeTrialPoints() > startPoints or getTotalRuns() > startRuns then
-					success = true
-					break
-				end
-			end
+			warn("⏳ Không có rương, chờ 20s...")
 
-			if success then
-				warn("✅ Điểm hoặc TotalRuns tăng → Thoát Time Trial")
-				safeTeleportOut()
-				return
-			end
-
-			warn("⏳ Không có thay đổi, chờ 20s...")
 			local foundChest = false
 			for i = 1, 200 do
 				if lagFlag then return end
@@ -299,11 +298,11 @@ function RunTimeTrialScript()
 			task.wait(5)
 
 			if lagMonitorThread then
-				task.cancel(lagMonitorThread)
+				pcall(task.cancel, lagMonitorThread)
 				lagMonitorThread = nil
 			end
 			if increaseMonitorThread then
-				task.cancel(increaseMonitorThread)
+				pcall(task.cancel, increaseMonitorThread)
 				increaseMonitorThread = nil
 			end
 		end
