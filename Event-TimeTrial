@@ -5,6 +5,8 @@ end
 
 _G.VAR_TIME_TRIAL = true
 
+local lagFlag = false -- ✅ Flag phát hiện lag
+
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -75,7 +77,7 @@ task.spawn(function()
 	end
 end)
 
--- Chờ đạt zone tối đa
+-- Zone tối đa
 local function getMaxZoneFromMap4()
 	local mapFolder = workspace:FindFirstChild("Map4")
 	if not mapFolder then
@@ -109,7 +111,8 @@ local function waitUntilReachMaxZone()
 end
 
 waitUntilReachMaxZone()
--- Theo dõi 12 phút không đổi lượt hoặc tổng Time Trial
+
+-- Theo dõi 12 phút
 local monitor12minThread
 local function startMonitor12Min()
 	monitor12minThread = task.spawn(function()
@@ -117,15 +120,13 @@ local function startMonitor12Min()
 			local startUsed = getRunsUsed()
 			local startTotal = getTotalRuns()
 			local t = 0
-
-			while t < 720 do -- 12 phút = 720 giây
+			while t < 720 do
 				task.wait(10)
 				t += 10
 				if getRunsUsed() ~= startUsed or getTotalRuns() ~= startTotal then
-					break -- Có thay đổi → reset kiểm tra
+					break
 				end
 			end
-
 			if getRunsUsed() == startUsed and getTotalRuns() == startTotal then
 				player:Kick("⏰ 12 phút không thay đổi lượt hoặc tổng Time Trial → nghi ngờ treo máy.")
 				return
@@ -136,7 +137,7 @@ end
 
 startMonitor12Min()
 
--- Teleport tiện lợi
+-- Teleport
 local function teleportTo(part)
 	local character = player.Character or player.CharacterAdded:Wait()
 	if character and character:FindFirstChild("HumanoidRootPart") and part and part.CFrame then
@@ -149,7 +150,7 @@ local function safeTeleportOut()
 	task.wait(9)
 end
 
--- Luồng kiểm tra lag
+-- Monitor lag
 local lagMonitorThread
 local function startLagMonitor()
 	lagMonitorThread = task.spawn(function()
@@ -159,7 +160,6 @@ local function startLagMonitor()
 			local character = player.Character or player.CharacterAdded:Wait()
 			local hrp = character:FindFirstChild("HumanoidRootPart")
 			if not hrp then task.wait(5) continue end
-
 			lastPosition = hrp.Position
 			task.wait(30)
 			local currentPos = hrp.Position
@@ -167,6 +167,7 @@ local function startLagMonitor()
 				retryCount += 1
 				warn("⚠️ Đứng im " .. retryCount .. " lần")
 				if retryCount <= 3 then
+					lagFlag = true -- ✅ Gắn cờ
 					safeTeleportOut()
 					return
 				else
@@ -180,9 +181,13 @@ local function startLagMonitor()
 		end
 	end)
 end
-
 local function teleportFarmLoop(startPoints, startRuns)
 	while true do
+		if lagFlag then
+			warn("🚫 Bị lag, dừng teleportFarmLoop")
+			return
+		end
+
 		local names = {}
 		for _, c in ipairs(workspace.__THINGS.Breakables:GetChildren()) do
 			if c:IsA("Model") and tonumber(c.Name) then
@@ -192,12 +197,14 @@ local function teleportFarmLoop(startPoints, startRuns)
 
 		if #names > 0 then
 			for _, n in ipairs(names) do
+				if lagFlag then return end -- kiểm tra lagFlag liên tục
 				local b = workspace.__THINGS.Breakables:FindFirstChild(n)
 				if b then
 					local p = b:FindFirstChildWhichIsA("BasePart")
 					if p then
 						teleportTo(p)
 						while workspace.__THINGS.Breakables:FindFirstChild(n) do
+							if lagFlag then return end
 							task.wait(0.1)
 						end
 					end
@@ -207,6 +214,7 @@ local function teleportFarmLoop(startPoints, startRuns)
 			warn("🔍 Hết rương, kiểm tra Điểm hoặc TotalRuns trong 5s...")
 			local success = false
 			for i = 1, 50 do
+				if lagFlag then return end
 				task.wait(0.1)
 				if getTimeTrialPoints() > startPoints or getTotalRuns() > startRuns then
 					success = true
@@ -223,6 +231,7 @@ local function teleportFarmLoop(startPoints, startRuns)
 			warn("⏳ Không có gì thay đổi, chờ 20s...")
 			local foundChest = false
 			for i = 1, 200 do
+				if lagFlag then return end
 				task.wait(0.1)
 				local check = {}
 				for _, c in ipairs(workspace.__THINGS.Breakables:GetChildren()) do
@@ -256,6 +265,7 @@ function RunTimeTrialScript()
 			local used = getRunsUsed()
 			local startPoints = getTimeTrialPoints()
 			local startRuns = getTotalRuns()
+			lagFlag = false
 
 			warn("🔁 Bắt đầu lượt: " .. tostring(used))
 
