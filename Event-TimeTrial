@@ -142,7 +142,6 @@ local function startMonitor12Min()
 end
 
 startMonitor12Min()
-
 -- Teleport helpers
 local function teleportTo(part)
 	local character = player.Character or player.CharacterAdded:Wait()
@@ -287,6 +286,20 @@ function RunTimeTrialScript()
 
 			teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
 			task.wait(5)
+
+			-- Xác nhận đã vào Time Trial bằng cách kiểm tra Active
+			local retryConfirm = 0
+			while not workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial") and retryConfirm < 3 do
+				retryConfirm += 1
+				warn("❌ Chưa vào được Time Trial, thử lại lần " .. retryConfirm)
+				teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
+				task.wait(5)
+			end
+
+			if not workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial") then
+				warn("⛔ Không thể vào Time Trial sau nhiều lần thử, dừng script")
+				return
+			end
 
 			local waitTime = 0
 			while #workspace.__THINGS.Breakables:GetChildren() == 0 and waitTime < 1 do
