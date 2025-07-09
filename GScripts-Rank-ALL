@@ -2,6 +2,11 @@ _G.script2Done = true
 _G.EventDone = true
 
 spawn(function()
+wait(68)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Tele-Map-269"))()
+end)
+
+spawn(function()
 wait(30)
 game:GetService("ReplicatedStorage").Network:FindFirstChild("Login Streaks: Claim"):InvokeServer()
 end)
