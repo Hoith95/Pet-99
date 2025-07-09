@@ -143,7 +143,6 @@ local function startMonitor12Min()
 		end
 	end)
 end
-
 startMonitor12Min()
 
 -- Teleport helpers
@@ -345,5 +344,4 @@ function RunTimeTrialScript()
 		end
 	end)
 end
-
 RunTimeTrialScript()
