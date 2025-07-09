@@ -1,0 +1,57 @@
+-- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
+if _G.TELEMAP then
+    warn("Script đã được chạy trước đó!")
+    return -- Dừng script nếu đã chạy
+end
+
+-- Đánh dấu script đã được chạy
+_G.TELEMAP = true
+
+-- Time Trial Checker & Smart Teleport - Heo
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local Save = require(game.ReplicatedStorage.Library.Client.Save)
+
+local TARGET_POS = Vector3.new(-14251, 17.39, 1336)
+local TELEPORT_THRESHOLD = 2 -- sai số cho phép trước khi teleport lại
+
+local function getRunsUsed()
+	local saveData = Save.Get()
+	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.DailyRuns or 0) or 0
+end
+
+local function startSmartTeleportLoop()
+	warn("✅ Đã hoàn tất Time Trial (10/10 lượt) → Bắt đầu giám sát vị trí và teleport khi lệch.")
+
+	spawn(function()
+		while true do
+			local character = player.Character or player.CharacterAdded:Wait()
+			local hrp = character:WaitForChild("HumanoidRootPart", 5)
+			if hrp then
+				local currentPos = hrp.Position
+				if (currentPos - TARGET_POS).Magnitude > TELEPORT_THRESHOLD then
+					warn("↩️ Vị trí lệch, teleport về vị trí cố định.")
+					hrp.CFrame = CFrame.new(TARGET_POS)
+				end
+			end
+			wait(5)
+		end
+	end)
+end
+
+local function monitorUntilMaxRuns()
+	while true do
+		local runsUsed = getRunsUsed()
+		local runsLeft = 10 - runsUsed
+
+		if runsUsed >= 10 then
+			startSmartTeleportLoop()
+			break
+		else
+			warn("⏳ Còn lại " .. tostring(runsLeft) .. " lượt Time Trial → kiểm tra lại sau 5 phút.")
+			wait(300)
+		end
+	end
+end
+
+monitorUntilMaxRuns()
