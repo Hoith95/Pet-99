@@ -34,7 +34,7 @@ local function startSmartTeleportLoop()
 					hrp.CFrame = CFrame.new(TARGET_POS)
 				end
 			end
-			wait(1)
+			wait(365)
 		end
 	end)
 end
