@@ -1,3 +1,4 @@
+-- Time Trial - Heo
 if _G.VAR_TIME_TRIAL then
 	warn("⛔ Script đã được chạy trước đó!")
 	return
@@ -117,6 +118,10 @@ local function waitUntilReachMaxZone()
 end
 
 waitUntilReachMaxZone()
+local function isInTimeTrial()
+	return workspace.__THINGS.__INSTANCE_CONTAINER:FindFirstChild("TimeTrial") ~= nil
+end
+
 -- Theo dõi 12 phút
 local monitor12minThread
 local function startMonitor12Min()
@@ -200,7 +205,7 @@ local function startIncreaseMonitor(startPoints, startRuns)
 	increaseMonitorThread = task.spawn(function()
 		warn("⏳ Bắt đầu theo dõi tăng Điểm/TotalRuns")
 		while true do
-			if lagFlag then return end
+			if lagFlag or not isInTimeTrial() then return end
 			if getTimeTrialPoints() > startPoints or getTotalRuns() > startRuns then
 				warn("✅ Điểm hoặc TotalRuns tăng → Thoát Time Trial")
 				endFlag = true
@@ -222,6 +227,11 @@ local function teleportFarmLoop(startPoints, startRuns)
 			return
 		end
 
+		if not isInTimeTrial() then
+			warn("⛔ Không còn ở trong Time Trial → dừng farm")
+			return
+		end
+
 		local names = {}
 		for _, c in ipairs(workspace.__THINGS.Breakables:GetChildren()) do
 			if c:IsA("Model") and tonumber(c.Name) then
@@ -231,14 +241,14 @@ local function teleportFarmLoop(startPoints, startRuns)
 
 		if #names > 0 then
 			for _, n in ipairs(names) do
-				if lagFlag or endFlag or _G.STOP_TIME_TRIAL then return end
+				if lagFlag or endFlag or _G.STOP_TIME_TRIAL or not isInTimeTrial() then return end
 				local b = workspace.__THINGS.Breakables:FindFirstChild(n)
 				if b then
 					local p = b:FindFirstChildWhichIsA("BasePart")
 					if p then
 						teleportTo(p)
 						while workspace.__THINGS.Breakables:FindFirstChild(n) do
-							if lagFlag or endFlag or _G.STOP_TIME_TRIAL then return end
+							if lagFlag or endFlag or _G.STOP_TIME_TRIAL or not isInTimeTrial() then return end
 							task.wait(0.1)
 						end
 					end
@@ -249,7 +259,7 @@ local function teleportFarmLoop(startPoints, startRuns)
 
 			local foundChest = false
 			for i = 1, 200 do
-				if lagFlag or endFlag or _G.STOP_TIME_TRIAL then return end
+				if lagFlag or endFlag or _G.STOP_TIME_TRIAL or not isInTimeTrial() then return end
 				task.wait(0.1)
 				for _, c in ipairs(workspace.__THINGS.Breakables:GetChildren()) do
 					if c:IsA("Model") and tonumber(c.Name) then
