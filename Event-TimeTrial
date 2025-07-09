@@ -73,7 +73,6 @@ local timeTrialLabel = screenGui:FindFirstChild("TimeTrialLabel") or createLabel
 
 task.spawn(function()
 	while true do
-		if _G.STOP_TIME_TRIAL then return end
 		pointsLabel.Text = "Điểm: " .. tostring(getTimeTrialPoints())
 		updateLabelSize(pointsLabel)
 		timeTrialLabel.Text = "Time Trial: " .. tostring(getRunsLeft()) .. "/10"
