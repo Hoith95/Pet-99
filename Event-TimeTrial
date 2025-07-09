@@ -4,7 +4,6 @@ if _G.VAR_TIME_TRIAL then
 end
 
 _G.VAR_TIME_TRIAL = true
-_G.STOP_TIME_TRIAL = false
 
 local lagFlag = false
 local endFlag = false
@@ -102,7 +101,6 @@ end
 local function waitUntilReachMaxZone()
 	local maxMapZone = getMaxZoneFromMap4()
 	while true do
-		if _G.STOP_TIME_TRIAL then return end
 		local success, data = pcall(function()
 			local _, zoneData = ZoneCmds.GetMaxOwnedZone()
 			return zoneData
@@ -123,7 +121,6 @@ local monitor12minThread
 local function startMonitor12Min()
 	monitor12minThread = task.spawn(function()
 		while true do
-			if _G.STOP_TIME_TRIAL then return end
 			local startUsed = getRunsUsed()
 			local startTotal = getTotalRuns()
 			local t = 0
@@ -136,15 +133,15 @@ local function startMonitor12Min()
 			end
 			if getRunsUsed() == startUsed and getTotalRuns() == startTotal then
 				pcall(function()
-					player:Kick("⏰ 12 phút không đổi lượt hoặc tổng Time Trial → nghi ngờ treo máy.")
+					player:Kick("⏰ 12 phút không thay đổi lượt hoặc tổng Time Trial → nghi ngờ treo máy.")
 				end)
 				return
 			end
 		end
 	end)
 end
-startMonitor12Min()
 
+startMonitor12Min()
 -- Teleport helpers
 local function teleportTo(part)
 	local character = player.Character or player.CharacterAdded:Wait()
@@ -172,7 +169,6 @@ local function startLagMonitor()
 		local retryCount = 0
 		local lastPosition = nil
 		while true do
-			if _G.STOP_TIME_TRIAL then return end
 			local character = player.Character or player.CharacterAdded:Wait()
 			local hrp = character:FindFirstChild("HumanoidRootPart")
 			if not hrp then task.wait(5) continue end
@@ -203,11 +199,11 @@ end
 -- Theo dõi tăng điểm
 local function startIncreaseMonitor(startPoints, startRuns)
 	increaseMonitorThread = task.spawn(function()
-		warn("⏳ Theo dõi tăng Điểm/TotalRuns")
+		warn("⏳ Bắt đầu theo dõi tăng Điểm/TotalRuns")
 		while true do
-			if lagFlag or _G.STOP_TIME_TRIAL then return end
+			if lagFlag then return end
 			if getTimeTrialPoints() > startPoints or getTotalRuns() > startRuns then
-				warn("✅ Điểm hoặc TotalRuns tăng → Thoát")
+				warn("✅ Điểm hoặc TotalRuns tăng → Thoát Time Trial")
 				endFlag = true
 				safeTeleportOut()
 				return
@@ -220,7 +216,10 @@ end
 -- Vòng lặp farm
 local function teleportFarmLoop(startPoints, startRuns)
 	while true do
-		if lagFlag or endFlag or _G.STOP_TIME_TRIAL then return end
+		if lagFlag or endFlag then
+			warn("⚠️ Đã kết thúc hoặc lag, dừng teleportFarmLoop")
+			return
+		end
 
 		local names = {}
 		for _, c in ipairs(workspace.__THINGS.Breakables:GetChildren()) do
@@ -231,14 +230,14 @@ local function teleportFarmLoop(startPoints, startRuns)
 
 		if #names > 0 then
 			for _, n in ipairs(names) do
-				if lagFlag or endFlag or _G.STOP_TIME_TRIAL then return end
+				if lagFlag or endFlag then return end
 				local b = workspace.__THINGS.Breakables:FindFirstChild(n)
 				if b then
 					local p = b:FindFirstChildWhichIsA("BasePart")
 					if p then
 						teleportTo(p)
 						while workspace.__THINGS.Breakables:FindFirstChild(n) do
-							if lagFlag or endFlag or _G.STOP_TIME_TRIAL then return end
+							if lagFlag or endFlag then return end
 							task.wait(0.1)
 						end
 					end
@@ -246,9 +245,10 @@ local function teleportFarmLoop(startPoints, startRuns)
 			end
 		else
 			warn("⏳ Không có rương, chờ 20s...")
+
 			local foundChest = false
 			for i = 1, 200 do
-				if lagFlag or endFlag or _G.STOP_TIME_TRIAL then return end
+				if lagFlag or endFlag then return end
 				task.wait(0.1)
 				for _, c in ipairs(workspace.__THINGS.Breakables:GetChildren()) do
 					if c:IsA("Model") and tonumber(c.Name) then
@@ -262,12 +262,13 @@ local function teleportFarmLoop(startPoints, startRuns)
 			if foundChest then
 				warn("📦 Rương xuất hiện lại, tiếp tục")
 			else
-				warn("❌ Hết rương → kết thúc lượt")
+				warn("❌ Hết rương và không có thay đổi, kết thúc lượt")
 				endFlag = true
 				safeTeleportOut()
 				return
 			end
 		end
+		task.wait(0.1)
 	end
 end
 
@@ -278,8 +279,10 @@ function RunTimeTrialScript()
 
 		while getRunsUsed() < 10 do
 			local used = getRunsUsed()
+
+			-- Nghỉ 30s trước mỗi lượt mới (trừ lượt đầu tiên)
 			if used > 0 then
-				warn("⏸️ Nghỉ 30s trước lượt mới...")
+				warn("⏸️ Nghỉ 30s trước khi bắt đầu lượt tiếp theo...")
 				task.wait(30)
 			end
 
@@ -287,21 +290,22 @@ function RunTimeTrialScript()
 			local startRuns = getTotalRuns()
 			lagFlag = false
 			endFlag = false
-			warn("🔁 Lượt: " .. tostring(used))
+			warn("🔁 Bắt đầu lượt: " .. tostring(used))
 
 			teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
 			task.wait(5)
 
+			-- Xác nhận đã vào Time Trial bằng cách kiểm tra Active
 			local retryConfirm = 0
 			while not workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial") and retryConfirm < 3 do
 				retryConfirm += 1
-				warn("❌ Vào Time Trial thất bại lần " .. retryConfirm)
+				warn("❌ Chưa vào được Time Trial, thử lại lần " .. retryConfirm)
 				teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
 				task.wait(5)
 			end
 
 			if not workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial") then
-				warn("⛔ Không vào được Time Trial, dừng")
+				warn("⛔ Không thể vào Time Trial sau nhiều lần thử, dừng script")
 				return
 			end
 
@@ -316,32 +320,37 @@ function RunTimeTrialScript()
 			teleportFarmLoop(startPoints, startRuns)
 			task.wait(5)
 
-			if lagMonitorThread then pcall(task.cancel, lagMonitorThread) lagMonitorThread = nil end
-			if increaseMonitorThread then pcall(task.cancel, increaseMonitorThread) increaseMonitorThread = nil end
-		end
-
-		warn("🎉 Đã đủ 10 lượt hoặc hoàn tất Time Trial")
-		_G.STOP_TIME_TRIAL = true
-
-		if monitor12minThread then
-			pcall(task.cancel, monitor12minThread)
-			monitor12minThread = nil
-			warn("🛑 Dừng theo dõi 12 phút")
-		end
-	end)
-
-	task.spawn(function()
-		while true do
-			task.wait(300)
-			if getRunsUsed() < 10 then
-				warn("🔁 DailyRuns reset → restart")
-				_G.VAR_TIME_TRIAL = nil
-				_G.STOP_TIME_TRIAL = false
-				startMonitor12Min()
-				RunTimeTrialScript()
-				return
+			if lagMonitorThread then
+				pcall(task.cancel, lagMonitorThread)
+				lagMonitorThread = nil
+			end
+			if increaseMonitorThread then
+				pcall(task.cancel, increaseMonitorThread)
+				increaseMonitorThread = nil
 			end
 		end
+
+		warn("🎉 Hoàn tất Time Trial hoặc đủ 10 lượt")
+
+		if monitor12minThread then
+			task.cancel(monitor12minThread)
+			monitor12minThread = nil
+			warn("🛑 Dừng theo dõi 12 phút không đổi lượt.")
+		end
+
+		task.spawn(function()
+			while true do
+				task.wait(300)
+				if getRunsUsed() < 10 then
+					warn("🔁 DailyRuns reset → restart")
+					_G.VAR_TIME_TRIAL = nil
+					startMonitor12Min()
+					RunTimeTrialScript()
+					return
+				end
+			end
+		end)
 	end)
 end
+
 RunTimeTrialScript()
