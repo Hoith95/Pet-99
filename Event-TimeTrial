@@ -402,12 +402,8 @@ task.spawn(function()
 
 		warn("🎉 Hoàn tất 10/10 lượt Time Trial.")
 		claimReward()
-
-		if monitor12minThread then
-			pcall(task.cancel, monitor12minThread)
-			monitor12minThread = nil
-			warn("🛑 Dừng theo dõi 12 phút không đổi lượt.")
-		end
+		task.wait(5)
+		cleanupAllThreads()
 
 		warn("⏳ Theo dõi reset DailyRuns...")
 
