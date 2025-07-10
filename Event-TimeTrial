@@ -39,6 +39,11 @@ local function getTotalRuns()
 	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.TotalRuns or 0) or 0
 end
 
+local function teleportToRewardLocation()
+	warn("🚶‍♂️ Đang teleport đến vị trí đổi quà...")
+	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-14223, 17.39, 1387)
+end
+
 local function teleportTo(part)
 	local character = player.Character or player.CharacterAdded:Wait()
 	if character and character:FindFirstChild("HumanoidRootPart") and part and part.CFrame then
@@ -130,20 +135,34 @@ local function waitUntilReachMaxZone()
 	end
 end
 
--- Theo dõi 12 phút không tăng
 local function startMonitor12Min()
 	monitor12minThread = task.spawn(function()
 		while true do
+			-- Nếu đã đủ 10 lượt thì dừng theo dõi
+			if getRunsUsed() >= 10 then
+				warn("🛑 Đã đủ 10 lượt → dừng theo dõi 12 phút.")
+				return
+			end
+
 			local startUsed = getRunsUsed()
 			local startTotal = getTotalRuns()
 			local t = 0
 			while t < 720 do
 				task.wait(10)
 				t += 10
+
+				-- Nếu đã thay đổi → reset thời gian theo dõi
 				if getRunsUsed() ~= startUsed or getTotalRuns() ~= startTotal then
 					break
 				end
+
+				-- Nếu đủ 10 lượt trong quá trình theo dõi → thoát luôn
+				if getRunsUsed() >= 10 then
+					warn("🛑 Đã đủ 10 lượt → dừng theo dõi 12 phút.")
+					return
+				end
 			end
+
 			if getRunsUsed() == startUsed and getTotalRuns() == startTotal then
 				player:Kick("⏰ 12 phút không đổi lượt hoặc tổng Time Trial → nghi ngờ treo máy.")
 				return
@@ -267,43 +286,52 @@ end
 local function claimReward()
 	warn("🎁 Bắt đầu đổi quà...")
 
+	-- 📊 Lấy điểm Time Trial
 	local points = getTimeTrialPoints()
 	local currentDay = os.date("*t").wday
 	local isSaturday = (currentDay == 7)
 
 	local chest3, chest2, chest1 = 0, 0, 0
 	if isSaturday then
+		warn("📆 Hôm nay là Thứ 7 → Đổi hết toàn bộ điểm.")
 		chest3 = math.floor(points / 5000)
-		points -= chest3 * 5000
+		points = points - chest3 * 5000
+
 		chest2 = math.floor(points / 3000)
-		points -= chest2 * 3000
+		points = points - chest2 * 3000
+
 		chest1 = math.floor(points / 1000)
 	else
+		warn("📆 Hôm nay KHÔNG phải Thứ 7 → Chỉ đổi hộp 3, giữ điểm dư.")
 		chest3 = math.floor(points / 5000)
 	end
+
+	warn("🧾 Số lần đổi quà sẽ thực hiện:")
+	warn("📦 Hộp 3 (5000): " .. chest3)
+	warn("📦 Hộp 2 (3000): " .. chest2)
+	warn("📦 Hộp 1 (1000): " .. chest1)
 
 	local totalChests = chest3 + chest2 + chest1
 	if totalChests == 0 then
-		warn("⚠️ Không đủ điểm để đổi quà.")
+		warn("⚠️ Không có phần thưởng nào đủ điểm để đổi.")
 		return
 	end
 
-	-- ✅ FIX: Dùng table + unpack
+	-- 📦 Gọi server để đổi hộp
 	local function openChest(chestType)
-		local args = {
-			[1] = chestType
-		}
+		local args = { [1] = chestType }
 		return ReplicatedStorage.Network.TimeTrials_OpenChest:InvokeServer(unpack(args))
 	end
 
+	-- 🔁 Đổi nhiều hộp 1 loại
 	local function claimMultiple(count, chestType)
 		for i = 1, count do
-			warn("🔁 Đổi hộp " .. chestType .. " - lần " .. i)
+			warn("🔁 Đang thực hiện đổi hộp " .. chestType .. " - lần " .. i .. "...")
 			local success, err = pcall(function()
 				openChest(chestType)
 			end)
 			if success then
-				warn("✅ Thành công hộp " .. chestType)
+				warn("✅ Đổi thành công hộp " .. chestType .. " - lần " .. i)
 			else
 				warn("❌ Lỗi khi đổi hộp " .. chestType .. ": " .. tostring(err))
 			end
@@ -311,17 +339,9 @@ local function claimReward()
 		end
 	end
 
-	-- 📍 Di chuyển tới vị trí đổi hộp
-	local hrp = character:FindFirstChild("HumanoidRootPart")
-	if hrp then
-		hrp.CFrame = CFrame.new(-14223, 17.39, 1387)
-		task.wait(2)
-	else
-		warn("❌ Không tìm thấy HumanoidRootPart")
-		return
-	end
-
-	-- 🔁 Đổi hộp
+	-- 🗺️ Teleport tới đổi
+	teleportToRewardLocation()
+	task.wait(2)
 	claimMultiple(chest3, 3)
 	claimMultiple(chest2, 2)
 	claimMultiple(chest1, 1)
@@ -375,6 +395,13 @@ task.spawn(function()
 
 		warn("🎉 Hoàn tất 10/10 lượt Time Trial.")
 		claimReward()
+
+		if monitor12minThread then
+			pcall(task.cancel, monitor12minThread)
+			monitor12minThread = nil
+			warn("🛑 Dừng theo dõi 12 phút không đổi lượt.")
+		end
+
 		warn("⏳ Theo dõi reset DailyRuns...")
 
 		while getRunsUsed() >= 10 do
