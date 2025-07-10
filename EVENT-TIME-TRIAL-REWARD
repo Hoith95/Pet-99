@@ -5,6 +5,8 @@ end
 
 _G.VAR_TIME_TRIAL_REWARD = true
 
+warn("📢 Script Time Trial Reward đang khởi động...")
+
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local player = Players.LocalPlayer
@@ -14,17 +16,22 @@ local Save = require(ReplicatedStorage:WaitForChild("Framework"):WaitForChild("S
 -- ⚙️ Hàm lấy điểm Time Trial
 local function getTimeTrialPoints()
 	local saveData = Save.Get()
-	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.Points or 0) or 0
+	local points = saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.Points or 0) or 0
+	warn("🔎 [getTimeTrialPoints] Điểm hiện tại: " .. points)
+	return points
 end
 
 -- ⚙️ Hàm lấy số lượt đã dùng
 local function getRunsUsed()
 	local saveData = Save.Get()
-	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.DailyRuns or 0) or 0
+	local runs = saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.DailyRuns or 0) or 0
+	warn("🔎 [getRunsUsed] Số lượt đã dùng: " .. runs .. "/10")
+	return runs
 end
 
 -- ⚙️ Teleport đến vị trí đổi quà (giữ nguyên như bạn yêu cầu)
 local function teleportToRewardLocation()
+	warn("🚶‍♂️ Đang teleport đến vị trí đổi quà...")
 	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-14223, 17.39, 1387)
 end
 
@@ -37,50 +44,53 @@ local function openChest()
 end
 
 -- ✅ BẮT ĐẦU
-warn("🚀 Bắt đầu kiểm tra Time Trial...")
-
--- 📌 Ghi lại vị trí hiện tại
+warn("📦 Ghi lại vị trí ban đầu...")
 local originalCFrame = character:WaitForChild("HumanoidRootPart").CFrame
 
 -- ⏳ Đợi đến khi hết lượt
+warn("🕒 Kiểm tra lượt Time Trial...")
 while true do
 	local runs = getRunsUsed()
 	if runs >= 10 then
-		warn("📉 Đã dùng hết lượt Time Trial: " .. runs .. "/10")
+		warn("✅ Đã dùng hết lượt Time Trial: " .. runs .. "/10")
 		break
 	end
-	warn("⌛ Còn lượt Time Trial, đang chờ hết lượt... (" .. runs .. "/10)")
+	warn("⏳ Còn lượt Time Trial. Chờ 5 phút trước khi kiểm tra lại...")
 	task.wait(300) -- Đợi 5 phút
 end
 
 -- 📊 Lấy điểm hiện tại
+warn("📊 Lấy thông tin điểm Time Trial...")
 local points = getTimeTrialPoints()
-warn("💎 Điểm hiện tại: " .. points)
 
 -- 🔢 Tính số lần có thể đổi
 local chestCount = math.floor(points / 5000)
-warn("🎁 Có thể đổi được " .. chestCount .. " phần thưởng.")
+warn("🧮 Tính toán số phần thưởng có thể đổi: " .. chestCount .. " lần (với mỗi 5000 điểm)")
 
 if chestCount > 0 then
 	-- 🗺️ Teleport đến chỗ đổi quà
 	teleportToRewardLocation()
 	task.wait(2)
 
-	-- 🎉 Đổi quà
+	-- 🎁 Đổi quà
+	warn("🎁 Bắt đầu đổi quà...")
 	for i = 1, chestCount do
+		warn("🔁 Đang thực hiện đổi phần thưởng thứ " .. i .. "...")
 		local success, err = pcall(openChest)
 		if success then
-			warn("✅ Đã đổi phần thưởng thứ " .. i)
+			warn("✅ Đổi thành công phần thưởng thứ " .. i)
 		else
-			warn("❌ Lỗi khi đổi phần thưởng " .. i .. ": " .. tostring(err))
+			warn("❌ Lỗi khi đổi phần thưởng thứ " .. i .. ": " .. tostring(err))
 		end
 		task.wait(5)
 	end
 	task.wait(1)
 else
-	warn("⚠️ Không đủ điểm để đổi phần thưởng.")
+	warn("⚠️ Không đủ điểm để đổi phần thưởng (cần ít nhất 5000 điểm).")
 end
 
--- 🔁 Quay về vị trí ban đầu
+-- 🏁 Quay về vị trí ban đầu
+warn("🔙 Quay về vị trí cũ...")
 character:WaitForChild("HumanoidRootPart").CFrame = originalCFrame
-warn("🏁 Hoàn tất quá trình đổi quà và đã trở về vị trí cũ.")
+
+warn("🎉 Đã hoàn tất toàn bộ quá trình đổi quà Time Trial.")
