@@ -7,6 +7,11 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/T
 end)
 
 spawn(function()
+wait(68)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial"))()
+end)
+
+spawn(function()
 wait(30)
 game:GetService("ReplicatedStorage").Network:FindFirstChild("Login Streaks: Claim"):InvokeServer()
 end)
