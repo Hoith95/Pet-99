@@ -44,6 +44,11 @@ local function teleportToRewardLocation()
 	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-14223, 17.39, 1387)
 end
 
+local function teleportToRewardLocation()
+	warn("🚶‍♂️ Đang teleport về vị trí map 269...")
+	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-14251, 17.39, 1336)
+end
+
 local function teleportTo(part)
 	local character = player.Character or player.CharacterAdded:Wait()
 	if character and character:FindFirstChild("HumanoidRootPart") and part and part.CFrame then
@@ -345,6 +350,8 @@ local function claimReward()
 	claimMultiple(chest3, 3)
 	claimMultiple(chest2, 2)
 	claimMultiple(chest1, 1)
+	task.wait(5)
+	teleportToLocation()
 end
 
 -- === VÒNG LẶP CHÍNH ===
