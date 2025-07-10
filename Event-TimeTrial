@@ -44,7 +44,7 @@ local function teleportToRewardLocation()
 	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-14223, 17.39, 1387)
 end
 
-local function teleportToRewardLocation()
+local function teleportToLocation()
 	warn("🚶‍♂️ Đang teleport về vị trí map 269...")
 	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-14251, 17.39, 1336)
 end
