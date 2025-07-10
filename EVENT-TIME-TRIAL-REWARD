@@ -11,7 +11,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
-local Save = require(ReplicatedStorage:WaitForChild("Framework"):WaitForChild("Save"))
+local Save = require(game.ReplicatedStorage.Library.Client.Save)
 
 -- ⚙️ Hàm lấy điểm Time Trial
 local function getTimeTrialPoints()
