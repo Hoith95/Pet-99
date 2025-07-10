@@ -402,7 +402,7 @@ task.spawn(function()
 
 		warn("🎉 Hoàn tất 10/10 lượt Time Trial.")
 		claimReward()
-		task.wait(5)
+		task.wait(30)
 		cleanupAllThreads()
 
 		warn("⏳ Theo dõi reset DailyRuns...")
