@@ -266,16 +266,17 @@ end
 -- ==== ĐỔI QUÀ SAU KHI HOÀN TẤT ====
 local function claimReward()
 	warn("🎁 Bắt đầu đổi quà...")
+
 	local points = getTimeTrialPoints()
 	local currentDay = os.date("*t").wday
 	local isSaturday = (currentDay == 7)
-	local chest3, chest2, chest1 = 0, 0, 0
 
+	local chest3, chest2, chest1 = 0, 0, 0
 	if isSaturday then
 		chest3 = math.floor(points / 5000)
-		points = points - chest3 * 5000
+		points -= chest3 * 5000
 		chest2 = math.floor(points / 3000)
-		points = points - chest2 * 3000
+		points -= chest2 * 3000
 		chest1 = math.floor(points / 1000)
 	else
 		chest3 = math.floor(points / 5000)
@@ -287,13 +288,22 @@ local function claimReward()
 		return
 	end
 
-	local function openChest(chestType, count)
+	-- ✅ FIX: Dùng table + unpack
+	local function openChest(chestType)
+		local args = {
+			[1] = chestType
+		}
+		return ReplicatedStorage.Network.TimeTrials_OpenChest:InvokeServer(unpack(args))
+	end
+
+	local function claimMultiple(count, chestType)
 		for i = 1, count do
+			warn("🔁 Đổi hộp " .. chestType .. " - lần " .. i)
 			local success, err = pcall(function()
-				ReplicatedStorage.Network.TimeTrials_OpenChest:InvokeServer(chestType)
+				openChest(chestType)
 			end)
 			if success then
-				warn("✅ Đổi thành công hộp " .. chestType .. " - lần " .. i)
+				warn("✅ Thành công hộp " .. chestType)
 			else
 				warn("❌ Lỗi khi đổi hộp " .. chestType .. ": " .. tostring(err))
 			end
@@ -301,11 +311,20 @@ local function claimReward()
 		end
 	end
 
-	character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(-14223, 17.39, 1387)
-	task.wait(2)
-	openChest(3, chest3)
-	openChest(2, chest2)
-	openChest(1, chest1)
+	-- 📍 Di chuyển tới vị trí đổi hộp
+	local hrp = character:FindFirstChild("HumanoidRootPart")
+	if hrp then
+		hrp.CFrame = CFrame.new(-14223, 17.39, 1387)
+		task.wait(2)
+	else
+		warn("❌ Không tìm thấy HumanoidRootPart")
+		return
+	end
+
+	-- 🔁 Đổi hộp
+	claimMultiple(chest3, 3)
+	claimMultiple(chest2, 2)
+	claimMultiple(chest1, 1)
 end
 
 -- === VÒNG LẶP CHÍNH ===
