@@ -276,6 +276,8 @@ function RunTimeTrialScript()
 
 		while getRunsUsed() < 10 do
 			local used = getRunsUsed()
+			lagFlag = false
+			endFlag = false
 
 			if used > 0 then
 				warn("⏸️ Nghỉ 30s trước khi bắt đầu lượt tiếp theo...")
@@ -284,8 +286,7 @@ function RunTimeTrialScript()
 
 			local startPoints = getTimeTrialPoints()
 			local startRuns = getTotalRuns()
-			lagFlag = false
-			endFlag = false
+
 			warn("🔁 Bắt đầu lượt: " .. tostring(used))
 
 			teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
