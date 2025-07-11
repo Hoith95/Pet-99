@@ -309,42 +309,52 @@ end
 local function claimReward()
 	warn("🎁 Bắt đầu đổi quà...")
 
+	-- 📊 Lấy điểm Time Trial
 	local points = getTimeTrialPoints()
 	local currentDay = os.date("*t").wday
 	local isSaturday = (currentDay == 7)
 
 	local chest3, chest2, chest1 = 0, 0, 0
 	if isSaturday then
-		warn("📆 Thứ 7 → Đổi hết điểm.")
+		warn("📆 Hôm nay là Thứ 7 → Đổi hết toàn bộ điểm.")
 		chest3 = math.floor(points / 5000)
-		points -= chest3 * 5000
+		points = points - chest3 * 5000
+
 		chest2 = math.floor(points / 3000)
-		points -= chest2 * 3000
+		points = points - chest2 * 3000
+
 		chest1 = math.floor(points / 1000)
 	else
-		warn("📆 Không phải Thứ 7 → Chỉ đổi hộp 3")
+		warn("📆 Hôm nay KHÔNG phải Thứ 7 → Chỉ đổi hộp 3, giữ điểm dư.")
 		chest3 = math.floor(points / 5000)
 	end
 
-	if chest3 + chest2 + chest1 == 0 then
-		warn("⚠️ Không đủ điểm để đổi quà.")
+	warn("🧾 Số lần đổi quà sẽ thực hiện:")
+	warn("📦 Hộp 3 (5000): " .. chest3)
+	warn("📦 Hộp 2 (3000): " .. chest2)
+	warn("📦 Hộp 1 (1000): " .. chest1)
+
+	local totalChests = chest3 + chest2 + chest1
+	if totalChests == 0 then
+		warn("⚠️ Không có phần thưởng nào đủ điểm để đổi.")
 		return
 	end
 
-	warn("📦 Hộp 3: " .. chest3)
-	warn("📦 Hộp 2: " .. chest2)
-	warn("📦 Hộp 1: " .. chest1)
-
+	-- 📦 Gọi server để đổi hộp
 	local function openChest(chestType)
-		return ReplicatedStorage.Network.TimeTrials_OpenChest:InvokeServer(chestType)
+		local args = { [1] = chestType }
+		return ReplicatedStorage.Network.TimeTrials_OpenChest:InvokeServer(unpack(args))
 	end
 
+	-- 🔁 Đổi nhiều hộp 1 loại
 	local function claimMultiple(count, chestType)
 		for i = 1, count do
-			warn("🔁 Đổi hộp " .. chestType .. " - lần " .. i)
-			local success, err = pcall(function() openChest(chestType) end)
+			warn("🔁 Đang thực hiện đổi hộp " .. chestType .. " - lần " .. i .. "...")
+			local success, err = pcall(function()
+				openChest(chestType)
+			end)
 			if success then
-				warn("✅ Thành công hộp " .. chestType)
+				warn("✅ Đổi thành công hộp " .. chestType .. " - lần " .. i)
 			else
 				warn("❌ Lỗi khi đổi hộp " .. chestType .. ": " .. tostring(err))
 			end
@@ -352,36 +362,38 @@ local function claimReward()
 		end
 	end
 
-	local function isExactlyAtRewardLocation()
+	-- 🗺️ Teleport tới đổi + kiểm tra vị trí chính xác tuyệt đối
+	local function isAtExactRewardPosition()
 		local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 		if not hrp then return false end
 		local pos = hrp.Position
-		local expected = Vector3.new(-14223, 17.39, 1387)
-		return pos.X == expected.X and pos.Y == expected.Y and pos.Z == expected.Z
+		return pos.X == -14223 and pos.Y == 17.39 and pos.Z == 1387
 	end
 
 	local retry = 0
 	while retry < 3 do
 		retry += 1
-		warn("🚶‍♂️ Teleport tới chỗ đổi quà (lần " .. retry .. ")...")
+		warn("🚶‍♂️ Teleport tới vị trí đổi quà (lần " .. retry .. ")...")
 		teleportToRewardLocation()
 		task.wait(9)
-		if isExactlyAtRewardLocation() then
-			warn("✅ Vị trí chính xác → tiến hành đổi quà.")
+		if isAtExactRewardPosition() then
+			warn("✅ Vị trí chính xác → bắt đầu đổi quà.")
 			break
 		else
-			warn("❌ Sai vị trí tuyệt đối → thử lại.")
+			warn("❌ Vị trí sai → thử lại.")
 		end
 	end
 
-	if not isExactlyAtRewardLocation() then
-		warn("⛔ Không thể tới đúng vị trí tuyệt đối sau 3 lần thử. Bỏ qua đổi quà.")
+	if not isAtExactRewardPosition() then
+		warn("⛔ Không thể đến đúng vị trí sau 3 lần thử → bỏ qua đổi quà.")
 		return
 	end
 
+	-- 🧧 Đổi quà
 	claimMultiple(chest3, 3)
 	claimMultiple(chest2, 2)
 	claimMultiple(chest1, 1)
+
 	task.wait(9)
 	teleportToLocation()
 end
