@@ -370,12 +370,14 @@ local function claimReward()
 		end
 	end
 
-	-- 🗺️ Teleport tới đổi + kiểm tra vị trí chính xác tuyệt đối
+	-- 🗺️ Teleport tới đổi + kiểm tra vị trí bằng khoảng cách
 	local function isAtExactRewardPosition()
 		local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 		if not hrp then return false end
 		local pos = hrp.Position
-		return pos.X == -14223 and pos.Y == 17.39 and pos.Z == 1387
+		local target = Vector3.new(-14223, 17.39, 1387)
+		local tolerance = 2
+		return (pos - target).Magnitude <= tolerance
 	end
 
 	local retry = 0
