@@ -10,7 +10,11 @@ getgenv().Settings = {
     Seller = {
         Active = true,
         ["Items"] = {
-	    ["All Titanics"] = {Price = "+1%", AllTypes = true, Priority = true},
+	    --["All Titanics"] = {Price = "+1%", AllTypes = true, Priority = true},
+	    ["Titanic Starlight Pony"] = {Price = 20568686868, Priority = true},
+            --["All Huges"] = {Price = "+1%", AllTypes = true},
+	    ["Huge Starry Eye Bunny"] = {Price = "+1%"},
+	    ["Huge Scribe Squirrel"] = {Price = "+1%"},
 	    ["MVP Key"] = {Price = "+1%", Priority = true},
 	    ["Fantasy Key"] = {Price = "+5%", Priority = true},
 	    ["Fantasy Spinny Wheel Ticket"] = {Price = "+5", Priority = true},
@@ -22,7 +26,6 @@ getgenv().Settings = {
 	    ["Tech Key"] = {Price = "+9%", Priority = true},
 	    ["Crystal Key"] = {Price = "+1%"},
 	    ["Gym Gift"] = {Price = "+1%", Priority = true},
-            ["All Huges"] = {Price = "+1%", AllTypes = true},
 	    ["Time Trial Gift"] = {Price = 268686, Priority = true},
 	    ["Huge Machine Egg 4"] = {Price = "+5%"},
 	    ["Huge Machine Egg 5"] = {Price = "+5%"},
