@@ -245,6 +245,14 @@ local function teleportFarmLoop(startPoints, startRuns)
 			return
 		end
 
+		-- 🔍 Kiểm tra nhân vật đã hồi sinh và có HRP chưa
+		local hrp = getHumanoidRootPart()
+		if not hrp then
+			warn("⚠️ Không tìm thấy HumanoidRootPart → đợi hồi sinh...")
+			task.wait(3)
+			continue
+		end
+
 		local names = {}
 		for _, c in ipairs(workspace.__THINGS.Breakables:GetChildren()) do
 			if c:IsA("Model") and tonumber(c.Name) then
