@@ -10,7 +10,6 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
-local character = player.Character or player.CharacterAdded:Wait()
 
 local Save = require(ReplicatedStorage.Library.Client.Save)
 local ZoneCmds = require(ReplicatedStorage.Library.Client.ZoneCmds)
@@ -19,7 +18,23 @@ local lagFlag = false
 local endFlag = false
 local lagMonitorThread, increaseMonitorThread, monitor12minThread
 
--- Các hàm tiện ích
+-- 🛡️ Lấy HumanoidRootPart an toàn
+local function getHumanoidRootPart()
+	local character = player.Character or player.CharacterAdded:Wait()
+	if not character then return nil end
+
+	local hrp = character:FindFirstChild("HumanoidRootPart")
+	local waitTime = 0
+	while not hrp and waitTime < 5 do
+		task.wait(0.5)
+		waitTime += 0.5
+		hrp = character:FindFirstChild("HumanoidRootPart")
+	end
+
+	return hrp
+end
+
+-- 📊 Hàm tiện ích
 local function getRunsUsed()
 	local saveData = Save.Get()
 	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.DailyRuns or 0) or 0
@@ -39,20 +54,27 @@ local function getTotalRuns()
 	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.TotalRuns or 0) or 0
 end
 
+-- 🗺️ Teleport hỗ trợ
+local function teleportTo(part)
+	local hrp = getHumanoidRootPart()
+	if hrp and part and part.CFrame then
+		hrp.CFrame = part.CFrame + Vector3.new(0, 5, 0)
+	end
+end
+
 local function teleportToRewardLocation()
 	warn("🚶‍♂️ Đang teleport đến vị trí đổi quà...")
-	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-14223, 17.39, 1387)
+	local hrp = getHumanoidRootPart()
+	if hrp then
+		hrp.CFrame = CFrame.new(-14223, 17.39, 1387)
+	end
 end
 
 local function teleportToLocation()
 	warn("🚶‍♂️ Đang teleport về vị trí map 269...")
-	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-14251, 17.39, 1336)
-end
-
-local function teleportTo(part)
-	local character = player.Character or player.CharacterAdded:Wait()
-	if character and character:FindFirstChild("HumanoidRootPart") and part and part.CFrame then
-		character.HumanoidRootPart.CFrame = part.CFrame + Vector3.new(0, 5, 0)
+	local hrp = getHumanoidRootPart()
+	if hrp then
+		hrp.CFrame = CFrame.new(-14251, 17.39, 1336)
 	end
 end
 
@@ -63,7 +85,7 @@ local function safeTeleportOut()
 	if lagMonitorThread then pcall(task.cancel, lagMonitorThread) lagMonitorThread = nil end
 end
 
--- GUI hiển thị
+-- 📺 GUI hiển thị điểm và lượt
 local screenGui = playerGui:FindFirstChild("TimeTrialGui")
 if not screenGui then
 	screenGui = Instance.new("ScreenGui")
@@ -106,8 +128,7 @@ task.spawn(function()
 		task.wait(10)
 	end
 end)
-
--- Check zone
+-- 🔍 Chờ đến khi đạt MaxZone ở map 4
 local function getMaxZoneFromMap4()
 	local mapFolder = workspace:FindFirstChild("Map4")
 	if not mapFolder then return 0 end
@@ -140,10 +161,10 @@ local function waitUntilReachMaxZone()
 	end
 end
 
+-- ⏱️ Monitor 12 phút không tăng lượt
 local function startMonitor12Min()
 	monitor12minThread = task.spawn(function()
 		while true do
-			-- Nếu đã đủ 10 lượt thì dừng theo dõi
 			if getRunsUsed() >= 10 then
 				warn("🛑 Đã đủ 10 lượt → dừng theo dõi 12 phút.")
 				return
@@ -155,17 +176,8 @@ local function startMonitor12Min()
 			while t < 720 do
 				task.wait(10)
 				t += 10
-
-				-- Nếu đã thay đổi → reset thời gian theo dõi
-				if getRunsUsed() ~= startUsed or getTotalRuns() ~= startTotal then
-					break
-				end
-
-				-- Nếu đủ 10 lượt trong quá trình theo dõi → thoát luôn
-				if getRunsUsed() >= 10 then
-					warn("🛑 Đã đủ 10 lượt → dừng theo dõi 12 phút.")
-					return
-				end
+				if getRunsUsed() ~= startUsed or getTotalRuns() ~= startTotal then break end
+				if getRunsUsed() >= 10 then return end
 			end
 
 			if getRunsUsed() == startUsed and getTotalRuns() == startTotal then
@@ -176,28 +188,29 @@ local function startMonitor12Min()
 	end)
 end
 
--- Theo dõi đứng yên (lag)
+-- 📌 Theo dõi đứng yên
 local function startLagMonitor()
 	lagMonitorThread = task.spawn(function()
 		local retryCount = 0
 		local lastPosition = nil
 		while true do
-			local character = player.Character or player.CharacterAdded:Wait()
-			local hrp = character:FindFirstChild("HumanoidRootPart")
+			local hrp = getHumanoidRootPart()
 			if not hrp then task.wait(5) continue end
+
 			lastPosition = hrp.Position
 			task.wait(60)
+
 			local currentPos = hrp.Position
 			if (lastPosition - currentPos).Magnitude < 1 then
 				retryCount += 1
 				warn("⚠️ Đứng im " .. retryCount .. " lần")
-				if retryCount <= 3 then
-					lagFlag = true
-					safeTeleportOut()
-					return
-				else
+
+				if retryCount > 3 then
 					player:Kick("Lag quá lâu trong Time Trial.")
 					return
+				else
+					lagFlag = true
+					safeTeleportOut()
 				end
 			else
 				retryCount = 0
@@ -207,7 +220,7 @@ local function startLagMonitor()
 	end)
 end
 
--- Theo dõi tăng điểm hoặc total runs
+-- 🧠 Theo dõi tăng điểm
 local function startIncreaseMonitor(startPoints, startRuns)
 	increaseMonitorThread = task.spawn(function()
 		warn("⏳ Theo dõi tăng Điểm/TotalRuns")
@@ -223,19 +236,22 @@ local function startIncreaseMonitor(startPoints, startRuns)
 		end
 	end)
 end
--- Farm từng lượt trong Time Trial
+
+-- 🔁 Teleport farm breakables
 local function teleportFarmLoop(startPoints, startRuns)
 	while true do
 		if lagFlag or endFlag or _G.STOP_TIME_TRIAL then
 			warn("⚠️ Dừng teleportFarmLoop")
 			return
 		end
+
 		local names = {}
 		for _, c in ipairs(workspace.__THINGS.Breakables:GetChildren()) do
 			if c:IsA("Model") and tonumber(c.Name) then
 				table.insert(names, c.Name)
 			end
 		end
+
 		if #names > 0 then
 			for _, n in ipairs(names) do
 				if lagFlag or endFlag or _G.STOP_TIME_TRIAL then return end
@@ -272,10 +288,12 @@ local function teleportFarmLoop(startPoints, startRuns)
 				return
 			end
 		end
+
 		task.wait(0.1)
 	end
 end
 
+-- 🧹 Cleanup toàn bộ threads
 local function cleanupAllThreads()
 	warn("🧹 Cleanup toàn bộ thread & trạng thái")
 	if lagMonitorThread then pcall(task.cancel, lagMonitorThread) lagMonitorThread = nil end
@@ -287,56 +305,46 @@ local function cleanupAllThreads()
 	_G.VAR_TIME_TRIAL = nil
 end
 
--- ==== ĐỔI QUÀ SAU KHI HOÀN TẤT ====
+-- 🎁 Đổi quà
 local function claimReward()
 	warn("🎁 Bắt đầu đổi quà...")
 
-	-- 📊 Lấy điểm Time Trial
 	local points = getTimeTrialPoints()
 	local currentDay = os.date("*t").wday
 	local isSaturday = (currentDay == 7)
 
 	local chest3, chest2, chest1 = 0, 0, 0
 	if isSaturday then
-		warn("📆 Hôm nay là Thứ 7 → Đổi hết toàn bộ điểm.")
+		warn("📆 Thứ 7 → Đổi hết điểm.")
 		chest3 = math.floor(points / 5000)
-		points = points - chest3 * 5000
-
+		points -= chest3 * 5000
 		chest2 = math.floor(points / 3000)
-		points = points - chest2 * 3000
-
+		points -= chest2 * 3000
 		chest1 = math.floor(points / 1000)
 	else
-		warn("📆 Hôm nay KHÔNG phải Thứ 7 → Chỉ đổi hộp 3, giữ điểm dư.")
+		warn("📆 Không phải Thứ 7 → Chỉ đổi hộp 3")
 		chest3 = math.floor(points / 5000)
 	end
 
-	warn("🧾 Số lần đổi quà sẽ thực hiện:")
-	warn("📦 Hộp 3 (5000): " .. chest3)
-	warn("📦 Hộp 2 (3000): " .. chest2)
-	warn("📦 Hộp 1 (1000): " .. chest1)
-
-	local totalChests = chest3 + chest2 + chest1
-	if totalChests == 0 then
-		warn("⚠️ Không có phần thưởng nào đủ điểm để đổi.")
+	if chest3 + chest2 + chest1 == 0 then
+		warn("⚠️ Không đủ điểm để đổi quà.")
 		return
 	end
 
-	-- 📦 Gọi server để đổi hộp
+	warn("📦 Hộp 3: " .. chest3)
+	warn("📦 Hộp 2: " .. chest2)
+	warn("📦 Hộp 1: " .. chest1)
+
 	local function openChest(chestType)
-		local args = { [1] = chestType }
-		return ReplicatedStorage.Network.TimeTrials_OpenChest:InvokeServer(unpack(args))
+		return ReplicatedStorage.Network.TimeTrials_OpenChest:InvokeServer(chestType)
 	end
 
-	-- 🔁 Đổi nhiều hộp 1 loại
 	local function claimMultiple(count, chestType)
 		for i = 1, count do
-			warn("🔁 Đang thực hiện đổi hộp " .. chestType .. " - lần " .. i .. "...")
-			local success, err = pcall(function()
-				openChest(chestType)
-			end)
+			warn("🔁 Đổi hộp " .. chestType .. " - lần " .. i)
+			local success, err = pcall(function() openChest(chestType) end)
 			if success then
-				warn("✅ Đổi thành công hộp " .. chestType .. " - lần " .. i)
+				warn("✅ Thành công hộp " .. chestType)
 			else
 				warn("❌ Lỗi khi đổi hộp " .. chestType .. ": " .. tostring(err))
 			end
@@ -344,17 +352,41 @@ local function claimReward()
 		end
 	end
 
-	-- 🗺️ Teleport tới đổi
-	teleportToRewardLocation()
-	task.wait(2)
+	local function isExactlyAtRewardLocation()
+		local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+		if not hrp then return false end
+		local pos = hrp.Position
+		local expected = Vector3.new(-14223, 17.39, 1387)
+		return pos.X == expected.X and pos.Y == expected.Y and pos.Z == expected.Z
+	end
+
+	local retry = 0
+	while retry < 3 do
+		retry += 1
+		warn("🚶‍♂️ Teleport tới chỗ đổi quà (lần " .. retry .. ")...")
+		teleportToRewardLocation()
+		task.wait(9)
+		if isExactlyAtRewardLocation() then
+			warn("✅ Vị trí chính xác → tiến hành đổi quà.")
+			break
+		else
+			warn("❌ Sai vị trí tuyệt đối → thử lại.")
+		end
+	end
+
+	if not isExactlyAtRewardLocation() then
+		warn("⛔ Không thể tới đúng vị trí tuyệt đối sau 3 lần thử. Bỏ qua đổi quà.")
+		return
+	end
+
 	claimMultiple(chest3, 3)
 	claimMultiple(chest2, 2)
 	claimMultiple(chest1, 1)
-	task.wait(5)
+	task.wait(9)
 	teleportToLocation()
 end
 
--- === VÒNG LẶP CHÍNH ===
+-- ✅ VÒNG LẶP CHÍNH
 task.spawn(function()
 	waitUntilReachMaxZone()
 	startMonitor12Min()
@@ -406,11 +438,10 @@ task.spawn(function()
 		cleanupAllThreads()
 
 		warn("⏳ Theo dõi reset DailyRuns...")
-
-		while getRunsUsed() >= 10 do
-			task.wait(60)
-		end
+		while getRunsUsed() >= 10 do task.wait(60) end
 
 		warn("🔁 DailyRuns reset → tiếp tục farm.")
+		if monitor12minThread then pcall(task.cancel, monitor12minThread) monitor12minThread = nil end
+		startMonitor12Min()
 	end
 end)
