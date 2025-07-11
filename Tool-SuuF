@@ -18,7 +18,8 @@ do
         script_key="PBgqFQESzNhuTfgQatfaWcLbqQSoMvXK";       -- Line 3
         --script_key="rNbCKzbKLEEjXeEXYEtLeFuubVUOqCYq";       -- Line 3
     elseif _G.Line4 then
-        script_key="HDYuxcdpCBScUeYhGfwpSmXppyhajreW";       -- Line 4
+        script_key="fpAiAhNtXhwOUUeKHzlHcvYOQHhsWSHN";
+        --script_key="HDYuxcdpCBScUeYhGfwpSmXppyhajreW";       -- Line 4
     else
         script_key = defaultKey                               -- không cờ nào
     end
