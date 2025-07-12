@@ -211,8 +211,8 @@ local function startMonitor12Min()
                 if teleportEvent and not runChanged then
                     teleportCount += 1
                     warn("⚠️ Teleport out mà không đổi lượt lần " .. teleportCount)
-                    if teleportCount > 3 then
-                        player:Kick("⏰ Quá 3 lần teleport out mà không đổi lượt → nghi ngờ treo máy.")
+                    if teleportCount > 6 then
+                        player:Kick("⏰ Quá 6 lần teleport out mà không đổi lượt → nghi ngờ treo máy.")
                         return
                     end
                 end
