@@ -1,0 +1,61 @@
+
+-- Chỉ theo dõi 15 phút không tăng lượt/TotalRuns và kick
+
+-- Thay thế đường dẫn require phù hợp với dự án của bạn
+local Players          = game:GetService("Players")
+local ReplicatedStorage= game:GetService("ReplicatedStorage")
+local Save             = require(ReplicatedStorage.Library.Client.Save)
+
+local player = Players.LocalPlayer
+
+-- Hàm tiện ích lấy lượt đã dùng
+local function getRunsUsed()
+    local saveData = Save.Get()
+    return (saveData and saveData.TimeTrialStats and saveData.TimeTrialStats.DailyRuns) or 0
+end
+
+-- Hàm tiện ích lấy tổng lượt
+local function getTotalRuns()
+    local saveData = Save.Get()
+    return (saveData and saveData.TimeTrialStats and saveData.TimeTrialStats.TotalRuns) or 0
+end
+
+-- ⏱️ Monitor 12 phút không tăng lượt/TotalRuns
+local function startMonitor12Min()
+    local lastUsed  = getRunsUsed()
+    local lastTotal = getTotalRuns()
+    local timer     = 0
+
+    task.spawn(function()
+        while true do
+            -- Nếu đã đủ 10 lượt thì dừng hẳn
+            if getRunsUsed() >= 10 then
+                warn("🛑 Đã đủ 10 lượt → dừng theo dõi 12 phút.")
+                return
+            end
+
+            task.wait(10)
+            timer = timer + 10
+
+            local curUsed  = getRunsUsed()
+            local curTotal = getTotalRuns()
+
+            -- Nếu có thay đổi lượt hoặc tổng lượt, reset timer
+            if curUsed ~= lastUsed or curTotal ~= lastTotal then
+                lastUsed  = curUsed
+                lastTotal = curTotal
+                timer     = 0
+                warn("🔄 Reset monitor12min do có hoạt động đổi lượt/TotalRuns.")
+            end
+
+            -- Nếu vượt quá 900 giây (12 phút) mà không reset thì kick
+            if timer >= 900 then
+                player:Kick("⏰ 15 phút không đổi lượt hoặc TotalRuns → nghi ngờ treo máy.")
+                return
+            end
+        end
+    end)
+end
+
+-- Khởi chạy monitor ngay khi require file này
+startMonitor15Min()
