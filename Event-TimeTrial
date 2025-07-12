@@ -337,11 +337,11 @@ local function claimReward()
 	-- 📊 Lấy điểm Time Trial
 	local points = getTimeTrialPoints()
 	local currentDay = os.date("*t").wday
-	local isSaturday = (currentDay == 7)
+	local isSaturday = (currentDay == 7) and (currentHour < 23)
 
 	local chest3, chest2, chest1 = 0, 0, 0
 	if isSaturday then
-		warn("📆 Hôm nay là Thứ 7 → Đổi hết toàn bộ điểm.")
+		warn("📆 Hôm nay là Thứ 7 và chưa tới 23h → Đổi hết toàn bộ điểm.")
 		chest3 = math.floor(points / 5000)
 		points = points - chest3 * 5000
 
@@ -350,7 +350,7 @@ local function claimReward()
 
 		chest1 = math.floor(points / 1000)
 	else
-		warn("📆 Hôm nay KHÔNG phải Thứ 7 → Chỉ đổi hộp 3, giữ điểm dư.")
+		warn("📆 Chỉ đổi hộp 3, giữ điểm dư. (Thứ 7 sau 23h hoặc không phải Thứ 7).")
 		chest3 = math.floor(points / 5000)
 	end
 
