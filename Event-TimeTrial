@@ -513,6 +513,9 @@ task.spawn(function()
 		claimReward()
 		task.wait(30)
 		cleanupAllThreads()
+
+        	-- **Chỉ bắt đầu auto-claim sau khi đã hoàn tất 10 lượt**
+       		warn("🔄 Khởi động Auto-Claim sau 10/10 lượt.")
 		task.wait(68)
 		startAutoClaim()
 
