@@ -1,68 +1,60 @@
--- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
-if _G.VARE then
-    warn("Script đã được chạy trước đó!")
-    return -- Dừng script nếu đã chạy
-end
--- Đánh dấu script đã được chạy
-_G.VARE = true
+-- Tránh chạy nhiều lần
+if _G.MONITOR_15MIN_RUNNING then return end
+_G.MONITOR_15MIN_RUNNING = true
 
--- Chỉ theo dõi 15 phút không tăng lượt/TotalRuns và kick
-
--- Thay thế đường dẫn require phù hợp với dự án của bạn
 local Players          = game:GetService("Players")
 local ReplicatedStorage= game:GetService("ReplicatedStorage")
+local RunService       = game:GetService("RunService")
 local Save             = require(ReplicatedStorage.Library.Client.Save)
 
 local player = Players.LocalPlayer
 
--- Hàm tiện ích lấy lượt đã dùng
+-- Lấy lượt đã dùng (DailyRuns)
 local function getRunsUsed()
-    local saveData = Save.Get()
-    return (saveData and saveData.TimeTrialStats and saveData.TimeTrialStats.DailyRuns) or 0
+    local sd = Save.Get()
+    return (sd and sd.TimeTrialStats and sd.TimeTrialStats.DailyRuns) or 0
 end
 
--- Hàm tiện ích lấy tổng lượt
+-- Lấy tổng lượt (TotalRuns)
 local function getTotalRuns()
-    local saveData = Save.Get()
-    return (saveData and saveData.TimeTrialStats and saveData.TimeTrialStats.TotalRuns) or 0
+    local sd = Save.Get()
+    return (sd and sd.TimeTrialStats and sd.TimeTrialStats.TotalRuns) or 0
 end
 
--- ⏱️ Monitor 12 phút không tăng lượt/TotalRuns
-local function startMonitor12Min()
+-- ⏱️ Monitor 15 phút dùng Heartbeat
+local function startMonitor15Min()
     local lastUsed  = getRunsUsed()
     local lastTotal = getTotalRuns()
     local timer     = 0
+    local conn
 
-    task.spawn(function()
-        while true do
-            -- Nếu đã đủ 10 lượt thì dừng hẳn
-            if getRunsUsed() >= 10 then
-                warn("🛑 Đã đủ 10 lượt → dừng theo dõi 12 phút.")
-                return
-            end
+    conn = RunService.Heartbeat:Connect(function(dt)
+        -- Nếu đã đủ 10 lượt, dừng luôn
+        if getRunsUsed() >= 10 then
+            warn("🛑 Đã đủ 10 lượt → dừng theo dõi 15 phút.")
+            conn:Disconnect()
+            return
+        end
 
-            task.wait(10)
-            timer = timer + 10
+        -- cộng dồn thời gian
+        timer = timer + dt
 
-            local curUsed  = getRunsUsed()
-            local curTotal = getTotalRuns()
+        -- kiểm tra reset khi có thay đổi
+        local curUsed, curTotal = getRunsUsed(), getTotalRuns()
+        if curUsed ~= lastUsed or curTotal ~= lastTotal then
+            lastUsed, lastTotal = curUsed, curTotal
+            timer = 0
+            warn("🔄 Reset monitor15Min (Đã đổi lượt/TotalRuns).")
+        end
 
-            -- Nếu có thay đổi lượt hoặc tổng lượt, reset timer
-            if curUsed ~= lastUsed or curTotal ~= lastTotal then
-                lastUsed  = curUsed
-                lastTotal = curTotal
-                timer     = 0
-                warn("🔄 Reset monitor12min do có hoạt động đổi lượt/TotalRuns.")
-            end
-
-            -- Nếu vượt quá 900 giây (12 phút) mà không reset thì kick
-            if timer >= 900 then
-                player:Kick("⏰ 15 phút không đổi lượt hoặc TotalRuns → nghi ngờ treo máy.")
-                return
-            end
+        -- nếu vượt quá 900s = 15 phút
+        if timer >= 900 then
+            warn("⏰ 15 phút không đổi lượt hoặc TotalRuns → Kick player.")
+            conn:Disconnect()
+            player:Kick("15 phút không đổi lượt/TotalRuns → nghi ngờ treo máy.")
         end
     end)
 end
 
--- Khởi chạy monitor ngay khi require file này
+-- start ngay
 startMonitor15Min()
