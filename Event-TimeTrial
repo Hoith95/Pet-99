@@ -441,14 +441,11 @@ end
 local function startAutoClaim()
     task.spawn(function()
         while true do
-            task.wait(15 * 60)  -- 15 phút
+            task.wait(15 * 60)
             local points     = getTimeTrialPoints()
             local currentDay = os.date("*t").wday
             local currentHour= os.date("*t").hour
 
-            -- Điều kiện auto-claim:
-            -- Thứ 7 trước 23h: points>=1000
-            -- Thứ 2-6 & CN: points>=5000
             local canClaim = false
             if currentDay == 7 and currentHour < 23 then
                 canClaim = (points >= 1000)
@@ -465,9 +462,6 @@ local function startAutoClaim()
         end
     end)
 end
-
--- Khởi động auto-claim ngay khi script load
-startAutoClaim()
 
 -- ✅ VÒNG LẶP CHÍNH
 task.spawn(function()
@@ -519,6 +513,8 @@ task.spawn(function()
 		claimReward()
 		task.wait(30)
 		cleanupAllThreads()
+		task.wait(68)
+		startAutoClaim()
 
 		warn("⏳ Theo dõi reset DailyRuns...")
 		while getRunsUsed() >= 10 do task.wait(60) end
