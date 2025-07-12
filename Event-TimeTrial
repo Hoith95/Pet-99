@@ -163,29 +163,46 @@ end
 
 -- ⏱️ Monitor 12 phút không tăng lượt
 local function startMonitor12Min()
-	monitor12minThread = task.spawn(function()
-		while true do
-			if getRunsUsed() >= 10 then
-				warn("🛑 Đã đủ 10 lượt → dừng theo dõi 12 phút.")
-				return
-			end
+    monitor12minThread = task.spawn(function()
+        -- Lấy giá trị khởi đầu
+        local lastUsed  = getRunsUsed()
+        local lastTotal = getTotalRuns()
+        local timer     = 0
 
-			local startUsed = getRunsUsed()
-			local startTotal = getTotalRuns()
-			local t = 0
-			while t < 720 do
-				task.wait(10)
-				t += 10
-				if getRunsUsed() ~= startUsed or getTotalRuns() ~= startTotal then break end
-				if getRunsUsed() >= 10 then return end
-			end
+        while true do
+            -- Nếu đã đủ 10 lượt thì dừng hẳn
+            if getRunsUsed() >= 10 then
+                warn("🛑 Đã đủ 10 lượt → dừng theo dõi 12 phút.")
+                return
+            end
 
-			if getRunsUsed() == startUsed and getTotalRuns() == startTotal then
-				player:Kick("⏰ 12 phút không đổi lượt hoặc tổng Time Trial → nghi ngờ treo máy.")
-				return
-			end
-		end
-	end)
+            task.wait(10)
+            timer += 10
+
+            -- Lấy giá trị hiện tại
+            local curUsed  = getRunsUsed()
+            local curTotal = getTotalRuns()
+
+            -- Nếu có thay đổi lượt/totalRuns hoặc có teleport out/reset flag
+            if curUsed ~= lastUsed 
+               or curTotal ~= lastTotal 
+               or endFlag 
+               or lagFlag then
+
+                -- Cập nhật lại mốc và reset bộ đếm
+                lastUsed  = curUsed
+                lastTotal = curTotal
+                timer     = 0
+                warn("🔄 Reset monitor12min do có loại hoạt động trong Time Trial.")
+            end
+
+            -- Nếu vượt quá 720 giây (12 phút) mà không reset thì kick
+            if timer >= 720 then
+                player:Kick("⏰ 12 phút không đổi lượt hoặc TotalRuns → nghi ngờ treo máy.")
+                return
+            end
+        end
+    end)
 end
 
 -- 📌 Theo dõi đứng yên
