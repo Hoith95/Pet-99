@@ -283,19 +283,22 @@ end
 
 -- 🧠 Theo dõi tăng điểm
 local function startIncreaseMonitor(startPoints, startRuns)
-	increaseMonitorThread = task.spawn(function()
-		warn("⏳ Theo dõi tăng Điểm/TotalRuns")
-		while true do
-			if lagFlag then return end
-			if getTimeTrialPoints() > startPoints or getTotalRuns() > startRuns then
-				warn("✅ Điểm hoặc TotalRuns tăng → Thoát Time Trial")
-				endFlag = true
-				safeTeleportOut()
-				return
-			end
-			task.wait(1)
-		end
-	end)
+    increaseMonitorThread = task.spawn(function()
+        warn("⏳ Theo dõi tăng Điểm/TotalRuns")
+        while true do
+            -- Nếu lagFlag bật, thôi dừng monitor
+            if lagFlag then return end
+
+            -- Khi phát hiện điểm hoặc TotalRuns tăng, chỉ set endFlag
+            if getTimeTrialPoints() > startPoints or getTotalRuns() > startRuns then
+                warn("✅ Điểm hoặc TotalRuns tăng → Đánh dấu endFlag")
+                endFlag = true
+                return
+            end
+
+            task.wait(1)
+        end
+    end)
 end
 
 -- 🔁 Teleport farm breakables
@@ -353,7 +356,6 @@ local function teleportFarmLoop(startPoints, startRuns)
 			if not found then
 				warn("❌ Hết rương → kết thúc lượt")
 				endFlag = true
-				safeTeleportOut()
 				return
 			end
 		end
@@ -375,7 +377,6 @@ local function cleanupAllThreads()
 end
 
 -- 🎁 Đổi quà
--- 🎁 Đổi quà (giữ nguyên style, chỉ thêm verify sau mỗi hộp)
 local function claimReward()
     warn("🎁 Bắt đầu đổi quà...")
 
@@ -542,6 +543,13 @@ task.spawn(function()
 			startLagMonitor()
 			startIncreaseMonitor(startPoints, startRuns)
 			teleportFarmLoop(startPoints, startRuns)
+
+			-- ✅ Nếu kết thúc lượt (do hết rương), thoát khỏi trial
+			if endFlag then
+				warn("🚪 Kết thúc lượt → teleport out")
+				safeTeleportOut()
+			end
+
 			task.wait(5)
 
 			if lagMonitorThread then pcall(task.cancel, lagMonitorThread) lagMonitorThread = nil end
