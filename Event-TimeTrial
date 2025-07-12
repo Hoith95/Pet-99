@@ -207,34 +207,46 @@ end
 
 -- 📌 Theo dõi đứng yên
 local function startLagMonitor()
-	lagMonitorThread = task.spawn(function()
-		local retryCount = 0
-		local lastPosition = nil
-		while true do
-			local hrp = getHumanoidRootPart()
-			if not hrp then task.wait(5) continue end
+    lagMonitorThread = task.spawn(function()
+        local retryCount = 0
 
-			lastPosition = hrp.Position
-			task.wait(60)
+        while true do
+            -- Lấy HRP an toàn
+            local hrp = getHumanoidRootPart()
+            if not hrp then
+                task.wait(5)
+                continue
+            end
 
-			local currentPos = hrp.Position
-			if (lastPosition - currentPos).Magnitude < 1 then
-				retryCount += 1
-				warn("⚠️ Đứng im " .. retryCount .. " lần")
+            -- Ghi nhận vị trí, đợi 60s
+            local lastPos = hrp.Position
+            task.wait(60)
+            local currPos = hrp.Position
 
-				if retryCount > 3 then
-					player:Kick("Lag quá lâu trong Time Trial.")
-					return
-				else
-					lagFlag = true
-					safeTeleportOut()
-				end
-			else
-				retryCount = 0
-			end
-			task.wait(5)
-		end
-	end)
+            -- Nếu đứng im (khoảng cách <1) thì tăng đếm
+            if (lastPos - currPos).Magnitude < 1 then
+                retryCount += 1
+                warn("⚠️ Đứng im " .. retryCount .. " lần")
+
+                if retryCount > 3 then
+                    -- Đứng im lần thứ 4 trở đi → kick
+                    player:Kick("Lag quá lâu trong Time Trial.")
+                    return
+                else
+                    -- Đứng im ≤3 lần → tele out 1 lần rồi dừng monitor
+                    lagFlag = true
+                    safeTeleportOut()
+                    return
+                end
+            else
+                -- Nếu di chuyển, reset lại bộ đếm
+                retryCount = 0
+            end
+
+            -- Nhỏ delay trước lần check tiếp theo
+            task.wait(5)
+        end
+    end)
 end
 
 -- 🧠 Theo dõi tăng điểm
