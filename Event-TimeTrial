@@ -161,13 +161,14 @@ local function waitUntilReachMaxZone()
 	end
 end
 
--- ⏱️ Monitor 12 phút không tăng lượt
+-- ⏱️ Monitor 12 phút không tăng lượt/TotalRuns với giới hạn teleport out
 local function startMonitor12Min()
     monitor12minThread = task.spawn(function()
-        -- Lấy giá trị khởi đầu
-        local lastUsed  = getRunsUsed()
-        local lastTotal = getTotalRuns()
-        local timer     = 0
+        -- Lấy giá trị khởi đầu và bộ đếm
+        local lastUsed       = getRunsUsed()
+        local lastTotal      = getTotalRuns()
+        local timer          = 0
+        local teleportCount  = 0  -- đếm số lần teleport out mà không đổi lượt
 
         while true do
             -- Nếu đã đủ 10 lượt thì dừng hẳn
@@ -183,17 +184,30 @@ local function startMonitor12Min()
             local curUsed  = getRunsUsed()
             local curTotal = getTotalRuns()
 
-            -- Nếu có thay đổi lượt/totalRuns hoặc có teleport out/reset flag
-            if curUsed ~= lastUsed 
-               or curTotal ~= lastTotal 
-               or endFlag 
-               or lagFlag then
+            -- Kiểm tra điều kiện reset hoặc teleport out
+            local runChanged    = (curUsed ~= lastUsed or curTotal ~= lastTotal)
+            local teleportEvent = (endFlag or lagFlag)
 
-                -- Cập nhật lại mốc và reset bộ đếm
-                lastUsed  = curUsed
-                lastTotal = curTotal
-                timer     = 0
-                warn("🔄 Reset monitor12min do có loại hoạt động trong Time Trial.")
+            if runChanged or teleportEvent then
+                -- Nếu chỉ teleport out mà không đổi lượt, tăng bộ đếm
+                if teleportEvent and not runChanged then
+                    teleportCount += 1
+                    warn("⚠️ Teleport out mà không đổi lượt lần " .. teleportCount)
+                    if teleportCount > 3 then
+                        player:Kick("⏰ Quá 3 lần teleport out mà không đổi lượt → nghi ngờ treo máy.")
+                        return
+                    end
+                end
+
+                -- Cập nhật lại mốc, reset bộ đếm thời gian và flags
+                lastUsed      = curUsed
+                lastTotal     = curTotal
+                timer         = 0
+                -- giữ nguyên teleportCount
+                endFlag       = false
+                lagFlag       = false
+
+                warn("🔄 Reset monitor12min do có hoạt động trong Time Trial.")
             end
 
             -- Nếu vượt quá 720 giây (12 phút) mà không reset thì kick
@@ -344,98 +358,116 @@ end
 
 -- 🎁 Đổi quà
 local function claimReward()
-	warn("🎁 Bắt đầu đổi quà...")
+    warn("🎁 Bắt đầu đổi quà...")
 
-	-- 📊 Lấy điểm Time Trial
-	local points = getTimeTrialPoints()
-	local currentDay = os.date("*t").wday
-	local isSaturday = (currentDay == 7) and (currentHour < 23)
+    -- 📊 Lấy điểm Time Trial và ngày giờ
+    local points      = getTimeTrialPoints()
+    local currentDay  = os.date("*t").wday
+    local currentHour = os.date("*t").hour
+    -- Nếu Thứ 7 trước 23h thì đổi hết, ngược lại chỉ đổi hộp 3
+    local isSaturdayFull = (currentDay == 7) and (currentHour < 23)
 
-	local chest3, chest2, chest1 = 0, 0, 0
-	if isSaturday then
-		warn("📆 Hôm nay là Thứ 7 và chưa tới 23h → Đổi hết toàn bộ điểm.")
-		chest3 = math.floor(points / 5000)
-		points = points - chest3 * 5000
+    -- Tính số lượng từng loại hộp
+    local chest3, chest2, chest1 = 0, 0, 0
+    if isSaturdayFull then
+        warn("📆 Hôm nay là Thứ 7 và chưa tới 23h → Đổi hết toàn bộ điểm.")
+        chest3 = math.floor(points / 5000)
+        points = points - chest3 * 5000
+        chest2 = math.floor(points / 3000)
+        points = points - chest2 * 3000
+        chest1 = math.floor(points / 1000)
+    else
+        warn("📆 Chỉ đổi hộp 3 (Thứ 7 sau 23h hoặc không phải Thứ 7).")
+        chest3 = math.floor(points / 5000)
+    end
 
-		chest2 = math.floor(points / 3000)
-		points = points - chest2 * 3000
+    -- Nếu không có hộp nào để đổi, dừng
+    local totalChests = chest3 + chest2 + chest1
+    if totalChests == 0 then
+        warn("⚠️ Không có phần thưởng nào đủ điểm để đổi.")
+        return
+    end
 
-		chest1 = math.floor(points / 1000)
-	else
-		warn("📆 Chỉ đổi hộp 3, giữ điểm dư. (Thứ 7 sau 23h hoặc không phải Thứ 7).")
-		chest3 = math.floor(points / 5000)
-	end
+    -- 📦 Gọi server để đổi hộp
+    local function openChest(chestType)
+        local args = { [1] = chestType }
+        return ReplicatedStorage.Network.TimeTrials_OpenChest:InvokeServer(unpack(args))
+    end
 
-	warn("🧾 Số lần đổi quà sẽ thực hiện:")
-	warn("📦 Hộp 3 (5000): " .. chest3)
-	warn("📦 Hộp 2 (3000): " .. chest2)
-	warn("📦 Hộp 1 (1000): " .. chest1)
+    -- 🗺️ Kiểm tra đã ở đúng vị trí đổi quà chưa
+    local function isAtExactRewardPosition()
+        local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        if not hrp then return false end
+        return (hrp.Position - Vector3.new(-14223,17.39,1387)).Magnitude <= 2
+    end
 
-	local totalChests = chest3 + chest2 + chest1
-	if totalChests == 0 then
-		warn("⚠️ Không có phần thưởng nào đủ điểm để đổi.")
-		return
-	end
+    -- 🔁 Thực hiện đổi và verify sau mỗi lần
+    local function claimAndVerify(count, chestType)
+        for i = 1, count do
+            warn(("🔁 Đổi hộp %d (lần %d/%d)..."):format(chestType, i, count))
+            local success, err = pcall(openChest, chestType)
+            if success then
+                warn(("✅ Đổi thành công hộp %d"):format(chestType))
+            else
+                warn(("❌ Lỗi khi đổi hộp %d: %s"):format(chestType, tostring(err)))
+            end
 
-	-- 📦 Gọi server để đổi hộp
-	local function openChest(chestType)
-		local args = { [1] = chestType }
-		return ReplicatedStorage.Network.TimeTrials_OpenChest:InvokeServer(unpack(args))
-	end
+            -- Chờ 5s sau đổi và verify vị trí
+            task.wait(5)
+            if not isAtExactRewardPosition() then
+                warn("⚠️ Sai vị trí sau khi đổi → teleport lại.")
+                teleportToRewardLocation()
+                task.wait(9)
+                if not isAtExactRewardPosition() then
+                    warn("⛔ Vẫn sai vị trí, bỏ qua kiểm tra lần này.")
+                else
+                    warn("✅ Đã trở lại đúng vị trí.")
+                end
+            end
+        end
+    end
 
-	-- 🔁 Đổi nhiều hộp 1 loại
-	local function claimMultiple(count, chestType)
-		for i = 1, count do
-			warn("🔁 Đang thực hiện đổi hộp " .. chestType .. " - lần " .. i .. "...")
-			local success, err = pcall(function()
-				openChest(chestType)
-			end)
-			if success then
-				warn("✅ Đổi thành công hộp " .. chestType .. " - lần " .. i)
-			else
-				warn("❌ Lỗi khi đổi hộp " .. chestType .. ": " .. tostring(err))
-			end
-			task.wait(5)
-		end
-	end
+    -- Thực thi lần lượt
+    claimAndVerify(chest3, 3)
+    claimAndVerify(chest2, 2)
+    claimAndVerify(chest1, 1)
 
-	-- 🗺️ Teleport tới đổi + kiểm tra vị trí bằng khoảng cách
-	local function isAtExactRewardPosition()
-		local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-		if not hrp then return false end
-		local pos = hrp.Position
-		local target = Vector3.new(-14223, 17.39, 1387)
-		local tolerance = 2
-		return (pos - target).Magnitude <= tolerance
-	end
-
-	local retry = 0
-	while retry < 3 do
-		retry += 1
-		warn("🚶‍♂️ Teleport tới vị trí đổi quà (lần " .. retry .. ")...")
-		teleportToRewardLocation()
-		task.wait(9)
-		if isAtExactRewardPosition() then
-			warn("✅ Vị trí chính xác → bắt đầu đổi quà.")
-			break
-		else
-			warn("❌ Vị trí sai → thử lại.")
-		end
-	end
-
-	if not isAtExactRewardPosition() then
-		warn("⛔ Không thể đến đúng vị trí sau 3 lần thử → bỏ qua đổi quà.")
-		return
-	end
-
-	-- 🧧 Đổi quà
-	claimMultiple(chest3, 3)
-	claimMultiple(chest2, 2)
-	claimMultiple(chest1, 1)
-
-	task.wait(9)
-	teleportToLocation()
+    -- Sau cùng teleport về map chính
+    task.wait(9)
+    teleportToLocation()
 end
+
+-- 🔄 Auto-claim song song, chạy mỗi 15 phút
+local function startAutoClaim()
+    task.spawn(function()
+        while true do
+            task.wait(15 * 60)  -- 15 phút
+            local points     = getTimeTrialPoints()
+            local currentDay = os.date("*t").wday
+            local currentHour= os.date("*t").hour
+
+            -- Điều kiện auto-claim:
+            -- Thứ 7 trước 23h: points>=1000
+            -- Thứ 2-6 & CN: points>=5000
+            local canClaim = false
+            if currentDay == 7 and currentHour < 23 then
+                canClaim = (points >= 1000)
+            else
+                canClaim = (points >= 5000)
+            end
+
+            if canClaim then
+                warn("🔔 Auto-claim: đủ điểm & điều kiện → thực thi claimReward().")
+                claimReward()
+            else
+                warn(("ℹ️ Auto-claim: chưa đủ điều kiện (Points = %d)."):format(points))
+            end
+        end
+    end)
+end
+
+-- Khởi động auto-claim ngay khi script load
+startAutoClaim()
 
 -- ✅ VÒNG LẶP CHÍNH
 task.spawn(function()
