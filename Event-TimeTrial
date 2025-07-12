@@ -357,10 +357,11 @@ local function cleanupAllThreads()
 end
 
 -- 🎁 Đổi quà
+-- 🎁 Đổi quà (giữ nguyên style, chỉ thêm verify sau mỗi hộp)
 local function claimReward()
     warn("🎁 Bắt đầu đổi quà...")
 
-    -- 📊 Lấy điểm Time Trial và ngày giờ
+    -- 📊 Lấy điểm Time Trial
     local points      = getTimeTrialPoints()
     local currentDay  = os.date("*t").wday
     local currentHour = os.date("*t").hour
@@ -381,7 +382,11 @@ local function claimReward()
         chest3 = math.floor(points / 5000)
     end
 
-    -- Nếu không có hộp nào để đổi, dừng
+    warn("🧾 Số lần đổi quà sẽ thực hiện:")
+    warn("📦 Hộp 3 (5000): " .. chest3)
+    warn("📦 Hộp 2 (3000): " .. chest2)
+    warn("📦 Hộp 1 (1000): " .. chest1)
+
     local totalChests = chest3 + chest2 + chest1
     if totalChests == 0 then
         warn("⚠️ Không có phần thưởng nào đủ điểm để đổi.")
@@ -398,41 +403,64 @@ local function claimReward()
     local function isAtExactRewardPosition()
         local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
         if not hrp then return false end
-        return (hrp.Position - Vector3.new(-14223,17.39,1387)).Magnitude <= 2
+        local target = Vector3.new(-14223, 17.39, 1387)
+        return (hrp.Position - target).Magnitude <= 2
     end
 
-    -- 🔁 Thực hiện đổi và verify sau mỗi lần
-    local function claimAndVerify(count, chestType)
+    -- 🔁 Đổi nhiều hộp 1 loại, sau mỗi lần verify vị trí
+    local function claimMultiple(count, chestType)
         for i = 1, count do
-            warn(("🔁 Đổi hộp %d (lần %d/%d)..."):format(chestType, i, count))
-            local success, err = pcall(openChest, chestType)
+            warn("🔁 Đang thực hiện đổi hộp " .. chestType .. " - lần " .. i)
+            local success, err = pcall(function()
+                openChest(chestType)
+            end)
             if success then
-                warn(("✅ Đổi thành công hộp %d"):format(chestType))
+                warn("✅ Đổi thành công hộp " .. chestType .. " - lần " .. i)
             else
-                warn(("❌ Lỗi khi đổi hộp %d: %s"):format(chestType, tostring(err)))
+                warn("❌ Lỗi khi đổi hộp " .. chestType .. ": " .. tostring(err))
             end
 
-            -- Chờ 5s sau đổi và verify vị trí
+            -- 📌 Chờ 5s rồi verify vị trí, nếu sai thì teleport lại
             task.wait(5)
             if not isAtExactRewardPosition() then
-                warn("⚠️ Sai vị trí sau khi đổi → teleport lại.")
+                warn("⚠️ Sai vị trí sau khi đổi hộp " .. chestType .. " → teleport lại.")
                 teleportToRewardLocation()
                 task.wait(9)
                 if not isAtExactRewardPosition() then
                     warn("⛔ Vẫn sai vị trí, bỏ qua kiểm tra lần này.")
                 else
-                    warn("✅ Đã trở lại đúng vị trí.")
+                    warn("✅ Đã trở lại đúng vị trí đổi.")
                 end
             end
         end
     end
 
-    -- Thực thi lần lượt
-    claimAndVerify(chest3, 3)
-    claimAndVerify(chest2, 2)
-    claimAndVerify(chest1, 1)
+    -- 🚶‍♂️ Teleport đến vị trí đổi quà, thử tối đa 3 lần
+    local retry = 0
+    while retry < 3 do
+        retry += 1
+        warn("🚶‍♂️ Teleport tới vị trí đổi quà (lần " .. retry .. ")...")
+        teleportToRewardLocation()
+        task.wait(9)
+        if isAtExactRewardPosition() then
+            warn("✅ Vị trí chính xác → bắt đầu đổi quà.")
+            break
+        else
+            warn("❌ Vị trí sai → thử lại.")
+        end
+    end
 
-    -- Sau cùng teleport về map chính
+    if not isAtExactRewardPosition() then
+        warn("⛔ Không thể đến đúng vị trí sau 3 lần thử → bỏ qua đổi quà.")
+        return
+    end
+
+    -- 🧧 Thực hiện đổi
+    claimMultiple(chest3, 3)
+    claimMultiple(chest2, 2)
+    claimMultiple(chest1, 1)
+
+    -- ⏳ Chờ chút rồi về map chính
     task.wait(9)
     teleportToLocation()
 end
@@ -441,23 +469,16 @@ end
 local function startAutoClaim()
     task.spawn(function()
         while true do
-            task.wait(15 * 60)
-            local points     = getTimeTrialPoints()
-            local currentDay = os.date("*t").wday
-            local currentHour= os.date("*t").hour
-
-            local canClaim = false
-            if currentDay == 7 and currentHour < 23 then
-                canClaim = (points >= 1000)
-            else
-                canClaim = (points >= 5000)
-            end
-
-            if canClaim then
-                warn("🔔 Auto-claim: đủ điểm & điều kiện → thực thi claimReward().")
+            task.wait(15 * 60)  -- 15 phút
+            local pts = getTimeTrialPoints()
+            local d   = os.date("*t")
+            local can = (d.wday == 7 and d.hour < 23 and pts >= 1000)
+                      or (d.wday ~= 7 and pts >= 5000)
+            if can then
+                warn("🔔 Auto-claim: đủ điều kiện → chạy claimReward().")
                 claimReward()
             else
-                warn(("ℹ️ Auto-claim: chưa đủ điều kiện (Points = %d)."):format(points))
+                warn("ℹ️ Auto-claim: chưa đủ điều kiện (Points="..pts..").")
             end
         end
     end)
