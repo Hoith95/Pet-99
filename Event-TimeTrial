@@ -179,18 +179,30 @@ local function waitUntilReachMaxZone()
 	end
 end
 
--- ⏱️ Monitor 12 phút không tăng lượt/TotalRuns với giới hạn teleport out
+-- ⏱️ Monitor 12 phút không tăng lượt/TotalRuns từ GUI Label
 local function startMonitor12Min()
     monitor12minThread = task.spawn(function()
+        -- Hàm tách số từ label
+        local function extractPoints()
+            local text = pointsLabel.Text -- "Điểm: 12345"
+            return tonumber(text:match("(%d+)$")) or 0
+        end
+
+        local function extractRunsUsed()
+            local text = timeTrialLabel.Text -- "Time Trial: 6/10"
+            local runsLeft = tonumber(text:match("(%d+)/10")) or 0
+            return 10 - runsLeft
+        end
+
         -- Lấy giá trị khởi đầu và bộ đếm
-        local lastUsed       = getRunsUsed()
-        local lastTotal      = getTotalRuns()
+        local lastUsed       = extractRunsUsed()
+        local lastPoints     = extractPoints()
         local timer          = 0
         local teleportCount  = 0  -- đếm số lần teleport out mà không đổi lượt
 
         while true do
             -- Nếu đã đủ 10 lượt thì dừng hẳn
-            if getRunsUsed() >= 10 then
+            if extractRunsUsed() >= 10 then
                 warn("🛑 Đã đủ 10 lượt → dừng theo dõi 12 phút.")
                 return
             end
@@ -199,18 +211,18 @@ local function startMonitor12Min()
             timer += 10
 
             -- Lấy giá trị hiện tại
-            local curUsed  = getRunsUsed()
-            local curTotal = getTotalRuns()
+            local curUsed   = extractRunsUsed()
+            local curPoints = extractPoints()
 
             -- Kiểm tra điều kiện reset hoặc teleport out
-            local runChanged    = (curUsed ~= lastUsed or curTotal ~= lastTotal)
+            local runChanged    = (curUsed ~= lastUsed or curPoints ~= lastPoints)
             local teleportEvent = (endFlag or lagFlag)
 
             if runChanged or teleportEvent then
                 -- Nếu chỉ teleport out mà không đổi lượt, tăng bộ đếm
                 if teleportEvent and not runChanged then
                     teleportCount += 1
-                    warn("⚠️ Teleport out mà không đổi lượt lần " .. teleportCount)
+                    warn("⚠️ Teleport out mà không đổi lượt/điểm lần " .. teleportCount)
                     if teleportCount > 6 then
                         player:Kick("⏰ Quá 6 lần teleport out mà không đổi lượt → nghi ngờ treo máy.")
                         return
@@ -218,19 +230,19 @@ local function startMonitor12Min()
                 end
 
                 -- Cập nhật lại mốc, reset bộ đếm thời gian và flags
-                lastUsed      = curUsed
-                lastTotal     = curTotal
-                timer         = 0
+                lastUsed   = curUsed
+                lastPoints = curPoints
+                timer      = 0
                 -- giữ nguyên teleportCount
-                endFlag       = false
-                lagFlag       = false
+                endFlag    = false
+                lagFlag    = false
 
                 warn("🔄 Reset monitor12min do có hoạt động trong Time Trial.")
             end
 
             -- Nếu vượt quá 720 giây (12 phút) mà không reset thì kick
             if timer >= 720 then
-                player:Kick("⏰ 12 phút không đổi lượt hoặc TotalRuns → nghi ngờ treo máy.")
+                player:Kick("⏰ 12 phút không đổi lượt hoặc điểm → nghi ngờ treo máy.")
                 return
             end
         end
