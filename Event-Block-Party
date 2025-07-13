@@ -1,0 +1,89 @@
+-- 📌 Script tự động mua tiles quanh PlotIndex liên tục (vòng lặp vô hạn)
+
+local plotIndex = 1       -- Thay PlotIndex tùy ý
+local radiusMax = 6       -- Bán kính tối đa
+local delayPerTile = 0.05  -- Delay giữa mỗi lần mua tile
+local delayPerCycle = 0.05   -- Delay sau mỗi vòng mua tất cả offsets
+
+-- Lấy reference tới RemoteFunction
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local PlotsInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Plots_Invoke")
+
+-- Tạo danh sách offsets (dx, dy) trong vùng vuông bán kính radiusMax
+local offsets = {}
+for dx = -radiusMax, radiusMax do
+    for dy = -radiusMax, radiusMax do
+        if not (dx == 0 and dy == 0) then  -- loại bỏ chính giữa
+            table.insert(offsets, {dx, dy})
+        end
+    end
+end
+
+-- Hàm mua 1 tile tại offset (dx, dy)
+local function purchaseTile(dx, dy)
+    local args = {
+        [1] = plotIndex,
+        [2] = "PurchaseTile",
+        [3] = dx,
+        [4] = dy,
+    }
+    local success, result = pcall(function()
+        return PlotsInvoke:InvokeServer(unpack(args))
+    end)
+    if success then
+        warn(string.format("✅ [Plot %d] Mua tile tại offset (%d, %d) thành công", plotIndex, dx, dy))
+    else
+        warn(string.format("❌ [Plot %d] Lỗi mua tile (%d, %d): %s", plotIndex, dx, dy, tostring(result)))
+    end
+end
+
+-- Vòng lặp vô hạn
+while true do
+    warn(string.format("▶️ Bắt đầu vòng mua tiles quanh PlotIndex = %d, bán kính = %d", plotIndex, radiusMax))
+    for _, offset in ipairs(offsets) do
+        purchaseTile(offset[1], offset[2])
+        task.wait(delayPerTile)
+    end
+    warn(string.format("🎉 Hoàn tất một vòng mua %d ô. Đợi %d giây trước vòng tiếp theo", #offsets, delayPerCycle))
+    task.wait(delayPerCycle)
+end
+
+------------------------
+-- 📌 Tham chiếu tới RemoteFunction
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TilesInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Tiles_Invoke")
+
+-- 📌 Tham chiếu tới folder chứa các tile
+local tilesFolder = workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
+
+-- ⚙️ Cấu hình
+local delayPerTile  = 0.05   -- thời gian chờ giữa mỗi claim
+local delayPerCycle = 0.05     -- thời gian chờ giữa mỗi vòng lặp
+
+-- 🔄 Vòng lặp vô hạn
+while true do
+    warn("▶️ Bắt đầu vòng Claim cho tất cả Tiles")
+    for _, tileInstance in ipairs(tilesFolder:GetChildren()) do
+        local tileId = tileInstance.Name
+        local args = {
+            [1] = tileId,
+            [2] = "Claim",
+        }
+
+        local ok, res = pcall(function()
+            return TilesInvoke:InvokeServer(unpack(args))
+        end)
+
+        if ok then
+            warn(("✅ Đã Claim Tile %s"):format(tileId))
+        else
+            warn(("❌ Lỗi Claim Tile %s: %s"):format(tileId, tostring(res)))
+        end
+
+        task.wait(delayPerTile)
+    end
+
+    warn(("🎉 Đã claim xong %d Tiles. Đợi %d giây trước khi lặp lại…"):format(#tilesFolder:GetChildren(), delayPerCycle))
+    task.wait(delayPerCycle)
+end
+
