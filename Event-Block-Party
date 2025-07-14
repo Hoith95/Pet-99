@@ -370,14 +370,14 @@ local function startGuiUpdater()
 		updateLabelSize(coinsLabel)
 
 		local giftCount = getItemAmount("Tropical Gift")
-		giftLabel.Text = tostring(giftCount) .. "x TROPICAL GIFT"
+		giftLabel.Text = tostring(giftCount) .. "TROPICAL GIFT"
 		updateLabelSize(giftLabel)
 
 		task.wait(1)
 	end
 end
 
----------------- 🧩 LUỒNG 10: Teleport một lần khi đủ 100 tile ----------------
+---------------- 🧩 LUỒNG 10: Teleport một lần khi đủ 50 tile ----------------
 local function startPreEggTeleport()
 	local player = Players.LocalPlayer
 
