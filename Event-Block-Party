@@ -282,7 +282,39 @@ local function startAutoRebirth()
 	end
 end
 
----------------- 🧩 LUỒNG 8: GUI Coins / Tiles / Chance ----------------
+---------------- 🧩 LUỒNG 8: VAR theo dõi tiles không đổi trong 12 phút ----------------
+local function startTileChangeMonitor()
+	local player = Players.LocalPlayer
+	local initialCount = getTotalTileCount()
+	local previousCount = initialCount
+	local lastChangedTick = tick()
+
+	while true do
+		local currentCount = getTotalTileCount()
+
+		if currentCount ~= previousCount then
+			lastChangedTick = tick()
+			previousCount = currentCount
+			print("🔁 Số lượng tiles đã thay đổi, reset bộ đếm thời gian.")
+		else
+			local timeSinceLastChange = tick() - lastChangedTick
+			if timeSinceLastChange >= 720 then -- 12 phút = 720 giây
+				if initialCount == 169 and currentCount == 169 then
+					print("✅ Tiles vẫn 169 sau 12 phút → dừng luồng kiểm tra.")
+					break
+				else
+					warn("⚠️ Tiles không thay đổi trong 12 phút.")
+					player:Kick("⏰ 12 phút không đổi tiles → nghi ngờ treo máy.")
+					break
+				end
+			end
+		end
+
+		task.wait(30)
+	end
+end
+
+---------------- 🧩 LUỒNG 9: GUI Coins / Tiles / Chance ----------------
 local function startGuiUpdater()
 	local player = Players.LocalPlayer
 	local playerGui = player:WaitForChild("PlayerGui")
@@ -354,4 +386,5 @@ task.spawn(startAutoPlantDiamond)
 task.spawn(startAutoHatchHuge)
 task.spawn(startAutoGiftBag)
 task.spawn(startAutoRebirth)
+task.spawn(startTileChangeMonitor)
 task.spawn(startGuiUpdater)
