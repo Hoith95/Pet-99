@@ -1,3 +1,9 @@
+local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+hrp.CFrame = workspace.__THINGS.Instances.BlockParty.Teleports.Enter.CFrame + Vector3.new(0, 5, 0)
+task.wait(9)
+hrp.CFrame = CFrame.new(16543, 2275, -21618)
+task.wait(9)
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
