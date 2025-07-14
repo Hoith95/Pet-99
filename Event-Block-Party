@@ -329,8 +329,8 @@ local function startGuiUpdater()
 	end
 
 	local coinsLabel = createLabel("CoinsLabel", UDim2.new(0, 0, 0, -10), Vector2.new(0, 0), Color3.fromRGB(255, 165, 0))
-	local tilesLabel = createLabel("TilesLabel", UDim2.new(0.5, 30, 0, -10), Vector2.new(0.5, 0), Color3.fromRGB(0, 128, 0))
-	local chanceLabel = createLabel("ChanceLabel", UDim2.new(1, -30, 0, -10), Vector2.new(1, 0), Color3.fromRGB(0, 102, 204))
+	local tilesLabel = createLabel("ChanceLabel", UDim2.new(0.5, 0, 0, -10), Vector2.new(0.5, 0), Color3.fromRGB(0, 128, 0))
+	local chanceLabel = createLabel("TilesLabel", UDim2.new(1, 0, 0, -10), Vector2.new(1, 0), Color3.fromRGB(0, 102, 204))
 
 	while true do
 		coinsLabel.Text = "Coins: " .. tostring(getCurrencyAmount("BlockPartyCoins"))
