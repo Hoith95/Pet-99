@@ -1,0 +1,70 @@
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local hrp = character:WaitForChild("HumanoidRootPart")
+
+local customEggsFolder = workspace:WaitForChild("__THINGS"):WaitForChild("CustomEggs")
+local hugeEggs = {} -- 📝 Danh sách các egg có ContentText là "1x HUGE CHANCE!"
+
+-- 📌 Hàm kiểm tra tên mã hoá (dài >= 32 ký tự, toàn ký tự hex)
+local function isEncodedName(name)
+	return #name >= 32 and name:match("^[a-f0-9]+$") ~= nil
+end
+
+-- 📌 Hàm teleport tới vị trí object
+local function teleportTo(object)
+	if object:IsA("Model") and object:FindFirstChild("PrimaryPart") then
+		hrp.CFrame = object.PrimaryPart.CFrame + Vector3.new(0, 5, 0)
+	elseif object:IsA("BasePart") then
+		hrp.CFrame = object.CFrame + Vector3.new(0, 5, 0)
+	end
+end
+
+-- 📌 Danh sách các egg hợp lệ (tên mã hóa)
+local encodedEggs = {}
+for _, egg in pairs(customEggsFolder:GetChildren()) do
+	if isEncodedName(egg.Name) then
+		table.insert(encodedEggs, egg)
+	end
+end
+
+-- 📌 Duyệt từng egg, teleport và kiểm tra ContentText
+for _, egg in ipairs(encodedEggs) do
+	print("📦 Kiểm tra egg:", egg.Name)
+
+	-- Teleport tới egg
+	teleportTo(egg)
+	task.wait(0.7)
+
+	-- Bọc kiểm tra bằng pcall để an toàn
+	local success, result = pcall(function()
+		local titleLabel = egg:FindFirstChild("Egg")
+			and egg.Egg:FindFirstChild("EggInfo")
+			and egg.Egg.EggInfo:FindFirstChild("Frame")
+			and egg.Egg.EggInfo.Frame:FindFirstChild("Title")
+		if titleLabel and titleLabel:IsA("TextLabel") then
+			local content = titleLabel.ContentText
+			if content == "1x HUGE CHANCE!" then
+				table.insert(hugeEggs, {
+					Name = egg.Name,
+					Position = egg:GetPrimaryPartCFrame().Position,
+					Text = content
+				})
+				print("✅ Tìm thấy:", egg.Name, "|", content)
+			end
+		end
+	end)
+
+	if not success then
+		warn("⚠️ Lỗi kiểm tra egg:", egg.Name, result)
+	end
+
+	task.wait(0.5) -- Delay nhẹ giữa các lần teleport
+end
+
+-- 📋 In kết quả cuối cùng
+print("\n===== 🧾 KẾT QUẢ CUỐI CÙNG =====")
+for i, data in ipairs(hugeEggs) do
+	print(string.format("%d. 🥚 Egg: %s | ContentText: %s | Vị trí: (%.1f, %.1f, %.1f)",
+		i, data.Name, data.Text, data.Position.X, data.Position.Y, data.Position.Z))
+end
