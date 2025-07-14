@@ -1,21 +1,20 @@
-local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
 local Network = ReplicatedStorage:WaitForChild("Network")
-
 local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local hrp = character:WaitForChild("HumanoidRootPart")
 
-local customEggsFolder = workspace:WaitForChild("__THINGS"):WaitForChild("CustomEggs")
+-- ⚙️ Cấu hình
+_G.AutoOpen = true
+local EggAmount = 89         -- Số lượng mở mỗi lần
+local HatchDelay = 0.01      -- Delay giữa mỗi lần mở
 
 -- 📌 Tắt animation mở trứng
 local Eggs = player:WaitForChild("PlayerScripts"):WaitForChild("Scripts"):WaitForChild("Game"):WaitForChild("Egg Opening Frontend")
 getsenv(Eggs).PlayEggAnimation = function() return end
 
--- ✅ Tùy chỉnh số lượng trứng muốn mở mỗi lần
-local EggAmount = 89 -- Sửa thành 1, 3 hoặc 8 tùy ý
-
--- 📌 Lọc tên mã hóa
+-- 📌 Kiểm tra tên mã hóa
 local function isEncodedName(name)
 	return #name >= 32 and name:match("^[a-f0-9]+$") ~= nil
 end
@@ -26,7 +25,7 @@ local function extractChanceValue(text)
 	return tonumber(num or "0")
 end
 
--- 📌 Teleport tới part của egg
+-- 📌 Teleport tới egg
 local function teleportToEgg(egg)
 	local part = egg:FindFirstChildWhichIsA("BasePart", true)
 	if part then
@@ -36,8 +35,9 @@ local function teleportToEgg(egg)
 	return false
 end
 
--- 🔍 Tìm egg mã hóa có giá trị HUGE CHANCE cao nhất (tele trước khi đọc GUI)
+-- 📌 Tìm egg mã hóa có HUGE CHANCE cao nhất
 local function findBestHugeChanceEgg()
+	local customEggsFolder = workspace:WaitForChild("__THINGS"):WaitForChild("CustomEggs")
 	local bestEgg = nil
 	local bestValue = -1
 
@@ -65,31 +65,28 @@ local function findBestHugeChanceEgg()
 	return bestEgg
 end
 
--- 🎯 Bắt đầu
+-- 🥇 Tìm egg tốt nhất trước khi bắt đầu auto open
 local bestEgg = findBestHugeChanceEgg()
 if not bestEgg then
 	warn("❌ Không tìm thấy egg nào có HUGE CHANCE!")
 	return
 end
 
-print("🎯 Tìm thấy egg tốt nhất:", bestEgg.Name)
+print("🎯 Sẽ mở egg:", bestEgg.Name)
 
--- 🌀 Auto mở egg liên tục
-_G.AutoOpen = true
-
+-- 📌 Vòng mở egg duy nhất (duy trì logic cũ)
 task.spawn(function()
-	while _G.AutoOpen and task.wait() do
+	while _G.AutoOpen do
 		local args = {
 			[1] = bestEgg.Name,
 			[2] = EggAmount
 		}
-
 		local success, result = pcall(function()
 			return Network.CustomEggs_Hatch:InvokeServer(unpack(args))
 		end)
-
 		if not success then
-			warn("⚠️ Lỗi khi Hatch:", result)
+			warn("⚠️ Lỗi khi mở egg:", result)
 		end
+		task.wait(HatchDelay)
 	end
 end)
