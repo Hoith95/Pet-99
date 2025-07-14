@@ -5,6 +5,8 @@ local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local hrp = character:WaitForChild("HumanoidRootPart")
 
+local customEggsFolder = workspace:WaitForChild("__THINGS"):WaitForChild("CustomEggs")
+
 -- ⚙️ Cấu hình
 _G.AutoOpen = true
 local EggAmount = 89         -- Số lượng mở mỗi lần
@@ -37,7 +39,6 @@ end
 
 -- 📌 Tìm egg mã hóa có HUGE CHANCE cao nhất
 local function findBestHugeChanceEgg()
-	local customEggsFolder = workspace:WaitForChild("__THINGS"):WaitForChild("CustomEggs")
 	local bestEgg = nil
 	local bestValue = -1
 
@@ -54,12 +55,18 @@ local function findBestHugeChanceEgg()
 			if titleLabel and titleLabel:IsA("TextLabel") then
 				local content = titleLabel.ContentText
 				local value = extractChanceValue(content)
+
+				print(string.format("🔍 %s: %sx", egg.Name, value))
 				if value > bestValue then
 					bestEgg = egg
 					bestValue = value
 				end
 			end
 		end
+	end
+
+	if bestEgg then
+		print("🎯 Egg tốt nhất:", bestEgg.Name, "- HUGE CHANCE:", bestValue.."x")
 	end
 
 	return bestEgg
@@ -72,9 +79,7 @@ if not bestEgg then
 	return
 end
 
-print("🎯 Sẽ mở egg:", bestEgg.Name)
-
--- 📌 Vòng mở egg duy nhất (duy trì logic cũ)
+-- 📌 Mở egg liên tục
 task.spawn(function()
 	while _G.AutoOpen do
 		local args = {
