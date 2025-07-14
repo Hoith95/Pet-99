@@ -103,7 +103,7 @@ end
 
 -- Auto hatch nearest egg
 local function GetMaxEggsToHatch()
-	return 3
+	return 89
 end
 
 _G.AutoOpen = true
