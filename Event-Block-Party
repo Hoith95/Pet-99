@@ -302,7 +302,7 @@ local function startTileChangeMonitor()
 	end
 end
 
----------------- 🧩 LUỒNG 9: GUI Coins / Tiles / Chance ----------------
+---------------- 🧩 LUỒNG 9: GUI Coins / Tiles / Tropical Gift ----------------
 local function startGuiUpdater()
 	local player = Players.LocalPlayer
 	local playerGui = player:WaitForChild("PlayerGui")
@@ -312,6 +312,16 @@ local function startGuiUpdater()
 		local Inventory = SaveModule.Get().Inventory
 		for _, v in pairs(Inventory.Currency) do 
 			if v.id == currencyId then
+				return v._am
+			end
+		end
+		return 0
+	end
+
+	local function getItemAmount(itemId)
+		local Inventory = SaveModule.Get().Inventory
+		for _, v in pairs(Inventory.Misc) do 
+			if v.id == itemId then
 				return v._am
 			end
 		end
@@ -348,19 +358,19 @@ local function startGuiUpdater()
 		label.Size = UDim2.new(0, label.TextBounds.X + 20, 0, 38)
 	end
 
-	local tilesLabel  = createLabel("TilesLabel",  UDim2.new(0, 0, 0, -10), Vector2.new(0, 0), Color3.fromRGB(0, 128, 0))
-	local coinsLabel  = createLabel("CoinsLabel",  UDim2.new(0.5, 0, 0, -10), Vector2.new(0.5, 0), Color3.fromRGB(255, 165, 0))
-	local chanceLabel = createLabel("ChanceLabel", UDim2.new(1, 0, 0, -10), Vector2.new(1, 0), Color3.fromRGB(0, 102, 204))
+	local tilesLabel   = createLabel("TilesLabel",   UDim2.new(0, 0, 0, -10),   Vector2.new(0, 0),     Color3.fromRGB(0, 128, 0))
+	local coinsLabel   = createLabel("CoinsLabel",   UDim2.new(0.5, 0, 0, -10), Vector2.new(0.5, 0),   Color3.fromRGB(255, 165, 0))
+	local giftLabel    = createLabel("GiftLabel",    UDim2.new(1, 0, 0, -10),   Vector2.new(1, 0),     Color3.fromRGB(128, 0, 128))
 
 	while true do
-		tilesLabel.Text  = "TILES: " .. tostring(getTotalTileCount())
+		tilesLabel.Text = "TILES: " .. tostring(getTotalTileCount())
 		updateLabelSize(tilesLabel)
 
-		coinsLabel.Text  = "COINS: " .. tostring(getCurrencyAmount("BlockPartyCoins"))
+		coinsLabel.Text = "COINS: " .. tostring(getCurrencyAmount("BlockPartyCoins"))
 		updateLabelSize(coinsLabel)
 
-		chanceLabel.Text = tostring(currentChance) .. "x HUGE CHANCE"
-		updateLabelSize(chanceLabel)
+		giftLabel.Text = "TROPICAL GIFT: " .. tostring(getItemAmount("TropicalGift"))
+		updateLabelSize(giftLabel)
 
 		task.wait(1)
 	end
