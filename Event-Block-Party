@@ -113,6 +113,7 @@ local function startAutoHatchHuge()
 	local player = Players.LocalPlayer
 	local Network = ReplicatedStorage:WaitForChild("Network")
 	local customEggsFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("CustomEggs")
+	task.wait(20)
 
 	-- ⚙️ Tắt animation mở trứng
 	local successEggs, Eggs = pcall(function()
