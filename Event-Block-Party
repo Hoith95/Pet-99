@@ -208,11 +208,11 @@ local function startAutoHatchHuge()
 				teleportToEgg(currentEgg)
 				task.wait(0.5)
 
-				-- 🕔 Cập nhật egg mỗi 30 phút
+				-- 🕔 Cập nhật egg mỗi 10 phút
 				task.spawn(function()
 					while true do
-						task.wait(1800)
-						print("🔁 [30 phút] Kiểm tra cập nhật egg...")
+						task.wait(600)
+						print("🔁 [10 phút] Kiểm tra cập nhật egg...")
 
 						updateKnownEggs()
 
@@ -221,7 +221,7 @@ local function startAutoHatchHuge()
 							currentEgg = bestEgg
 							currentValue = bestValue
 							currentChance = bestValue
-							print("🔁 [30 phút] Đổi sang egg mới:", currentEgg.Name, "Chance:", currentChance)
+							print("🔁 [10 phút] Đổi sang egg mới:", currentEgg.Name, "Chance:", currentChance)
 							teleportToEgg(currentEgg)
 						end
 					end
