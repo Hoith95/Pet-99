@@ -252,7 +252,21 @@ local function startAutoHatchHuge()
 	end
 end
 
----------------- 🧩 LUỒNG 6: Auto Rebirth ----------------
+---------------- 🧩 LUỒNG 6: Auto SummerGiftBag2025 ----------------
+local function startAutoGiftBag()
+	local Network = ReplicatedStorage:WaitForChild("Network")
+	while true do
+		if getTotalTileCount() >= 50 then
+			local args = { [1] = 10 }
+			pcall(function()
+				Network.SummerGiftBag2025Machine_Activate:InvokeServer(unpack(args))
+			end)
+		end
+		task.wait(1)
+	end
+end
+
+---------------- 🧩 LUỒNG 7: Auto Rebirth ----------------
 local function startAutoRebirth()
 	local threshold = 169
 	local PlotsInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Plots_Invoke")
@@ -268,7 +282,7 @@ local function startAutoRebirth()
 	end
 end
 
----------------- 🧩 LUỒNG 7: GUI Coins / Tiles / Chance ----------------
+---------------- 🧩 LUỒNG 8: GUI Coins / Tiles / Chance ----------------
 local function startGuiUpdater()
 	local player = Players.LocalPlayer
 	local playerGui = player:WaitForChild("PlayerGui")
