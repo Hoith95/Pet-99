@@ -175,21 +175,25 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TilesInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Tiles_Invoke")
 local tilesFolder = workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
 
--- 🔁 Vòng lặp vô hạn, mỗi 30s lặp lại 1 lần
+-- 🔁 Vòng lặp vô hạn, mỗi 30s lặp lại
 while true do
     print("🔄 Bắt đầu vòng xử lý mới...")
 
     for _, tile in ipairs(tilesFolder:GetChildren()) do
         if tile:IsA("Model") or tile:IsA("Folder") then
-            if tile:FindFirstChild("Plant1") then
-                local tileId = tile.Name
-                print("🌿 Đang xử lý tile:", tileId)
+            local tileId = tile.Name
+            local hasPlant1 = tile:FindFirstChild("Plant1")
+            local hasDiamond = tile:FindFirstChild("Diamond")
 
-                for i = 1, 6 do
+            -- 📦 Claim từ 1 → 6 nếu có Plant1
+            if hasPlant1 then
+                print("🌿 Tile có Plant1:", tileId)
+
+                for i = 0, 6 do
                     local args = {
                         [1] = tileId,
                         [2] = "Claim",
-                        [3] = i,
+                        [3] = i
                     }
 
                     local success, result = pcall(function()
@@ -197,17 +201,39 @@ while true do
                     end)
 
                     if success then
-                        print(("✅ Claim %s với giá trị %d thành công"):format(tileId, i))
+                        print(("✅ Claim %s (i=%d) thành công"):format(tileId, i))
                     else
-                        warn(("❌ Lỗi Claim %s với giá trị %d: %s"):format(tileId, i, tostring(result)))
+                        warn(("❌ Lỗi Claim %s (i=%d): %s"):format(tileId, i, tostring(result)))
                     end
 
                     task.wait(0.1)
                 end
             end
+
+            -- 💎 ClaimDiamond nếu có Diamond
+            if hasDiamond then
+                print("💎 Tile có Diamond:", tileId)
+
+                local args = {
+                    [1] = tileId,
+                    [2] = "Tile_ClaimDiamonds"
+                }
+
+                local success, result = pcall(function()
+                    return TilesInvoke:InvokeServer(unpack(args))
+                end)
+
+                if success then
+                    print(("✅ ClaimDiamond %s thành công"):format(tileId))
+                else
+                    warn(("❌ Lỗi ClaimDiamond %s: %s"):format(tileId, tostring(result)))
+                end
+
+                task.wait(0.1)
+            end
         end
     end
 
-    print("🎉 Đã xử lý xong tất cả Tiles có Plant1! Đợi 30 giây trước khi lặp lại...")
+    print("⏳ Đợi 30 giây trước khi bắt đầu vòng tiếp theo...\n")
     task.wait(30)
 end
