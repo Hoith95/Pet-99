@@ -7,11 +7,6 @@ local hrp = character:WaitForChild("HumanoidRootPart")
 
 local customEggsFolder = workspace:WaitForChild("__THINGS"):WaitForChild("CustomEggs")
 
--- ⚙️ Cấu hình
-_G.AutoOpen = true
-local EggAmount = 50         -- Số lượng mở mỗi lần
-local HatchDelay = 1      -- Delay giữa mỗi lần mở
-
 -- 📌 Tắt animation mở trứng
 local Eggs = player:WaitForChild("PlayerScripts"):WaitForChild("Scripts"):WaitForChild("Game"):WaitForChild("Egg Opening Frontend")
 getsenv(Eggs).PlayEggAnimation = function() return end
@@ -79,19 +74,12 @@ if not bestEgg then
 	return
 end
 
--- 📌 Mở egg liên tục
-task.spawn(function()
-	while _G.AutoOpen do
-		local args = {
-			[1] = bestEgg.Name,
-			[2] = EggAmount
-		}
-		local success, result = pcall(function()
-			return Network.CustomEggs_Hatch:InvokeServer(unpack(args))
-		end)
-		if not success then
-			warn("⚠️ Lỗi khi mở egg:", result)
-		end
-		task.wait(HatchDelay)
-	end
-end)
+-- 📌 Mở egg liên tục (vòng lặp cứng)
+while true do
+	local args = {
+		[1] = bestEgg.Name,
+		[2] = 89
+	}
+	game:GetService("ReplicatedStorage").Network.CustomEggs_Hatch:InvokeServer(unpack(args))
+	wait(0.01)
+end
