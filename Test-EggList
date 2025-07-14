@@ -1,0 +1,72 @@
+-- ⚙️ Dịch vụ
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+
+local player = Players.LocalPlayer
+local customEggsFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("CustomEggs")
+
+-- 🧭 Teleport vào Block Party
+local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+if hrp then
+	hrp.CFrame = Workspace.__THINGS.Instances.BlockParty.Teleports.Enter.CFrame + Vector3.new(0, 5, 0)
+	print("🚪 Teleport vào Block Party thành công.")
+	task.wait(5)
+end
+
+-- ✅ Kiểm tra tên mã hóa
+local function isEncodedName(name)
+	return #name >= 32 and name:match("^[a-f0-9]+$") ~= nil
+end
+
+-- 🔍 Rút trích HUGE CHANCE
+local function extractChanceValue(text)
+	local num = text:match("(%d+)x%s+HUGE%s+CHANCE!?")
+	return tonumber(num or "0")
+end
+
+-- 📍 Tele tới egg (dùng Part trực tiếp)
+local function teleportToEgg(egg)
+	local character = player.Character or player.CharacterAdded:Wait()
+	local hrp = character:FindFirstChild("HumanoidRootPart")
+	local part = egg:FindFirstChild("Part")
+	if hrp and part then
+		hrp.CFrame = part.CFrame + Vector3.new(0, 5, 0)
+		print("📦 Teleported to egg:", egg.Name)
+	end
+end
+
+-- 🏆 Tìm egg HUGE CHANCE cao nhất
+local function findBestHugeChanceEgg(eggList)
+	local bestEgg, bestValue = nil, -1
+	for _, egg in ipairs(eggList) do
+		local label = egg:FindFirstChild("Egg")
+			and egg.Egg:FindFirstChild("EggInfo")
+			and egg.Egg.EggInfo:FindFirstChild("Frame")
+			and egg.Egg.EggInfo.Frame:FindFirstChild("Title")
+		if label and label:IsA("TextLabel") then
+			local value = extractChanceValue(label.ContentText)
+			if value > bestValue then
+				bestEgg, bestValue = egg, value
+			end
+		end
+	end
+	return bestEgg, bestValue
+end
+
+-- 🧠 Danh sách egg đã biết
+local knownEggs = {}
+for _, egg in ipairs(customEggsFolder:GetChildren()) do
+	if isEncodedName(egg.Name) then
+		table.insert(knownEggs, egg)
+	end
+end
+
+-- 🥇 Tìm và teleport tới egg tốt nhất
+local bestEgg, bestChance = findBestHugeChanceEgg(knownEggs)
+if bestEgg then
+	print("🥚 Egg tốt nhất:", bestEgg.Name, "→", bestChance .. "x HUGE CHANCE")
+	teleportToEgg(bestEgg)
+else
+	warn("❌ Không tìm thấy egg phù hợp.")
+end
