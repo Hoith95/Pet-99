@@ -184,61 +184,67 @@ local function startMonitor12Min()
     monitor12minThread = task.spawn(function()
         -- Hàm tách số từ label
         local function extractPoints()
-            return tonumber(pointsLabel.Text:match("(%d+)$")) or 0
+            local text = pointsLabel.Text -- "Điểm: 12345"
+            return tonumber(text:match("(%d+)$")) or 0
         end
+
         local function extractRunsUsed()
-            local runsLeft = tonumber(timeTrialLabel.Text:match("(%d+)/10")) or 0
+            local text = timeTrialLabel.Text -- "Time Trial: 6/10"
+            local runsLeft = tonumber(text:match("(%d+)/10")) or 0
             return 10 - runsLeft
         end
 
-        -- Khởi tạo trạng thái
-        local lastPoints     = extractPoints()
+        -- Lấy giá trị khởi đầu và bộ đếm
         local lastUsed       = extractRunsUsed()
-        local lastActivityTime = os.clock()   -- mốc thời gian "hoạt động" cuối cùng
-        local teleportCount  = 0
-
-        -- Callback khi có sự kiện “hoạt động” (lượt mới hoặc điểm mới)
-        local function onActivity()
-            lastPoints       = extractPoints()
-            lastUsed         = extractRunsUsed()
-            lastActivityTime = os.clock()
-            -- reset cờ endFlag và lagFlag nếu muốn
-            endFlag, lagFlag = false, false
-            warn("🔄 Monitor12Min: có hoạt động mới, reset thời gian.")
-        end
+        local lastPoints     = extractPoints()
+        local timer          = 0
+        local teleportCount  = 0  -- đếm số lần teleport out mà không đổi lượt
 
         while true do
-            -- Dừng hẳn khi đủ 10 lượt
+            -- Nếu đã đủ 10 lượt thì dừng hẳn
             if extractRunsUsed() >= 10 then
-                warn("🛑 Đã đủ 10 lượt → dừng monitor12Min.")
+                warn("🛑 Đã đủ 10 lượt → dừng theo dõi 12 phút.")
                 return
             end
 
-            -- Kiểm tra teleport out (lag hoặc endFlag) trước, tăng count
-            if (endFlag or lagFlag) then
-                teleportCount += 1
-                warn("⚠️ Teleport out mà không đổi lượt/điểm lần "..teleportCount)
-                if teleportCount > 7 then
-                    player:Kick("⏰ Quá 7 lần teleport out mà không đổi lượt → nghi ngờ treo máy.")
-                    return
-                end
-                onActivity()  -- coi như 1 “hoạt động” để reset timer
-            end
+            task.wait(10)
+            timer += 10
 
-            -- Kiểm tra xem lượt hoặc điểm có thay đổi so với lần trước không
-            local curPoints = extractPoints()
+            -- Lấy giá trị hiện tại
             local curUsed   = extractRunsUsed()
-            if curPoints ~= lastPoints or curUsed ~= lastUsed then
-                onActivity()
+            local curPoints = extractPoints()
+
+            -- Kiểm tra điều kiện reset hoặc teleport out
+            local runChanged    = (curUsed ~= lastUsed or curPoints ~= lastPoints)
+            local teleportEvent = (endFlag or lagFlag)
+
+            if runChanged or teleportEvent then
+                -- Nếu chỉ teleport out mà không đổi lượt, tăng bộ đếm
+                if teleportEvent and not runChanged then
+                    teleportCount += 1
+                    warn("⚠️ Teleport out mà không đổi lượt/điểm lần " .. teleportCount)
+                    if teleportCount > 7 then
+                        player:Kick("⏰ Quá 7 lần teleport out mà không đổi lượt → nghi ngờ treo máy.")
+                        return
+                    end
+                end
+
+                -- Cập nhật lại mốc, reset bộ đếm thời gian và flags
+                lastUsed   = curUsed
+                lastPoints = curPoints
+                timer      = 0
+                -- giữ nguyên teleportCount
+                endFlag    = false
+                lagFlag    = false
+
+                warn("🔄 Reset monitor12min do có hoạt động trong Time Trial.")
             end
 
-            -- Nếu quá 12 phút không có bất kỳ hoạt động nào → kick
-            if os.clock() - lastActivityTime >= 720 then
+            -- Nếu vượt quá 720 giây (12 phút) mà không reset thì kick
+            if timer >= 720 then
                 player:Kick("⏰ 12 phút không đổi lượt hoặc điểm → nghi ngờ treo máy.")
                 return
             end
-
-            task.wait(5)  -- kiểm tra mỗi 5 giây, không cần quá sát
         end
     end)
 end
