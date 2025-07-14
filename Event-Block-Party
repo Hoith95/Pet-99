@@ -225,14 +225,14 @@ local function startAutoHatchHuge()
 
 					local args = {currentEgg.Name, 83}
 					local success, err = pcall(function()
-						return Network.CustomEggs_Hatch:InvokeServer(unpack(args))
+					Network.CustomEggs_Hatch:InvokeServer(unpack(args))
 					end)
 					if not success then
 						warn("[AutoHatch] Error:", err)
 					else
 						print("🎁 Đã mở egg:", currentEgg.Name)
-						-- 🧮 Ghi nhận hatch
-						_G.hatchCounter = (_G.hatchCounter or 0) + 1
+
+
 					end
 
 					task.wait(0)
@@ -305,7 +305,7 @@ local function startTileChangeMonitor()
 	end
 end
 
----------------- 🧩 LUỒNG 9: GUI Coins / Tiles / Tropical Gift / Hatch Rate ----------------
+---------------- 🧩 LUỒNG 9: GUI Coins / Tiles / Tropical Gift ----------------
 local function startGuiUpdater()
 	local player = Players.LocalPlayer
 	local playerGui = player:WaitForChild("PlayerGui")
@@ -361,26 +361,9 @@ local function startGuiUpdater()
 		label.Size = UDim2.new(0, label.TextBounds.X + 20, 0, 38)
 	end
 
-	local tilesLabel     = createLabel("TilesLabel",     UDim2.new(0, 0, 0, -10),    Vector2.new(0, 0),     Color3.fromRGB(0, 128, 0))
-	local coinsLabel     = createLabel("CoinsLabel",     UDim2.new(0.5, 0, 0, -10),  Vector2.new(0.5, 0),   Color3.fromRGB(255, 165, 0))
-	local hatchRateLabel = createLabel("HatchRateLabel", UDim2.new(0.5, 0, 0, 35),   Vector2.new(0.5, 0),   Color3.fromRGB(30, 144, 255))
-	local giftLabel      = createLabel("GiftLabel",      UDim2.new(1, 0, 0, -10),    Vector2.new(1, 0),     Color3.fromRGB(128, 0, 128))
-
-	-- 🧮 Biến đếm số lượng trứng đã nở
-	_G.hatchCounter = 0
-	local lastCount = 0
-
-	-- Tính eggs/min mỗi 60s
-	task.spawn(function()
-		while true do
-			task.wait(60)
-			local rate = _G.hatchCounter - lastCount
-			lastCount = _G.hatchCounter
-			hatchRateLabel.Text = tostring(rate) .. " eggs/min"
-			updateLabelSize(hatchRateLabel)
-		end
-	end)
-
+	local tilesLabel   = createLabel("TilesLabel",   UDim2.new(0, 0, 0, -10),   Vector2.new(0, 0),     Color3.fromRGB(0, 128, 0))
+	local coinsLabel   = createLabel("CoinsLabel",   UDim2.new(0.5, 0, 0, -10), Vector2.new(0.5, 0),   Color3.fromRGB(255, 165, 0))
+	local giftLabel    = createLabel("GiftLabel",    UDim2.new(1, 0, 0, -10),   Vector2.new(1, 0),     Color3.fromRGB(128, 0, 128))
 	while true do
 		tilesLabel.Text = "TILES: " .. tostring(getTotalTileCount())
 		updateLabelSize(tilesLabel)
@@ -388,10 +371,28 @@ local function startGuiUpdater()
 		coinsLabel.Text = "COINS: " .. tostring(getCurrencyAmount("BlockPartyCoins"))
 		updateLabelSize(coinsLabel)
 
-		giftLabel.Text = tostring(getItemAmount("Tropical Gift")) .. " TROPICAL GIFT"
+		local giftCount = getItemAmount("Tropical Gift")
+		giftLabel.Text = tostring(giftCount) .. "TROPICAL GIFT"
 		updateLabelSize(giftLabel)
 
 		task.wait(1)
+	end
+end
+
+---------------- 🧩 LUỒNG 10: Teleport một lần khi đủ 50 tile ----------------
+local function startPreEggTeleport()
+	local player = Players.LocalPlayer
+
+	-- Chờ đến khi đủ 50 tile
+	while getTotalTileCount() < 50 do
+		task.wait(1)
+	end
+
+	-- 🧭 Di chuyển tới vị trí trước khi bắt đầu xử lý egg
+	local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	if hrp then
+		hrp.CFrame = CFrame.new(16543, 2275, -21618)
+		task.wait(5)
 	end
 end
 
