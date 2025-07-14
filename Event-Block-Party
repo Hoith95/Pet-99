@@ -183,14 +183,8 @@ local function startAutoHatchHuge()
 
 	-- 🔁 Vòng chính
 -- 🔁 Vòng chính
-while true do
-	if getTotalTileCount() >= tileThreshold then
-			local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-			if hrp then
-				hrp.CFrame = CFrame.new(16543, 2275, -21618)
-				task.wait(5)
-			end
-
+	while true do
+		if getTotalTileCount() >= tileThreshold then
 			updateKnownEggs()
 
 			for _, egg in ipairs(knownEggs) do
@@ -383,6 +377,26 @@ local function startGuiUpdater()
 	end
 end
 
+---------------- 🧩 LUỒNG 10: Teleport một lần khi đủ 100 tile ----------------
+local function startPreEggTeleport()
+	local player = Players.LocalPlayer
+
+	-- Chờ đến khi đủ 100 tile
+	while getTotalTileCount() < 100 do
+		task.wait(1)
+	end
+
+	-- 🧭 Di chuyển tới vị trí trước khi bắt đầu xử lý egg
+	local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	if hrp then
+		hrp.Anchored = true
+		hrp.CFrame = CFrame.new(16543, 2275, -21618)
+		task.wait(0.2)
+		hrp.Anchored = false
+		task.wait(5)
+	end
+end
+
 ---------------- 🚀 Kích hoạt tất cả luồng song song ----------------
 task.spawn(startAutoPurchase)
 task.spawn(startClaimAndOpen)
@@ -393,3 +407,4 @@ task.spawn(startAutoGiftBag)
 task.spawn(startAutoRebirth)
 task.spawn(startTileChangeMonitor)
 task.spawn(startGuiUpdater)
+task.spawn(startPreEggTeleport)
