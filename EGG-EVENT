@@ -32,30 +32,25 @@ local function teleportToEgg(egg)
 	return false
 end
 
--- 📌 Tìm egg mã hóa có HUGE CHANCE cao nhất
-local function findBestHugeChanceEgg()
+-- 📌 Tìm egg có HUGE CHANCE cao nhất từ list
+local function findBestHugeChanceEgg(eggList)
 	local bestEgg = nil
 	local bestValue = -1
 
-	for _, egg in ipairs(customEggsFolder:GetChildren()) do
-		if isEncodedName(egg.Name) then
-			teleportToEgg(egg)
-			task.wait(0.3)
+	for _, egg in ipairs(eggList) do
+		local titleLabel = egg:FindFirstChild("Egg")
+			and egg.Egg:FindFirstChild("EggInfo")
+			and egg.Egg.EggInfo:FindFirstChild("Frame")
+			and egg.Egg.EggInfo.Frame:FindFirstChild("Title")
 
-			local titleLabel = egg:FindFirstChild("Egg")
-				and egg.Egg:FindFirstChild("EggInfo")
-				and egg.Egg.EggInfo:FindFirstChild("Frame")
-				and egg.Egg.EggInfo.Frame:FindFirstChild("Title")
+		if titleLabel and titleLabel:IsA("TextLabel") then
+			local content = titleLabel.ContentText
+			local value = extractChanceValue(content)
 
-			if titleLabel and titleLabel:IsA("TextLabel") then
-				local content = titleLabel.ContentText
-				local value = extractChanceValue(content)
-
-				print(string.format("🔍 %s: %sx", egg.Name, value))
-				if value > bestValue then
-					bestEgg = egg
-					bestValue = value
-				end
+			print(string.format("🔍 %s: %sx", egg.Name, value))
+			if value > bestValue then
+				bestEgg = egg
+				bestValue = value
 			end
 		end
 	end
@@ -64,22 +59,78 @@ local function findBestHugeChanceEgg()
 		print("🎯 Egg tốt nhất:", bestEgg.Name, "- HUGE CHANCE:", bestValue.."x")
 	end
 
-	return bestEgg
+	return bestEgg, bestValue
 end
 
--- 🥇 Tìm egg tốt nhất trước khi bắt đầu auto open
-local bestEgg = findBestHugeChanceEgg()
-if not bestEgg then
+-- 📌 Danh sách egg đã biết
+local knownEggs = {}
+
+-- 📌 Thêm các egg mã hóa mới vào knownEggs (không trùng)
+local function updateKnownEggs()
+	for _, egg in ipairs(customEggsFolder:GetChildren()) do
+		if isEncodedName(egg.Name) then
+			local alreadyExists = false
+			for _, e in ipairs(knownEggs) do
+				if e == egg then
+					alreadyExists = true
+					break
+				end
+			end
+			if not alreadyExists then
+				table.insert(knownEggs, egg)
+			end
+		end
+	end
+end
+
+-- 🚀 Khởi động lần đầu
+updateKnownEggs()
+for _, egg in ipairs(knownEggs) do
+	teleportToEgg(egg)
+	task.wait(0.2)
+end
+
+local currentEgg, currentValue = findBestHugeChanceEgg(knownEggs)
+if not currentEgg then
 	warn("❌ Không tìm thấy egg nào có HUGE CHANCE!")
 	return
 end
 
--- 📌 Mở egg liên tục (vòng lặp cứng)
+teleportToEgg(currentEgg)
+task.wait(0.5)
+
+-- ⏲️ Kiểm tra lại egg mỗi 300s
+task.spawn(function()
+	while true do
+		task.wait(300) -- 5 phút
+
+		print("🔁 Đang cập nhật egg mới...")
+		updateKnownEggs()
+
+		print("🧭 Tele lần lượt tới từng egg để load thông tin...")
+		for _, egg in ipairs(knownEggs) do
+			teleportToEgg(egg)
+			task.wait(0.3)
+		end
+
+		local bestEgg, bestValue = findBestHugeChanceEgg(knownEggs)
+		if bestEgg and bestValue > currentValue then
+			print("🌟 Đã phát hiện egg tốt hơn:", bestEgg.Name, bestValue.."x")
+			currentEgg = bestEgg
+			currentValue = bestValue
+			teleportToEgg(currentEgg)
+			task.wait(0.5)
+		else
+			print("✅ Vẫn tiếp tục mở egg hiện tại:", currentEgg.Name, currentValue.."x")
+		end
+	end
+end)
+
+-- 🔁 Mở egg liên tục
 while true do
 	local args = {
-		[1] = bestEgg.Name,
+		[1] = currentEgg.Name,
 		[2] = 89
 	}
 	game:GetService("ReplicatedStorage").Network.CustomEggs_Hatch:InvokeServer(unpack(args))
-	wait(0.01)
 end
