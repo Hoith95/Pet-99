@@ -572,6 +572,9 @@ task.spawn(function()
        		warn("🔄 Khởi động Auto-Claim sau 10/10 lượt.")
 		task.wait(68)
 		startAutoClaim()
+		task.wait(38)
+		_G.VAR_START_BLOCK_PARTY = true
+		_G.VAR_STOP_BLOCK_PARTY = nil
 
 		warn("⏳ Theo dõi reset DailyRuns...")
 		while getRunsUsed() >= 10 do task.wait(60) end
@@ -579,5 +582,7 @@ task.spawn(function()
 		warn("🔁 DailyRuns reset → tiếp tục farm.")
 		if monitor12minThread then pcall(task.cancel, monitor12minThread) monitor12minThread = nil end
 		startMonitor12Min()
+		_G.VAR_STOP_BLOCK_PARTY = true
+		_G.VAR_START_BLOCK_PARTY = nil
 	end
 end)
