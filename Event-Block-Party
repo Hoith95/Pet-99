@@ -320,7 +320,7 @@ local function startGuiUpdater()
 
 	local function getItemAmount(itemId)
 		local Inventory = SaveModule.Get().Inventory
-		for _, v in pairs(Inventory.Misc) do 
+		for _, v in pairs(Inventory.Lootbox) do
 			if v.id == itemId then
 				return v._am
 			end
@@ -369,7 +369,7 @@ local function startGuiUpdater()
 		coinsLabel.Text = "COINS: " .. tostring(getCurrencyAmount("BlockPartyCoins"))
 		updateLabelSize(coinsLabel)
 
-		giftLabel.Text = "TROPICAL GIFT: " .. tostring(getItemAmount("TropicalGift"))
+		giftLabel.Text = "TROPICAL GIFT: " .. tostring(getItemAmount("Tropical Gift"))
 		updateLabelSize(giftLabel)
 
 		task.wait(1)
