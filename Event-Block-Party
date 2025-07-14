@@ -2,8 +2,6 @@
 local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
 hrp.CFrame = workspace.__THINGS.Instances.BlockParty.Teleports.Enter.CFrame + Vector3.new(0, 5, 0)
 task.wait(9)
-hrp.CFrame = CFrame.new(16543, 2275, -21618)
-task.wait(9)
 
 -- ⚙️ Dịch vụ & Folder
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -184,8 +182,15 @@ local function startAutoHatchHuge()
 	end
 
 	-- 🔁 Vòng chính
-	while true do
-		if getTotalTileCount() >= tileThreshold then
+-- 🔁 Vòng chính
+while true do
+	if getTotalTileCount() >= tileThreshold then
+			local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+			if hrp then
+				hrp.CFrame = CFrame.new(16543, 2275, -21618)
+				task.wait(5)
+			end
+
 			updateKnownEggs()
 
 			for _, egg in ipairs(knownEggs) do
