@@ -7,13 +7,8 @@ wait(68)
 end)
 
 spawn(function()
-wait(68)
+wait(38)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial"))()
-end)
-
-spawn(function()
-wait(68)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Block-Party"))()
 end)
 
 spawn(function()
@@ -36,7 +31,7 @@ end)
 getgenv().GLOOTBOXES = {"Locked Hype Egg"}
 
 getgenv().GPROGRESS_MODE = "Hybrid" -- Hatch
-getgenv().GGFX_MODE = 1
+getgenv().GGFX_MODE = 3
 getgenv().GRANK_TO = 99
 getgenv().GZONE_TO = 299
 getgenv().GREBIRTH_TO = 99
