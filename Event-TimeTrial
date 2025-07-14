@@ -218,8 +218,8 @@ local function startMonitor12Min()
             if (endFlag or lagFlag) then
                 teleportCount += 1
                 warn("⚠️ Teleport out mà không đổi lượt/điểm lần "..teleportCount)
-                if teleportCount > 6 then
-                    player:Kick("⏰ Quá 6 lần teleport out mà không đổi lượt → nghi ngờ treo máy.")
+                if teleportCount > 7 then
+                    player:Kick("⏰ Quá 7 lần teleport out mà không đổi lượt → nghi ngờ treo máy.")
                     return
                 end
                 onActivity()  -- coi như 1 “hoạt động” để reset timer
