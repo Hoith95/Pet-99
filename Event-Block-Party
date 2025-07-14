@@ -56,34 +56,115 @@ local TilesInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Tile
 -- 📌 Tham chiếu tới folder chứa các tile
 local tilesFolder = workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
 
--- ⚙️ Cấu hình
-local delayPerTile  = 0.05   -- thời gian chờ giữa mỗi claim
-local delayPerCycle = 0.05     -- thời gian chờ giữa mỗi vòng lặp
+-- ⚙️ Cấu hình thời gian chờ
+local delayPerTile  = 0.05   -- thời gian chờ giữa mỗi tile
+local delayPerCycle = 0.05   -- thời gian chờ giữa mỗi vòng lặp
 
--- 🔄 Vòng lặp vô hạn
-while true do
-    warn("▶️ Bắt đầu vòng Claim cho tất cả Tiles")
-    for _, tileInstance in ipairs(tilesFolder:GetChildren()) do
+-- ⚙️ Hàm xử lý từng tile: gửi 2 lệnh Claim + Open
+local function claimAndOpenTiles()
+    warn("▶️ Bắt đầu vòng Claim + Open cho tất cả Tiles")
+
+    local tileList = tilesFolder:GetChildren()
+
+    for _, tileInstance in ipairs(tileList) do
         local tileId = tileInstance.Name
-        local args = {
-            [1] = tileId,
-            [2] = "Claim",
-        }
 
-        local ok, res = pcall(function()
-            return TilesInvoke:InvokeServer(unpack(args))
+        -- 🔹 Gửi lệnh Claim
+        local success1, result1 = pcall(function()
+            return TilesInvoke:InvokeServer(tileId, "Claim")
         end)
 
-        if ok then
-            warn(("✅ Đã Claim Tile %s"):format(tileId))
+        if success1 then
+            warn(("✅ Claimed Tile %s"):format(tileId))
         else
-            warn(("❌ Lỗi Claim Tile %s: %s"):format(tileId, tostring(res)))
+            warn(("❌ Lỗi Claim Tile %s: %s"):format(tileId, tostring(result1)))
+        end
+
+        -- 🔹 Gửi lệnh Open
+        local success2, result2 = pcall(function()
+            return TilesInvoke:InvokeServer(tileId, "Open")
+        end)
+
+        if success2 then
+            warn(("🔓 Opened Tile %s"):format(tileId))
+        else
+            warn(("❌ Lỗi Open Tile %s: %s"):format(tileId, tostring(result2)))
         end
 
         task.wait(delayPerTile)
     end
 
-    warn(("🎉 Đã claim xong %d Tiles. Đợi %d giây trước khi lặp lại…"):format(#tilesFolder:GetChildren(), delayPerCycle))
+    warn(("🎉 Đã xử lý %d Tiles. Đợi %g giây trước vòng tiếp theo..."):format(#tileList, delayPerCycle))
     task.wait(delayPerCycle)
 end
 
+-- 🔁 Vòng lặp vô hạn: mỗi vòng sẽ Claim + Open tất cả
+while true do
+    claimAndOpenTiles()
+end
+
+
+-----------------------------
+-- 📌 Tham chiếu RemoteEvent
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TilesFire = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Tiles_Fire")
+
+-- 📌 Tham chiếu folder chứa các tile
+local tilesFolder = workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
+
+-- ⚙️ Cấu hình
+local delayPerTile = 0.05   -- thời gian chờ giữa mỗi tile
+local delayPerCycle = 0.05  -- thời gian chờ giữa mỗi vòng lặp
+
+-- ⚙️ Hàm xử lý từng tile: gửi cả 2 lệnh liên tiếp
+local function claimAndUnlockTiles()
+    warn("▶️ Bắt đầu vòng Claim + Unlock cho tất cả Tiles")
+
+    local tileList = tilesFolder:GetChildren()
+
+    for _, tileInstance in ipairs(tileList) do
+        local tileId = tileInstance.Name
+
+        -- Gửi lệnh Claimed
+        local args1 = {
+            [1] = tileId,
+            [2] = "Claimed",
+        }
+
+        local success1, err1 = pcall(function()
+            TilesFire:FireServer(unpack(args1))
+        end)
+
+        if success1 then
+            warn(("✅ Claimed Tile %s"):format(tileId))
+        else
+            warn(("❌ Lỗi Claimed Tile %s: %s"):format(tileId, tostring(err1)))
+        end
+
+        -- Gửi lệnh Unlock
+        local args2 = {
+            [1] = tileId,
+            [2] = "Unlock",
+        }
+
+        local success2, err2 = pcall(function()
+            TilesFire:FireServer(unpack(args2))
+        end)
+
+        if success2 then
+            warn(("🔓 Unlock Tile %s"):format(tileId))
+        else
+            warn(("❌ Lỗi Unlock Tile %s: %s"):format(tileId, tostring(err2)))
+        end
+
+        task.wait(delayPerTile)
+    end
+
+    warn(("🎉 Đã xử lý %d Tiles. Đợi %g giây trước vòng tiếp theo..."):format(#tileList, delayPerCycle))
+    task.wait(delayPerCycle)
+end
+
+-- 🔁 Vòng lặp vô hạn
+while true do
+    claimAndUnlockTiles()
+end
