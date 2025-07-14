@@ -1,220 +1,149 @@
--- 📌 Script tự động mua tiles quanh PlotIndex liên tục (vòng lặp vô hạn)
-
-local plotIndex = 1       -- Thay PlotIndex tùy ý
-local radiusMax = 6       -- Bán kính tối đa
-local delayPerTile = 0.05  -- Delay giữa mỗi lần mua tile
-local delayPerCycle = 0.05   -- Delay sau mỗi vòng mua tất cả offsets
-
--- Lấy reference tới RemoteFunction
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local PlotsInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Plots_Invoke")
+local Workspace = game:GetService("Workspace")
 
--- Tạo danh sách offsets (dx, dy) trong vùng vuông bán kính radiusMax
-local offsets = {}
-for dx = -radiusMax, radiusMax do
-    for dy = -radiusMax, radiusMax do
-        if not (dx == 0 and dy == 0) then  -- loại bỏ chính giữa
-            table.insert(offsets, {dx, dy})
-        end
-    end
+-- Tách riêng các hàm không log, dùng task.spawn để chạy song song
+
+---------------- 🧩 LUỒNG 1: Mua tiles quanh Plot ----------------
+
+local function startAutoPurchase()
+	local plotIndex = 1
+	local radiusMax = 6
+	local delayPerTile = 0.05
+	local delayPerCycle = 0.05
+
+	local PlotsInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Plots_Invoke")
+
+	local offsets = {}
+	for dx = -radiusMax, radiusMax do
+		for dy = -radiusMax, radiusMax do
+			if not (dx == 0 and dy == 0) then
+				table.insert(offsets, {dx, dy})
+			end
+		end
+	end
+
+	local function purchaseTile(dx, dy)
+		local args = {
+			[1] = plotIndex,
+			[2] = "PurchaseTile",
+			[3] = dx,
+			[4] = dy,
+		}
+		pcall(function()
+			PlotsInvoke:InvokeServer(unpack(args))
+		end)
+	end
+
+	while true do
+		for _, offset in ipairs(offsets) do
+			purchaseTile(offset[1], offset[2])
+			task.wait(delayPerTile)
+		end
+		task.wait(delayPerCycle)
+	end
 end
 
--- Hàm mua 1 tile tại offset (dx, dy)
-local function purchaseTile(dx, dy)
-    local args = {
-        [1] = plotIndex,
-        [2] = "PurchaseTile",
-        [3] = dx,
-        [4] = dy,
-    }
-    local success, result = pcall(function()
-        return PlotsInvoke:InvokeServer(unpack(args))
-    end)
-    if success then
-        warn(string.format("✅ [Plot %d] Mua tile tại offset (%d, %d) thành công", plotIndex, dx, dy))
-    else
-        warn(string.format("❌ [Plot %d] Lỗi mua tile (%d, %d): %s", plotIndex, dx, dy, tostring(result)))
-    end
+---------------- 🧩 LUỒNG 2: Claim + Open bằng Tiles_Invoke ----------------
+
+local function startClaimAndOpen()
+	local TilesInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Tiles_Invoke")
+	local tilesFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
+	local delayPerTile  = 0.05
+	local delayPerCycle = 0.05
+
+	local function claimAndOpenTiles()
+		local tileList = tilesFolder:GetChildren()
+		for _, tileInstance in ipairs(tileList) do
+			local tileId = tileInstance.Name
+
+			pcall(function()
+				TilesInvoke:InvokeServer(tileId, "Claim")
+			end)
+			pcall(function()
+				TilesInvoke:InvokeServer(tileId, "Open")
+			end)
+			task.wait(delayPerTile)
+		end
+		task.wait(delayPerCycle)
+	end
+
+	while true do
+		claimAndOpenTiles()
+	end
 end
 
--- Vòng lặp vô hạn
-while true do
-    warn(string.format("▶️ Bắt đầu vòng mua tiles quanh PlotIndex = %d, bán kính = %d", plotIndex, radiusMax))
-    for _, offset in ipairs(offsets) do
-        purchaseTile(offset[1], offset[2])
-        task.wait(delayPerTile)
-    end
-    warn(string.format("🎉 Hoàn tất một vòng mua %d ô. Đợi %d giây trước vòng tiếp theo", #offsets, delayPerCycle))
-    task.wait(delayPerCycle)
+---------------- 🧩 LUỒNG 3: Claim + Unlock bằng Tiles_Fire ----------------
+
+local function startClaimAndUnlock()
+	local TilesFire = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Tiles_Fire")
+	local tilesFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
+	local delayPerTile = 0.05
+	local delayPerCycle = 0.05
+
+	local function claimAndUnlockTiles()
+		local tileList = tilesFolder:GetChildren()
+		for _, tileInstance in ipairs(tileList) do
+			local tileId = tileInstance.Name
+
+			local args1 = {tileId, "Claimed"}
+			pcall(function()
+				TilesFire:FireServer(unpack(args1))
+			end)
+
+			local args2 = {tileId, "Unlock"}
+			pcall(function()
+				TilesFire:FireServer(unpack(args2))
+			end)
+
+			task.wait(delayPerTile)
+		end
+		task.wait(delayPerCycle)
+	end
+
+	while true do
+		claimAndUnlockTiles()
+	end
 end
 
-------------------------
--- 📌 Tham chiếu tới RemoteFunction
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local TilesInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Tiles_Invoke")
+---------------- 🧩 LUỒNG 4: Auto Claim Plant + Diamond ----------------
 
--- 📌 Tham chiếu tới folder chứa các tile
-local tilesFolder = workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
+local function startAutoPlantDiamond()
+	local TilesInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Tiles_Invoke")
+	local tilesFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
 
--- ⚙️ Cấu hình thời gian chờ
-local delayPerTile  = 0.05   -- thời gian chờ giữa mỗi tile
-local delayPerCycle = 0.05   -- thời gian chờ giữa mỗi vòng lặp
+	while true do
+		for _, tile in ipairs(tilesFolder:GetChildren()) do
+			if tile:IsA("Model") or tile:IsA("Folder") then
+				local tileId = tile.Name
+				local hasPlant1 = tile:FindFirstChild("Plant1")
+				local hasDiamond = tile:FindFirstChild("Diamond")
 
--- ⚙️ Hàm xử lý từng tile: gửi 2 lệnh Claim + Open
-local function claimAndOpenTiles()
-    warn("▶️ Bắt đầu vòng Claim + Open cho tất cả Tiles")
+				if hasPlant1 then
+					for i = 0, 6 do
+						local args = {tileId, "Claim", i}
+						pcall(function()
+							TilesInvoke:InvokeServer(unpack(args))
+						end)
+						task.wait(0.1)
+					end
+				end
 
-    local tileList = tilesFolder:GetChildren()
-
-    for _, tileInstance in ipairs(tileList) do
-        local tileId = tileInstance.Name
-
-        -- 🔹 Gửi lệnh Claim
-        local success1, result1 = pcall(function()
-            return TilesInvoke:InvokeServer(tileId, "Claim")
-        end)
-
-        if success1 then
-            warn(("✅ Claimed Tile %s"):format(tileId))
-        else
-            warn(("❌ Lỗi Claim Tile %s: %s"):format(tileId, tostring(result1)))
-        end
-
-        -- 🔹 Gửi lệnh Open
-        local success2, result2 = pcall(function()
-            return TilesInvoke:InvokeServer(tileId, "Open")
-        end)
-
-        if success2 then
-            warn(("🔓 Opened Tile %s"):format(tileId))
-        else
-            warn(("❌ Lỗi Open Tile %s: %s"):format(tileId, tostring(result2)))
-        end
-
-        task.wait(delayPerTile)
-    end
-
-    warn(("🎉 Đã xử lý %d Tiles. Đợi %g giây trước vòng tiếp theo..."):format(#tileList, delayPerCycle))
-    task.wait(delayPerCycle)
+				if hasDiamond then
+					local args = {tileId, "Tile_ClaimDiamonds"}
+					pcall(function()
+						TilesInvoke:InvokeServer(unpack(args))
+					end)
+					task.wait(0.1)
+				end
+			end
+		end
+		task.wait(30)
+	end
 end
 
--- 🔁 Vòng lặp vô hạn: mỗi vòng sẽ Claim + Open tất cả
-while true do
-    claimAndOpenTiles()
-end
+---------------- 🔁 Kích hoạt cả 4 luồng ----------------
 
-
------------------------------
--- 📌 Tham chiếu RemoteEvent
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local TilesFire = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Tiles_Fire")
-
--- 📌 Tham chiếu folder chứa các tile
-local tilesFolder = workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
-
--- ⚙️ Cấu hình
-local delayPerTile = 0.05   -- thời gian chờ giữa mỗi tile
-local delayPerCycle = 0.05  -- thời gian chờ giữa mỗi vòng lặp
-
--- ⚙️ Hàm xử lý từng tile: gửi cả 2 lệnh liên tiếp
-local function claimAndUnlockTiles()
-    warn("▶️ Bắt đầu vòng Claim + Unlock cho tất cả Tiles")
-
-    local tileList = tilesFolder:GetChildren()
-
-    for _, tileInstance in ipairs(tileList) do
-        local tileId = tileInstance.Name
-
-        -- Gửi lệnh Claimed
-        local args1 = {
-            [1] = tileId,
-            [2] = "Claimed",
-        }
-
-        local success1, err1 = pcall(function()
-            TilesFire:FireServer(unpack(args1))
-        end)
-
-        if success1 then
-            warn(("✅ Claimed Tile %s"):format(tileId))
-        else
-            warn(("❌ Lỗi Claimed Tile %s: %s"):format(tileId, tostring(err1)))
-        end
-
-        -- Gửi lệnh Unlock
-        local args2 = {
-            [1] = tileId,
-            [2] = "Unlock",
-        }
-
-        local success2, err2 = pcall(function()
-            TilesFire:FireServer(unpack(args2))
-        end)
-
-        if success2 then
-            warn(("🔓 Unlock Tile %s"):format(tileId))
-        else
-            warn(("❌ Lỗi Unlock Tile %s: %s"):format(tileId, tostring(err2)))
-        end
-
-        task.wait(delayPerTile)
-    end
-
-    warn(("🎉 Đã xử lý %d Tiles. Đợi %g giây trước vòng tiếp theo..."):format(#tileList, delayPerCycle))
-    task.wait(delayPerCycle)
-end
-
--- 🔁 Vòng lặp vô hạn
-while true do
-    claimAndUnlockTiles()
-end
-
------------
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local TilesInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Tiles_Invoke")
-local tilesFolder = workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
-
--- 🔁 Vòng lặp vô hạn, mỗi 30s lặp lại
-while true do
-    for _, tile in ipairs(tilesFolder:GetChildren()) do
-        if tile:IsA("Model") or tile:IsA("Folder") then
-            local tileId = tile.Name
-            local hasPlant1 = tile:FindFirstChild("Plant1")
-            local hasDiamond = tile:FindFirstChild("Diamond")
-
-            -- 📦 Nếu có Plant1: gửi Claim từ 0 → 6
-            if hasPlant1 then
-                for i = 0, 6 do
-                    local args = {
-                        [1] = tileId,
-                        [2] = "Claim",
-                        [3] = i
-                    }
-
-                    pcall(function()
-                        TilesInvoke:InvokeServer(unpack(args))
-                    end)
-
-                    task.wait(0.1)
-                end
-            end
-
-            -- 💎 Nếu có Diamond: gửi Tile_ClaimDiamonds
-            if hasDiamond then
-                local args = {
-                    [1] = tileId,
-                    [2] = "Tile_ClaimDiamonds"
-                }
-
-                pcall(function()
-                    TilesInvoke:InvokeServer(unpack(args))
-                end)
-
-                task.wait(0.1)
-            end
-        end
-    end
-
-    task.wait(30)
-end
-
+task.spawn(startAutoPurchase)
+task.spawn(startClaimAndOpen)
+task.spawn(startClaimAndUnlock)
+task.spawn(startAutoPlantDiamond)
