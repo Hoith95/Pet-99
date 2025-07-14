@@ -109,7 +109,7 @@ end
 local currentChance = 0
 
 local function startAutoHatchHuge()
-	local tileThreshold = 100
+	local tileThreshold = 50
 	local player = Players.LocalPlayer
 	local Network = ReplicatedStorage:WaitForChild("Network")
 	local customEggsFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("CustomEggs")
@@ -207,7 +207,7 @@ local function startAutoHatchHuge()
 						end
 					end
 
-					local args = {currentEgg.Name, 89}
+					local args = {currentEgg.Name, 83}
 					local success, err = pcall(function()
 						Network.CustomEggs_Hatch:InvokeServer(unpack(args))
 					end)
@@ -354,8 +354,8 @@ end
 local function startPreEggTeleport()
 	local player = Players.LocalPlayer
 
-	-- Chờ đến khi đủ 100 tile
-	while getTotalTileCount() < 100 do
+	-- Chờ đến khi đủ 50 tile
+	while getTotalTileCount() < 50 do
 		task.wait(1)
 	end
 
