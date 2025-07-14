@@ -147,24 +147,6 @@ local function startAutoHatchHuge()
 		end
 	end
 
-	-- 🏆 Tìm egg HUGE CHANCE cao nhất
-	local function findBestHugeChanceEgg(eggList)
-		local bestEgg, bestValue = nil, -1
-		for _, egg in ipairs(eggList) do
-			local label = egg:FindFirstChild("Egg")
-				and egg.Egg:FindFirstChild("EggInfo")
-				and egg.Egg.EggInfo:FindFirstChild("Frame")
-				and egg.Egg.EggInfo.Frame:FindFirstChild("Title")
-			if label and label:IsA("TextLabel") then
-				local value = extractChanceValue(label.ContentText)
-				if value > bestValue then
-					bestEgg, bestValue = egg, value
-				end
-			end
-		end
-		return bestEgg, bestValue
-	end
-
 	-- 🧠 Danh sách egg đã biết
 	local knownEggs = {}
 	local function updateKnownEggs()
@@ -192,9 +174,9 @@ local function startAutoHatchHuge()
 				task.wait(0.2)
 			end
 
-			local currentEgg, currentValue = findBestHugeChanceEgg(knownEggs)
+			local currentEgg = knownEggs[1]
+			currentChance = 0
 			if currentEgg then
-				currentChance = currentValue
 				teleportToEgg(currentEgg)
 				task.wait(0.5)
 
@@ -206,15 +188,6 @@ local function startAutoHatchHuge()
 						for _, egg in ipairs(knownEggs) do
 							teleportToEgg(egg)
 							task.wait(1)
-						end
-						local bestEgg, bestValue = findBestHugeChanceEgg(knownEggs)
-						if bestEgg and bestValue > currentValue then
-							currentEgg = bestEgg
-							currentValue = bestValue
-							currentChance = currentValue
-							print("🔄 Đổi sang egg mới:", currentEgg.Name, "Chance:", currentChance)
-							task.wait(1)
-							teleportToEgg(currentEgg)
 						end
 					end
 				end)
