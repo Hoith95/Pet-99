@@ -9,7 +9,7 @@ local customEggsFolder = workspace:WaitForChild("__THINGS"):WaitForChild("Custom
 
 -- ⚙️ Cấu hình
 _G.AutoOpen = true
-local EggAmount = 83         -- Số lượng mở mỗi lần
+local EggAmount = 89         -- Số lượng mở mỗi lần
 local HatchDelay = 0.1      -- Delay giữa mỗi lần mở
 
 -- 📌 Tắt animation mở trứng
