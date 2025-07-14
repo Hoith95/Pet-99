@@ -8,83 +8,99 @@ local hrp = character:WaitForChild("HumanoidRootPart")
 
 local customEggsFolder = workspace:WaitForChild("__THINGS"):WaitForChild("CustomEggs")
 
--- 📌 Lọc tên mã hóa
+-- 📌 Hàm lọc tên mã hóa
 local function isEncodedName(name)
 	return #name >= 32 and name:match("^[a-f0-9]+$") ~= nil
 end
 
--- 🚀 Teleport đến BasePart đầu tiên
-local function teleportToEgg(egg)
-	local part = egg:FindFirstChildWhichIsA("BasePart", true)
-	if part then
-		hrp.CFrame = part.CFrame + Vector3.new(0, 5, 0)
-		return true
-	else
-		warn("❌ Không tìm thấy part:", egg.Name)
-		return false
-	end
-end
-
--- 🔍 Trích xuất số x từ "1x HUGE CHANCE!", "100x HUGE CHANCE!"...
+-- 📌 Tách số từ "1x HUGE CHANCE!", "100x HUGE CHANCE!"...
 local function extractChanceValue(text)
 	local num = text:match("(%d+)x%s+HUGE%s+CHANCE!?")
 	return tonumber(num or "0")
 end
 
--- 🧠 Bước 1: Tìm tất cả egg mã hóa có "HUGE CHANCE!"
-local hugeEggs = {}
+-- 🔍 Tìm egg có HUGE CHANCE! cao nhất
+local function findBestHugeChanceEgg()
+	local bestEgg = nil
+	local bestValue = -1
 
-for _, egg in ipairs(customEggsFolder:GetChildren()) do
-	if isEncodedName(egg.Name) then
-		local titleLabel = egg:FindFirstChild("Egg")
-			and egg.Egg:FindFirstChild("EggInfo")
-			and egg.Egg.EggInfo:FindFirstChild("Frame")
-			and egg.Egg.EggInfo.Frame:FindFirstChild("Title")
+	for _, egg in ipairs(customEggsFolder:GetChildren()) do
+		if isEncodedName(egg.Name) then
+			local titleLabel = egg:FindFirstChild("Egg")
+				and egg.Egg:FindFirstChild("EggInfo")
+				and egg.Egg.EggInfo:FindFirstChild("Frame")
+				and egg.Egg.EggInfo.Frame:FindFirstChild("Title")
 
-		if titleLabel and titleLabel:IsA("TextLabel") then
-			local content = titleLabel.ContentText
-			local chanceValue = extractChanceValue(content)
-			if chanceValue > 0 then
-				table.insert(hugeEggs, {
-					Name = egg.Name,
-					Text = content,
-					Value = chanceValue,
-					Ref = egg
-				})
+			if titleLabel and titleLabel:IsA("TextLabel") then
+				local content = titleLabel.ContentText
+				local value = extractChanceValue(content)
+				if value > bestValue then
+					bestEgg = egg
+					bestValue = value
+				end
 			end
 		end
 	end
+
+	return bestEgg
 end
 
--- 🥇 Bước 2: Chọn quả trứng có giá trị lớn nhất
-table.sort(hugeEggs, function(a, b)
-	return a.Value > b.Value
-end)
-
-if #hugeEggs == 0 then
+-- 🥇 Xác định quả trứng có HUGE CHANCE cao nhất
+local bestEgg = findBestHugeChanceEgg()
+if not bestEgg then
 	warn("❌ Không tìm thấy egg nào có HUGE CHANCE!")
 	return
 end
 
-local bestEgg = hugeEggs[1]
-print("🎯 Egg giá trị cao nhất:", bestEgg.Name, "|", bestEgg.Text)
+print("🎯 Chọn egg:", bestEgg.Name)
 
--- 🚀 Teleport đến quả trứng đó
-teleportToEgg(bestEgg.Ref)
+-- 📦 Đổi tên egg cần dùng cho find_nearest_egg()
+_G.TargetEggName = bestEgg.Name
 
--- 🥚 Bắt đầu tự động mở egg
-_G.AutoOpen = true
+-- 📌 GIỮ NGUYÊN CODE SAU
 
-local function GetMaxEggsToHatch()
-	return 3 -- Bạn có thể thay bằng 1, 3 hoặc logic tự động
+-- Find nearest egg
+local function find_nearest_egg()
+	local nearestEgg, nearestDistance = nil, math.huge
+	local eggsFolder = workspace.__THINGS:FindFirstChild("CustomEggs")
+	if not eggsFolder then return nil end
+
+	local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	if not hrp then return nil end
+
+	for _, eggModel in ipairs(eggsFolder:GetChildren()) do
+		if eggModel:IsA("Model") and eggModel.Name == _G.TargetEggName then
+			local success, cframe = pcall(function()
+				return eggModel:GetBoundingBox()
+			end)
+			if success and cframe then
+				local dist = (hrp.Position - cframe.Position).Magnitude
+				if dist < nearestDistance then
+					nearestEgg = eggModel.Name
+					nearestDistance = dist
+				end
+			end
+		end
+	end
+
+	return nearestEgg
 end
 
+-- Auto hatch nearest egg
+local function GetMaxEggsToHatch()
+	return 89 -- Bạn có thể thay bằng 1 hoặc hàm tính tự động
+end
+
+_G.AutoOpen = true
 task.spawn(function()
 	while task.wait() do
 		if _G.AutoOpen then
-			pcall(function()
-				Network:Invoke("CustomEggs_Hatch", bestEgg.Name, GetMaxEggsToHatch())
-			end)
+			local nearestEgg = find_nearest_egg()
+			if nearestEgg then
+				pcall(function()
+					Network:Invoke("CustomEggs_Hatch", nearestEgg, GetMaxEggsToHatch())
+				end)
+			end
 		end
 	end
 end)
