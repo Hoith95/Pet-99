@@ -369,7 +369,8 @@ local function startGuiUpdater()
 		coinsLabel.Text = "COINS: " .. tostring(getCurrencyAmount("BlockPartyCoins"))
 		updateLabelSize(coinsLabel)
 
-		giftLabel.Text = "TROPICAL GIFT: " .. tostring(getItemAmount("Tropical Gift"))
+		local giftCount = getItemAmount("Tropical Gift")
+		giftLabel.Text = tostring(giftCount) .. "x TROPICAL GIFT"
 		updateLabelSize(giftLabel)
 
 		task.wait(1)
