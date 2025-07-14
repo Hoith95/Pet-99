@@ -582,7 +582,6 @@ task.spawn(function()
 
        		warn("🔄 Khởi động Event Block Party sau 10/10 lượt.")
 		spawn(function()
-		wait(38)
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Block-Party"))()
 		end)
 
