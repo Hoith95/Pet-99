@@ -293,7 +293,7 @@ local function startGuiUpdater()
 		tilesLabel.Text = "Tiles: " .. tostring(getTotalTileCount())
 		updateLabelSize(tilesLabel)
 
-		chanceLabel.Text = "Chance: " .. tostring(currentChance) .. "x"
+		chanceLabel.Text = "HUGE Chance: " .. tostring(currentChance) .. "x"
 		updateLabelSize(chanceLabel)
 
 		task.wait(1)
