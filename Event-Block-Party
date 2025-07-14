@@ -280,30 +280,7 @@ local function startAutoRebirth()
 	end
 end
 
----------------- 🧩 LUỒNG 8: VAR theo dõi tiles không đổi trong 12 phút ----------------
-local function startTileChangeMonitor()
-	local player = Players.LocalPlayer
-	local previousCount = getTotalTileCount()
-	local lastChangedTick = tick()
-
-	while true do
-		local currentCount = getTotalTileCount()
-
-		if currentCount ~= previousCount then
-			previousCount = currentCount
-			lastChangedTick = tick()
-		else
-			if tick() - lastChangedTick >= 720 then
-				player:Kick("⏰ 12 phút không đổi tiles → nghi ngờ treo máy.")
-				break
-			end
-		end
-
-		task.wait(30)
-	end
-end
-
----------------- 🧩 LUỒNG 9: GUI Coins / Tiles / Tropical Gift ----------------
+---------------- 🧩 LUỒNG 8: GUI Coins / Tiles / Tropical Gift ----------------
 local function startGuiUpdater()
 	local player = Players.LocalPlayer
 	local playerGui = player:WaitForChild("PlayerGui")
@@ -377,24 +354,7 @@ local function startGuiUpdater()
 	end
 end
 
----------------- 🧩 LUỒNG 10: Teleport một lần khi đủ 50 tile ----------------
-local function startPreEggTeleport()
-	local player = Players.LocalPlayer
-
-	-- Chờ đến khi đủ 50 tile
-	while getTotalTileCount() < 50 do
-		task.wait(1)
-	end
-
-	-- 🧭 Di chuyển tới vị trí trước khi bắt đầu xử lý egg
-	local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-	if hrp then
-		hrp.CFrame = CFrame.new(16543, 2275, -21618)
-		task.wait(5)
-	end
-end
-
----------------- 🧩 LUỒNG 10: Teleport một lần khi đủ 50 tile ----------------
+---------------- 🧩 LUỒNG 9: Teleport một lần khi đủ 50 tile ----------------
 local function startPreEggTeleport()
 	local player = Players.LocalPlayer
 
@@ -419,6 +379,5 @@ task.spawn(startAutoPlantDiamond)
 task.spawn(startAutoHatchHuge)
 task.spawn(startAutoGiftBag)
 task.spawn(startAutoRebirth)
-task.spawn(startTileChangeMonitor)
 task.spawn(startGuiUpdater)
 task.spawn(startPreEggTeleport)
