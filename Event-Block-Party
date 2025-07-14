@@ -2,22 +2,16 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
 
-local plotIndex = 1
 local TilesFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
 
--- 🔢 Đếm số lượng tiles theo plot
-local function getTileCountByPlot(index)
-	local count = 0
-	for _, tile in ipairs(TilesFolder:GetChildren()) do
-		if tile:GetAttribute("PlotIndex") == index then
-			count += 1
-		end
-	end
-	return count
+-- 🔢 Đếm tổng số tile
+local function getTotalTileCount()
+	return #TilesFolder:GetChildren()
 end
 
----------------- 🧩 LUỒNG 1: Mua tiles quanh Plot ----------------
+---------------- 🧩 LUỒNG 1: Mua tiles quanh plot ----------------
 local function startAutoPurchase()
+	local plotIndex = 1
 	local radiusMax = 6
 	local delayPerTile = 0.05
 	local delayPerCycle = 0.05
@@ -34,8 +28,9 @@ local function startAutoPurchase()
 
 	while true do
 		for _, offset in ipairs(offsets) do
+			local args = {plotIndex, "PurchaseTile", offset[1], offset[2]}
 			pcall(function()
-				PlotsInvoke:InvokeServer(plotIndex, "PurchaseTile", offset[1], offset[2])
+				PlotsInvoke:InvokeServer(unpack(args))
 			end)
 			task.wait(delayPerTile)
 		end
@@ -86,7 +81,7 @@ local function startAutoPlantDiamond()
 			if tile:IsA("Model") or tile:IsA("Folder") then
 				local tileId = tile.Name
 				if tile:FindFirstChild("Plant1") then
-					for i = 1, 6 do
+					for i = 0, 6 do
 						pcall(function()
 							TilesInvoke:InvokeServer(tileId, "Claim", i)
 						end)
@@ -167,8 +162,7 @@ local function startAutoHatchHuge()
 	end
 
 	while true do
-		local count = getTileCountByPlot(plotIndex)
-		if count >= tileThreshold then
+		if getTotalTileCount() >= tileThreshold then
 			updateKnownEggs()
 			for _, egg in ipairs(knownEggs) do
 				teleportToEgg(egg)
@@ -198,12 +192,11 @@ local function startAutoHatchHuge()
 					end
 				end)
 
-				while getTileCountByPlot(plotIndex) >= tileThreshold do
+				while getTotalTileCount() >= tileThreshold do
 					local args = {currentEgg.Name, 89}
-					local success, err = pcall(function()
+					pcall(function()
 						Network.CustomEggs_Hatch:InvokeServer(unpack(args))
 					end)
-					if not success then warn("[AutoHatch] Error:", err) end
 					task.wait(0)
 				end
 			end
@@ -212,26 +205,25 @@ local function startAutoHatchHuge()
 	end
 end
 
----------------- 🧩 LUỒNG 6: Auto Rebirth khi đủ 169 tiles ----------------
+---------------- 🧩 LUỒNG 6: Auto Rebirth khi đủ 169 tile ----------------
 local function startAutoRebirth()
+	local plotIndex = 1
 	local PlotsInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Plots_Invoke")
 	local threshold = 169
 	local delay = 2
 
 	while true do
-		local tileCount = getTileCountByPlot(plotIndex)
-		if tileCount >= threshold then
+		if getTotalTileCount() >= threshold then
 			local args = {plotIndex, "Rebirth"}
-			local success, err = pcall(function()
+			pcall(function()
 				PlotsInvoke:InvokeServer(unpack(args))
 			end)
-			if not success then warn("[Rebirth] Error:", err) end
 		end
 		task.wait(delay)
 	end
 end
 
----------------- 🔁 Kích hoạt tất cả các luồng ----------------
+---------------- 🔁 Kích hoạt tất cả luồng ----------------
 task.spawn(startAutoPurchase)
 task.spawn(startClaimAndOpen)
 task.spawn(startClaimAndUnlock)
