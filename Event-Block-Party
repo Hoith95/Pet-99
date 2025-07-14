@@ -107,33 +107,49 @@ local function startAutoPlantDiamond()
 end
 
 ---------------- 🧩 LUỒNG 5: Auto Hatch Egg HUGE CHANCE ----------------
+---------------- 🧩 LUỒNG 5: Auto Hatch Egg HUGE CHANCE ----------------
 local function startAutoHatchHuge()
 	local tileThreshold = 100
 	local player = Players.LocalPlayer
-	local character = player.Character or player.CharacterAdded:Wait()
-	local hrp = character:WaitForChild("HumanoidRootPart")
 	local Network = ReplicatedStorage:WaitForChild("Network")
 	local customEggsFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("CustomEggs")
 
-	local Eggs = player:WaitForChild("PlayerScripts"):WaitForChild("Scripts"):WaitForChild("Game"):WaitForChild("Egg Opening Frontend")
-	getsenv(Eggs).PlayEggAnimation = function() return end
+	-- ⚙️ Tắt animation mở trứng
+	local successEggs, Eggs = pcall(function()
+		return player:WaitForChild("PlayerScripts"):WaitForChild("Scripts"):WaitForChild("Game"):WaitForChild("Egg Opening Frontend")
+	end)
+	if successEggs and Eggs then
+		pcall(function()
+			getsenv(Eggs).PlayEggAnimation = function() return end
+		end)
+	end
 
+	-- ✅ Kiểm tra chuỗi mã hóa
 	local function isEncodedName(name)
 		return #name >= 32 and name:match("^[a-f0-9]+$") ~= nil
 	end
 
+	-- 🔍 Rút trích HUGE CHANCE
 	local function extractChanceValue(text)
 		local num = text:match("(%d+)x%s+HUGE%s+CHANCE!?")
 		return tonumber(num or "0")
 	end
 
+	-- 📍 Tele tới egg
 	local function teleportToEgg(egg)
+		local character = player.Character or player.CharacterAdded:Wait()
+		local hrp = character:FindFirstChild("HumanoidRootPart")
 		local part = egg:FindFirstChildWhichIsA("BasePart", true)
-		if part then
+
+		if hrp and part then
 			hrp.CFrame = part.CFrame + Vector3.new(0, 5, 0)
+			print("📦 Teleported to egg:", egg.Name)
+		else
+			warn("❌ Không thể teleport tới egg:", egg.Name, "HRP:", hrp, "Part:", part)
 		end
 	end
 
+	-- 🏆 Tìm egg HUGE CHANCE cao nhất
 	local function findBestHugeChanceEgg(eggList)
 		local bestEgg, bestValue = nil, -1
 		for _, egg in ipairs(eggList) do
@@ -151,6 +167,7 @@ local function startAutoHatchHuge()
 		return bestEgg, bestValue
 	end
 
+	-- 🧠 Cập nhật danh sách egg đã biết
 	local knownEggs = {}
 	local function updateKnownEggs()
 		for _, egg in ipairs(customEggsFolder:GetChildren()) do
@@ -167,9 +184,11 @@ local function startAutoHatchHuge()
 		end
 	end
 
+	-- 🔁 Vòng chính kiểm tra đủ tile để kích hoạt mở egg
 	while true do
 		if getTotalTileCount() >= tileThreshold then
 			updateKnownEggs()
+
 			for _, egg in ipairs(knownEggs) do
 				teleportToEgg(egg)
 				task.wait(0.2)
@@ -177,9 +196,11 @@ local function startAutoHatchHuge()
 
 			local currentEgg, currentValue = findBestHugeChanceEgg(knownEggs)
 			if currentEgg then
+				print("🥚 Best Egg:", currentEgg.Name, "Chance:", currentValue)
 				teleportToEgg(currentEgg)
 				task.wait(0.5)
 
+				-- ⏳ Cập nhật egg mới mỗi 5 phút
 				task.spawn(function()
 					while true do
 						task.wait(300)
@@ -192,17 +213,24 @@ local function startAutoHatchHuge()
 						if bestEgg and bestValue > currentValue then
 							currentEgg = bestEgg
 							currentValue = bestValue
+							print("🔄 Chuyển sang egg mới:", currentEgg.Name, "Chance:", currentValue)
 							teleportToEgg(currentEgg)
-							task.wait(0.5)
+							task.wait(3)
 						end
 					end
 				end)
 
+				-- 🎯 Vòng mở egg chính
 				while getTotalTileCount() >= tileThreshold do
 					local args = {currentEgg.Name, 89}
-					pcall(function()
+					local success, err = pcall(function()
 						Network.CustomEggs_Hatch:InvokeServer(unpack(args))
 					end)
+					if not success then
+						warn("[AutoHatch] Error:", err)
+					else
+						print("🎁 Đã mở egg:", currentEgg.Name)
+					end
 					task.wait(0)
 				end
 			end
