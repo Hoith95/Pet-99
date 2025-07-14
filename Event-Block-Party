@@ -240,7 +240,6 @@ local function startAutoHatchHuge()
 end
 
 ---------------- 🧩 LUỒNG 6: Auto Rebirth khi đủ 169 tile ----------------
----------------- 🧩 LUỒNG 6: Auto Rebirth khi đủ 169 tile ----------------
 local function startAutoRebirth()
 	local threshold = 169
 	local PlotsInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Plots_Invoke")
