@@ -389,10 +389,7 @@ local function startPreEggTeleport()
 	-- 🧭 Di chuyển tới vị trí trước khi bắt đầu xử lý egg
 	local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 	if hrp then
-		hrp.Anchored = true
 		hrp.CFrame = CFrame.new(16543, 2275, -21618)
-		task.wait(0.2)
-		hrp.Anchored = false
 		task.wait(5)
 	end
 end
