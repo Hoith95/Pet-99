@@ -2,13 +2,25 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
 
+local plotIndex = 1
+local TilesFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
+
+-- 🔢 Đếm số lượng tiles theo plot
+local function getTileCountByPlot(index)
+	local count = 0
+	for _, tile in ipairs(TilesFolder:GetChildren()) do
+		if tile:GetAttribute("PlotIndex") == index then
+			count += 1
+		end
+	end
+	return count
+end
+
 ---------------- 🧩 LUỒNG 1: Mua tiles quanh Plot ----------------
 local function startAutoPurchase()
-	local plotIndex = 1
 	local radiusMax = 6
 	local delayPerTile = 0.05
 	local delayPerCycle = 0.05
-
 	local PlotsInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Plots_Invoke")
 
 	local offsets = {}
@@ -20,31 +32,25 @@ local function startAutoPurchase()
 		end
 	end
 
-	local function purchaseTile(dx, dy)
-		local args = {plotIndex, "PurchaseTile", dx, dy}
-		pcall(function()
-			PlotsInvoke:InvokeServer(unpack(args))
-		end)
-	end
-
 	while true do
 		for _, offset in ipairs(offsets) do
-			purchaseTile(offset[1], offset[2])
+			pcall(function()
+				PlotsInvoke:InvokeServer(plotIndex, "PurchaseTile", offset[1], offset[2])
+			end)
 			task.wait(delayPerTile)
 		end
 		task.wait(delayPerCycle)
 	end
 end
 
----------------- 🧩 LUỒNG 2: Claim + Open bằng Tiles_Invoke ----------------
+---------------- 🧩 LUỒNG 2: Claim + Open ----------------
 local function startClaimAndOpen()
 	local TilesInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Tiles_Invoke")
-	local tilesFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
 	local delayPerTile = 0.05
 	local delayPerCycle = 0.05
 
 	while true do
-		for _, tile in ipairs(tilesFolder:GetChildren()) do
+		for _, tile in ipairs(TilesFolder:GetChildren()) do
 			local tileId = tile.Name
 			pcall(function() TilesInvoke:InvokeServer(tileId, "Claim") end)
 			pcall(function() TilesInvoke:InvokeServer(tileId, "Open") end)
@@ -54,15 +60,14 @@ local function startClaimAndOpen()
 	end
 end
 
----------------- 🧩 LUỒNG 3: Claim + Unlock bằng Tiles_Fire ----------------
+---------------- 🧩 LUỒNG 3: Claim + Unlock ----------------
 local function startClaimAndUnlock()
 	local TilesFire = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Tiles_Fire")
-	local tilesFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
 	local delayPerTile = 0.05
 	local delayPerCycle = 0.05
 
 	while true do
-		for _, tile in ipairs(tilesFolder:GetChildren()) do
+		for _, tile in ipairs(TilesFolder:GetChildren()) do
 			local tileId = tile.Name
 			pcall(function() TilesFire:FireServer(tileId, "Claimed") end)
 			pcall(function() TilesFire:FireServer(tileId, "Unlock") end)
@@ -75,10 +80,9 @@ end
 ---------------- 🧩 LUỒNG 4: Auto Claim Plant + Diamond ----------------
 local function startAutoPlantDiamond()
 	local TilesInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Tiles_Invoke")
-	local tilesFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
 
 	while true do
-		for _, tile in ipairs(tilesFolder:GetChildren()) do
+		for _, tile in ipairs(TilesFolder:GetChildren()) do
 			if tile:IsA("Model") or tile:IsA("Folder") then
 				local tileId = tile.Name
 				if tile:FindFirstChild("Plant1") then
@@ -101,19 +105,15 @@ local function startAutoPlantDiamond()
 	end
 end
 
----------------- 🧩 LUỒNG 5: Tự động mở egg HUGE CHANCE cao nhất ----------------
+---------------- 🧩 LUỒNG 5: Auto Hatch Egg HUGE CHANCE ----------------
 local function startAutoHatchHuge()
+	local tileThreshold = 100
 	local player = Players.LocalPlayer
 	local character = player.Character or player.CharacterAdded:Wait()
 	local hrp = character:WaitForChild("HumanoidRootPart")
 	local Network = ReplicatedStorage:WaitForChild("Network")
 	local customEggsFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("CustomEggs")
-	local PlotsFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("Plots")
 
-	local plotIndex = 1
-	local tileThreshold = 100
-
-	-- Tắt animation mở trứng
 	local Eggs = player:WaitForChild("PlayerScripts"):WaitForChild("Scripts"):WaitForChild("Game"):WaitForChild("Egg Opening Frontend")
 	getsenv(Eggs).PlayEggAnimation = function() return end
 
@@ -130,14 +130,11 @@ local function startAutoHatchHuge()
 		local part = egg:FindFirstChildWhichIsA("BasePart", true)
 		if part then
 			hrp.CFrame = part.CFrame + Vector3.new(0, 5, 0)
-			return true
 		end
-		return false
 	end
 
 	local function findBestHugeChanceEgg(eggList)
-		local bestEgg = nil
-		local bestValue = -1
+		local bestEgg, bestValue = nil, -1
 		for _, egg in ipairs(eggList) do
 			local label = egg:FindFirstChild("Egg")
 				and egg.Egg:FindFirstChild("EggInfo")
@@ -146,8 +143,7 @@ local function startAutoHatchHuge()
 			if label and label:IsA("TextLabel") then
 				local value = extractChanceValue(label.ContentText)
 				if value > bestValue then
-					bestEgg = egg
-					bestValue = value
+					bestEgg, bestValue = egg, value
 				end
 			end
 		end
@@ -165,24 +161,14 @@ local function startAutoHatchHuge()
 						break
 					end
 				end
-				if not exists then
-					table.insert(knownEggs, egg)
-				end
+				if not exists then table.insert(knownEggs, egg) end
 			end
 		end
 	end
 
-	-- ⏳ Luồng chính kiểm tra tile và quản lý mở egg
 	while true do
-		local function getTileCount()
-			local plot = PlotsFolder:FindFirstChild(tostring(plotIndex))
-			if plot and plot:FindFirstChild("Tiles") then
-				return #plot.Tiles:GetChildren()
-			end
-			return 0
-		end
-
-		if getTileCount() >= tileThreshold then
+		local count = getTileCountByPlot(plotIndex)
+		if count >= tileThreshold then
 			updateKnownEggs()
 			for _, egg in ipairs(knownEggs) do
 				teleportToEgg(egg)
@@ -194,7 +180,6 @@ local function startAutoHatchHuge()
 				teleportToEgg(currentEgg)
 				task.wait(0.5)
 
-				-- Luồng phụ cập nhật egg tốt nhất mỗi 5 phút
 				task.spawn(function()
 					while true do
 						task.wait(300)
@@ -213,46 +198,40 @@ local function startAutoHatchHuge()
 					end
 				end)
 
-				-- 🔁 Vòng mở egg liên tục nếu đủ tile
-				while getTileCount() >= tileThreshold do
+				while getTileCountByPlot(plotIndex) >= tileThreshold do
 					local args = {currentEgg.Name, 89}
-					pcall(function()
+					local success, err = pcall(function()
 						Network.CustomEggs_Hatch:InvokeServer(unpack(args))
 					end)
-					task.wait(0) -- Không delay để tối ưu tốc độ
+					if not success then warn("[AutoHatch] Error:", err) end
+					task.wait(0)
 				end
 			end
 		end
-
 		task.wait(30)
 	end
 end
 
----------------- 🧩 LUỒNG 6: Auto Rebirth khi đủ 169 tile ----------------
+---------------- 🧩 LUỒNG 6: Auto Rebirth khi đủ 169 tiles ----------------
 local function startAutoRebirth()
-	local plotIndex = 1
-	local threshold = 169
-	local delay = 2 -- thời gian kiểm tra lại (giây)
-
 	local PlotsInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Plots_Invoke")
-	local PlotsFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("Plots")
+	local threshold = 169
+	local delay = 2
 
 	while true do
-		local plot = PlotsFolder:FindFirstChild(tostring(plotIndex))
-		if plot and plot:FindFirstChild("Tiles") then
-			local tileCount = #plot.Tiles:GetChildren()
-			if tileCount >= threshold then
-				local args = {plotIndex, "Rebirth"}
-				pcall(function()
-					PlotsInvoke:InvokeServer(unpack(args))
-				end)
-			end
+		local tileCount = getTileCountByPlot(plotIndex)
+		if tileCount >= threshold then
+			local args = {plotIndex, "Rebirth"}
+			local success, err = pcall(function()
+				PlotsInvoke:InvokeServer(unpack(args))
+			end)
+			if not success then warn("[Rebirth] Error:", err) end
 		end
 		task.wait(delay)
 	end
 end
 
----------------- 🔁 Kích hoạt cả 6 luồng song song ----------------
+---------------- 🔁 Kích hoạt tất cả các luồng ----------------
 task.spawn(startAutoPurchase)
 task.spawn(startClaimAndOpen)
 task.spawn(startClaimAndUnlock)
