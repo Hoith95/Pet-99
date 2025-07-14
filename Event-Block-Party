@@ -86,7 +86,7 @@ local function startAutoPlantDiamond()
 			if tile:IsA("Model") or tile:IsA("Folder") then
 				local tileId = tile.Name
 				if tile:FindFirstChild("Plant1") then
-					for i = 0, 6 do
+					for i = 1, 6 do
 						pcall(function()
 							TilesInvoke:InvokeServer(tileId, "Claim", i)
 						end)
