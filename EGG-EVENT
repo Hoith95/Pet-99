@@ -8,18 +8,25 @@ local hrp = character:WaitForChild("HumanoidRootPart")
 
 local customEggsFolder = workspace:WaitForChild("__THINGS"):WaitForChild("CustomEggs")
 
+-- 📌 Tắt animation mở trứng
+local Eggs = player:WaitForChild("PlayerScripts"):WaitForChild("Scripts"):WaitForChild("Game"):WaitForChild("Egg Opening Frontend")
+getsenv(Eggs).PlayEggAnimation = function() return end
+
+-- ✅ Tùy chỉnh số lượng trứng muốn mở mỗi lần
+local EggAmount = 89 -- Sửa thành 1, 3 hoặc 8 tùy ý
+
 -- 📌 Lọc tên mã hóa
 local function isEncodedName(name)
 	return #name >= 32 and name:match("^[a-f0-9]+$") ~= nil
 end
 
--- 📌 Trích giá trị từ "100x HUGE CHANCE!"
+-- 📌 Trích số từ "100x HUGE CHANCE!"
 local function extractChanceValue(text)
 	local num = text:match("(%d+)x%s+HUGE%s+CHANCE!?")
 	return tonumber(num or "0")
 end
 
--- 📌 Tele tới BasePart trong egg
+-- 📌 Teleport tới part của egg
 local function teleportToEgg(egg)
 	local part = egg:FindFirstChildWhichIsA("BasePart", true)
 	if part then
@@ -29,17 +36,15 @@ local function teleportToEgg(egg)
 	return false
 end
 
--- 🧠 Tìm egg mã hóa có HUGE CHANCE cao nhất (sau khi tele tới từng cái)
+-- 🔍 Tìm egg mã hóa có giá trị HUGE CHANCE cao nhất (tele trước khi đọc GUI)
 local function findBestHugeChanceEgg()
 	local bestEgg = nil
 	local bestValue = -1
 
 	for _, egg in ipairs(customEggsFolder:GetChildren()) do
 		if isEncodedName(egg.Name) then
-			-- 🚀 Tele tới trước để GUI hiện đầy đủ
-			if teleportToEgg(egg) then
-				task.wait(0.4) -- chờ GUI load
-			end
+			teleportToEgg(egg)
+			task.wait(0.3)
 
 			local titleLabel = egg:FindFirstChild("Egg")
 				and egg.Egg:FindFirstChild("EggInfo")
@@ -60,62 +65,31 @@ local function findBestHugeChanceEgg()
 	return bestEgg
 end
 
--- 🥇 Tìm quả trứng có HUGE CHANCE cao nhất
+-- 🎯 Bắt đầu
 local bestEgg = findBestHugeChanceEgg()
 if not bestEgg then
 	warn("❌ Không tìm thấy egg nào có HUGE CHANCE!")
 	return
 end
 
-print("🎯 Chọn egg:", bestEgg.Name)
+print("🎯 Tìm thấy egg tốt nhất:", bestEgg.Name)
 
--- 🔒 Gắn tên egg cho AutoOpen sử dụng
-_G.TargetEggName = bestEgg.Name
-
--- ✅ Giữ nguyên phần sau của bạn
-
--- Find nearest egg
-local function find_nearest_egg()
-	local nearestEgg, nearestDistance = nil, math.huge
-	local eggsFolder = workspace.__THINGS:FindFirstChild("CustomEggs")
-	if not eggsFolder then return nil end
-
-	local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-	if not hrp then return nil end
-
-	for _, eggModel in ipairs(eggsFolder:GetChildren()) do
-		if eggModel:IsA("Model") and eggModel.Name == _G.TargetEggName then
-			local success, cframe = pcall(function()
-				return eggModel:GetBoundingBox()
-			end)
-			if success and cframe then
-				local dist = (hrp.Position - cframe.Position).Magnitude
-				if dist < nearestDistance then
-					nearestEgg = eggModel.Name
-					nearestDistance = dist
-				end
-			end
-		end
-	end
-
-	return nearestEgg
-end
-
--- Auto hatch nearest egg
-local function GetMaxEggsToHatch()
-	return 89
-end
-
+-- 🌀 Auto mở egg liên tục
 _G.AutoOpen = true
+
 task.spawn(function()
-	while task.wait() do
-		if _G.AutoOpen then
-			local nearestEgg = find_nearest_egg()
-			if nearestEgg then
-				pcall(function()
-					Network:Invoke("CustomEggs_Hatch", nearestEgg, GetMaxEggsToHatch())
-				end)
-			end
+	while _G.AutoOpen and task.wait() do
+		local args = {
+			[1] = bestEgg.Name,
+			[2] = EggAmount
+		}
+
+		local success, result = pcall(function()
+			return Network.CustomEggs_Hatch:InvokeServer(unpack(args))
+		end)
+
+		if not success then
+			warn("⚠️ Lỗi khi Hatch:", result)
 		end
 	end
 end)
