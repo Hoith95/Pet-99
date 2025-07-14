@@ -8,24 +8,39 @@ local hrp = character:WaitForChild("HumanoidRootPart")
 
 local customEggsFolder = workspace:WaitForChild("__THINGS"):WaitForChild("CustomEggs")
 
--- 📌 Hàm lọc tên mã hóa
+-- 📌 Lọc tên mã hóa
 local function isEncodedName(name)
 	return #name >= 32 and name:match("^[a-f0-9]+$") ~= nil
 end
 
--- 📌 Tách số từ "1x HUGE CHANCE!", "100x HUGE CHANCE!"...
+-- 📌 Trích giá trị từ "100x HUGE CHANCE!"
 local function extractChanceValue(text)
 	local num = text:match("(%d+)x%s+HUGE%s+CHANCE!?")
 	return tonumber(num or "0")
 end
 
--- 🔍 Tìm egg có HUGE CHANCE! cao nhất
+-- 📌 Tele tới BasePart trong egg
+local function teleportToEgg(egg)
+	local part = egg:FindFirstChildWhichIsA("BasePart", true)
+	if part then
+		hrp.CFrame = part.CFrame + Vector3.new(0, 5, 0)
+		return true
+	end
+	return false
+end
+
+-- 🧠 Tìm egg mã hóa có HUGE CHANCE cao nhất (sau khi tele tới từng cái)
 local function findBestHugeChanceEgg()
 	local bestEgg = nil
 	local bestValue = -1
 
 	for _, egg in ipairs(customEggsFolder:GetChildren()) do
 		if isEncodedName(egg.Name) then
+			-- 🚀 Tele tới trước để GUI hiện đầy đủ
+			if teleportToEgg(egg) then
+				task.wait(0.4) -- chờ GUI load
+			end
+
 			local titleLabel = egg:FindFirstChild("Egg")
 				and egg.Egg:FindFirstChild("EggInfo")
 				and egg.Egg.EggInfo:FindFirstChild("Frame")
@@ -45,7 +60,7 @@ local function findBestHugeChanceEgg()
 	return bestEgg
 end
 
--- 🥇 Xác định quả trứng có HUGE CHANCE cao nhất
+-- 🥇 Tìm quả trứng có HUGE CHANCE cao nhất
 local bestEgg = findBestHugeChanceEgg()
 if not bestEgg then
 	warn("❌ Không tìm thấy egg nào có HUGE CHANCE!")
@@ -54,10 +69,10 @@ end
 
 print("🎯 Chọn egg:", bestEgg.Name)
 
--- 📦 Đổi tên egg cần dùng cho find_nearest_egg()
+-- 🔒 Gắn tên egg cho AutoOpen sử dụng
 _G.TargetEggName = bestEgg.Name
 
--- 📌 GIỮ NGUYÊN CODE SAU
+-- ✅ Giữ nguyên phần sau của bạn
 
 -- Find nearest egg
 local function find_nearest_egg()
@@ -88,7 +103,7 @@ end
 
 -- Auto hatch nearest egg
 local function GetMaxEggsToHatch()
-	return 89 -- Bạn có thể thay bằng 1 hoặc hàm tính tự động
+	return 3
 end
 
 _G.AutoOpen = true
