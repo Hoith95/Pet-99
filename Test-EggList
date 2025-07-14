@@ -13,6 +13,12 @@ if hrp then
 	print("🚪 Teleport vào Block Party thành công.")
 	task.wait(5)
 end
+task.wait(5)
+local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+if hrp then
+	hrp.CFrame = CFrame.new(16543, 2275, -21618)
+	task.wait(5)
+end
 
 -- ✅ Kiểm tra tên mã hóa
 local function isEncodedName(name)
