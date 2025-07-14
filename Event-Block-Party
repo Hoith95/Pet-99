@@ -168,3 +168,46 @@ end
 while true do
     claimAndUnlockTiles()
 end
+
+-----------
+-- 📌 Tham chiếu RemoteFunction và folder Tiles
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TilesInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Tiles_Invoke")
+local tilesFolder = workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
+
+-- 🔁 Vòng lặp vô hạn, mỗi 30s lặp lại 1 lần
+while true do
+    print("🔄 Bắt đầu vòng xử lý mới...")
+
+    for _, tile in ipairs(tilesFolder:GetChildren()) do
+        if tile:IsA("Model") or tile:IsA("Folder") then
+            if tile:FindFirstChild("Plant1") then
+                local tileId = tile.Name
+                print("🌿 Đang xử lý tile:", tileId)
+
+                for i = 1, 6 do
+                    local args = {
+                        [1] = tileId,
+                        [2] = "Claim",
+                        [3] = i,
+                    }
+
+                    local success, result = pcall(function()
+                        return TilesInvoke:InvokeServer(unpack(args))
+                    end)
+
+                    if success then
+                        print(("✅ Claim %s với giá trị %d thành công"):format(tileId, i))
+                    else
+                        warn(("❌ Lỗi Claim %s với giá trị %d: %s"):format(tileId, i, tostring(result)))
+                    end
+
+                    task.wait(0.1)
+                end
+            end
+        end
+    end
+
+    print("🎉 Đã xử lý xong tất cả Tiles có Plant1! Đợi 30 giây trước khi lặp lại...")
+    task.wait(30)
+end
