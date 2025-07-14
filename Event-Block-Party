@@ -108,7 +108,12 @@ local function startAutoHatchHuge()
 	local hrp = character:WaitForChild("HumanoidRootPart")
 	local Network = ReplicatedStorage:WaitForChild("Network")
 	local customEggsFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("CustomEggs")
+	local PlotsFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("Plots")
 
+	local plotIndex = 1
+	local tileThreshold = 100
+
+	-- Tắt animation mở trứng
 	local Eggs = player:WaitForChild("PlayerScripts"):WaitForChild("Scripts"):WaitForChild("Game"):WaitForChild("Egg Opening Frontend")
 	getsenv(Eggs).PlayEggAnimation = function() return end
 
@@ -150,7 +155,6 @@ local function startAutoHatchHuge()
 	end
 
 	local knownEggs = {}
-
 	local function updateKnownEggs()
 		for _, egg in ipairs(customEggsFolder:GetChildren()) do
 			if isEncodedName(egg.Name) then
@@ -168,41 +172,59 @@ local function startAutoHatchHuge()
 		end
 	end
 
-	updateKnownEggs()
-	for _, egg in ipairs(knownEggs) do
-		teleportToEgg(egg)
-		task.wait(0.2)
-	end
+	-- ⏳ Luồng chính kiểm tra tile và quản lý mở egg
+	while true do
+		local function getTileCount()
+			local plot = PlotsFolder:FindFirstChild(tostring(plotIndex))
+			if plot and plot:FindFirstChild("Tiles") then
+				return #plot.Tiles:GetChildren()
+			end
+			return 0
+		end
 
-	local currentEgg, currentValue = findBestHugeChanceEgg(knownEggs)
-	if not currentEgg then return end
-
-	teleportToEgg(currentEgg)
-	task.wait(0.5)
-
-	task.spawn(function()
-		while true do
-			task.wait(300)
+		if getTileCount() >= tileThreshold then
 			updateKnownEggs()
 			for _, egg in ipairs(knownEggs) do
 				teleportToEgg(egg)
-				task.wait(0.3)
+				task.wait(0.2)
 			end
-			local bestEgg, bestValue = findBestHugeChanceEgg(knownEggs)
-			if bestEgg then
-				currentEgg = bestEgg
-				currentValue = bestValue
+
+			local currentEgg, currentValue = findBestHugeChanceEgg(knownEggs)
+			if currentEgg then
 				teleportToEgg(currentEgg)
 				task.wait(0.5)
+
+				-- Luồng phụ cập nhật egg tốt nhất mỗi 5 phút
+				task.spawn(function()
+					while true do
+						task.wait(300)
+						updateKnownEggs()
+						for _, egg in ipairs(knownEggs) do
+							teleportToEgg(egg)
+							task.wait(0.3)
+						end
+						local bestEgg, bestValue = findBestHugeChanceEgg(knownEggs)
+						if bestEgg and bestValue > currentValue then
+							currentEgg = bestEgg
+							currentValue = bestValue
+							teleportToEgg(currentEgg)
+							task.wait(0.5)
+						end
+					end
+				end)
+
+				-- 🔁 Vòng mở egg liên tục nếu đủ tile
+				while getTileCount() >= tileThreshold do
+					local args = {currentEgg.Name, 89}
+					pcall(function()
+						Network.CustomEggs_Hatch:InvokeServer(unpack(args))
+					end)
+					task.wait(0) -- Không delay để tối ưu tốc độ
+				end
 			end
 		end
-	end)
 
-	while true do
-		local args = {currentEgg.Name, 89}
-		pcall(function()
-			Network.CustomEggs_Hatch:InvokeServer(unpack(args))
-		end)
+		task.wait(30)
 	end
 end
 
