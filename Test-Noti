@@ -56,8 +56,8 @@ local function updateLabelSize(label)
 end
 
 -- 🏷️ Tạo Label — đặt phía dưới GUI cũ (Y = -10 thay vì -55)
-local coinsLabel = createLabel("CoinsLabel", UDim2.new(0, 0, 0, -10), Vector2.new(0, 0), Color3.fromRGB(255, 165, 0))
-local tilesLabel = createLabel("TilesLabel", UDim2.new(0.5, 30, 0, -10), Vector2.new(0.5, 0), Color3.fromRGB(0, 128, 0))
+local coinsLabel = createLabel("TilesLabel", UDim2.new(0, 0, 0, -10), Vector2.new(0, 0), Color3.fromRGB(255, 165, 0))
+local tilesLabel = createLabel("CoinsLabel", UDim2.new(0.5, 30, 0, -10), Vector2.new(0.5, 0), Color3.fromRGB(0, 128, 0))
 
 -- 🔁 Cập nhật nội dung mỗi 10 giây
 task.spawn(function()
@@ -72,6 +72,6 @@ task.spawn(function()
 		tilesLabel.Text = "Tiles: " .. tostring(totalTiles)
 		updateLabelSize(tilesLabel)
 
-		task.wait(10)
+		task.wait(1)
 	end
 end)
