@@ -581,7 +581,9 @@ task.spawn(function()
 
        		warn("🔄 Khởi động Event Block Party sau 10/10 lượt.")
 		spawn(function()
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Block-Party-2"))()
+		_G.VAR_STOP_BLOCK_PARTY = false
+		_G.VAR_START_BLOCK_PARTY = true
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Block-Party-3"))()
 		end)
 
 		warn("⏳ Theo dõi reset DailyRuns...")
@@ -589,6 +591,9 @@ task.spawn(function()
 
 		warn("🔁 DailyRuns reset → tiếp tục farm.")
 		if monitor12minThread then pcall(task.cancel, monitor12minThread) monitor12minThread = nil end
+		_G.VAR_STOP_BLOCK_PARTY = true
+		_G.VAR_START_BLOCK_PARTY = false
+		task.wait(5)
 		startMonitor12Min()
 	end
 end)
