@@ -581,7 +581,7 @@ task.spawn(function()
 
        		warn("🔄 Khởi động Event Block Party sau 10/10 lượt.")
 		spawn(function()
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Block-Party"))()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Block-Party-2"))()
 		end)
 
 		warn("⏳ Theo dõi reset DailyRuns...")
