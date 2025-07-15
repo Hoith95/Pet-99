@@ -140,12 +140,6 @@ local function startAutoHatchHuge()
 		return #name >= 32 and name:match("^[a-f0-9]+$") ~= nil
 	end
 
-	-- 🔍 Rút trích HUGE CHANCE
-	local function extractChanceValue(text)
-		local num = text:match("(%d+)x%s+HUGE%s+CHANCE!?")
-		return tonumber(num or "0")
-	end
-
 	-- 📍 Tele tới egg (dùng Part trực tiếp)
 	local function teleportToEgg(egg)
 		local character = player.Character or player.CharacterAdded:Wait()
@@ -155,24 +149,6 @@ local function startAutoHatchHuge()
 			hrp.CFrame = part.CFrame + Vector3.new(0, 5, 0)
 			print("📦 Teleported to egg:", egg.Name)
 		end
-	end
-
-	-- 🏆 Tìm egg HUGE CHANCE cao nhất
-	local function findBestHugeChanceEgg(eggList)
-		local bestEgg, bestValue = nil, -1
-		for _, egg in ipairs(eggList) do
-			local label = egg:FindFirstChild("Egg")
-				and egg.Egg:FindFirstChild("EggInfo")
-				and egg.Egg.EggInfo:FindFirstChild("Frame")
-				and egg.Egg.EggInfo.Frame:FindFirstChild("Title")
-			if label and label:IsA("TextLabel") then
-				local value = extractChanceValue(label.ContentText)
-				if value > bestValue then
-					bestEgg, bestValue = egg, value
-				end
-			end
-		end
-		return bestEgg, bestValue
 	end
 
 	-- 🧠 Danh sách egg đã biết
@@ -205,28 +181,38 @@ local function startAutoHatchHuge()
 				task.wait(0.2)
 			end
 
-			local currentEgg, currentValue = findBestHugeChanceEgg(knownEggs)
+			local currentEgg = knownEggs[math.random(1, #knownEggs)]
+			currentChance = 0
 			if currentEgg then
-				currentChance = currentValue
 				teleportToEgg(currentEgg)
 				task.wait(0.5)
 
-				-- 🕔 Cập nhật egg mỗi 10 phút
+				-- 🕔 Cập nhật egg mỗi 30 phút
 				task.spawn(function()
 					while true do
-						task.wait(600)
-						print("🔁 [10 phút] Kiểm tra cập nhật egg...")
-
-						updateKnownEggs()
-
-						local bestEgg, bestValue = findBestHugeChanceEgg(knownEggs)
-						if bestEgg and bestValue > currentChance then
-							currentEgg = bestEgg
-							currentValue = bestValue
-							currentChance = bestValue
-							print("🔁 [10 phút] Đổi sang egg mới:", currentEgg.Name, "Chance:", currentChance)
-							teleportToEgg(currentEgg)
+						task.wait(1800)
+						print("🔁 [30 phút] Kiểm tra lại danh sách egg...")
+						for _, egg in ipairs(customEggsFolder:GetChildren()) do
+							if isEncodedName(egg.Name) then
+								local exists = false
+								for _, e in ipairs(knownEggs) do
+									if e == egg then
+										exists = true
+										break
+									end
+								end
+								if not exists then
+									table.insert(knownEggs, egg)
+									print("🆕 Thêm egg mới vào danh sách:", egg.Name)
+								end
+								teleportToEgg(egg)
+								task.wait(1)
+							end
 						end
+						currentEgg = knownEggs[math.random(1, #knownEggs)]
+						print("🔁 Đổi egg ngẫu nhiên:", currentEgg.Name)
+						task.wait(1)
+						teleportToEgg(currentEgg)
 					end
 				end)
 
@@ -247,12 +233,12 @@ local function startAutoHatchHuge()
 
 					local args = {currentEgg.Name, MaxEggHatch}
 					local success, err = pcall(function()
-						Network.CustomEggs_Hatch:InvokeServer(unpack(args))
+					Network.CustomEggs_Hatch:InvokeServer(unpack(args))
 					end)
 					if not success then
 						warn("[AutoHatch] Error:", err)
 					else
-						--print("🎁 Đã mở egg:", currentEgg.Name)
+						print("🎁 Đã mở egg:", currentEgg.Name)
 					end
 					task.wait(0)
 				end
