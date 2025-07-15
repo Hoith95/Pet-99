@@ -146,19 +146,6 @@ local function startAutoHatchHuge()
 		return bestTile, bestValue
 	end
 
-	-- 📍 Teleport nếu đang lệch
-	local function ensureTeleportToTile(tile)
-		local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-		if hrp and tile and tile:IsA("Model") and tile.PrimaryPart then
-			local distance = (hrp.Position - tile.PrimaryPart.Position).Magnitude
-			if distance > 15 then
-				print("📍 Tele lại vào tile:", tile.Name)
-				hrp.CFrame = tile.PrimaryPart.CFrame + Vector3.new(0, 5, 0)
-				task.wait(1)
-			end
-		end
-	end
-
 	-- 🔁 Vòng chính
 	while true do
 		if getTotalTileCount() >= tileThreshold then
@@ -166,28 +153,17 @@ local function startAutoHatchHuge()
 			if bestTile and bestChance > 0 and bestTile.PrimaryPart then
 				currentChance = bestChance
 				print("🎯 Tìm thấy tile Huge:", bestTile.Name, "|", bestChance .. "x")
-				ensureTeleportToTile(bestTile)
 
-				-- 🕔 Theo dõi cập nhật tile
-				task.spawn(function()
-					while true do
-						task.wait(600)
-						local newTile, newChance = findBestHugeTile()
-						if newTile and newTile.PrimaryPart and newChance > currentChance then
-							currentChance = newChance
-							print("🔁 Tile mới tốt hơn:", newTile.Name, "|", newChance .. "x")
-							ensureTeleportToTile(newTile)
-							bestTile = newTile
-						else
-							print("✅ Không có tile nào tốt hơn. Giữ tile:", bestTile.Name, "|", currentChance .. "x")
-						end
-					end
-				end)
+				-- 🧭 Teleport đúng 1 lần
+				local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+				if hrp then
+					print("🚀 Teleport đến tile:", bestTile.Name)
+					hrp.CFrame = bestTile.PrimaryPart.CFrame + Vector3.new(0, 5, 0)
+					task.wait(1)
+				end
 
-				-- 🥚 Auto Hatch liên tục
+				-- 🥚 Auto Hatch
 				while getTotalTileCount() >= tileThreshold do
-					ensureTeleportToTile(bestTile)
-
 					local args = {bestTile.Name, MaxEggHatch}
 					local success, err = pcall(function()
 						Network.CustomEggs_Hatch:InvokeServer(unpack(args))
@@ -195,7 +171,6 @@ local function startAutoHatchHuge()
 					if not success then
 						warn("❌ Hatch lỗi:", err)
 					end
-
 					task.wait(0)
 				end
 			else
