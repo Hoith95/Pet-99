@@ -12,7 +12,7 @@ getgenv().Settings = {
         ["Items"] = {
 	    --["All Titanics"] = {Price = "+1%", AllTypes = true, Priority = true},
 	    ["Rainbow Titanic Starlight Pony"] = {Price = 868686868683, DetectManipulation = true, AllTypes = true},
-	    ["Golden Titanic Starlight Pony"] = {Price = 38686868683, DetectManipulation = true, AllTypes = true},
+	    ["Golden Titanic Starlight Pony"] = {Price = 38686868683, AllTypes = true},
 	    ["Titanic Starlight Pony"] = {Price = 16868686868, Priority = true},
             --["All Huges"] = {Price = "+1%", AllTypes = true},
 	    ["Huge Starry Eye Bunny"] = {Price = "+1%"},
