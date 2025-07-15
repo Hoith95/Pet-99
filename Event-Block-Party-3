@@ -23,6 +23,14 @@ local function getTotalTileCount()
 	return #TilesFolder:GetChildren()
 end
 
+-- 🧠 Dừng toàn bộ khi bị stop
+local function waitUntilAllowed()
+	while _G.VAR_STOP_BLOCK_PARTY and not _G.VAR_START_BLOCK_PARTY do
+		warn("⏸ Script đang bị tạm dừng bởi _G.VAR_STOP_BLOCK_PARTY")
+		task.wait(1)
+	end
+end
+
 ---------------- 🧩 LUỒNG 1: Mua tiles quanh plot ----------------
 local function startAutoPurchase()
 	local plotIndex = 1
@@ -41,6 +49,7 @@ local function startAutoPurchase()
 	end
 
 	while true do
+		waitUntilAllowed()
 		for _, offset in ipairs(offsets) do
 			local args = {plotIndex, "PurchaseTile", offset[1], offset[2]}
 			pcall(function()
@@ -60,6 +69,7 @@ local function startTileHandler()
 	local delayPerCycle = 0.5
 
 	while true do
+		waitUntilAllowed()
 		for _, tile in ipairs(TilesFolder:GetChildren()) do
 			local tileId = tile.Name
 
@@ -193,6 +203,7 @@ local function startAutoHatchHuge()
 
 	local function safeHatchLoop(tile, isStrict25x)
 		while true do
+			waitUntilAllowed()
 			if getTotalTileCount() >= tileThreshold then
 				local egg = findEggNearTile(tile)
 
@@ -240,6 +251,7 @@ local function startAutoHatchHuge()
 	end
 
 	while true do
+		waitUntilAllowed()
 		local rebirth = Save.Get().TileRebirth or 0
 
 		if rebirth < 10 then
@@ -259,6 +271,7 @@ local function startAutoHatchHuge()
 			task.wait(5)
 
 			while true do
+				waitUntilAllowed()
 				local bestTile, bestChance = findBestHugeTile(25)
 				if bestTile and bestChance >= 25 then
 					currentChance = bestChance
@@ -282,6 +295,7 @@ end
 local function startAutoGiftBag()
 	local Network = ReplicatedStorage:WaitForChild("Network")
 	while true do
+		waitUntilAllowed()
 		if getTotalTileCount() >= 50 then
 			local args = { [1] = 10 }
 			pcall(function()
@@ -300,6 +314,7 @@ local function startAutoRebirth()
 	local maxTileRebirth = 10
 
 	while true do
+		waitUntilAllowed()
 		local saveData = Save.Get()
 		local tileRebirth = saveData.TileRebirth or 0
 
@@ -371,6 +386,7 @@ local function startGuiUpdater()
 	local chanceLabel = createLabel("ChanceLabel", UDim2.new(1, -30, 0, -10), Vector2.new(1, 0), Color3.fromRGB(0, 102, 204))
 
 	while true do
+		waitUntilAllowed()
 		tilesLabel.Text  = "TILES: " .. tostring(getTotalTileCount())
 		updateLabelSize(tilesLabel)
 
@@ -390,6 +406,7 @@ local function startPreEggTeleport()
 
 	-- Chờ đến khi đủ 83 tile
 	while getTotalTileCount() < 83 do
+		waitUntilAllowed()
 		task.wait(1)
 	end
 
