@@ -212,14 +212,12 @@ local function startAutoHatchHuge()
 				local egg = findEggNearTile(tile)
 
 				if egg and egg:IsDescendantOf(workspace) then
-					-- Nếu đứng xa egg → Tele lại
 					if not isNearEgg(egg) then
 						print("🚶‍♂️ Không ở gần egg, teleport lại...")
 						teleportTo(egg.Part.CFrame + Vector3.new(0, 5, 0))
 						task.wait(1)
 					end
 
-					-- Gửi lệnh hatch
 					local args = {egg.Name, MaxEggHatch}
 					local success, err = pcall(function()
 						Network.CustomEggs_Hatch:InvokeServer(unpack(args))
@@ -237,7 +235,6 @@ local function startAutoHatchHuge()
 						print("✅ Đã tìm được egg mới:", newEgg.Name)
 						teleportTo(newEgg.Part.CFrame + Vector3.new(0, 5, 0))
 						task.wait(1)
-
 					else
 						if isStrict25x then
 							print("⚠️ Không tìm thấy egg mới cho tile ≥ 25x → reset map")
@@ -257,9 +254,10 @@ local function startAutoHatchHuge()
 	while true do
 		waitUntilAllowed()
 		local rebirth = Save.Get().TileRebirth or 0
+		local totalTiles = getTotalTileCount()
 
-		if rebirth < 10 then
-			if getTotalTileCount() >= tileThreshold then
+		if rebirth < 10 or (rebirth == 10 and totalTiles < 169) then
+			if totalTiles >= tileThreshold then
 				local bestTile, bestChance = findBestHugeTile()
 				if bestTile and bestChance > 0 then
 					currentChance = bestChance
@@ -269,8 +267,8 @@ local function startAutoHatchHuge()
 					safeHatchLoop(bestTile, false)
 				end
 			end
-		else
-			-- Logic mới: Rebirth = 10
+
+		elseif rebirth == 10 and totalTiles >= 169 then
 			teleportTo(CFrame.new(16460, 2275, -21473))
 			task.wait(5)
 
