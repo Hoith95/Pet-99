@@ -345,6 +345,18 @@ local function startGuiUpdater()
 	local playerGui = player:WaitForChild("PlayerGui")
 	local SaveModule = require(ReplicatedStorage.Library.Client.Save)
 
+	-- ✅ Xoá GUI cũ nếu có
+	local oldGui = playerGui:FindFirstChild("BlockPartyGui")
+	if oldGui then
+		oldGui:Destroy()
+	end
+
+	-- ✅ Tạo mới GUI
+	local screenGui = Instance.new("ScreenGui")
+	screenGui.Name = "BlockPartyGui"
+	screenGui.ResetOnSpawn = false
+	screenGui.Parent = playerGui
+
 	local function getCurrencyAmount(currencyId)
 		local Inventory = SaveModule.Get().Inventory
 		for _, v in pairs(Inventory.Currency) do 
@@ -353,14 +365,6 @@ local function startGuiUpdater()
 			end
 		end
 		return 0
-	end
-
-	local screenGui = playerGui:FindFirstChild("BlockPartyGui")
-	if not screenGui then
-		screenGui = Instance.new("ScreenGui")
-		screenGui.Name = "BlockPartyGui"
-		screenGui.ResetOnSpawn = false
-		screenGui.Parent = playerGui
 	end
 
 	local function createLabel(name, position, anchor, bgColor)
