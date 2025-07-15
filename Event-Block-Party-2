@@ -52,56 +52,37 @@ local function startAutoPurchase()
 	end
 end
 
----------------- 🧩 LUỒNG 2: Claim + Open ----------------
-local function startClaimAndOpen()
+---------------- 🧩 GỘP LUỒNG: Claim + Open + Unlock + Plant + Diamond ----------------
+local function startTileHandler()
 	local TilesInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Tiles_Invoke")
-	local delayPerTile = 0.05
-	local delayPerCycle = 0.05
-
-	while true do
-		for _, tile in ipairs(TilesFolder:GetChildren()) do
-			local tileId = tile.Name
-			pcall(function() TilesInvoke:InvokeServer(tileId, "Claim") end)
-			pcall(function() TilesInvoke:InvokeServer(tileId, "Open") end)
-			task.wait(delayPerTile)
-		end
-		task.wait(delayPerCycle)
-	end
-end
-
----------------- 🧩 LUỒNG 3: Claim + Unlock ----------------
-local function startClaimAndUnlock()
 	local TilesFire = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Tiles_Fire")
 	local delayPerTile = 0.05
-	local delayPerCycle = 0.05
+	local delayPerCycle = 0.5
 
 	while true do
 		for _, tile in ipairs(TilesFolder:GetChildren()) do
 			local tileId = tile.Name
+
+			-- ✅ Claim + Open (Tiles_Invoke)
+			pcall(function() TilesInvoke:InvokeServer(tileId, "Claim") end)
+			pcall(function() TilesInvoke:InvokeServer(tileId, "Open") end)
+
+			-- ✅ Claim + Unlock (Tiles_Fire)
 			pcall(function() TilesFire:FireServer(tileId, "Claimed") end)
 			pcall(function() TilesFire:FireServer(tileId, "Unlock") end)
-			task.wait(delayPerTile)
-		end
-		task.wait(delayPerCycle)
-	end
-end
 
----------------- 🧩 LUỒNG 4: Claim Plant + Diamond ----------------
-local function startAutoPlantDiamond()
-	local TilesInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Tiles_Invoke")
-
-	while true do
-		for _, tile in ipairs(TilesFolder:GetChildren()) do
+			-- ✅ Claim Plant[i] (0 -> 6)
 			if tile:IsA("Model") or tile:IsA("Folder") then
-				local tileId = tile.Name
 				if tile:FindFirstChild("Plant1") then
 					for i = 0, 6 do
 						pcall(function()
 							TilesInvoke:InvokeServer(tileId, "Claim", i)
 						end)
-						task.wait(0.1)
+						task.wait(0.05)
 					end
 				end
+
+				-- ✅ Claim Diamond
 				if tile:FindFirstChild("Diamond") then
 					pcall(function()
 						TilesInvoke:InvokeServer(tileId, "Tile_ClaimDiamonds")
@@ -109,8 +90,11 @@ local function startAutoPlantDiamond()
 					task.wait(0.1)
 				end
 			end
+
+			task.wait(delayPerTile)
 		end
-		task.wait(30)
+
+		task.wait(delayPerCycle)
 	end
 end
 
