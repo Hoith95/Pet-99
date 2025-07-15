@@ -31,7 +31,7 @@ end)
 getgenv().GLOOTBOXES = {"Locked Hype Egg"}
 
 getgenv().GPROGRESS_MODE = "Hybrid" -- Hatch
-getgenv().GGFX_MODE = 3
+getgenv().GGFX_MODE = 1
 getgenv().GRANK_TO = 99
 getgenv().GZONE_TO = 299
 getgenv().GREBIRTH_TO = 99
