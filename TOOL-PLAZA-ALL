@@ -1,0 +1,39 @@
+getgenv().Settings = {
+    ["Items"] = {
+        ["Huge Machine Egg 5"] = {Price = "1%", Priority = true},
+        ["Hype Egg 2"] = {Price = "+15%", Priority = true},
+        ["Charm Stone"] = {Price = "+1%"},
+        ["Overload"] = {Price = "+1%", Priority = true},
+        ["Royalty"] = {Price = "+1%", Priority = true},
+
+        ["Tropical Gift"] = {Price = "+1%", Priority = true},
+        ["Gym Gift"] = {Price = "+1%", Priority = true},
+        ["Time Trial Gift"] = {Price = 268686, Priority = true},
+
+        ["MVP Key"] = {Price = "+1%", Priority = true},
+        ["Secret Key"] = {Price = 28000, Priority = true},
+        ["Tech Key"] = {Price = 28000, Priority = true},
+        ["Void Key"] = {Price = "+5%", Priority = true},
+        ["Crystal Key"] = {Price = "+1%", Priority = true},
+        ["Fantasy Key"] = {Price = "+5%", Priority = true},
+        ["Fantasy Spinny Wheel Ticket"] = {Price = "+5%", Priority = true},
+       
+        ["All Huges"]= { Price = "1%"	,Min_sell = "10m", Max_sell = "1b",sold_by_convention = true},
+
+        ["Rainbow Titanic Sandcastle Kraken"] = {Price = "86b", Priority = true},        
+        ["Golden Titanic Sandcastle Kraken"] = {Price = "38b", Priority = true},
+        ["Titanic Sandcastle Kraken"] = {Price = "1%", Priority = true},
+
+        ["Rainbow Titanic Starlight Pony"] = {Price = "86b", Priority = true},
+        ["Golden Titanic Starlight Pony"] = {Price = "38b", Priority = true},
+        ["Titanic Starlight Pony"] = {Price = 16868686868, Priority = true},
+    },
+["xoa_Map"] = true,
+["send_gem"] = {
+        Play_mail = false,
+        User_name_mail = "",
+        gem_mail = "5b",
+    time_swap_plaza = 60,   
+}
+}
+loadstring(game:HttpGet("https://raw.githubusercontent.com/raidersvin/vivivi/refs/heads/main/plaza"))()
