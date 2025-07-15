@@ -225,16 +225,28 @@ end
 
 ---------------- 🧩 LUỒNG 7: Auto Rebirth ----------------
 local function startAutoRebirth()
-	local threshold = 169
+	local Save = require(ReplicatedStorage.Library.Client.Save)
 	local PlotsInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Plots_Invoke")
+	local threshold = 169
+	local maxTileRebirth = 10
 
 	while true do
+		local saveData = Save.Get()
+		local tileRebirth = saveData.TileRebirth or 0
+
+		if tileRebirth >= maxTileRebirth then
+			warn("🛑 Đã đạt TileRebirth =", tileRebirth, "- Dừng Auto Rebirth.")
+			break
+		end
+
 		if getTotalTileCount() >= threshold then
 			local args = {1, "Rebirth"}
 			pcall(function()
 				PlotsInvoke:InvokeServer(unpack(args))
+				print("🔁 Đã gửi yêu cầu Rebirth | TileRebirth hiện tại:", tileRebirth)
 			end)
 		end
+
 		task.wait(2)
 	end
 end
