@@ -404,24 +404,6 @@ local function startGuiUpdater()
 	end
 end
 
----------------- 🧩 LUỒNG 9: Teleport một lần khi đủ 83 tile ----------------
-local function startPreEggTeleport()
-	local player = Players.LocalPlayer
-
-	-- Chờ đến khi đủ 83 tile
-	while getTotalTileCount() < 83 do
-		waitUntilAllowed()
-		task.wait(1)
-	end
-
-	-- 🧭 Di chuyển tới vị trí trước khi bắt đầu xử lý egg
-	local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-	if hrp then
-		hrp.CFrame = CFrame.new(16460, 2275, -21473)
-		task.wait(5)
-	end
-end
-
 ---------------- 🚀 Kích hoạt tất cả luồng song song ----------------
 
 -- 🔁 Hàm GỘP khởi động toàn bộ luồng
@@ -435,7 +417,6 @@ local function startAllBlockPartyTasks()
 	task.spawn(startAutoGiftBag)
 	task.spawn(startAutoRebirth)
 	task.spawn(startGuiUpdater)
-	task.spawn(startPreEggTeleport)
 end
 
 -- 🧪 Theo dõi _G để auto khởi động lại nếu START được bật
