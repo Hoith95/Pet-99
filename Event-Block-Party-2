@@ -146,7 +146,7 @@ local function startAutoHatchHuge()
 		local bestTile = nil
 		local bestValue = -1
 
-		for _, tile in pairs(tilesFolder:GetChildren()) do
+		for _, tile in pairs(TilesFolder:GetChildren()) do
 			local label = tile:FindFirstChild("Sign")
 				and tile.Sign:FindFirstChild("SurfaceGui")
 				and tile.Sign.SurfaceGui:FindFirstChild("Frame")
@@ -224,7 +224,7 @@ local function startAutoHatchHuge()
 				print("⚠️ Không tìm thấy tile nào có Huge Luck!")
 			end
 		end
-		task.wait(30)
+		task.wait(5)
 	end
 end
 
