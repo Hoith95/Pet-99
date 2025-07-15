@@ -252,7 +252,7 @@ local function startAutoHatchHuge()
 					if not success then
 						warn("[AutoHatch] Error:", err)
 					else
-						print("🎁 Đã mở egg:", currentEgg.Name)
+						--print("🎁 Đã mở egg:", currentEgg.Name)
 					end
 					task.wait(0)
 				end
