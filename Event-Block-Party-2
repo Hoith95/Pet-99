@@ -151,7 +151,7 @@ local function startAutoHatchHuge()
 		local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 		if hrp and tile and tile:IsA("Model") and tile.PrimaryPart then
 			local distance = (hrp.Position - tile.PrimaryPart.Position).Magnitude
-			if distance > 5 then
+			if distance > 15 then
 				print("📍 Tele lại vào tile:", tile.Name)
 				hrp.CFrame = tile.PrimaryPart.CFrame + Vector3.new(0, 5, 0)
 				task.wait(1)
