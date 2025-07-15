@@ -106,8 +106,7 @@ local function startAutoHatchHuge()
 	local MaxEggHatch = EggCmds.GetMaxHatch()
 	local player = Players.LocalPlayer
 	local Network = ReplicatedStorage:WaitForChild("Network")
-	local Workspace = game:GetService("Workspace")
-	local EggsFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("CustomEggs")
+	local CustomEggsFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("CustomEggs")
 	task.wait(20)
 
 	-- ⚙️ Tắt animation mở trứng
@@ -120,7 +119,7 @@ local function startAutoHatchHuge()
 		end)
 	end
 
-	-- ✅ Tách giá trị "12x Huge Luck!"
+	-- ✅ Rút giá trị từ text kiểu "12x Huge Luck!"
 	local function extractHugeLuckValue(text)
 		local value = text:match("(%d+)x%s+Huge%s+Luck!?")
 		return tonumber(value or "0")
@@ -148,29 +147,26 @@ local function startAutoHatchHuge()
 		return bestTile, bestValue
 	end
 
-	-- 🥚 Tìm egg gần 1 tile (chỉ xét model tên 32 ký tự)
+	-- 🥚 Tìm egg gần một tile
 	local function findEggNearTile(tile)
-		if not tile or not tile.PrimaryPart then return nil end
-		local closestEgg, closestDist = nil, math.huge
-		for _, egg in ipairs(EggsFolder:GetChildren()) do
-			if egg:IsA("Model") and #egg.Name == 32 and egg.PrimaryPart then
-				local dist = (egg.PrimaryPart.Position - tile.PrimaryPart.Position).Magnitude
-				if dist < closestDist then
-					closestEgg = egg
-					closestDist = dist
+		local closestEgg, minDistance = nil, math.huge
+		for _, egg in pairs(CustomEggsFolder:GetChildren()) do
+			if #egg.Name == 32 and egg:IsA("Model") and egg:FindFirstChild("Part") then
+				local dist = (egg.Part.Position - tile.PrimaryPart.Position).Magnitude
+				if dist < minDistance then
+					closestEgg, minDistance = egg, dist
 				end
 			end
 		end
 		return closestEgg
 	end
 
-	-- 📍 Teleport 1 lần tới tile
+	-- 📍 Teleport tới tile
 	local function teleportToTile(tile)
 		local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 		if hrp and tile and tile:IsA("Model") and tile.PrimaryPart then
-			print("📍 Tele đến tile:", tile.Name)
 			hrp.CFrame = tile.PrimaryPart.CFrame + Vector3.new(0, 5, 0)
-			task.wait(1)
+			print("📍 Teleport đến tile:", tile.Name)
 		end
 	end
 
@@ -182,41 +178,58 @@ local function startAutoHatchHuge()
 				currentChance = bestChance
 				print("🎯 Tìm thấy tile Huge:", bestTile.Name, "|", bestChance .. "x")
 
-				local bestEgg = findEggNearTile(bestTile)
-				if not bestEgg then
-					warn("❌ Không tìm thấy egg gần tile:", bestTile.Name)
-					return
-				end
-				print("🥚 Egg gần nhất:", bestEgg.Name)
-
+				-- 1️⃣ Tele đến tile
 				teleportToTile(bestTile)
+				task.wait(1)
 
-				-- 🕔 Theo dõi cập nhật tile mỗi 10p
+				-- 2️⃣ Tìm egg gần tile
+				local bestEgg = findEggNearTile(bestTile)
+				if not bestEgg or not bestEgg:IsA("Model") then
+					warn("❌ Không tìm thấy egg gần tile!")
+					task.wait(5)
+					continue
+				end
+
+				print("🥚 Dùng egg:", bestEgg.Name)
+
+				-- 3️⃣ Cập nhật tile mỗi 10 phút
 				task.spawn(function()
 					while true do
 						task.wait(600)
+						print("🔁 [10 phút] Kiểm tra tile mới...")
 						local newTile, newChance = findBestHugeTile()
 						if newTile and newTile.PrimaryPart and newChance > currentChance then
 							currentChance = newChance
 							print("🔁 Tile mới tốt hơn:", newTile.Name, "|", newChance .. "x")
-							bestTile = newTile
+
 							teleportToTile(newTile)
+							task.wait(1)
+							bestTile = newTile
 							bestEgg = findEggNearTile(newTile)
-							print("🥚 Egg mới gần tile:", bestEgg and bestEgg.Name or "nil")
+
+							if bestEgg then
+								print("✅ Egg mới:", bestEgg.Name)
+							else
+								warn("❌ Không tìm thấy egg mới!")
+							end
 						else
-							print("✅ Không có tile nào tốt hơn. Giữ tile:", bestTile.Name, "|", currentChance .. "x")
+							print("⏸ Vẫn giữ tile:", bestTile.Name, "|", currentChance .. "x")
 						end
 					end
 				end)
 
-				-- 🥚 Hatch egg liên tục
+				-- 4️⃣ Hatch liên tục
 				while getTotalTileCount() >= tileThreshold do
-					local args = {bestEgg.Name, MaxEggHatch}
-					local success, err = pcall(function()
-						Network.CustomEggs_Hatch:InvokeServer(unpack(args))
-					end)
-					if not success then
-						warn("❌ Hatch lỗi:", err)
+					if bestEgg and bestEgg:IsA("Model") then
+						local args = {bestEgg.Name, MaxEggHatch}
+						local success, err = pcall(function()
+							Network.CustomEggs_Hatch:InvokeServer(unpack(args))
+						end)
+						if not success then
+							warn("❌ Hatch lỗi:", err)
+						end
+					else
+						warn("❌ Egg không hợp lệ!")
 					end
 					task.wait(0)
 				end
