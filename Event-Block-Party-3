@@ -4,6 +4,7 @@ if _G.VAR_BLOCK_PARTY then
 end
 
 _G.VAR_BLOCK_PARTY = true
+local isRunning = false
 
 -- 🧭 Teleport vào Block Party & đến vị trí
 local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
@@ -28,6 +29,9 @@ local function waitUntilAllowed()
 	while _G.VAR_STOP_BLOCK_PARTY and not _G.VAR_START_BLOCK_PARTY do
 		warn("⏸ Script đang bị tạm dừng bởi _G.VAR_STOP_BLOCK_PARTY")
 		task.wait(1)
+	end
+	if not _G.VAR_START_BLOCK_PARTY then
+		isRunning = false
 	end
 end
 
@@ -419,10 +423,27 @@ local function startPreEggTeleport()
 end
 
 ---------------- 🚀 Kích hoạt tất cả luồng song song ----------------
-task.spawn(startAutoPurchase)
-task.spawn(startTileHandler)
-task.spawn(startAutoHatchHuge)
-task.spawn(startAutoGiftBag)
-task.spawn(startAutoRebirth)
-task.spawn(startGuiUpdater)
-task.spawn(startPreEggTeleport)
+
+-- 🔁 Hàm GỘP khởi động toàn bộ luồng
+local function startAllBlockPartyTasks()
+	if isRunning then return end
+	isRunning = true
+
+	task.spawn(startAutoPurchase)
+	task.spawn(startTileHandler)
+	task.spawn(startAutoHatchHuge)
+	task.spawn(startAutoGiftBag)
+	task.spawn(startAutoRebirth)
+	task.spawn(startGuiUpdater)
+	task.spawn(startPreEggTeleport)
+end
+
+-- 🧪 Theo dõi _G để auto khởi động lại nếu START được bật
+task.spawn(function()
+	while true do
+		if _G.VAR_START_BLOCK_PARTY and not isRunning then
+			startAllBlockPartyTasks()
+		end
+		task.wait(2)
+	end
+end)
