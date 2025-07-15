@@ -123,7 +123,6 @@ local function startAutoHatchHuge()
 	local player = Players.LocalPlayer
 	local Network = ReplicatedStorage:WaitForChild("Network")
 	local Workspace = game:GetService("Workspace")
-	local tilesFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
 	task.wait(20)
 
 	-- ⚙️ Tắt animation mở trứng
