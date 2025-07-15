@@ -190,10 +190,10 @@ local function startAutoHatchHuge()
 		task.wait(9)
 
 		teleportTo(Enter.CFrame + Vector3.new(0, 5, 0))
-		task.wait(5)
+		task.wait(9)
 
 		teleportTo(CFrame.new(16460, 2275, -21473))
-		task.wait(5)
+		task.wait(9)
 	end
 
 	local function isNearEgg(egg)
