@@ -154,13 +154,28 @@ local function startAutoHatchHuge()
 				currentChance = bestChance
 				print("🎯 Tìm thấy tile Huge:", bestTile.Name, "|", bestChance .. "x")
 
-				-- 🧭 Teleport đúng 1 lần
 				local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 				if hrp then
 					print("🚀 Teleport đến tile:", bestTile.Name)
 					hrp.CFrame = bestTile.PrimaryPart.CFrame + Vector3.new(0, 5, 0)
 					task.wait(1)
 				end
+
+				-- 🕔 Theo dõi tile tốt hơn mỗi 10 phút
+				task.spawn(function()
+					while true do
+						task.wait(600)
+						local newTile, newChance = findBestHugeTile()
+						if newTile and newChance > currentChance and newTile.PrimaryPart then
+							currentChance = newChance
+							print("🔁 Tìm thấy tile tốt hơn:", newTile.Name, "|", newChance .. "x")
+							print("❗Không auto teleport lại — chỉ cập nhật info.")
+							player.Character.HumanoidRootPart.CFrame = newTile.PrimaryPart.CFrame + Vector3.new(0, 5, 0)
+						else
+							print("✅ Giữ tile cũ:", bestTile.Name, "|", currentChance .. "x")
+						end
+					end
+				end)
 
 				-- 🥚 Auto Hatch
 				while getTotalTileCount() >= tileThreshold do
