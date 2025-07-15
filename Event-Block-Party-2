@@ -106,6 +106,8 @@ local function startAutoHatchHuge()
 	local MaxEggHatch = EggCmds.GetMaxHatch()
 	local player = Players.LocalPlayer
 	local Network = ReplicatedStorage:WaitForChild("Network")
+	local Workspace = game:GetService("Workspace")
+	local EggsFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("CustomEggs")
 	task.wait(20)
 
 	-- ⚙️ Tắt animation mở trứng
@@ -146,6 +148,32 @@ local function startAutoHatchHuge()
 		return bestTile, bestValue
 	end
 
+	-- 🥚 Tìm egg gần 1 tile (chỉ xét model tên 32 ký tự)
+	local function findEggNearTile(tile)
+		if not tile or not tile.PrimaryPart then return nil end
+		local closestEgg, closestDist = nil, math.huge
+		for _, egg in ipairs(EggsFolder:GetChildren()) do
+			if egg:IsA("Model") and #egg.Name == 32 and egg.PrimaryPart then
+				local dist = (egg.PrimaryPart.Position - tile.PrimaryPart.Position).Magnitude
+				if dist < closestDist then
+					closestEgg = egg
+					closestDist = dist
+				end
+			end
+		end
+		return closestEgg
+	end
+
+	-- 📍 Teleport 1 lần tới tile
+	local function teleportToTile(tile)
+		local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+		if hrp and tile and tile:IsA("Model") and tile.PrimaryPart then
+			print("📍 Tele đến tile:", tile.Name)
+			hrp.CFrame = tile.PrimaryPart.CFrame + Vector3.new(0, 5, 0)
+			task.wait(1)
+		end
+	end
+
 	-- 🔁 Vòng chính
 	while true do
 		if getTotalTileCount() >= tileThreshold then
@@ -154,31 +182,36 @@ local function startAutoHatchHuge()
 				currentChance = bestChance
 				print("🎯 Tìm thấy tile Huge:", bestTile.Name, "|", bestChance .. "x")
 
-				local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-				if hrp then
-					print("🚀 Teleport đến tile:", bestTile.Name)
-					hrp.CFrame = bestTile.PrimaryPart.CFrame + Vector3.new(0, 5, 0)
-					task.wait(1)
+				local bestEgg = findEggNearTile(bestTile)
+				if not bestEgg then
+					warn("❌ Không tìm thấy egg gần tile:", bestTile.Name)
+					return
 				end
+				print("🥚 Egg gần nhất:", bestEgg.Name)
 
-				-- 🕔 Theo dõi tile tốt hơn mỗi 10 phút
+				teleportToTile(bestTile)
+
+				-- 🕔 Theo dõi cập nhật tile mỗi 10p
 				task.spawn(function()
 					while true do
 						task.wait(600)
 						local newTile, newChance = findBestHugeTile()
-						if newTile and newChance > currentChance and newTile.PrimaryPart then
+						if newTile and newTile.PrimaryPart and newChance > currentChance then
 							currentChance = newChance
-							print("🔁 Tìm thấy tile tốt hơn:", newTile.Name, "|", newChance .. "x")
-							player.Character.HumanoidRootPart.CFrame = newTile.PrimaryPart.CFrame + Vector3.new(0, 5, 0)
+							print("🔁 Tile mới tốt hơn:", newTile.Name, "|", newChance .. "x")
+							bestTile = newTile
+							teleportToTile(newTile)
+							bestEgg = findEggNearTile(newTile)
+							print("🥚 Egg mới gần tile:", bestEgg and bestEgg.Name or "nil")
 						else
-							print("✅ Giữ tile cũ:", bestTile.Name, "|", currentChance .. "x")
+							print("✅ Không có tile nào tốt hơn. Giữ tile:", bestTile.Name, "|", currentChance .. "x")
 						end
 					end
 				end)
 
-				-- 🥚 Auto Hatch
+				-- 🥚 Hatch egg liên tục
 				while getTotalTileCount() >= tileThreshold do
-					local args = {bestTile.Name, MaxEggHatch}
+					local args = {bestEgg.Name, MaxEggHatch}
 					local success, err = pcall(function()
 						Network.CustomEggs_Hatch:InvokeServer(unpack(args))
 					end)
