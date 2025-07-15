@@ -139,7 +139,7 @@ local function startAutoHatchHuge()
 		return tonumber(value or "0")
 	end
 
-	local function findBestHugeTile(minRequired)
+	local function findBestHugeTile()
 		local bestTile, bestValue = nil, -1
 		for _, tile in pairs(TilesFolder:GetChildren()) do
 			local label = tile:FindFirstChild("Sign")
@@ -149,7 +149,7 @@ local function startAutoHatchHuge()
 				and tile.Sign.SurfaceGui.Frame.Frame:FindFirstChild("TextLabel")
 			if label and label:IsA("TextLabel") then
 				local value = extractHugeLuckValue(label.Text)
-				if value > bestValue and (not minRequired or value >= minRequired) then
+				if value > bestValue then
 					bestTile, bestValue = tile, value
 				end
 			end
@@ -190,10 +190,10 @@ local function startAutoHatchHuge()
 		task.wait(9)
 
 		teleportTo(Enter.CFrame + Vector3.new(0, 5, 0))
-		task.wait(9)
+		task.wait(5)
 
 		teleportTo(CFrame.new(16460, 2275, -21473))
-		task.wait(9)
+		task.wait(5)
 	end
 
 	local function isNearEgg(egg)
@@ -205,7 +205,7 @@ local function startAutoHatchHuge()
 		return false
 	end
 
-	local function safeHatchLoop(tile, isStrict25x)
+	local function safeHatchLoop(tile)
 		while true do
 			waitUntilAllowed()
 			if getTotalTileCount() >= tileThreshold then
@@ -236,14 +236,9 @@ local function startAutoHatchHuge()
 						teleportTo(newEgg.Part.CFrame + Vector3.new(0, 5, 0))
 						task.wait(1)
 					else
-						if isStrict25x then
-							print("⚠️ Không tìm thấy egg mới cho tile ≥ 25x → reset map")
-							handleRejoin()
-							break
-						else
-							warn("❌ Không tìm thấy egg mới gần tile, chờ 5s rồi thử lại...")
-							task.wait(5)
-						end
+						print("❌ Không tìm thấy egg mới gần tile → reset map")
+						handleRejoin()
+						break
 					end
 				end
 			end
@@ -253,42 +248,19 @@ local function startAutoHatchHuge()
 
 	while true do
 		waitUntilAllowed()
-		local rebirth = Save.Get().TileRebirth or 0
-		local totalTiles = getTotalTileCount()
-
-		if rebirth < 10 or (rebirth == 10 and totalTiles < 169) then
-			if totalTiles >= tileThreshold then
-				local bestTile, bestChance = findBestHugeTile()
-				if bestTile and bestChance > 0 then
-					currentChance = bestChance
-					teleportToTile(bestTile)
-					task.wait(1)
-					print("🥚 Bắt đầu nở ở tile:", bestTile.Name, "|", bestChance .. "x")
-					safeHatchLoop(bestTile, false)
-				end
-			end
-
-		elseif rebirth == 10 and totalTiles >= 169 then
-			teleportTo(CFrame.new(16460, 2275, -21473))
-			task.wait(5)
-
-			while true do
-				waitUntilAllowed()
-				local bestTile, bestChance = findBestHugeTile(25)
-				if bestTile and bestChance >= 25 then
-					currentChance = bestChance
-					teleportToTile(bestTile)
-					task.wait(1)
-					print("🎯 Tile ≥ 25x:", bestTile.Name, "|", bestChance .. "x")
-					safeHatchLoop(bestTile, true)
-				else
-					print("🔄 Không có tile ≥ 25x, reset map...")
-					handleRejoin()
-				end
-				task.wait(5)
+		if getTotalTileCount() >= tileThreshold then
+			local bestTile, bestChance = findBestHugeTile()
+			if bestTile and bestChance > 0 then
+				currentChance = bestChance
+				teleportToTile(bestTile)
+				task.wait(1)
+				print("🥚 Bắt đầu nở ở tile:", bestTile.Name, "|", bestChance .. "x")
+				safeHatchLoop(bestTile)
+			else
+				print("❌ Không có tile nào có HUGE CHANCE > 0 → reset map")
+				handleRejoin()
 			end
 		end
-
 		task.wait(5)
 	end
 end
