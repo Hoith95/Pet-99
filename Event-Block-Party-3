@@ -441,9 +441,14 @@ end
 -- 🧪 Theo dõi _G để auto khởi động lại nếu START được bật
 task.spawn(function()
 	while true do
+		if _G.VAR_STOP_BLOCK_PARTY and _G.VAR_BLOCK_PARTY then
+			isRunning = false -- 🔁 Reset flag thủ công khi bị dừng
+		end
+
 		if _G.VAR_START_BLOCK_PARTY and not isRunning then
 			startAllBlockPartyTasks()
 		end
+
 		task.wait(2)
 	end
 end)
