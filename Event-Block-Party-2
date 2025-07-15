@@ -325,9 +325,7 @@ end
 
 ---------------- 🚀 Kích hoạt tất cả luồng song song ----------------
 task.spawn(startAutoPurchase)
-task.spawn(startClaimAndOpen)
-task.spawn(startClaimAndUnlock)
-task.spawn(startAutoPlantDiamond)
+task.spawn(startTileHandler)
 task.spawn(startAutoHatchHuge)
 task.spawn(startAutoGiftBag)
 task.spawn(startAutoRebirth)
