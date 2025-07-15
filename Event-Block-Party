@@ -15,6 +15,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
 local TilesFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
+local NLibrary = game.ReplicatedStorage.Library
+local EggCmds = require(NLibrary.Client.EggCmds)
 
 -- 🔢 Đếm tổng số tile
 local function getTotalTileCount()
@@ -117,6 +119,7 @@ local currentChance = 0
 
 local function startAutoHatchHuge()
 	local tileThreshold = 83
+	local MaxEggHatch = EggCmds.GetMaxHatch()
 	local player = Players.LocalPlayer
 	local Network = ReplicatedStorage:WaitForChild("Network")
 	local customEggsFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("CustomEggs")
@@ -242,7 +245,7 @@ local function startAutoHatchHuge()
 						end
 					end
 
-					local args = {currentEgg.Name, 89}
+					local args = {currentEgg.Name, MaxEggHatch}
 					local success, err = pcall(function()
 						Network.CustomEggs_Hatch:InvokeServer(unpack(args))
 					end)
