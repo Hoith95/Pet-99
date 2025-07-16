@@ -449,8 +449,9 @@ end
 local function startAllBlockPartyTasks()
 	if isRunning then return end
 	isRunning = true
+	print("🚀 Đã kích hoạt startAllBlockPartyTasks")
 
-	-- 🧩 LUỒNG 1: Auto Purchase → chờ đến khi chưa đủ rebirth 10 hoặc chưa đủ 169 tiles
+	-- 🧩 LUỒNG 1: Auto Purchase
 	task.spawn(function()
 		local Save = require(ReplicatedStorage.Library.Client.Save)
 		while true do
@@ -459,6 +460,7 @@ local function startAllBlockPartyTasks()
 			local totalTiles = getTotalTileCount()
 
 			if tileRebirth < 10 or totalTiles < 169 then
+				print("✅ Đã khởi động LUỒNG 1: Auto Purchase")
 				startAutoPurchase()
 				break
 			end
@@ -466,37 +468,42 @@ local function startAllBlockPartyTasks()
 		end
 	end)
 
-	-- 🧩 LUỒNG 2: Tile Handler (Claim/Open/Unlock/Plant/Diamond) → chạy ngay
-	task.spawn(startTileHandler)
+	-- 🧩 LUỒNG 2: Tile Handler
+	task.spawn(function()
+		print("✅ Đã khởi động LUỒNG 2: Tile Handler (Claim/Open/Unlock/Plant/Diamond)")
+		startTileHandler()
+	end)
 
-	-- 🧩 LUỒNG 5: Hatch HUGE → chỉ chạy khi đủ 83 tiles
+	-- 🧩 LUỒNG 5: Hatch HUGE
 	task.spawn(function()
 		while true do
 			while getTotalTileCount() < 83 do
 				task.wait(2)
 			end
+			print("✅ Đã khởi động LUỒNG 3: Hatch HUGE CHANCE")
 			startAutoHatchHuge()
 		end
 	end)
 
-
-	-- 🧩 LUỒNG 6: Auto Gift Bag → chỉ chạy nếu đủ ≥ 50 tile
+	-- 🧩 LUỒNG 6: Auto Gift Bag
 	task.spawn(function()
 		while true do
 			while getTotalTileCount() < 50 do
 				task.wait(2)
 			end
+			print("✅ Đã khởi động LUỒNG 4: Auto SummerGiftBag2025")
 			startAutoGiftBag()
 		end
 	end)
 
-	-- 🧩 LUỒNG 7: Auto Rebirth → chỉ chạy nếu chưa đạt rebirth 10
+	-- 🧩 LUỒNG 7: Auto Rebirth
 	task.spawn(function()
 		local Save = require(ReplicatedStorage.Library.Client.Save)
 		while true do
 			local saveData = Save.Get()
 			local tileRebirth = saveData.TileRebirth or 0
 			if tileRebirth < 10 then
+				print("✅ Đã khởi động LUỒNG 5: Auto Rebirth")
 				startAutoRebirth()
 				break
 			end
@@ -504,8 +511,11 @@ local function startAllBlockPartyTasks()
 		end
 	end)
 
-	-- 🧩 LUỒNG 8: GUI Updater → chạy ngay
-	task.spawn(startGuiUpdater)
+	-- 🧩 LUỒNG 8: GUI Updater
+	task.spawn(function()
+		print("✅ Đã khởi động LUỒNG 6: GUI Updater")
+		startGuiUpdater()
+	end)
 end
 
 task.spawn(function()
