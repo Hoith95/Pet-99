@@ -209,7 +209,7 @@ local function startAutoHatchHuge()
 		local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 		if hrp and egg and egg:FindFirstChild("Part") then
 			local distance = (hrp.Position - egg.Part.Position).Magnitude
-			return distance < 15
+			return distance < 30
 		end
 		return false
 	end
