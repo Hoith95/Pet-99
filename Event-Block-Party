@@ -428,16 +428,40 @@ local function startAllBlockPartyTasks()
 	if isRunning then return end
 	isRunning = true
 
-	task.spawn(startAutoPurchase)
+	local Save = require(ReplicatedStorage.Library.Client.Save)
+
+	-- 🔢 Kiểm tra dữ liệu hiện tại
+	local saveData = Save.Get()
+	local tileRebirth = saveData.TileRebirth or 0
+	local totalTiles = getTotalTileCount()
+
+	-- 🧩 LUỒNG 1: Auto Purchase → chỉ chạy nếu chưa max Rebirth
+	if tileRebirth < 10 or totalTiles < 169 then
+		task.spawn(startAutoPurchase)
+	end
+
+	-- 🧩 LUỒNG 2: Tile Handler (Claim/Open/Unlock/Plant/Diamond)
 	task.spawn(startTileHandler)
+
+	-- 🧩 LUỒNG 5: Hatch HUGE → chỉ chạy khi đủ 83 tiles
 	task.spawn(function()
 		while getTotalTileCount() < 83 do
 			task.wait(2)
 		end
 		startAutoHatchHuge()
 	end)
-	task.spawn(startAutoGiftBag)
-	task.spawn(startAutoRebirth)
+
+	-- 🧩 LUỒNG 6: Auto Gift Bag → chỉ chạy nếu đủ ≥ 50 tile
+	if totalTiles >= 50 then
+		task.spawn(startAutoGiftBag)
+	end
+
+	-- 🧩 LUỒNG 7: Auto Rebirth → chỉ chạy nếu chưa đủ rebirth
+	if tileRebirth < 10 then
+		task.spawn(startAutoRebirth)
+	end
+
+	-- 🧩 LUỒNG 8: GUI Updater
 	task.spawn(startGuiUpdater)
 end
 
