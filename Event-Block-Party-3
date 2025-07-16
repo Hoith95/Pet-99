@@ -324,7 +324,7 @@ local function startAutoGiftBag()
 		waitUntilAllowed()
 
 		if getTotalTileCount() >= 50 then
-			local flowerCount = getCurrencyAmount("TropicalFlower")
+			local flowerCount = getCurrencyAmount("Tropical Flower")
 			if flowerCount >= 10 then
 				local args = { [1] = 10 }
 				pcall(function()
