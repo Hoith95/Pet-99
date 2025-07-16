@@ -6,8 +6,6 @@ end
 _G.VAR_BLOCK_PARTY = true
 local isRunning = false
 
-teleportToBlockParty()
-
 -- ⚙️ Dịch vụ & Folder
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
@@ -54,6 +52,8 @@ local function teleportToBlockParty()
 
 	teleportTo(CFrame.new(16460, 2275, -21473))
 end
+
+teleportToBlockParty()
 
 ---------------- 🧩 LUỒNG 1: Mua tiles quanh plot ----------------
 local function startAutoPurchase()
