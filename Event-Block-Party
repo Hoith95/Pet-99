@@ -224,6 +224,10 @@ local function startAutoHatchHuge()
 			task.wait(3)
 		end
 
+		if getTotalTileCount() < 83 then
+			warn("⚠️ Tiles bị giảm khi đang hatch → thoát vòng lặp hatch để reset lại")
+			break
+		end
 
 			if not bestEgg or not bestEgg:IsDescendantOf(workspace) then
 				warn("❌ Egg hiện tại đã mất, đang tìm lại...")
