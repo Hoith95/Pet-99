@@ -52,6 +52,7 @@ local function teleportToBlockParty()
 end
 
 teleportToBlockParty()
+teleportTo(CFrame.new(16460, 2275, -21473))
 
 ---------------- 🧩 LUỒNG 1: Mua tiles quanh plot ----------------
 local function startAutoPurchase()
@@ -142,6 +143,7 @@ local currentChance = 0
 
 local function startAutoHatchHuge()
 	local tileThreshold = 83
+	local player = Players.LocalPlayer
 	task.wait(20)
 
 	-- ⚙️ Tắt animation mở trứng
@@ -199,15 +201,10 @@ local function startAutoHatchHuge()
 
 	local function handleRejoin()
 		local Leave = workspace.__THINGS.Instances.LuckyBlocks.Teleports.Leave
-		local Enter = workspace.__THINGS.Instances.BlockParty.Teleports.Enter
-
-		-- 🚪 Rời khu vực hiện tại
 		teleportTo(Leave.CFrame + Vector3.new(0, 5, 0))
 		task.wait(9)
-
 		teleportToBlockParty()
 	end
-
 
 	local function isNearEgg(egg)
 		local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
@@ -223,12 +220,17 @@ local function startAutoHatchHuge()
 
 	local function safeHatchLoop()
 		while true do
-		waitUntilAllowed()
+			waitUntilAllowed()
 
-		while getTotalTileCount() < 83 do
-			warn("⏳ Tiles hiện tại dưới 83 → đang chờ...")
-			task.wait(3)
-		end
+			while getTotalTileCount() < 83 do
+				warn("⏳ Tiles hiện tại dưới 83 → đang chờ...")
+				task.wait(3)
+			end
+
+			if getTotalTileCount() < 83 then
+				warn("⚠️ Tiles bị giảm khi đang hatch → thoát vòng lặp hatch để reset lại")
+				break
+			end
 
 			if not bestEgg or not bestEgg:IsDescendantOf(workspace) then
 				warn("❌ Egg hiện tại đã mất, đang tìm lại...")
@@ -250,7 +252,7 @@ local function startAutoHatchHuge()
 				teleportTo(bestEgg.Part.CFrame + Vector3.new(0, 5, 0))
 				task.wait(1)
 			end
-			
+
 			local MaxEggHatch = EggCmds.GetMaxHatch()
 			local args = {bestEgg.Name, MaxEggHatch}
 			local success, err = pcall(function()
@@ -303,8 +305,23 @@ local function startAutoHatchHuge()
 
 				safeHatchLoop()
 			else
-				print("❌ Không có tile nào có HUGE CHANCE > 0 → reset map")
-				handleRejoin()
+				print("❌ Không có tile nào có HUGE CHANCE > 0 → thử teleport thủ công trước khi reset map")
+				teleportTo(CFrame.new(16460, 2275, -21473))
+				task.wait(3)
+
+				local retryTile, retryChance = findBestHugeTile()
+				if retryTile and retryChance > 0 then
+					print("✅ Đã tìm thấy tile sau khi teleport thủ công:", retryTile.Name, "|", retryChance .. "x")
+					currentChance = retryChance
+					bestTile = retryTile
+					bestEgg = findEggNearTile(retryTile)
+					teleportToTile(retryTile)
+					task.wait(1)
+					safeHatchLoop()
+				else
+					print("❌ Vẫn không tìm thấy tile → reset map")
+					handleRejoin()
+				end
 			end
 		end
 		task.wait(5)
