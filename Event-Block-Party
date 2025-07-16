@@ -326,32 +326,33 @@ end
 
 ---------------- 🧩 LUỒNG 4: Auto SummerGiftBag2025 ----------------
 local function startAutoGiftBag()
-	local function getCurrencyAmount(itemId)
-		local Inventory = Save.Get().Inventory
-		for _, v in pairs(Inventory.Misc) do 
-			if v.id == itemId then
-				return v._am
-			end
-		end
-		return 0
-	end
+    local function getCurrencyAmount(itemId)
+        local Inventory = Save.Get().Inventory
+        for _, v in pairs(Inventory.Misc) do 
+            if v.id == itemId then
+                return tonumber(v._am) or 0
+            end
+        end
+        return 0
+    end
 
-	while true do
-		waitUntilAllowed()
+    while true do
+        waitUntilAllowed()
 
-		if getTotalTileCount() >= 50 then
-			local flowerCount = getCurrencyAmount("Tropical Flower")
-			if flowerCount >= 10 then
-				local args = { [1] = 10 }
-				pcall(function()
-					Network.SummerGiftBag2025Machine_Activate:InvokeServer(unpack(args))
-					print("🎁 Đã đổi 10 Tropical Flower thành Gift Bag")
-				end)
-			end
-		end
+        if getTotalTileCount() >= 50 then
+            local flowerCount = getCurrencyAmount("Tropical Flower")
+            print("🌺 Tropical Flower hiện tại:", flowerCount)
+            if flowerCount >= 10 then
+                local args = {10}
+                pcall(function()
+                    Network.SummerGiftBag2025Machine_Activate:InvokeServer(unpack(args))
+                    print("🎁 Đã đổi 10 Tropical Flower thành Gift Bag")
+                end)
+            end
+        end
 
-		task.wait(30)
-	end
+        task.wait(30)
+    end
 end
 
 ---------------- 🧩 LUỒNG 5: Auto Rebirth ----------------
