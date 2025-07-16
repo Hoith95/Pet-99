@@ -224,7 +224,7 @@ local function startAutoHatchHuge()
 					if not isNearEgg(egg) then
 						print("🚶‍♂️ Không ở gần egg, teleport lại...")
 						teleportTo(egg.Part.CFrame + Vector3.new(0, 5, 0))
-						task.wait(1)
+						task.wait(5)
 					end
 
 					local args = {egg.Name, MaxEggHatch}
