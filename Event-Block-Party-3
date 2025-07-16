@@ -214,9 +214,11 @@ local function startAutoHatchHuge()
 		return false
 	end
 
+
 	local function safeHatchLoop(tile)
 		while true do
 			waitUntilAllowed()
+
 			if getTotalTileCount() >= tileThreshold then
 				local egg = findEggNearTile(tile)
 
@@ -224,7 +226,7 @@ local function startAutoHatchHuge()
 					if not isNearEgg(egg) then
 						print("🚶‍♂️ Không ở gần egg, teleport lại...")
 						teleportTo(egg.Part.CFrame + Vector3.new(0, 5, 0))
-						task.wait(5)
+						task.wait(2)
 					end
 
 					local args = {egg.Name, MaxEggHatch}
@@ -236,14 +238,14 @@ local function startAutoHatchHuge()
 					end
 
 				else
-					warn("❌ Egg cũ đã mất, đang tìm egg mới gần tile:", tile.Name)
+					warn("❌ Egg không hợp lệ hoặc đã mất ở tile:", tile.Name)
 					task.wait(2)
-					local newEgg = findEggNearTile(tile)
 
-					if newEgg and newEgg:IsDescendantOf(workspace) then
-						print("✅ Đã tìm được egg mới:", newEgg.Name)
-						teleportTo(newEgg.Part.CFrame + Vector3.new(0, 5, 0))
-						task.wait(1)
+					local retryEgg = findEggNearTile(tile)
+					if retryEgg and retryEgg:IsDescendantOf(workspace) then
+						print("✅ Đã tìm được egg mới:", retryEgg.Name)
+						teleportTo(retryEgg.Part.CFrame + Vector3.new(0, 5, 0))
+						task.wait(2)
 					else
 						print("❌ Không tìm thấy egg mới gần tile → reset map")
 						handleRejoin()
@@ -251,7 +253,8 @@ local function startAutoHatchHuge()
 					end
 				end
 			end
-			task.wait(0)
+
+			task.wait(0.5)
 		end
 	end
 
