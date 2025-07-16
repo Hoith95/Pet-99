@@ -10,6 +10,7 @@ local isRunning = false
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
+local player = game.Players.LocalPlayer
 local TilesFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
 local NLibrary = ReplicatedStorage.Library
 local EggCmds = require(NLibrary.Client.EggCmds)
@@ -32,8 +33,6 @@ local function waitUntilAllowed()
 		isRunning = false
 	end
 end
-
-local player = game.Players.LocalPlayer
 
 function teleportTo(cf)
 	local character = player.Character or player.CharacterAdded:Wait()
@@ -143,7 +142,6 @@ local currentChance = 0
 
 local function startAutoHatchHuge()
 	local tileThreshold = 83
-	local player = Players.LocalPlayer
 	task.wait(20)
 
 	-- ⚙️ Tắt animation mở trứng
