@@ -146,10 +146,12 @@ task.spawn(function()
 		task.wait(10)
 	end
 end)
+
 -- 🔍 Lấy Max Zone từ Map4
 local function getMaxZoneFromMap4()
 	local mapFolder = workspace:FindFirstChild("Map4")
 	if not mapFolder then return 0 end
+
 	local maxZone = 0
 	for _, folder in ipairs(mapFolder:GetChildren()) do
 		if folder:IsA("Folder") then
@@ -165,6 +167,7 @@ end
 -- 🕐 Chờ đến khi đạt Max Zone
 local function waitUntilReachMaxZone(useCustomZone)
 	local maxMapZone = useCustomZone and 269 or getMaxZoneFromMap4()
+
 	while true do
 		local success, data = pcall(function()
 			local _, zoneData = ZoneCmds.GetMaxOwnedZone()
@@ -172,19 +175,20 @@ local function waitUntilReachMaxZone(useCustomZone)
 		end)
 
 		local current = success and data and data.ZoneNumber or 0
+
 		if current >= maxMapZone then
 			warn("✅ Đã đạt Zone tối đa (" .. tostring(current) .. ")")
 			break
+		else
+			warn("⏳ Chưa đạt Zone tối đa (" .. tostring(current) .. "/" .. tostring(maxMapZone) .. "), đợi 60s...")
+			task.wait(60)
 		end
-
-		warn("⏳ Chưa đạt Zone tối đa (" .. tostring(current) .. "/" .. tostring(maxMapZone) .. "), đợi 60s...")
-		task.wait(60)
 	end
 end
 
 -- 🧪 Gọi hàm với tùy chọn
-waitUntilReachMaxZone(true)  -- Dùng zone 269 cố định
--- waitUntilReachMaxZone(false) -- Dùng theo Map4
+waitUntilReachMaxZone(true)  -- Dùng zone cố định 269
+-- waitUntilReachMaxZone(false) -- Dùng zone lấy từ Map4
 
 -- ⏱️ Monitor 12 phút không tăng lượt/TotalRuns từ GUI Label
 local function startMonitor12Min()
