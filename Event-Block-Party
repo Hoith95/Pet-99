@@ -6,14 +6,7 @@ end
 _G.VAR_BLOCK_PARTY = true
 local isRunning = false
 
--- 🧭 Teleport vào Block Party & đến vị trí cụ thể
-local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
-local Enter = workspace.__THINGS.Instances.BlockParty.Teleports.Enter
-
-hrp.CFrame = Enter.CFrame + Vector3.new(0, 5, 0)
-task.wait(9)
-hrp.CFrame = CFrame.new(16460, 2275, -21473)
-
+teleportToBlockParty()
 
 -- ⚙️ Dịch vụ & Folder
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -40,6 +33,23 @@ local function waitUntilAllowed()
 	if not _G.VAR_START_BLOCK_PARTY then
 		isRunning = false
 	end
+end
+
+local function teleportToBlockParty()
+	local player = game.Players.LocalPlayer
+	local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	if not hrp then
+		warn("❌ Không tìm thấy HumanoidRootPart")
+		return
+	end
+
+	local Enter = workspace.__THINGS.Instances.BlockParty.Teleports.Enter
+
+	-- 🧭 Teleport vào Block Party & đến vị trí cụ thể
+	hrp.CFrame = Enter.CFrame + Vector3.new(0, 5, 0)
+	task.wait(9)
+
+	hrp.CFrame = CFrame.new(16460, 2275, -21473)
 end
 
 ---------------- 🧩 LUỒNG 1: Mua tiles quanh plot ----------------
@@ -201,9 +211,7 @@ local function startAutoHatchHuge()
 		teleportTo(Leave.CFrame + Vector3.new(0, 5, 0))
 		task.wait(9)
 
-		-- 🚪 Vào lại khu vực BlockParty
-		teleportTo(Enter.CFrame + Vector3.new(0, 5, 0))
-		task.wait(5)
+		teleportToBlockParty()
 	end
 
 
