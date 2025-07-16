@@ -91,7 +91,7 @@ local function startAutoPurchase()
 	end
 end
 
----------------- 🧩 GỘP LUỒNG: Claim + Open + Unlock + Plant + Diamond ----------------
+---------------- 🧩 LUỒNG 2: Claim + Open + Unlock + Plant + Diamond ----------------
 local function startTileHandler()
 	local TilesInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Tiles_Invoke")
 	local TilesFire = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Tiles_Fire")
@@ -137,7 +137,7 @@ local function startTileHandler()
 		task.wait(delayPerCycle)
 	end
 end
----------------- 🧩 LUỒNG 5: Hatch HUGE CHANCE ----------------
+---------------- 🧩 LUỒNG 3: Hatch HUGE CHANCE ----------------
 local currentChance = 0
 
 local function startAutoHatchHuge()
@@ -223,11 +223,6 @@ local function startAutoHatchHuge()
 			while getTotalTileCount() < 83 do
 				warn("⏳ Tiles hiện tại dưới 83 → đang chờ...")
 				task.wait(3)
-			end
-
-			if getTotalTileCount() < 83 then
-				warn("⚠️ Tiles bị giảm khi đang hatch → thoát vòng lặp hatch để reset lại")
-				break
 			end
 
 			if not bestEgg or not bestEgg:IsDescendantOf(workspace) then
@@ -326,7 +321,7 @@ local function startAutoHatchHuge()
 	end
 end
 
----------------- 🧩 LUỒNG 6: Auto SummerGiftBag2025 ----------------
+---------------- 🧩 LUỒNG 4: Auto SummerGiftBag2025 ----------------
 local function startAutoGiftBag()
 	local function getCurrencyAmount(itemId)
 		local Inventory = Save.Get().Inventory
@@ -356,7 +351,7 @@ local function startAutoGiftBag()
 	end
 end
 
----------------- 🧩 LUỒNG 7: Auto Rebirth ----------------
+---------------- 🧩 LUỒNG 5: Auto Rebirth ----------------
 local function startAutoRebirth()
 	local PlotsInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Plots_Invoke")
 	local threshold = 169
@@ -384,7 +379,7 @@ local function startAutoRebirth()
 	end
 end
 
----------------- 🧩 LUỒNG 8: GUI Coins / Tiles / Chance ----------------
+---------------- 🧩 LUỒNG 6: GUI Coins / Tiles / Chance ----------------
 local function startGuiUpdater()
 	local player = Players.LocalPlayer
 	local playerGui = player:WaitForChild("PlayerGui")
