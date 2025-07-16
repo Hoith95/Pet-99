@@ -306,15 +306,35 @@ end
 ---------------- 🧩 LUỒNG 6: Auto SummerGiftBag2025 ----------------
 local function startAutoGiftBag()
 	local Network = ReplicatedStorage:WaitForChild("Network")
+	local SaveModule = require(ReplicatedStorage.Library.Client.Save)
+
+	-- 🔁 Hàm lấy số lượng Tropical Flower trong Misc
+	local function getCurrencyAmount(itemId)
+		local Inventory = SaveModule.Get().Inventory
+		for _, v in pairs(Inventory.Misc) do 
+			if v.id == itemId then
+				return v._am
+			end
+		end
+		return 0
+	end
+
+	-- 🧪 Theo dõi liên tục mỗi 30 giây
 	while true do
 		waitUntilAllowed()
+
 		if getTotalTileCount() >= 50 then
-			local args = { [1] = 10 }
-			pcall(function()
-				Network.SummerGiftBag2025Machine_Activate:InvokeServer(unpack(args))
-			end)
+			local flowerCount = getCurrencyAmount("TropicalFlower")
+			if flowerCount >= 10 then
+				local args = { [1] = 10 }
+				pcall(function()
+					Network.SummerGiftBag2025Machine_Activate:InvokeServer(unpack(args))
+					print("🎁 Đã đổi 10 Tropical Flower thành Gift Bag")
+				end)
+			end
 		end
-		task.wait(1)
+
+		task.wait(30)
 	end
 end
 
