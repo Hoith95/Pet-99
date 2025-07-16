@@ -6,10 +6,14 @@ end
 _G.VAR_BLOCK_PARTY = true
 local isRunning = false
 
--- 🧭 Teleport vào Block Party & đến vị trí
+-- 🧭 Teleport vào Block Party & đến vị trí cụ thể
 local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
-hrp.CFrame = workspace.__THINGS.Instances.BlockParty.Teleports.Enter.CFrame + Vector3.new(0, 5, 0)
+local Enter = workspace.__THINGS.Instances.BlockParty.Teleports.Enter
+
+hrp.CFrame = Enter.CFrame + Vector3.new(0, 5, 0)
 task.wait(9)
+hrp.CFrame = CFrame.new(16460, 2275, -21473)
+
 
 -- ⚙️ Dịch vụ & Folder
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -193,15 +197,15 @@ local function startAutoHatchHuge()
 		local Leave = workspace.__THINGS.Instances.LuckyBlocks.Teleports.Leave
 		local Enter = workspace.__THINGS.Instances.BlockParty.Teleports.Enter
 
+		-- 🚪 Rời khu vực hiện tại
 		teleportTo(Leave.CFrame + Vector3.new(0, 5, 0))
 		task.wait(9)
 
+		-- 🚪 Vào lại khu vực BlockParty
 		teleportTo(Enter.CFrame + Vector3.new(0, 5, 0))
-		task.wait(9)
-
-		teleportTo(CFrame.new(16460, 2275, -21473))
-		task.wait(9)
+		task.wait(5)
 	end
+
 
 	local function isNearEgg(egg)
 		local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
