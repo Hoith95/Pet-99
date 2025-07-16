@@ -430,7 +430,12 @@ local function startAllBlockPartyTasks()
 
 	task.spawn(startAutoPurchase)
 	task.spawn(startTileHandler)
-	task.spawn(startAutoHatchHuge)
+	task.spawn(function()
+		while getTotalTileCount() < 83 do
+			task.wait(2)
+		end
+		startAutoHatchHuge()
+	end)
 	task.spawn(startAutoGiftBag)
 	task.spawn(startAutoRebirth)
 	task.spawn(startGuiUpdater)
