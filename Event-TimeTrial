@@ -529,7 +529,7 @@ end
 
 -- ✅ VÒNG LẶP CHÍNH
 task.spawn(function()
-	waitUntilReachMaxZone()
+	waitUntilReachMaxZone(true)
 	startMonitor12Min()
 
 	while true do
