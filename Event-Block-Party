@@ -212,7 +212,7 @@ local function startAutoHatchHuge()
 		if not part then return false end
 
 		local distance = (hrp.Position - part.Position).Magnitude
-		return distance < 35
+		return distance < 50
 	end
 
 
