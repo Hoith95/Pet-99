@@ -217,7 +217,13 @@ local function startAutoHatchHuge()
 
 	local function safeHatchLoop()
 		while true do
-			waitUntilAllowed()
+		waitUntilAllowed()
+
+		while getTotalTileCount() < 83 do
+			warn("⏳ Tiles hiện tại dưới 83 → đang chờ...")
+			task.wait(3)
+		end
+
 
 			if not bestEgg or not bestEgg:IsDescendantOf(workspace) then
 				warn("❌ Egg hiện tại đã mất, đang tìm lại...")
@@ -449,18 +455,23 @@ local function startAllBlockPartyTasks()
 
 	-- 🧩 LUỒNG 5: Hatch HUGE → chỉ chạy khi đủ 83 tiles
 	task.spawn(function()
-		while getTotalTileCount() < 83 do
-			task.wait(2)
+		while true do
+			while getTotalTileCount() < 83 do
+				task.wait(2)
+			end
+			startAutoHatchHuge()
 		end
-		startAutoHatchHuge()
 	end)
+
 
 	-- 🧩 LUỒNG 6: Auto Gift Bag → chỉ chạy nếu đủ ≥ 50 tile
 	task.spawn(function()
-		while getTotalTileCount() < 50 do
-			task.wait(2)
+		while true do
+			while getTotalTileCount() < 50 do
+				task.wait(2)
+			end
+			startAutoGiftBag()
 		end
-		startAutoGiftBag()
 	end)
 
 	-- 🧩 LUỒNG 7: Auto Rebirth → chỉ chạy nếu chưa đạt rebirth 10
