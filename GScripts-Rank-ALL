@@ -39,6 +39,7 @@ getgenv().GREBIRTH_TO = 99
 getgenv().GAUTO_UPGRADE_PETS = false
 getgenv().GHATCH_GOLDEN_EGGS = false
 getgenv().GCLEAR_FAVORITE_PETS = true
+getgenv().GMIN_EGGS_TO_HATCH = math.huge
 getgenv().GHATCH_SPEED_MS = 0
 getgenv().GMAX_HATCH = 99
 
