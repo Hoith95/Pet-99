@@ -35,21 +35,24 @@ local function waitUntilAllowed()
 	end
 end
 
-local function teleportToBlockParty()
-	local player = game.Players.LocalPlayer
-	local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-	if not hrp then
-		warn("❌ Không tìm thấy HumanoidRootPart")
-		return
-	end
+local player = game.Players.LocalPlayer
 
+function teleportTo(cf)
+	local character = player.Character or player.CharacterAdded:Wait()
+	local hrp = character:FindFirstChild("HumanoidRootPart")
+	if hrp then
+		hrp.CFrame = cf
+	end
+end
+
+local function teleportToBlockParty()
 	local Enter = workspace.__THINGS.Instances.BlockParty.Teleports.Enter
 
 	-- 🧭 Teleport vào Block Party & đến vị trí cụ thể
-	hrp.CFrame = Enter.CFrame + Vector3.new(0, 5, 0)
+	teleportTo(Enter.CFrame + Vector3.new(0, 5, 0))
 	task.wait(9)
 
-	hrp.CFrame = CFrame.new(16460, 2275, -21473)
+	teleportTo(CFrame.new(16460, 2275, -21473))
 end
 
 ---------------- 🧩 LUỒNG 1: Mua tiles quanh plot ----------------
@@ -189,11 +192,6 @@ local function startAutoHatchHuge()
 			end
 		end
 		return closestEgg
-	end
-
-	local function teleportTo(cf)
-		local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-		if hrp then hrp.CFrame = cf end
 	end
 
 	local function teleportToTile(tile)
