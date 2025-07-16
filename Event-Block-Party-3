@@ -37,6 +37,7 @@ end
 
 ---------------- 🧩 LUỒNG 1: Mua tiles quanh plot ----------------
 local function startAutoPurchase()
+	local Save = require(ReplicatedStorage.Library.Client.Save)
 	local plotIndex = 1
 	local radiusMax = 6
 	local delayPerTile = 0.05
