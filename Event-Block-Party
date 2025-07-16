@@ -144,8 +144,6 @@ local currentChance = 0
 
 local function startAutoHatchHuge()
 	local tileThreshold = 83
-	local MaxEggHatch = EggCmds.GetMaxHatch()
-	local player = Players.LocalPlayer
 	task.wait(20)
 
 	-- ⚙️ Tắt animation mở trứng
@@ -254,7 +252,8 @@ local function startAutoHatchHuge()
 				teleportTo(bestEgg.Part.CFrame + Vector3.new(0, 5, 0))
 				task.wait(1)
 			end
-
+			
+			local MaxEggHatch = EggCmds.GetMaxHatch()
 			local args = {bestEgg.Name, MaxEggHatch}
 			local success, err = pcall(function()
 				Network.CustomEggs_Hatch:InvokeServer(unpack(args))
