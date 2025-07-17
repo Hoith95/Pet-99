@@ -1,78 +1,58 @@
--- ⚙️ Dịch vụ
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local player = Players.LocalPlayer
-local customEggsFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("CustomEggs")
+local TilesFolder = Workspace:WaitForChild("__TILE"):WaitForChild("Tiles")
+local CustomEggsFolder = Workspace:WaitForChild("__EGG"):WaitForChild("Custom")
 
--- 🧭 Teleport vào Block Party
-local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-if hrp then
-	hrp.CFrame = Workspace.__THINGS.Instances.BlockParty.Teleports.Enter.CFrame + Vector3.new(0, 5, 0)
-	print("🚪 Teleport vào Block Party thành công.")
-	task.wait(5)
-end
-task.wait(5)
-local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-if hrp then
-	hrp.CFrame = CFrame.new(16543, 2275, -21618)
-	task.wait(5)
+-- 🧠 Hàm kiểm tra egg có slashes không
+local function hasSlashes(egg)
+	local ok, result = pcall(function()
+		return egg:FindFirstChild("Egg") and egg.Egg:FindFirstChild("slashes")
+	end)
+	return ok and result ~= nil
 end
 
--- ✅ Kiểm tra tên mã hóa
-local function isEncodedName(name)
-	return #name >= 32 and name:match("^[a-f0-9]+$") ~= nil
-end
-
--- 🔍 Rút trích HUGE CHANCE
-local function extractChanceValue(text)
-	local num = text:match("(%d+)x%s+HUGE%s+CHANCE!?")
-	return tonumber(num or "0")
-end
-
--- 📍 Tele tới egg (dùng Part trực tiếp)
-local function teleportToEgg(egg)
-	local character = player.Character or player.CharacterAdded:Wait()
-	local hrp = character:FindFirstChild("HumanoidRootPart")
-	local part = egg:FindFirstChild("Part")
-	if hrp and part then
-		hrp.CFrame = part.CFrame + Vector3.new(0, 5, 0)
-		print("📦 Teleported to egg:", egg.Name)
-	end
-end
-
--- 🏆 Tìm egg HUGE CHANCE cao nhất
-local function findBestHugeChanceEgg(eggList)
-	local bestEgg, bestValue = nil, -1
-	for _, egg in ipairs(eggList) do
-		local label = egg:FindFirstChild("Egg")
-			and egg.Egg:FindFirstChild("EggInfo")
-			and egg.Egg.EggInfo:FindFirstChild("Frame")
-			and egg.Egg.EggInfo.Frame:FindFirstChild("Title")
-		if label and label:IsA("TextLabel") then
-			local value = extractChanceValue(label.ContentText)
-			if value > bestValue then
-				bestEgg, bestValue = egg, value
+-- 🎯 Tìm tile có Huge Chance cao nhất
+local function findBestHugeTile()
+	local bestTile = nil
+	local maxChance = 0
+	for _, tile in pairs(TilesFolder:GetChildren()) do
+		if tile:FindFirstChild("HugeChance") then
+			local value = tonumber(tile.HugeChance.Value)
+			if value and value > maxChance then
+				bestTile = tile
+				maxChance = value
 			end
 		end
 	end
-	return bestEgg, bestValue
+	return bestTile, maxChance
 end
 
--- 🧠 Danh sách egg đã biết
-local knownEggs = {}
-for _, egg in ipairs(customEggsFolder:GetChildren()) do
-	if isEncodedName(egg.Name) then
-		table.insert(knownEggs, egg)
+-- 🥚 Tìm egg gần tile và có slashes
+local function findEggNearTile(tile)
+	local closestEgg, minDistance = nil, math.huge
+	for _, egg in pairs(CustomEggsFolder:GetChildren()) do
+		if #egg.Name == 32 and egg:IsA("Model") and egg:FindFirstChild("Part") and hasSlashes(egg) then
+			local dist = (egg.Part.Position - tile.PrimaryPart.Position).Magnitude
+			if dist < minDistance then
+				closestEgg, minDistance = egg, dist
+			end
+		end
 	end
+	return closestEgg
 end
 
--- 🥇 Tìm và teleport tới egg tốt nhất
-local bestEgg, bestChance = findBestHugeChanceEgg(knownEggs)
-if bestEgg then
-	print("🥚 Egg tốt nhất:", bestEgg.Name, "→", bestChance .. "x HUGE CHANCE")
-	teleportToEgg(bestEgg)
+-- ▶️ Bắt đầu test
+local tile, chance = findBestHugeTile()
+if tile and chance > 0 then
+	print("🧱 Tile Huge cao nhất:", tile.Name, "| Chance:", chance .. "x")
+
+	local egg = findEggNearTile(tile)
+	if egg then
+		print("🥚 Egg hợp lệ gần tile:", egg.Name)
+	else
+		print("❌ Không tìm thấy egg hợp lệ gần tile này.")
+	end
 else
-	warn("❌ Không tìm thấy egg phù hợp.")
+	print("⚠️ Không tìm thấy tile nào có Huge Chance.")
 end
