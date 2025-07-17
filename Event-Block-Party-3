@@ -137,14 +137,80 @@ local function startTileHandler()
 		task.wait(delayPerCycle)
 	end
 end
+
 ---------------- 🧩 LUỒNG 3: Hatch HUGE CHANCE ----------------
 local currentChance = 0
+local tileThreshold = 83
+
+local function extractHugeLuckValue(text)
+	local value = text:match("(%d+)x%s+Huge%s+Luck!?")
+	return tonumber(value or "0")
+end
+
+local function findEggNearTile(tile)
+	local closestEgg, minDist = nil, math.huge
+	for _, eggModel in pairs(CustomEggsFolder:GetChildren()) do
+		local egg = eggModel:FindFirstChild("Egg")
+		if egg and egg:FindFirstChild("slashes") and eggModel:IsA("Model") then
+			local part = eggModel:FindFirstChild("Part")
+			if part and tile.PrimaryPart then
+				local dist = (part.Position - tile.PrimaryPart.Position).Magnitude
+				if dist < minDist then
+					closestEgg, minDist = eggModel, dist
+				end
+			end
+		end
+	end
+	return closestEgg
+end
+
+local function findBestHugeTile()
+	local bestTile, bestValue = nil, -1
+	for _, tile in pairs(TilesFolder:GetChildren()) do
+		local label = tile:FindFirstChild("Sign")
+			and tile.Sign:FindFirstChild("SurfaceGui")
+			and tile.Sign.SurfaceGui:FindFirstChild("Frame")
+			and tile.Sign.SurfaceGui.Frame:FindFirstChild("Frame")
+			and tile.Sign.SurfaceGui.Frame.Frame:FindFirstChild("TextLabel")
+		if label and label:IsA("TextLabel") then
+			local value = extractHugeLuckValue(label.Text)
+			if value > bestValue then
+				local egg = findEggNearTile(tile)
+				if egg then
+					bestTile, bestValue = tile, value
+				end
+			end
+		end
+	end
+	return bestTile, bestValue
+end
+
+local function teleportToTile(tile)
+	if tile and tile:IsA("Model") and tile.PrimaryPart then
+		teleportTo(tile.PrimaryPart.CFrame + Vector3.new(0, 5, 0))
+		print("📍 Teleport đến tile:", tile.Name)
+	end
+end
+
+local function handleRejoin()
+	local Leave = workspace.__THINGS.Instances.LuckyBlocks.Teleports.Leave
+	teleportTo(Leave.CFrame + Vector3.new(0, 5, 0))
+	task.wait(9)
+	teleportToBlockParty()
+end
+
+local function isNearEgg(egg)
+	local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	if not (hrp and egg) then return false end
+	local part = egg:FindFirstChild("Part")
+	if not part then return false end
+	return (hrp.Position - part.Position).Magnitude < 15
+end
 
 local function startAutoHatchHuge()
-	local tileThreshold = 83
 	task.wait(20)
 
-	-- ⚙️ Tắt animation mở trứng
+	-- Tắt animation mở trứng
 	local successEggs, Eggs = pcall(function()
 		return player:WaitForChild("PlayerScripts"):WaitForChild("Scripts"):WaitForChild("Game"):WaitForChild("Egg Opening Frontend")
 	end)
@@ -154,77 +220,14 @@ local function startAutoHatchHuge()
 		end)
 	end
 
-	local function extractHugeLuckValue(text)
-		local value = text:match("(%d+)x%s+Huge%s+Luck!?")
-		return tonumber(value or "0")
-	end
-
-	local function findBestHugeTile()
-		local bestTile, bestValue = nil, -1
-		for _, tile in pairs(TilesFolder:GetChildren()) do
-			local label = tile:FindFirstChild("Sign")
-				and tile.Sign:FindFirstChild("SurfaceGui")
-				and tile.Sign.SurfaceGui:FindFirstChild("Frame")
-				and tile.Sign.SurfaceGui.Frame:FindFirstChild("Frame")
-				and tile.Sign.SurfaceGui.Frame.Frame:FindFirstChild("TextLabel")
-			if label and label:IsA("TextLabel") then
-				local value = extractHugeLuckValue(label.Text)
-				if value > bestValue then
-					bestTile, bestValue = tile, value
-				end
-			end
-		end
-		return bestTile, bestValue
-	end
-
-	local function findEggNearTile(tile)
-		local closestEgg, minDistance = nil, math.huge
-		for _, egg in pairs(CustomEggsFolder:GetChildren()) do
-			if #egg.Name == 32 and egg:IsA("Model") and egg:FindFirstChild("Part") then
-				local dist = (egg.Part.Position - tile.PrimaryPart.Position).Magnitude
-				if dist < minDistance then
-					closestEgg, minDistance = egg, dist
-				end
-			end
-		end
-		return closestEgg
-	end
-
-	local function teleportToTile(tile)
-		if tile and tile:IsA("Model") and tile.PrimaryPart then
-			teleportTo(tile.PrimaryPart.CFrame + Vector3.new(0, 5, 0))
-			print("📍 Teleport đến tile:", tile.Name)
-		end
-	end
-
-	local function handleRejoin()
-		local Leave = workspace.__THINGS.Instances.LuckyBlocks.Teleports.Leave
-		teleportTo(Leave.CFrame + Vector3.new(0, 5, 0))
-		task.wait(9)
-		teleportToBlockParty()
-	end
-
-	local function isNearEgg(egg)
-		local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-		if not (hrp and egg) then return false end
-
-		local part = egg:FindFirstChild("Part")
-		if not part then return false end
-
-		local distance = (hrp.Position - part.Position).Magnitude
-		return distance < 15
-	end
-
-
-	local bestTile = nil
-	local bestEgg = nil
+	local bestTile, bestEgg = nil, nil
 
 	local function safeHatchLoop()
 		while true do
 			waitUntilAllowed()
 
-			while getTotalTileCount() < 83 do
-				warn("⏳ Tiles hiện tại dưới 83 → đang chờ...")
+			while getTotalTileCount() < tileThreshold do
+				warn("⏳ Tiles hiện tại dưới " .. tileThreshold .. " → đang chờ...")
 				task.wait(3)
 			end
 
@@ -301,7 +304,7 @@ local function startAutoHatchHuge()
 
 				safeHatchLoop()
 			else
-				print("❌ Không có tile nào có HUGE CHANCE > 0 → thử teleport thủ công trước khi reset map")
+				print("❌ Không có tile nào có Huge Chance + egg.slashes → thử teleport thủ công trước khi reset")
 				teleportTo(CFrame.new(16460, 2275, -21473))
 				task.wait(3)
 
