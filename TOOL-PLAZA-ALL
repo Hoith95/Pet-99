@@ -20,7 +20,7 @@ getgenv().Settings = {
         ["Fantasy Key"] = {Price = "+5%", Priority = true},
         ["Fantasy Spinny Wheel Ticket"] = {Price = "+5%", Priority = true},
        
-        ["All Huges"]= { Price = "1%"	,Min_sell = "10m", Max_sell = "1b",sold_by_convention = true},
+        ["All Huges"]= { Price = "1%"	,Min_sell = "9m", Max_sell = "1b",sold_by_convention = true},
 
         ["Titanic Pixel Dominus Astra"] = {Price = "5%", Priority = true},
 
