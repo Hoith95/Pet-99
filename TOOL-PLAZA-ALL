@@ -24,15 +24,15 @@ getgenv().Settings = {
 
         ["Titanic Pixel Dominus Astra"] = {Price = "5%", Priority = true},
 
-        ["Rainbow Titanic Sun Griffin"] = {Price = "86b", Priority = true},        
+        ["Rainbow Titanic Sun Griffin"] = {Price = "68b", Priority = true},        
         ["Golden Titanic Sun Griffin"] = {Price = "15b", Priority = true},
         ["Titanic Sun Griffin"] = {Price = "5%", Priority = true},
 
-        ["Rainbow Titanic Sandcastle Kraken"] = {Price = "86b", Priority = true},        
+        ["Rainbow Titanic Sandcastle Kraken"] = {Price = "68b", Priority = true},        
         ["Golden Titanic Sandcastle Kraken"] = {Price = "15bb", Priority = true},
         ["Titanic Sandcastle Kraken"] = {Price = "1%", Priority = true},
 
-        ["Rainbow Titanic Starlight Pony"] = {Price = "86b", Priority = true},
+        ["Rainbow Titanic Starlight Pony"] = {Price = "66b", Priority = true},
         ["Golden Titanic Starlight Pony"] = {Price = "25b", Priority = true},
         ["Titanic Starlight Pony"] = {Price = 16868686868, Priority = true},
     },
