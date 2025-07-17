@@ -1,6 +1,6 @@
 getgenv().Settings = {
     ["Items"] = {
-        [Huge Splash Angelus"] = {Price = "1%", Priority = true},
+        [Huge Splash Angelus"] = {Price = "8b", Priority = true},
 
         ["Huge Machine Egg 5"] = {Price = "1%", Priority = true},
         ["Hype Egg 2"] = {Price = "+15%", Priority = true},
