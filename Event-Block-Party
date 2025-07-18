@@ -140,7 +140,7 @@ end
 
 ---------------- 🧩 LUỒNG 3: Hatch HUGE CHANCE ----------------
 local currentChance = 0
-local tileThreshold = 99
+local tileThreshold = 139
 
 local function extractHugeLuckValue(text)
 	local value = text:match("(%d+)x%s+Huge%s+Luck!?")
@@ -483,7 +483,7 @@ local function startAllBlockPartyTasks()
 	-- 🧩 LUỒNG 3: Hatch HUGE
 	task.spawn(function()
 		while true do
-			while getTotalTileCount() < 99 do
+			while getTotalTileCount() < 139 do
 				task.wait(2)
 			end
 			print("✅ Đã khởi động LUỒNG 3: Hatch HUGE CHANCE")
