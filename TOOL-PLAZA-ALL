@@ -34,7 +34,7 @@ getgenv().Settings = {
 
         ["Rainbow Titanic Starlight Pony"] = {Price = "68b", Priority = true},
         ["Golden Titanic Starlight Pony"] = {Price = "25b", Priority = true},
-        ["Titanic Starlight Pony"] = {Price = "15b", Priority = true},
+        ["Titanic Starlight Pony"] = {Price = 13686868686, Priority = true},
     },
 ["xoa_Map"] = true,
 ["send_gem"] = {
