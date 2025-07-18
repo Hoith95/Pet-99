@@ -1,38 +1,20 @@
--- ====== Test Script for Huge Chance + slashes ======
+-- ▶️ Script Test: In kết quả tìm Tile & Egg “best”
 
--- Services & folders
-local Workspace            = game:GetService("Workspace")
-local TilesFolder          = Workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
-local CustomEggsFolder     = Workspace:WaitForChild("__THINGS"):WaitForChild("CustomEggs")
+local Workspace         = game:GetService("Workspace")
+local TilesFolder       = Workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
+local CustomEggsFolder  = Workspace:WaitForChild("__THINGS"):WaitForChild("CustomEggs")
 
--- Hàm trích giá trị Huge Luck từ text
+-- 🔢 Extract giá trị “x Huge Luck” từ text
 local function extractHugeLuckValue(text)
-    local value = text:match("(%d+)x%s+Huge%s+Luck!?")
-    return tonumber(value or "0")
+    local num = text:match("(%d+)x%s+Huge%s+Luck")
+    return tonumber(num) or 0
 end
 
--- Hàm tìm egg gần tile, chỉ egg có Egg.slashes
-local function findEggNearTile(tile)
-    local closestEgg, minDist = nil, math.huge
-    for _, eggModel in pairs(CustomEggsFolder:GetChildren()) do
-        local egg = eggModel:FindFirstChild("Egg")
-        if egg and egg:FindFirstChild("slashes") and eggModel:IsA("Model") then
-            local part = eggModel:FindFirstChild("Part")
-            if part and tile.PrimaryPart then
-                local dist = (part.Position - tile.PrimaryPart.Position).Magnitude
-                if dist < minDist then
-                    closestEgg, minDist = eggModel, dist
-                end
-            end
-        end
-    end
-    return closestEgg
-end
-
--- Hàm tìm tile có Huge Chance cao nhất, nhưng chỉ xét khi findEggNearTile trả về egg
-local function findBestHugeTile()
+-- 🧱 Tìm Tile có “x Huge” cao nhất
+local function findBestTile()
     local bestTile, bestValue = nil, -1
-    for _, tile in pairs(TilesFolder:GetChildren()) do
+    for _, tile in ipairs(TilesFolder:GetChildren()) do
+        -- lấy Label chứa text “Nx Huge Luck”
         local label = tile:FindFirstChild("Sign")
             and tile.Sign:FindFirstChild("SurfaceGui")
             and tile.Sign.SurfaceGui:FindFirstChild("Frame")
@@ -41,29 +23,59 @@ local function findBestHugeTile()
         if label and label:IsA("TextLabel") then
             local value = extractHugeLuckValue(label.Text)
             if value > bestValue then
-                local eggModel = findEggNearTile(tile)
-                if eggModel then
-                    bestTile, bestValue = tile, value
-                end
+                bestTile, bestValue = tile, value
             end
         end
     end
+
+    if bestTile then
+        print(string.format("🧱 Best Tile: %s | %dx HUGE", bestTile.Name, bestValue))
+    else
+        warn("❌ Không tìm thấy bất kỳ Tile nào có ‘x Huge’.")
+    end
+
     return bestTile, bestValue
 end
 
--- ====== Thực thi test ======
-
-local tile, chance = findBestHugeTile()
-if tile then
-    print("🎯 Best tile found:", tile.Name, "| Chance:", chance .. "x")
-    local egg = findEggNearTile(tile)
-    if egg then
-        print("🥚 Closest valid egg:", egg.Name)
-        assert(egg:FindFirstChild("Egg").slashes, "Lỗi: egg không có child 'slashes'")
-        print("✅ Egg có 'slashes' đúng như yêu cầu")
-    else
-        warn("⚠️ Không tìm được egg hợp lệ cho tile này")
+-- 🥚 Tìm Egg gần Tile, ưu tiên có “slashes”
+local function findBestEggNearTile(tile)
+    if not tile or not tile.PrimaryPart then
+        warn("❌ Tile không hợp lệ để tìm Egg.")
+        return nil
     end
-else
-    warn("❌ Không có tile nào thỏa điều kiện Huge Chance + egg.slashes")
+
+    local function findClosest(filterFn)
+        local closest, minDist = nil, math.huge
+        for _, eggM in ipairs(CustomEggsFolder:GetChildren()) do
+            local part = eggM:FindFirstChild("Part")
+            if part and filterFn(eggM) then
+                local dist = (part.Position - tile.PrimaryPart.Position).Magnitude
+                if dist < minDist then
+                    closest, minDist = eggM, dist
+                end
+            end
+        end
+        return closest
+    end
+
+    -- 1) thử lấy egg có slashes
+    local eggWith = findClosest(function(e) return e:FindFirstChild("slashes") end)
+    if eggWith then
+        print(string.format("🥚 Best Egg: %s | ✅ CÓ 'slashes'", eggWith.Name))
+        return eggWith
+    end
+
+    -- 2) fallback: lấy bất kỳ egg nào
+    local eggAny = findClosest(function() return true end)
+    if eggAny then
+        print(string.format("🥚 Fallback Egg: %s | ❌ KHÔNG 'slashes'", eggAny.Name))
+        return eggAny
+    end
+
+    warn("❌ Không tìm thấy bất kỳ Egg nào quanh Tile.")
+    return nil
 end
+
+-- ▶️ Chạy test
+local tile, hugeValue = findBestTile()
+local egg = findBestEggNearTile(tile)
