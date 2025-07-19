@@ -452,7 +452,7 @@ local function claimReward()
     local function isAtExactRewardPosition()
         local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
         if not hrp then return false end
-        local target = Vector3.new(-14223, 17.39, 1387)
+        local target = Vector3.new(-14221, 17.39, 2210)
         return (hrp.Position - target).Magnitude <= 2
     end
 
