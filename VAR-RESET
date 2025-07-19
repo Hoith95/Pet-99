@@ -1,7 +1,7 @@
 spawn(function()
     while true do
-        if _G.Event1 == true then
-            -- Nếu _G.Event1 là true, dừng script
+        if _G.Event == true then
+            -- Nếu _G.Event là true, dừng script
             break
         else
             -- Nếu _G.EventDone không phải là true, chạy loadstring
