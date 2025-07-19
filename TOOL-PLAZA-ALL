@@ -41,7 +41,7 @@ getgenv().Settings = {
         Play_mail = false,
         User_name_mail = "",
         gem_mail = "5b",
-    time_swap_plaza = 60,   
+    time_swap_plaza = 90,   
 }
 }
 loadstring(game:HttpGet("https://raw.githubusercontent.com/raidersvin/vivivi/refs/heads/main/plaza"))()
