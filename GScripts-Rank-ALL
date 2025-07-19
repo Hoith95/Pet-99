@@ -12,7 +12,7 @@ wait(68)
 end)
 
 spawn(function()
-wait(83)
+wait(68)
 _G.VAR_STOP_BLOCK_PARTY = false
 _G.VAR_START_BLOCK_PARTY = true
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Block-Party-3"))()
