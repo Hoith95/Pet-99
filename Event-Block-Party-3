@@ -75,7 +75,7 @@ local function startAutoPurchase()
 		local saveData = Save.Get()
 		local tileRebirth = saveData.TileRebirth or 0
 		local totalTiles = getTotalTileCount()
-		if tileRebirth >= 10 and totalTiles >= 169 then
+		if tileRebirth >= 11 and totalTiles >= 169 then
 			warn("🛑 Đã đạt TileRebirth = 10 và Tiles = 169 → Dừng Auto Purchase.")
 			break
 		end
@@ -465,7 +465,7 @@ local function startAllBlockPartyTasks()
 			local tileRebirth = saveData.TileRebirth or 0
 			local totalTiles = getTotalTileCount()
 
-			if tileRebirth < 10 or totalTiles < 169 then
+			if tileRebirth < 11 or totalTiles < 169 then
 				print("✅ Đã khởi động LUỒNG 1: Auto Purchase")
 				startAutoPurchase()
 				break
