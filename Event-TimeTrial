@@ -240,6 +240,11 @@ local function startMonitor12Min()
                     end
                 end
 
+                -- Nếu đã có runChanged thì reset luôn teleportCount về 0
+                if runChanged then
+                    teleportCount = 0
+                end
+
                 -- Cập nhật lại mốc, reset bộ đếm thời gian và flags
                 lastUsed   = curUsed
                 lastPoints = curPoints
