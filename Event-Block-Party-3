@@ -140,7 +140,7 @@ end
 
 ---------------- 🧩 LUỒNG 3: Hatch HUGE CHANCE ----------------
 local currentChance = 0
-local tileThreshold = 83
+local tileThreshold = 139
 
 local function extractHugeLuckValue(text)
 	local value = text:match("(%d+)x%s+Huge%s+Luck!?")
@@ -480,10 +480,10 @@ local function startAllBlockPartyTasks()
 		startTileHandler()
 	end)
 
-	-- 🧩 LUỒNG 5: Hatch HUGE
+	-- 🧩 LUỒNG 3: Hatch HUGE
 	task.spawn(function()
 		while true do
-			while getTotalTileCount() < 83 do
+			while getTotalTileCount() < 139 do
 				task.wait(2)
 			end
 			print("✅ Đã khởi động LUỒNG 3: Hatch HUGE CHANCE")
@@ -491,7 +491,7 @@ local function startAllBlockPartyTasks()
 		end
 	end)
 
-	-- 🧩 LUỒNG 6: Auto Gift Bag
+	-- 🧩 LUỒNG 4: Auto Gift Bag
 	task.spawn(function()
 		while true do
 			while getTotalTileCount() < 50 do
@@ -502,7 +502,7 @@ local function startAllBlockPartyTasks()
 		end
 	end)
 
-	-- 🧩 LUỒNG 7: Auto Rebirth
+	-- 🧩 LUỒNG 5: Auto Rebirth
 	task.spawn(function()
 		local Save = require(ReplicatedStorage.Library.Client.Save)
 		while true do
@@ -517,7 +517,7 @@ local function startAllBlockPartyTasks()
 		end
 	end)
 
-	-- 🧩 LUỒNG 8: GUI Updater
+	-- 🧩 LUỒNG 6: GUI Updater
 	task.spawn(function()
 		print("✅ Đã khởi động LUỒNG 6: GUI Updater")
 		startGuiUpdater()
