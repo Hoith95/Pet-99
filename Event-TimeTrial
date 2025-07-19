@@ -187,8 +187,8 @@ local function waitUntilReachMaxZone(useCustomZone)
 end
 
 -- 🧪 Gọi hàm với tùy chọn
-waitUntilReachMaxZone(true)  -- Dùng zone cố định 269
--- waitUntilReachMaxZone(false) -- Dùng zone lấy từ Map4
+--waitUntilReachMaxZone(true)  -- Dùng zone cố định 269
+waitUntilReachMaxZone(false) -- Dùng zone lấy từ Map4
 
 -- ⏱️ Monitor 12 phút không tăng lượt/TotalRuns từ GUI Label
 local function startMonitor12Min()
@@ -529,7 +529,7 @@ end
 
 -- ✅ VÒNG LẶP CHÍNH
 task.spawn(function()
-	waitUntilReachMaxZone(true)
+	waitUntilReachMaxZone(false)
 	startMonitor12Min()
 
 	while true do
