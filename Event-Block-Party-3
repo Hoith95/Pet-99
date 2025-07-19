@@ -140,7 +140,7 @@ end
 
 ---------------- 🧩 LUỒNG 3: Hatch HUGE CHANCE ----------------
 local currentChance = 0
-local tileThreshold = 139
+local tileThreshold = 169
 
 local function extractHugeLuckValue(text)
 	local value = text:match("(%d+)x%s+Huge%s+Luck!?")
@@ -195,7 +195,7 @@ end
 local function handleRejoin()
 	local Leave = workspace.__THINGS.Instances.LuckyBlocks.Teleports.Leave
 	teleportTo(Leave.CFrame + Vector3.new(0, 5, 0))
-	task.wait(9)
+	task.wait(15)
 	teleportToBlockParty()
 end
 
@@ -483,7 +483,7 @@ local function startAllBlockPartyTasks()
 	-- 🧩 LUỒNG 3: Hatch HUGE
 	task.spawn(function()
 		while true do
-			while getTotalTileCount() < 139 do
+			while getTotalTileCount() < 169 do
 				task.wait(2)
 			end
 			print("✅ Đã khởi động LUỒNG 3: Hatch HUGE CHANCE")
