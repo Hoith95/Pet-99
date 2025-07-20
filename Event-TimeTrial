@@ -84,7 +84,7 @@ local function teleportToRewardLocation()
 	warn("🚶‍♂️ Đang teleport đến vị trí đổi quà...")
 	local hrp = getHumanoidRootPart()
 	if hrp then
-		hrp.CFrame = CFrame.new(-14223, 17.39, 1387)
+		hrp.CFrame = CFrame.new(-14221, 17.39, 2210)
 	end
 end
 
@@ -92,7 +92,7 @@ local function teleportToLocation()
 	warn("🚶‍♂️ Đang teleport về vị trí map 269...")
 	local hrp = getHumanoidRootPart()
 	if hrp then
-		hrp.CFrame = CFrame.new(-14251, 17.39, 1336)
+		hrp.CFrame = CFrame.new(-14251, 17.39, 2154)
 	end
 end
 
