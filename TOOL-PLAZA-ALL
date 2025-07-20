@@ -12,7 +12,7 @@ getgenv().Settings = {
         ["Gym Gift"] = {Price = "+1%", Priority = true},
         ["Time Trial Gift"] = {Price = 268686, Priority = true},
 
-        ["MVP Key"] = {Price = "+1%", Priority = true},
+        ["MVP Key"] = {Price = "+9%", Priority = true},
         ["Secret Key"] = {Price = 28000, Priority = true},
         ["Tech Key"] = {Price = 28000, Priority = true},
         ["Void Key"] = {Price = "+5%", Priority = true},
