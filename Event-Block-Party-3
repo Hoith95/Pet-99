@@ -558,7 +558,7 @@ local function startGuiUpdater()
 	pointsLabel.Text = "Điểm: " .. tostring(getTimeTrialPoints())
 	updateLabelSize(pointsLabel)
 
-        task.wait(1)
+        task.wait(0.1)
     end
 end
         	
