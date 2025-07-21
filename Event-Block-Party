@@ -447,7 +447,6 @@ local function getLootboxAmount(itemId)
         return 0
 end
 
--- Lấy số lượng Misc theo id
 local function getMiscAmount(itemId)
         local Inventory = Save.Get().Inventory
         for _, v in pairs(Inventory.Misc) do 
