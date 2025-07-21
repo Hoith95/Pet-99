@@ -451,7 +451,7 @@ local function startAllBlockPartyTasks()
 			task.wait(5)
 		end
 	end)
-
+end
 task.spawn(function()
 	while true do
 		if _G.VAR_STOP_BLOCK_PARTY and _G.VAR_BLOCK_PARTY then
