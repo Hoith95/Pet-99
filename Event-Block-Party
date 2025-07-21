@@ -458,7 +458,7 @@ local function startGuiUpdater()
 	local chanceLabel = createLabel("ChanceLabel", UDim2.new(0, -10, 0, -10), Vector2.new(0, 0), Color3.fromRGB(0, 102, 204))
   	local rebirthLabel = createLabel("RebirthLabel", UDim2.new(1, -30, 0, 28), Vector2.new(1, 0), Color3.fromRGB(128, 0, 128))
 	local giftLabel = createLabel("TropicalGiftLabel", UDim2.new(1, -30, 0, 65), Vector2.new(1, 0), Color3.fromRGB(255, 0, 127))
-    	local ticketLabel = createLabel("SBPTicketLabel", UDim2.new(1, -30, 0, 83), Vector2.new(1, 0), Color3.fromRGB(0, 191, 255))
+    	local ticketLabel = createLabel("SBPTicketLabel", UDim2.new(1, -30, 0, 101), Vector2.new(1, 0), Color3.fromRGB(0, 191, 255))
 	while true do
 		waitUntilAllowed()
 
