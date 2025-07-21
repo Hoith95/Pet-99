@@ -416,6 +416,11 @@ local function formatTime(seconds)
     return string.format("%02d:%02d:%02d", hours, minutes, remainingSeconds)
 end
 
+-- Hàm cập nhật kích thước label theo text
+local function updateLabelSize(label)
+	label.Size = UDim2.new(0, label.TextBounds.X + 20, 0, 38)
+end
+
 -- Lấy số lượng currency theo id
 local function getCurrencyAmount(currencyId)
     local inv = Save.Get().Inventory.Currency
@@ -519,25 +524,32 @@ local function startGuiUpdater()
     local startTime = os.time()
 
     -- Vòng lặp cập nhật GUI
-    while true do
-        waitUntilAllowed()
+	while true do
+		waitUntilAllowed()
 
-        -- Tiles (trái)
-        tilesLabel.Text   = tostring(getTotalTileCount()) .. " | TILES"
-        -- Coins (giữa), định dạng giống Gems
-        coinsLabel.Text   = "COINS: " .. Formatint(getCurrencyAmount("BlockPartyCoins"))
-        -- Chance (phải)
-        chanceLabel.Text  = "HUGE | x" .. tostring(currentChance)
-        -- Rebirth (phải)
-        rebirthLabel.Text = tostring(Save.Get().TileRebirth or 0) .. " | REBIRTH"
-        -- Tropical Gift (phải)
-        giftLabel.Text    = tostring(getLootboxAmount("Tropical Gift")) .. " | Tropical Gift"
-        -- Summer Ticket (phải)
-        ticketLabel.Text  = tostring(getMiscAmount("Summer Block Party Ticket")) .. " | Summer Ticket"
-        -- Gems (mới, phải)
-        gemsLabel.Text    = Formatint(getCurrencyAmount("Diamonds")) .. " | GEMS"
-        -- Thời gian (mới, phải)
-        timeLabel.Text    = formatTime(os.time() - startTime)
+		tilesLabel.Text   = tostring(getTotalTileCount()) .. " | TILES"
+		updateLabelSize(tilesLabel)
+
+		coinsLabel.Text   = "COINS: " .. Formatint(getCurrencyAmount("BlockPartyCoins"))
+		updateLabelSize(coinsLabel)
+
+		chanceLabel.Text  = "HUGE | x" .. tostring(currentChance)
+		updateLabelSize(chanceLabel)
+
+		rebirthLabel.Text = tostring(Save.TileRebirth or 0) .. " | REBIRTH"
+		updateLabelSize(rebirthLabel)
+
+		giftLabel.Text    = tostring(getLootboxAmount("Tropical Gift")) .. " | Tropical Gift"
+		updateLabelSize(giftLabel)
+
+		ticketLabel.Text  = tostring(getMiscAmount("Summer Block Party Ticket")) .. " | Summer Ticket"
+		updateLabelSize(ticketLabel)
+
+		gemsLabel.Text    = Formatint(getCurrencyAmount("Diamonds")) .. " | GEMS"
+		updateLabelSize(gemsLabel)
+
+		timeLabel.Text    = formatTime(os.time() - startTime)
+		updateLabelSize(timeLabel)
 
         task.wait(1)
     end
