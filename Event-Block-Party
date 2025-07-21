@@ -490,7 +490,7 @@ local function startGuiUpdater()
 
         local layout = Instance.new("UIListLayout")
         layout.SortOrder = Enum.SortOrder.LayoutOrder
-        layout.Padding = UDim.new(0, 4)
+        layout.Padding = UDim.new(0, 3)
         layout.HorizontalAlignment = alignment
         layout.VerticalAlignment = Enum.VerticalAlignment.Top
         layout.Parent = frame
@@ -521,9 +521,9 @@ local function startGuiUpdater()
     end
 
     -- Tạo các label với màu cân đối
-    local tilesLabel    = createLabel("TilesLabel",   leftRegion,   Color3.fromRGB(34, 139, 34))   -- xanh lá đậm
+    local tilesLabel    = createLabel("TilesLabel",   rightRegion,   Color3.fromRGB(34, 139, 34))   -- xanh lá đậm
     local coinsLabel    = createLabel("CoinsLabel",   centerRegion, Color3.fromRGB(255, 140, 0))   -- cam đậm
-    local chanceLabel   = createLabel("ChanceLabel",  rightRegion,  Color3.fromRGB(0, 102, 204))  -- xanh dương đậm
+    local chanceLabel   = createLabel("ChanceLabel",  leftRegion,  Color3.fromRGB(0, 102, 204))  -- xanh dương đậm
     local rebirthLabel  = createLabel("RebirthLabel", rightRegion,  Color3.fromRGB(148, 0, 211))   -- tím đậm
     local giftLabel     = createLabel("TropicalGiftLabel", rightRegion, Color3.fromRGB(255, 105, 180)) -- hồng đậm
     local ticketLabel   = createLabel("SBPTicketLabel",   rightRegion, Color3.fromRGB(30, 144, 255))  -- xanh dương sáng
