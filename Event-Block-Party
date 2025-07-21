@@ -418,6 +418,13 @@ local function updateLabelSize(label)
 	label.Size = UDim2.new(0, label.TextBounds.X + 20, 0, 38)
 end
 
+-- Lấy Diamonds từ leaderstats
+local function getDiamondsFromLeaderstats()
+	local leaderstats = player:FindFirstChild("leaderstats")
+	local diamondsStat = leaderstats and leaderstats:FindFirstChild("💎 Diamonds")
+	return diamondsStat and diamondsStat.Value or 0
+end
+
 -- Lấy số lượng currency theo id
 local function getCurrencyAmount(currencyId)
 	local Inventory = Save.Get().Inventory
@@ -543,7 +550,7 @@ local function startGuiUpdater()
         ticketLabel.Text  = tostring(getMiscAmount("Summer Block Party Ticket")) .. " | Summer Ticket"
 	updateLabelSize(ticketLabel)
         -- Gems (mới, phải)
-        gemsLabel.Text    = Formatint(getCurrencyAmount("Diamonds")) .. " | GEMS"
+        gemsLabel.Text    = Formatint(getDiamondsFromLeaderstats()) .. " | GEMS"
 	updateLabelSize(gemsLabel)
         -- Thời gian (mới, phải)
         timeLabel.Text    = formatTime(os.time() - startTime)) .. " | TIMES "
