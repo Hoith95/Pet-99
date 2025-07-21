@@ -435,7 +435,7 @@ local function startGuiUpdater()
 
 	local tilesLabel = createLabel("TilesLabel", UDim2.new(1, -30, 0, -10), Vector2.new(1, 0), Color3.fromRGB(0, 128, 0))
 	local coinsLabel  = createLabel("CoinsLabel", UDim2.new(0.5, -15, 0, -10), Vector2.new(0.5, 0), Color3.fromRGB(255, 165, 0))
-	local chanceLabel = createLabel("ChanceLabel", UDim2.new(1, -30, 0, 28), Vector2.new(1, 0), Color3.fromRGB(0, 102, 204))
+	local chanceLabel = createLabel("ChanceLabel", UDim2.new(0, -10, 0, -10), Vector2.new(0, 0), Color3.fromRGB(0, 102, 204))
   	local rebirthLabel = createLabel("RebirthLabel", UDim2.new(1, -30, 0, 28 + 38 + 5), Vector2.new(1, 0), Color3.fromRGB(128, 0, 128))
 	while true do
 		waitUntilAllowed()
