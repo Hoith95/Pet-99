@@ -386,11 +386,7 @@ local function startAutoRebirth()
 	end
 end
 
--- 🧩 LUỒNG 6: GUI Coins / Tiles / Chance (CÓ THÊM GEMS VÀ THỜI GIAN, FORMAT COINS)
-local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Save = require(ReplicatedStorage.Library.Client.Save)
-
+-- 🧩 LUỒNG 6: GUI Coins / Tiles / Chance (CÓ THÊM GEMS VÀ THỜI GIAN)
 -- Hàm format số lớn thành chuỗi dạng 1.23M, 4.56B...
 local Formatint = function(int)
     local Suffix = {"", "k", "M", "B", "T", "Qd", "Qn", "Sx", "Sp", "Oc", "No", "De", "UDe", "DDe"}
