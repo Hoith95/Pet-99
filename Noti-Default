@@ -26,7 +26,7 @@ local function Formatint(int)
 end
 
 -- Hàm format thời gian từ giây thành HH:MM:SS
-local function formatTime(seconds)
+local function FormatTime(seconds)
 	local hours = math.floor(seconds / 3600)
 	local minutes = math.floor((seconds % 3600) / 60)
 	local remainingSeconds = math.floor(seconds % 60)
