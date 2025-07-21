@@ -390,7 +390,8 @@ end
 ---------------- 🧩 LUỒNG 6: GUI Coins / Tiles / Chance / GEMS / Time ----------------
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Save = require(ReplicatedStorage.Library.Client.Save)
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
 
 -- Hàm format số lớn thành chuỗi dạng 1.23M, 4.56B...
 local Formatint = function(int)
@@ -419,9 +420,8 @@ local function updateLabelSize(label)
 	label.Size = UDim2.new(0, label.TextBounds.X + 20, 0, 38)
 end
 
--- 📥 Lấy diamonds từ leaderstats
+-- Lấy Diamonds từ leaderstats
 local function getDiamondsFromLeaderstats()
-	local player = Players.LocalPlayer
 	local stats = player:FindFirstChild("leaderstats")
 	if stats then
 		local diamonds = stats:FindFirstChild("💎 Diamonds")
