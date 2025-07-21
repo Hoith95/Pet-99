@@ -11,6 +11,20 @@ local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
+-- Hàm format số lớn thành chuỗi dạng 1.23M, 4.56B...
+local function Formatint(int)
+    local Suffix = {"", "k", "M", "B", "T", "Qd", "Qn", "Sx", "Sp", "Oc", "No", "De", "UDe", "DDe"}
+    local Index = 1
+    if int < 999 then
+        return tostring(int)
+    end
+    while int >= 1000 and Index < #Suffix do
+        int = int / 1000
+        Index = Index + 1
+    end
+    return string.format("%.2f%s", int, Suffix[Index])
+end
+
 -- Hàm format thời gian từ giây thành HH:MM:SS
 local function formatTime(seconds)
 	local hours = math.floor(seconds / 3600)
