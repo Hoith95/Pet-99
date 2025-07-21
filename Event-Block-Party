@@ -441,7 +441,7 @@ local function startGuiUpdater()
 		waitUntilAllowed()
 
 		-- cập nhật Tiles
-	        tilesLabel.Text = tostring(getTotalTileCount()) .. "TILES:"
+	        tilesLabel.Text = tostring(getTotalTileCount()) .. " :TILES:"
 	        updateLabelSize(tilesLabel)
 
 	        -- cập nhật Coins
@@ -454,7 +454,7 @@ local function startGuiUpdater()
 
 	        -- cập nhật Rebirth
 	        local rebirthCount = Save.Get().TileRebirth or 0
-	        rebirthLabel.Text = tostring(rebirthCount) .. "REBIRTH:"
+	        rebirthLabel.Text = tostring(rebirthCount) .. " :REBIRTH"
 	        updateLabelSize(rebirthLabel)
 		task.wait(1)
 	end
