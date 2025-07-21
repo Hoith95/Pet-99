@@ -88,12 +88,12 @@ end
 -- Hàm khởi tạo GUI và cập nhật
 local function startGuiUpdater()
     -- Xoá GUI cũ nếu đã có
-    local oldGui = playerGui:FindFirstChild("BlockPartyGui")
+    local oldGui = playerGui:FindFirstChild("GuiUpdater")
     if oldGui then oldGui:Destroy() end
 
     -- Tạo ScreenGui mới
     local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "BlockPartyGui"
+    screenGui.Name = "GuiUpdater"
     screenGui.ResetOnSpawn = false
     screenGui.Parent = playerGui
 
