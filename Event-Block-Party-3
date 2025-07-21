@@ -139,7 +139,7 @@ local function startTileHandler()
 end
 
 ---------------- 🧩 LUỒNG 3: Hatch HUGE CHANCE ----------------
-local currentChance = 0
+_G.CURRENT_HUGE_CHANCE = 0
 local tileThreshold = 169
 
 local function extractHugeLuckValue(text)
@@ -182,6 +182,7 @@ local function findBestHugeTile()
 			end
 		end
 	end
+	_G.CURRENT_HUGE_CHANCE = bestValue
 	return bestTile, bestValue
 end
 
@@ -272,6 +273,8 @@ local function startAutoHatchHuge()
 			local initialTile, initialChance = findBestHugeTile()
 			if initialTile and initialChance > 0 then
 				currentChance = initialChance
+				_G.CURRENT_HUGE_CHANCE = initialChance
+
 				bestTile = initialTile
 				bestEgg = findEggNearTile(initialTile)
 				teleportToTile(bestTile)
