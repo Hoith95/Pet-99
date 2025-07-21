@@ -1,5 +1,5 @@
 -- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
-if _G.LOOKFPS5 then
+if _G.LOOKFPS3 then
     warn("Script đã được chạy trước đó!")
     return -- Dừng script nếu đã chạy
 end
