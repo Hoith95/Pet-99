@@ -1,3 +1,9 @@
+if _G.VAR_GUI_UPDATER then
+    warn("⛔ GUI Updater đã được chạy trước đó!")
+    return
+end
+_G.VAR_GUI_UPDATER = true
+
 -- Dịch vụ cơ bản
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
