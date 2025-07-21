@@ -525,31 +525,32 @@ local function startGuiUpdater()
 
     -- Vòng lặp cập nhật GUI
 	while true do
-		waitUntilAllowed()
+	waitUntilAllowed()
 
-		tilesLabel.Text   = tostring(getTotalTileCount()) .. " | TILES"
-		updateLabelSize(tilesLabel)
-
-		coinsLabel.Text   = "COINS: " .. Formatint(getCurrencyAmount("BlockPartyCoins"))
-		updateLabelSize(coinsLabel)
-
-		chanceLabel.Text  = "HUGE | x" .. tostring(currentChance)
-		updateLabelSize(chanceLabel)
-
-		rebirthLabel.Text = tostring(Save.TileRebirth or 0) .. " | REBIRTH"
-		updateLabelSize(rebirthLabel)
-
-		giftLabel.Text    = tostring(getLootboxAmount("Tropical Gift")) .. " | Tropical Gift"
-		updateLabelSize(giftLabel)
-
-		ticketLabel.Text  = tostring(getMiscAmount("Summer Block Party Ticket")) .. " | Summer Ticket"
-		updateLabelSize(ticketLabel)
-
-		gemsLabel.Text    = Formatint(getCurrencyAmount("Diamonds")) .. " | GEMS"
-		updateLabelSize(gemsLabel)
-
-		timeLabel.Text    = formatTime(os.time() - startTime)
-		updateLabelSize(timeLabel)
+        -- Tiles (trái)
+        tilesLabel.Text   = tostring(getTotalTileCount()) .. " | TILES"
+	updateLabelSize(tilesLabel)
+        -- Coins (giữa), định dạng giống Gems
+        coinsLabel.Text   = "COINS: " .. Formatint(getCurrencyAmount("BlockPartyCoins"))
+	updateLabelSize(coinsLabel)
+        -- Chance (phải)
+        chanceLabel.Text  = "HUGE | x" .. tostring(currentChance)
+	updateLabelSize(chanceLabel)
+        -- Rebirth (phải)
+        rebirthLabel.Text = tostring(Save.Get().TileRebirth or 0) .. " | REBIRTH"
+	updateLabelSize(rebirthLabel)
+        -- Tropical Gift (phải)
+        giftLabel.Text    = tostring(getLootboxAmount("Tropical Gift")) .. " | Tropical Gift"
+	updateLabelSize(giftLabel)
+        -- Summer Ticket (phải)
+        ticketLabel.Text  = tostring(getMiscAmount("Summer Block Party Ticket")) .. " | Summer Ticket"
+	updateLabelSize(ticketLabel)
+        -- Gems (mới, phải)
+        gemsLabel.Text    = Formatint(getCurrencyAmount("Diamonds")) .. " | GEMS"
+	updateLabelSize(gemsLabel)
+        -- Thời gian (mới, phải)
+        timeLabel.Text    = formatTime(os.time() - startTime)
+	updateLabelSize(timeLabel)
 
         task.wait(1)
     end
