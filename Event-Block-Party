@@ -498,9 +498,9 @@ local function startGuiUpdater()
         return frame
     end
 
-    local rightRegion  = createRegion(UDim2.new(1, -39, 0, -10), Vector2.new(1, 0), Enum.HorizontalAlignment.Right)
-    local centerRegion = createRegion(UDim2.new(0.5, -5, 0, -10), Vector2.new(0.5, 0), Enum.HorizontalAlignment.Center)
-    local leftRegion   = createRegion(UDim2.new(0, 10, 0, -10), Vector2.new(0, 0), Enum.HorizontalAlignment.Left)
+    local rightRegion  = createRegion(UDim2.new(1, -30, 0, -10), Vector2.new(1, 0), Enum.HorizontalAlignment.Right)
+    local centerRegion = createRegion(UDim2.new(0.5, -10, 0, -10), Vector2.new(0.5, 0), Enum.HorizontalAlignment.Center)
+    local leftRegion   = createRegion(UDim2.new(0, 0, 0, -10), Vector2.new(0, 0), Enum.HorizontalAlignment.Left)
 
     -- Hàm tạo label
     local function createLabel(name, parent, bgColor)
