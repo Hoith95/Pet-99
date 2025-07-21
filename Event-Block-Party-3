@@ -272,9 +272,7 @@ local function startAutoHatchHuge()
 		if getTotalTileCount() >= tileThreshold then
 			local initialTile, initialChance = findBestHugeTile()
 			if initialTile and initialChance > 0 then
-				currentChance = initialChance
 				_G.CURRENT_HUGE_CHANCE = initialChance
-
 				bestTile = initialTile
 				bestEgg = findEggNearTile(initialTile)
 				teleportToTile(bestTile)
