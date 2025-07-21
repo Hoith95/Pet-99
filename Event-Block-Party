@@ -17,6 +17,7 @@ local EggCmds = require(NLibrary.Client.EggCmds)
 local Save = require(ReplicatedStorage.Library.Client.Save)
 local Network = ReplicatedStorage:WaitForChild("Network")
 local CustomEggsFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("CustomEggs")
+local leaderstats = player:FindFirstChild("leaderstats")
 
 -- 🔢 Đếm tổng số tile
 local function getTotalTileCount()
