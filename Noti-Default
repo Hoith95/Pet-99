@@ -117,7 +117,7 @@ local function startGuiDefault()
 		local now = tick()
 		if now - lastUpdate >= 1 then
 			local fps = frameCount / (now - lastUpdate)
-			fpsLabel.Text = string.format("FPS: %d", fps + 0.5)
+			fpsLabel.Text = string.format("FPS | %d", fps + 0.5)
 			updateLabelSize(fpsLabel)
 			frameCount = 0
 			lastUpdate = now
@@ -130,10 +130,10 @@ local function startGuiDefault()
 	-- Vòng lặp cập nhật GUI
 	while true do
 		pcall(function()
-			gemsLabel.Text = Formatint(getDiamondsFromLeaderstats()) .. " | GEMS"
+			gemsLabel.Text = "GEMS | " .. Formatint(getDiamondsFromLeaderstats())
 			updateLabelSize(gemsLabel)
 
-			timeLabel.Text = formatTime(os.time() - startTime) .. " | TIME"
+			timeLabel.Text = "TIME | " .. FormatTime(os.time() - startTime)
 			updateLabelSize(timeLabel)
 		end)
 		task.wait(1)
