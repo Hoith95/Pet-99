@@ -419,11 +419,17 @@ local function updateLabelSize(label)
 	label.Size = UDim2.new(0, label.TextBounds.X + 20, 0, 38)
 end
 
--- Lấy Diamonds từ leaderstats
+-- 📥 Lấy diamonds từ leaderstats
 local function getDiamondsFromLeaderstats()
-	local leaderstats = player:FindFirstChild("leaderstats")
-	local diamondsStat = leaderstats and leaderstats:FindFirstChild("💎 Diamonds")
-	return diamondsStat and diamondsStat.Value or 0
+	local player = Players.LocalPlayer
+	local stats = player:FindFirstChild("leaderstats")
+	if stats then
+		local diamonds = stats:FindFirstChild("💎 Diamonds")
+		if diamonds then
+			return diamonds.Value
+		end
+	end
+	return 0
 end
 
 -- Lấy số lượng currency theo id
@@ -553,7 +559,7 @@ local function startGuiUpdater()
         gemsLabel.Text    = Formatint(getDiamondsFromLeaderstats()) .. " | GEMS"
 	updateLabelSize(gemsLabel)
         -- Thời gian (mới, phải)
-        timeLabel.Text    = formatTime(os.time() - startTime)) .. " | TIMES "
+        timeLabel.Text    = formatTime(os.time() - startTime) .. " | TIMES "
 	updateLabelSize(timeLabel)
 
         task.wait(1)
