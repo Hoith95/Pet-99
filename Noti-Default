@@ -136,7 +136,7 @@ local function startGuiDefault()
 			timeLabel.Text = "TIME | " .. FormatTime(os.time() - startTime)
 			updateLabelSize(timeLabel)
 		end)
-		task.wait(1)
+		task.wait(0.1)
 	end
 end
 
