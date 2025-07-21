@@ -441,7 +441,7 @@ local function startGuiUpdater()
 		waitUntilAllowed()
 
 		-- cập nhật Tiles
-	        tilesLabel.Text = "TILES: " .. tostring(getTotalTileCount())
+	        tilesLabel.Text = tostring(getTotalTileCount()) .. "TILES:"
 	        updateLabelSize(tilesLabel)
 
 	        -- cập nhật Coins
@@ -449,7 +449,7 @@ local function startGuiUpdater()
 	        updateLabelSize(coinsLabel)
 
 	        -- cập nhật Chance
-  		chanceLabel.Text = tostring(currentChance) .. "x HUGE"
+  		chanceLabel.Text = "HUGE: x" .. tostring(currentChance)
 	        updateLabelSize(chanceLabel)
 
 	        -- cập nhật Rebirth
