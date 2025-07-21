@@ -155,7 +155,7 @@ local function startGuiUpdater()
         coinsLabel.Text   = Formatint(getCurrencyAmount("BlockPartyCoins")) .. " | COINS"
         updateLabelSize(coinsLabel)
 
-        chanceLabel.Text  = tostring(currentChance or 0) .. "x | HUGE"
+        chanceLabel.Text  = tostring(_G.CURRENT_HUGE_CHANCE or 0) .. "x | HUGE"
         updateLabelSize(chanceLabel)
 
         rebirthLabel.Text = tostring(Save.Get().TileRebirth or 0) .. " | REBIRTH"
