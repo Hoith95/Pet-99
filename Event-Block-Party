@@ -423,7 +423,7 @@ local function getCurrencyAmount(currencyId)
 	local Inventory = Save.Get().Inventory
 	for _, v in pairs(Inventory.Currency) do 
 		if v.id == currencyId then
-			return v._am
+			return v._am or 0
 		end
 	end
 	return 0
