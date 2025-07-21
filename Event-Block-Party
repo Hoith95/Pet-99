@@ -438,10 +438,10 @@ local function getLootboxAmount(itemId)
             	end
         end
         return 0
-    end
+end
 
 -- Lấy số lượng Misc theo id
-local function getLootboxAmount(itemId)
+local function getMiscAmount(itemId)
         local Inventory = Save.Get().Inventory
         for _, v in pairs(Inventory.Misc) do 
             if v.id == itemId then
@@ -449,7 +449,7 @@ local function getLootboxAmount(itemId)
             	end
         end
         return 0
-    end
+end
 
 -- Hàm khởi tạo GUI
 local function startGuiUpdater()
@@ -546,7 +546,7 @@ local function startGuiUpdater()
         gemsLabel.Text    = Formatint(getCurrencyAmount("Diamonds")) .. " | GEMS"
 	updateLabelSize(gemsLabel)
         -- Thời gian (mới, phải)
-        timeLabel.Text    = formatTime(os.time() - startTime) .. " | TIMES "
+        timeLabel.Text    = formatTime(os.time() - startTime)) .. " | TIMES "
 	updateLabelSize(timeLabel)
 
         task.wait(1)
