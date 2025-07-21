@@ -37,7 +37,7 @@ local function getDiamondsFromLeaderstats()
 end
 
 -- Hàm khởi tạo GUI
-local function startGuiUpdater()
+local function startGuiDefault()
 	-- Xoá GUI cũ nếu đã có
 	local oldGui = playerGui:FindFirstChild("GuiDefault")
 	if oldGui then oldGui:Destroy() end
