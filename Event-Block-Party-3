@@ -199,6 +199,7 @@ local function handleRejoin()
     task.wait(15)
     teleportToBlockParty()
     task.wait(9)
+    isRunning = false
 end
 
 local function isNearEgg(egg)
