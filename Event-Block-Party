@@ -521,7 +521,6 @@ task.spawn(function()
 	while true do
 		if _G.VAR_STOP_BLOCK_PARTY and _G.VAR_BLOCK_PARTY then
 			isRunning = false
-			_G.VAR_BLOCK_PARTY = false
 		end
 
 		if _G.VAR_START_BLOCK_PARTY and not isRunning then
