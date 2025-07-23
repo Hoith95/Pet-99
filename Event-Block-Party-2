@@ -390,30 +390,38 @@ end
 
 ---------------- 🧩 LUỒNG 5: Auto Rebirth ----------------
 local function startAutoRebirth()
-	local PlotsInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Plots_Invoke")
-	local threshold = 169
-	local maxTileRebirth = 15
+    local threshold = 169
+    local maxTileRebirth = 15
 
-	while true do
-		waitUntilAllowed()
-		local saveData = Save.Get()
-		local tileRebirth = saveData.TileRebirth or 0
+    while true do
+        waitUntilAllowed()
 
-		if tileRebirth >= maxTileRebirth then
-			warn("🛑 Đã đạt TileRebirth =", tileRebirth, "- Dừng Auto Rebirth.")
-			break
-		end
+        -- Re-fetch các reference phòng khi map reset
+        local PlotsInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Plots_Invoke")
 
-		if getTotalTileCount() >= threshold then
-			local args = {1, "Rebirth"}
-			pcall(function()
-				PlotsInvoke:InvokeServer(unpack(args))
-				print("🔁 Đã gửi yêu cầu Rebirth | TileRebirth hiện tại:", tileRebirth)
-			end)
-		end
+        local saveData = Save.Get()
+        local tileRebirth = saveData.TileRebirth or 0
+        local totalTiles = getTotalTileCount()
+        local hugeChance = _G.CURRENT_HUGE_CHANCE or 0
 
-		task.wait(2)
-	end
+        -- Chỉ dừng khi cả 2 điều kiện cùng đúng
+        if tileRebirth >= maxTileRebirth
+           and hugeChance >= 25 then
+            warn(("🛑 Đã đạt TileRebirth = %d và HugeChance = %dx → Dừng Auto Rebirth."):format(tileRebirth, hugeChance))
+            break
+        end
+
+        -- Khi đủ tile threshold thì rebirth
+        if totalTiles >= threshold then
+            local args = {1, "Rebirth"}
+            pcall(function()
+                PlotsInvoke:InvokeServer(unpack(args))
+                print(("🔁 Gửi yêu cầu Rebirth | TileRebirth = %d"):format(tileRebirth))
+            end)
+        end
+
+        task.wait(2)
+    end
 end
         	
 ---------------- 🚀 Kích hoạt tất cả luồng song song ----------------
