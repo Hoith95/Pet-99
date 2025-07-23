@@ -386,43 +386,45 @@ end
 
 ---------------- 🧩 LUỒ̀NG 5: Auto Rebirth ----------------
 local function startAutoRebirth()
-    local PlotsInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Plots_Invoke")
-    local threshold = 169
+    local PlotsInvoke   = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Plots_Invoke")
+    local threshold     = 169
     local rebirthTarget = 15
-    local hugeTarget = 25
+    local hugeTarget    = 25
 
     while true do
         waitUntilAllowed()
-        
+
         local saveData    = Save.Get()
         local tileRebirth = saveData.TileRebirth or 0
         local totalTiles  = getTotalTileCount()
         local hugeChance  = _G.CURRENT_HUGE_CHANCE or 0
 
+        -- Trường hợp đã đủ rebirth & tiles
         if tileRebirth >= rebirthTarget and totalTiles >= threshold then
-            -- Nhưng HugeChance chưa đạt target → chờ 5 phút rồi continue
             if hugeChance < hugeTarget then
-                warn(("🔄 Đã Rebirth ≥%d và Tiles ≥%d nhưng HugeChance = %dx < %dx → chờ 5 phút"):format(
+                warn(("🔄 Rebirth ≥%d và Tiles ≥%d nhưng HugeChance = %dx < %dx → chờ 5 phút"):format(
                     rebirthTarget, threshold, hugeChance, hugeTarget))
-                task.wait(5 * 60)  -- 5 phút
-                continue
+                task.wait(5 * 60)
+            else
+                warn(("🛑 Đã đạt Rebirth ≥%d, Tiles ≥%d và HugeChance ≥%dx → Dừng Auto Rebirth"):format(
+                    rebirthTarget, threshold, hugeTarget))
+                break
             end
 
-            warn(("🛑 Đã đạt Rebirth ≥%d, Tiles ≥%d và HugeChance ≥%dx → Dừng Auto Rebirth."):format(
-                rebirthTarget, threshold, hugeTarget))
-            break
-        end
-
-        if totalTiles >= threshold then
+        -- Trường hợp chỉ đủ tiles, chưa đủ rebirth
+        elseif totalTiles >= threshold then
             local args = {1, "Rebirth"}
             pcall(function()
                 PlotsInvoke:InvokeServer(unpack(args))
                 print(("🔁 Gửi Rebirth | Hiện tại Rebirth = %d, HugeChance = %dx"):format(
                     tileRebirth, hugeChance))
             end)
-        end
+            task.wait(2)
 
-        task.wait(2)
+        -- Trường hợp chưa đủ tiles
+        else
+            task.wait(2)
+        end
     end
 end
         	
