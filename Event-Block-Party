@@ -391,27 +391,50 @@ local function startAutoRebirth()
 
 	while true do
 		waitUntilAllowed()
+
 		local saveData = Save.Get()
 		local tileRebirth = saveData.TileRebirth or 0
 		local hugeChance = _G.CURRENT_HUGE_CHANCE or 0
+
 		if tileRebirth >= 15 and hugeChance >= 25 then
 			warn("🛑 Đã đạt TileRebirth = 15 và HugeChance >= 25x → Dừng Auto Rebirth.")
 			break
 		end
 
 		if getTotalTileCount() >= threshold then
+			print("⏳ Đủ tile để rebirth, chờ 5 phút để kiểm tra lại HugeChance...")
+
+			for i = 1, 300 do
+				task.wait(1)
+				if not _G.VAR_BLOCK_PARTY then
+					warn("⚠️ Script đã bị dừng trong lúc chờ rebirth.")
+					return
+				end
+			end
+
+			saveData = Save.Get()
+			tileRebirth = saveData.TileRebirth or 0
+			hugeChance = _G.CURRENT_HUGE_CHANCE or 0
+
+			if tileRebirth >= 15 and hugeChance >= 25 then
+				warn("🛑 Sau khi chờ 5 phút: HugeChance đã >= 25x → Không rebirth nữa.")
+				break
+			end
+
 			local args = {1, "Rebirth"}
 			pcall(function()
 				PlotsInvoke:InvokeServer(unpack(args))
 				print("🔁 Đã gửi yêu cầu Rebirth | TileRebirth hiện tại:", tileRebirth)
 			end)
 		end
+
 		task.wait(2)
 	end
 end
         	
 ---------------- 🚀 Kích hoạt tất cả luồng song song ----------------
 local function startAllBlockPartyTasks()
+	local tileThreshold = 169
 	if isRunning then return end
 	isRunning = true
 	print("🚀 Đã kích hoạt startAllBlockPartyTasks")
