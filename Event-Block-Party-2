@@ -485,16 +485,22 @@ local function startAllBlockPartyTasks()
 		end
 	end)
 end
+-- Vòng monitor cuối file
 task.spawn(function()
-	while true do
-		if _G.VAR_STOP_BLOCK_PARTY and _G.VAR_BLOCK_PARTY then
-			isRunning = false
-		end
+    while true do
+        -- Khi stop: reset isRunning để cho phép restart
+        if _G.VAR_STOP_BLOCK_PARTY and _G.VAR_BLOCK_PARTY then
+            isRunning = false
+        end
 
-		if _G.VAR_START_BLOCK_PARTY and not isRunning then
-			startAllBlockPartyTasks()
-		end
+        -- Khi resume và chưa chạy các luồng
+        if _G.VAR_START_BLOCK_PARTY and not isRunning then
+            -- ✈️ Teleport chỉ khi resume, không ảnh hưởng lần đầu
+            teleportToBlockParty()
+            -- Khởi lại toàn bộ luồng
+            startAllBlockPartyTasks()
+        end
 
-		task.wait(2)
-	end
+        task.wait(2)
+    end
 end)
