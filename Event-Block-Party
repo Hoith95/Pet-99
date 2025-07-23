@@ -434,7 +434,6 @@ end
         	
 ---------------- 🚀 Kích hoạt tất cả luồng song song ----------------
 local function startAllBlockPartyTasks()
-	local tileThreshold = 169
 	if isRunning then return end
 	isRunning = true
 	print("🚀 Đã kích hoạt startAllBlockPartyTasks")
@@ -466,23 +465,14 @@ local function startAllBlockPartyTasks()
 		startTileHandler()
 	end)
 
-	-- 🧩 LUỒ̀NG 3: Hatch HUGE CHANCE
+	-- 🧩 LUỒNG 3: Hatch HUGE
 	task.spawn(function()
-	    while true do
-	        while getTotalTileCount() < tileThreshold do
-	            warn("⏳ Tiles chưa đạt đủ " .. tileThreshold .. " → chưa khởi Luồng 3")
-	            task.wait(5)
-	        end
-
-	        print("✅ Đã đủ " .. tileThreshold .. " tiles → Khởi LUỒ̀NG 3: Hatch HUGE CHANCE")
-	        startAutoHatchHuge()
-
-	        repeat
-	            task.wait(5)
-	        until getTotalTileCount() < tileThreshold
-
-	        print("🔄 Tiles đã xuống dưới " .. tileThreshold .. ", chuẩn bị chạy lại Luồng 3")
+	    while getTotalTileCount() < tileThreshold do
+	        warn("⏳ Tiles chưa đạt đủ " .. tileThreshold .. " → chưa khởi Luồng 3")
+	        task.wait(5)
 	    end
+	    print("✅ Đã đủ " .. tileThreshold .. " tiles → Khởi LUỒ̀NG 3: Hatch HUGE CHANCE")
+	    startAutoHatchHuge()
 	end)
 
 	-- 🧩 LUỒNG 4: Auto Gift Bag
