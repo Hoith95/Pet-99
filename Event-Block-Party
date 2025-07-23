@@ -50,27 +50,13 @@ local function teleportToBlockParty()
 	task.wait(15)
 	teleportTo(CFrame.new(16460, 2275, -21473))
 end
----------------- 🧩 LUỒNG 1: Mua tiles quanh plot (cải tiến) ----------------
+---------------- 🧩 LUỒNG 1: Mua tiles quanh plot ----------------
 local function startAutoPurchase()
 	local radiusMax = 6
 	local delayPerTile = 0.05
 	local delayPerCycle = 0.05
 
 	local PlotsInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Plots_Invoke")
-
-	-- 📌 Dynamic plotIndex từ Workspace.__THINGS.Plots
-	local plotIndex = 1
-	pcall(function()
-		local plots = Workspace.__THINGS:FindFirstChild("Plots")
-		if plots then
-			for _, v in ipairs(plots:GetChildren()) do
-				if tonumber(v.Name) then
-					plotIndex = tonumber(v.Name)
-					break
-				end
-			end
-		end
-	end)
 
 	-- 💠 Tạo danh sách offsets quanh plot
 	local offsets = {}
@@ -80,6 +66,23 @@ local function startAutoPurchase()
 				table.insert(offsets, {dx, dy})
 			end
 		end
+	end
+
+	-- 📌 Hàm lấy plotIndex động
+	local function getCurrentPlotIndex()
+		local index = 1
+		pcall(function()
+			local plots = Workspace.__THINGS:FindFirstChild("Plots")
+			if plots then
+				for _, v in ipairs(plots:GetChildren()) do
+					if tonumber(v.Name) then
+						index = tonumber(v.Name)
+						break
+					end
+				end
+			end
+		end)
+		return index
 	end
 
 	while true do
@@ -100,6 +103,7 @@ local function startAutoPurchase()
 			task.wait(30)
 		else
 			for _, offset in ipairs(offsets) do
+				local plotIndex = getCurrentPlotIndex()
 				local args = {plotIndex, "PurchaseTile", offset[1], offset[2]}
 				pcall(function()
 					PlotsInvoke:InvokeServer(unpack(args))
