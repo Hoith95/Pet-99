@@ -82,6 +82,7 @@ local function startAutoPurchase()
         local hugeChance = _G.CURRENT_HUGE_CHANCE or 0
 
         -- Cập nhật lại Network Invoke mỗi lần (tránh stale reference sau reset)
+	local TilesFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
         local PlotsInvoke = ReplicatedStorage:WaitForChild("Network"):WaitForChild("Plots_Invoke")
 
         -- Kiểm tra dừng khi cùng lúc thỏa 3 điều kiện
@@ -416,6 +417,7 @@ local function startAllBlockPartyTasks()
 	-- 🧩 LUỒNG 1: Auto Purchase
     	task.spawn(function()
         	while true do
+			local TilesFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
             		local saveData = Save.Get()
             		local tileRebirth = saveData.TileRebirth or 0
             		local totalTiles = getTotalTileCount()
