@@ -223,7 +223,6 @@ local function handleRejoin()
     task.wait(15)
     teleportToBlockParty()
     task.wait(9)
-    isRunning = false
 end
 
 local function isNearEgg(egg)
@@ -235,69 +234,70 @@ local function isNearEgg(egg)
 end
 
 local function startAutoHatchHuge()
-    task.wait(20)
+    task.spawn(function()
+        -- 🧷 Luồng này chỉ bắt đầu khi đủ tiles
+        while getTotalTileCount() < tileThreshold do
+            warn("⏳ Tiles chưa đạt đủ " .. tileThreshold .. " → chưa khởi động Luồng 3")
+            task.wait(5)
+        end
 
-    -- Tắt animation mở trứng
-    local successEggs, Eggs = pcall(function()
-        return player:WaitForChild("PlayerScripts"):WaitForChild("Scripts"):WaitForChild("Game"):WaitForChild("Egg Opening Frontend")
-    end)
-    if successEggs and Eggs then
-        pcall(function()
-            getsenv(Eggs).PlayEggAnimation = function() return end
+        task.wait(2)
+
+        -- Tắt animation mở trứng
+        local successEggs, Eggs = pcall(function()
+            return player:WaitForChild("PlayerScripts"):WaitForChild("Scripts"):WaitForChild("Game"):WaitForChild("Egg Opening Frontend")
         end)
-    end
+        if successEggs and Eggs then
+            pcall(function()
+                getsenv(Eggs).PlayEggAnimation = function() return end
+            end)
+        end
 
-    local bestTile, bestEgg = nil, nil
+        local bestTile, bestEgg = nil, nil
 
-    local function safeHatchLoop()
-        while true do
-            waitUntilAllowed()
+        local function safeHatchLoop()
+            while true do
+                waitUntilAllowed()
 
-            while getTotalTileCount() < tileThreshold do
-                warn("⏳ Tiles hiện tại dưới " .. tileThreshold .. " → đang chờ...")
-                task.wait(3)
-            end
+                if not bestEgg or not bestEgg:IsDescendantOf(workspace) then
+                    warn("❌ Egg hiện tại đã mất, đang tìm lại...")
+                    task.wait(2)
+                    bestEgg = findEggNearTile(bestTile)
+                    if bestEgg then
+                        print("✅ Đã tìm lại được egg:", bestEgg.Name)
+                        teleportTo(bestEgg.Part.CFrame + Vector3.new(0, 5, 0))
+                        task.wait(1)
+                    else
+                        print("❌ Không tìm thấy egg → reset map")
+                        handleRejoin()
+                        break
+                    end
+                end
 
-            if not bestEgg or not bestEgg:IsDescendantOf(workspace) then
-                warn("❌ Egg hiện tại đã mất, đang tìm lại...")
-                task.wait(2)
-                bestEgg = findEggNearTile(bestTile)
-                if bestEgg then
-                    print("✅ Đã tìm lại được egg:", bestEgg.Name)
+                if not isNearEgg(bestEgg) then
+                    print("🚶‍♂️ Không ở gần egg, teleport lại...")
                     teleportTo(bestEgg.Part.CFrame + Vector3.new(0, 5, 0))
                     task.wait(1)
-                else
-                    print("❌ Không tìm thấy egg → reset map")
-                    handleRejoin()
-                    break
                 end
-            end
 
-            if not isNearEgg(bestEgg) then
-                print("🚶‍♂️ Không ở gần egg, teleport lại...")
-                teleportTo(bestEgg.Part.CFrame + Vector3.new(0, 5, 0))
-                task.wait(1)
-            end
+                local MaxEggHatch = EggCmds.GetMaxHatch()
+                local args = {bestEgg.Name, MaxEggHatch}
+                local success, err = pcall(function()
+                    Network.CustomEggs_Hatch:InvokeServer(unpack(args))
+                end)
+                if not success then
+                    warn("❌ Hatch lỗi:", err)
+                end
 
-            local MaxEggHatch = EggCmds.GetMaxHatch()
-            local args = {bestEgg.Name, MaxEggHatch}
-            local success, err = pcall(function()
-                Network.CustomEggs_Hatch:InvokeServer(unpack(args))
-            end)
-            if not success then
-                warn("❌ Hatch lỗi:", err)
+                task.wait(0.5)
             end
-
-            task.wait(0.5)
         end
-    end
 
-    while true do
-        waitUntilAllowed()
-        if getTotalTileCount() >= tileThreshold then
+        -- 🔁 Vòng kiểm tra tile tốt hơn mỗi 10 phút
+        while true do
+            waitUntilAllowed()
             local initialTile, initialChance = findBestHugeTile()
             if initialTile and initialChance > 0 then
-                -- Sử dụng trực tiếp biến global để in
                 bestTile = initialTile
                 bestEgg = findEggNearTile(initialTile)
                 teleportToTile(bestTile)
@@ -348,9 +348,9 @@ local function startAutoHatchHuge()
                     handleRejoin()
                 end
             end
+            task.wait(5)
         end
-        task.wait(5)
-    end
+    end)
 end
 
 ---------------- 🧩 LUỒNG 4: Auto SummerGiftBag2025 ----------------
