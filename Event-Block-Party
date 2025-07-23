@@ -446,13 +446,13 @@ local function startAllBlockPartyTasks()
 
 	-- 🧩 LUỒNG 3: Hatch HUGE
 	task.spawn(function()
-		while true do
-			while getTotalTileCount() < 169 do
-				task.wait(2)
-			end
-			print("✅ Đã khởi động LUỒNG 3: Hatch HUGE CHANCE")
-			startAutoHatchHuge()
-		end
+	    while getTotalTileCount() < tileThreshold do
+	        warn("⏳ Tiles chưa đạt đủ " .. tileThreshold .. " → chưa khởi Luồng 3")
+	        task.wait(5)
+	    end
+
+	    print("✅ Đã đủ " .. tileThreshold .. " tiles → Khởi LUỒ̀NG 3: Hatch HUGE CHANCE")
+	    startAutoHatchHuge()
 	end)
 
 	-- 🧩 LUỒNG 4: Auto Gift Bag
