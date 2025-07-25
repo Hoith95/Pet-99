@@ -1,0 +1,59 @@
+if _G.VARTELE2 then 
+    warn("Script đã được chạy trước đó!")
+    return
+end
+_G.VARTELE2 = true 
+
+-- ⚙️ Dịch vụ
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local LocalPlayer = Players.LocalPlayer
+
+-- 🌍 PlaceId các world
+local PLACE_WORLD_2 = 16498369169
+local PLACE_WORLD_3 = 17503543197
+local PLACE_WORLD_4 = 140403681187145
+
+-- 🧭 Hàm kiểm tra nếu đang ở World 2/3/4
+local function isInTargetWorld()
+    return game.PlaceId == PLACE_WORLD_2 or game.PlaceId == PLACE_WORLD_3 or game.PlaceId == PLACE_WORLD_4
+end
+
+-- 🚪 Hàm kiểm tra nếu chỉ có 1 mình
+local function handleIfInTargetWorld()
+    task.wait(5)
+    local playerCount = #Players:GetPlayers()
+    if playerCount <= 1 then
+        return true -- chỉ có 1 mình → dừng
+    else
+        LocalPlayer:Kick("Có người khác") -- có người khác → kick
+        return false
+    end
+end
+
+-- 🔁 Hàm thử teleport + chờ + kiểm tra PlaceId
+local function tryTeleportAndCheck(worldName, targetPlaceId)
+    local teleportFunc = ReplicatedStorage:WaitForChild("Network"):WaitForChild(worldName)
+    teleportFunc:InvokeServer()
+    task.wait(60)
+    return game.PlaceId == targetPlaceId
+end
+
+-- 🚀 Bắt đầu logic chính
+task.spawn(function()
+    if isInTargetWorld() then
+        if handleIfInTargetWorld() then return end
+    else
+        -- 🛰 Thử teleport lần lượt
+        if tryTeleportAndCheck("World4Teleport", PLACE_WORLD_4) then
+            if handleIfInTargetWorld() then return end
+        elseif tryTeleportAndCheck("World3Teleport", PLACE_WORLD_3) then
+            if handleIfInTargetWorld() then return end
+        elseif tryTeleportAndCheck("World2Teleport", PLACE_WORLD_2) then
+            if handleIfInTargetWorld() then return end
+        end
+
+        -- ❌ Nếu đến đây vẫn chưa dịch chuyển được
+        LocalPlayer:Kick("Dịch Chuyển Thất Bại!")
+    end
+end)
