@@ -1,0 +1,31 @@
+local RS = game:GetService("ReplicatedStorage")
+local ZonesRoot = RS.__DIRECTORY.Zones
+local zoneName = require(RS.Library.Client.ZoneCmds).GetMaxOwnedZone()
+print("🔍 MaxOwnedZone:", zoneName)
+
+for _, world in ipairs(ZonesRoot:GetChildren()) do
+	for _, folder in ipairs(world:GetChildren()) do
+		if folder:IsA("Folder") and (folder.Name:lower():find("update") or folder == world) then
+			for _, zone in ipairs(folder:GetChildren()) do
+				if zone:IsA("ModuleScript") and zone.Name:find(zoneName) then
+					local worldName = world.Name
+					print("🌍 Zone thuộc:", worldName)
+
+					if worldName == "World 2" then
+						game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World2Teleport"):InvokeServer()
+						print("🚀 Đã teleport đến World2")
+					elseif worldName == "World 3" then
+						game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World3Teleport"):InvokeServer()
+						print("🚀 Đã teleport đến World3")
+					elseif worldName == "World 4" then
+						game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World4Teleport"):InvokeServer()
+						print("🚀 Đã teleport đến World4")
+					else
+						warn("❌ Không có lệnh teleport cho: " .. worldName)
+					end
+					return
+				end
+			end
+		end
+	end
+end
