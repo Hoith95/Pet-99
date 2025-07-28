@@ -11,7 +11,10 @@ for _, world in ipairs(ZonesRoot:GetChildren()) do
 					local worldName = world.Name
 					print("🌍 Zone thuộc:", worldName)
 
-					if worldName == "World 2" then
+					if worldName == "World 1" then
+						game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World1Teleport"):InvokeServer()
+						print("🚀 Đã teleport đến World1")
+					elseif worldName == "World 2" then
 						game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World2Teleport"):InvokeServer()
 						print("🚀 Đã teleport đến World2")
 					elseif worldName == "World 3" then
