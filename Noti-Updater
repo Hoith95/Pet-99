@@ -136,12 +136,12 @@ local function startGuiUpdater()
         return label
     end
 
-    local chanceLabel     = createLabel("ChanceLabel",       rightRegion,   Color3.fromRGB(34, 139, 34))
-    local tilesLabel      = createLabel("TilesLabel",        rightRegion,   Color3.fromRGB(34, 139, 34))
-    local rebirthLabel    = createLabel("RebirthLabel",      rightRegion,   Color3.fromRGB(34, 139, 34))
+    --local chanceLabel     = createLabel("ChanceLabel",       rightRegion,   Color3.fromRGB(34, 139, 34))
+    --local tilesLabel      = createLabel("TilesLabel",        rightRegion,   Color3.fromRGB(34, 139, 34))
+    --local rebirthLabel    = createLabel("RebirthLabel",      rightRegion,   Color3.fromRGB(34, 139, 34))
     local coinsLabel      = createLabel("CoinsLabel",        rightRegion,   Color3.fromRGB(34, 139, 34))
-    local giftLabel       = createLabel("TropicalGiftLabel", rightRegion,   Color3.fromRGB(34, 139, 34))
-    local ticketLabel     = createLabel("SBPTicketLabel",    rightRegion,   Color3.fromRGB(34, 139, 34))
+    --local giftLabel       = createLabel("TropicalGiftLabel", rightRegion,   Color3.fromRGB(34, 139, 34))
+    --local ticketLabel     = createLabel("SBPTicketLabel",    rightRegion,   Color3.fromRGB(34, 139, 34))
 
     local timeTrialLabel  = createLabel("timeTrialLabel",    leftRegion,    Color3.fromRGB(34, 139, 34))
     local pointsLabel     = createLabel("pointsLabel",       centerRegion,  Color3.fromRGB(34, 139, 34))
@@ -149,23 +149,24 @@ local function startGuiUpdater()
     -- Vòng lặp cập nhật GUI liên tục
     while true do
         local currentTime = os.time()
-        tilesLabel.Text   = tostring(#game:GetService("Workspace").__THINGS.Tiles:GetChildren()) .. " | TILES"
-        updateLabelSize(tilesLabel)
 
-        coinsLabel.Text   = Formatint(getCurrencyAmount("BlockPartyCoins")) .. " | COINS"
+        --tilesLabel.Text   = tostring(#game:GetService("Workspace").__THINGS.Tiles:GetChildren()) .. " | TILES"
+        --updateLabelSize(tilesLabel)
+
+        coinsLabel.Text   = Formatint(getCurrencyAmount("FantasyCoins")) .. " | COINS"
         updateLabelSize(coinsLabel)
 
-        chanceLabel.Text  = tostring(_G.CURRENT_HUGE_CHANCE or 0) .. "x | HUGE"
-        updateLabelSize(chanceLabel)
+        --chanceLabel.Text  = tostring(_G.CURRENT_HUGE_CHANCE or 0) .. "x | HUGE"
+        --updateLabelSize(chanceLabel)
 
-        rebirthLabel.Text = tostring(Save.Get().TileRebirth or 0) .. " | REBIRTH"
-        updateLabelSize(rebirthLabel)
+        --rebirthLabel.Text = tostring(Save.Get().TileRebirth or 0) .. " | REBIRTH"
+        --updateLabelSize(rebirthLabel)
 
-        giftLabel.Text    = tostring(getLootboxAmount("Tropical Gift")) .. " | Tropical Gift"
-        updateLabelSize(giftLabel)
+        --giftLabel.Text    = tostring(getLootboxAmount("Tropical Gift")) .. " | Tropical Gift"
+        --updateLabelSize(giftLabel)
 
-        ticketLabel.Text  = tostring(getMiscAmount("Summer Block Party Ticket")) .. " | Summer Ticket"
-        updateLabelSize(ticketLabel)
+        --ticketLabel.Text  = tostring(getMiscAmount("Summer Block Party Ticket")) .. " | Summer Ticket"
+        --updateLabelSize(ticketLabel)
 
         timeTrialLabel.Text = "Time Trial: " .. tostring(getRunsLeft()) .. "/10"
         updateLabelSize(timeTrialLabel)
