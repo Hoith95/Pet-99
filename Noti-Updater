@@ -139,7 +139,7 @@ local function startGuiUpdater()
     --local chanceLabel     = createLabel("ChanceLabel",       rightRegion,   Color3.fromRGB(34, 139, 34))
     --local tilesLabel      = createLabel("TilesLabel",        rightRegion,   Color3.fromRGB(34, 139, 34))
     --local rebirthLabel    = createLabel("RebirthLabel",      rightRegion,   Color3.fromRGB(34, 139, 34))
-    local coinsLabel      = createLabel("CoinsLabel",        rightRegion,   Color3.fromRGB(34, 139, 34))
+    --local coinsLabel      = createLabel("CoinsLabel",        rightRegion,   Color3.fromRGB(34, 139, 34))
     --local giftLabel       = createLabel("TropicalGiftLabel", rightRegion,   Color3.fromRGB(34, 139, 34))
     --local ticketLabel     = createLabel("SBPTicketLabel",    rightRegion,   Color3.fromRGB(34, 139, 34))
 
@@ -153,8 +153,8 @@ local function startGuiUpdater()
         --tilesLabel.Text   = tostring(#game:GetService("Workspace").__THINGS.Tiles:GetChildren()) .. " | TILES"
         --updateLabelSize(tilesLabel)
 
-        coinsLabel.Text   = Formatint(getCurrencyAmount("FantasyCoins")) .. " | COINS"
-        updateLabelSize(coinsLabel)
+        --coinsLabel.Text   = Formatint(getCurrencyAmount("FantasyCoins")) .. " | COINS"
+        --updateLabelSize(coinsLabel)
 
         --chanceLabel.Text  = tostring(_G.CURRENT_HUGE_CHANCE or 0) .. "x | HUGE"
         --updateLabelSize(chanceLabel)
