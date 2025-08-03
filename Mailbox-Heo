@@ -13,7 +13,7 @@ task.wait(60)  -- Đảm bảo chờ đúng 60 giây trước khi thực thi
 
 getgenv().AutoMail = {
     ['Items'] = {
-        ['All Huges'] = { Class = "Pet", AllVariants = true, Amount = 1 },
+        --['All Huges'] = { Class = "Pet", AllVariants = true, Amount = 1 },
         --['Hippomelon Ball'] = { Class = "Pet", AllVariants = true, Amount = "Max" },
         ['Hype Egg 2'] = { Class = "Lootbox", Amount = 1 },
         ['Hype Egg'] = { Class = "Lootbox", Amount = "Max" },
@@ -26,7 +26,7 @@ getgenv().AutoMail = {
         ['Time Trial Gift'] = { Class = "Lootbox", MinAmount = 18, Amount = "Max" },
         --['Deep Sea Treasure Chest'] = { Class = "Lootbox", MinAmount = 5, Amount = "Max" },
         ['Summer Block Party Ticket'] = { Class = "Misc", MinAmount = 150, Amount = "Max" },
-        ['Tropical Gift'] = { Class = "Lootbox", MinAmount = 150, Amount = "Max" },
+        ['Tropical Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
         ['Gym Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
         ['Tower Defense Gift 3'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
         ['Tower Defense Gift 2'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
@@ -48,7 +48,7 @@ getgenv().AutoMail = {
         ['Charm Stone'] = { Class = "Misc", MinAmount = 500, Amount = "Max" },
         ['Royalty'] = { Class = "Charm", MinAmount = 1, Amount = "Max" },
         ['Overload'] = { Class = "Charm", MinAmount = 1, Amount = "Max" },
-        --['Mini Pinata'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
+        ['Mini Pinata'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
         ['Secret Key'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
         ['Fantasy Key'] = { Class = "Misc", MinAmount = 40, Amount = "Max" },
         ['Void Key'] = { Class = "Misc", MinAmount = 100, Amount = "Max" },
