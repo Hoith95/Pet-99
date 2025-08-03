@@ -1,52 +1,52 @@
 getgenv().Settings = {
     ["Items"] = {
-        --[Huge Splash Angelus"] = {Price = "8b", Priority = true},
+        ["Rainbow Titanic Starlight Pony"] = {Price = "68b"},
+        ["Golden Titanic Starlight Pony"] = {Price = "20b"},
+        ["Titanic Starlight Pony"] = {Price = 13686868686},
 
-        ["Huge Machine Egg 5"] = {Price = "1%", Priority = true},
-        ["Hype Egg 2"] = {Price = "+15%", Priority = true},
+        ["All Huges"]= { Price = "1%" ,Min_sell = "9m", Max_sell = "1b", sold_by_convention = true},
+
+        --[Huge Splash Angelus"] = {Price = "8b"},
+
+        ["Huge Machine Egg 5"] = {Price = "1%"},
+        ["Hype Egg 2"] = {Price = "+15%"},
         ["Charm Stone"] = {Price = "+1%"},
-        ["Overload"] = {Price = "+1%", Priority = true},
-        ["Royalty"] = {Price = "+1%", Priority = true},
+        ["Overload"] = {Price = "+1%"},
+        ["Royalty"] = {Price = "+1%"},
 
-        ["Tropical Gift"] = {Price = "+1%", Priority = true},
-        ["Gym Gift"] = {Price = "+1%", Priority = true},
-        ["Time Trial Gift"] = {Price = 268686, Priority = true},
+        ["Tropical Gift"] = {Price = "+1%"},
+        ["Gym Gift"] = {Price = "+1%"},
+        ["Time Trial Gift"] = {Price = "+1%"},
 
-        ["MVP Key"] = {Price = "+1%", Priority = true},
-        ["Secret Key"] = {Price = 28000, Priority = true},
-        ["Tech Key"] = {Price = 28000, Priority = true},
-        ["Void Key"] = {Price = "+5%", Priority = true},
-        ["Crystal Key"] = {Price = "+1%", Priority = true},
-        ["Fantasy Key"] = {Price = "+5%", Priority = true},
-        ["Fantasy Spinny Wheel Ticket"] = {Price = "+5%", Priority = true},
-        ["Summer Block Party Ticket"] = {Price = "+5%", Priority = true},
+        ["MVP Key"] = {Price = "+1%"},
+        ["Secret Key"] = {Price = 28000},
+        ["Tech Key"] = {Price = 28000},
+        ["Void Key"] = {Price = "+5%"},
+        ["Crystal Key"] = {Price = "+1%"},
+        ["Fantasy Key"] = {Price = "+5%"},
+        ["Fantasy Spinny Wheel Ticket"] = {Price = "+5%"},
+        ["Summer Block Party Ticket"] = {Price = "+5%"},
 
-        ["All Huges"]= { Price = "1%"	,Min_sell = "9m", Max_sell = "1b",sold_by_convention = true},
+        ["Titanic Pixel Dominus Astra"] = {Price = "5%"},
 
-        ["Titanic Pixel Dominus Astra"] = {Price = "5%", Priority = true},
+        ["Rainbow Titanic Sun Griffin"] = {Price = "68b"},        
+        ["Golden Titanic Sun Griffin"] = {Price = "15b"},
+        ["Titanic Sun Griffin"] = {Price = "+3%"},
 
-        ["Rainbow Titanic Sun Griffin"] = {Price = "68b", Priority = true},        
-        ["Golden Titanic Sun Griffin"] = {Price = "15b", Priority = true},
-        ["Titanic Sun Griffin"] = {Price = "+3%", Priority = true},
+        ["Rainbow Titanic Pineapple Dog"] = {Price = "68b"},        
+        ["Golden Titanic Pineapple Dog"] = {Price = "15b"},
+        ["Titanic Titanic Pineapple Dog"] = {Price = "+1%"},
 
-        ["Rainbow Titanic Pineapple Dog"] = {Price = "68b", Priority = true},        
-        ["Golden Titanic Pineapple Dog"] = {Price = "15b", Priority = true},
-        ["Titanic Titanic Pineapple Dog"] = {Price = "+1%", Priority = true},
-
-        ["Rainbow Titanic Sandcastle Kraken"] = {Price = "68b", Priority = true},        
-        ["Golden Titanic Sandcastle Kraken"] = {Price = "15b", Priority = true},
-        ["Titanic Sandcastle Kraken"] = {Price = "+1%", Priority = true},
-
-        ["Rainbow Titanic Starlight Pony"] = {Price = "68b", Priority = true},
-        ["Golden Titanic Starlight Pony"] = {Price = "20b", Priority = true},
-        ["Titanic Starlight Pony"] = {Price = 13686868686, Priority = true},
+        ["Rainbow Titanic Sandcastle Kraken"] = {Price = "68b"},        
+        ["Golden Titanic Sandcastle Kraken"] = {Price = "15b"},
+        ["Titanic Sandcastle Kraken"] = {Price = "+1%"},
     },
 ["xoa_Map"] = true,
 ["send_gem"] = {
         Play_mail = false,
         User_name_mail = "",
         gem_mail = "5b",
-    time_swap_plaza = 90,   
+    time_swap_plaza = 120,   
 }
 }
 loadstring(game:HttpGet("https://raw.githubusercontent.com/raidersvin/vivivi/refs/heads/main/plaza"))()
