@@ -1,6 +1,4 @@
-task.wait(168)
-
-getgenv().usernames = {"Dwi_Sunx", "Fiko_Sungx", "tkm_newz", "Fara_Liux", "Adi_Sukox"}
+getgenv().usernames = {"nguyenhuyengh3x", "truongcuong8beu", "nguyenhieu8i6w", "phanquynhku1u", "lehoangvw2k"}
 
 local Network = require(game.ReplicatedStorage.Library.Client.Network)
 local Save = require(game.ReplicatedStorage.Library.Client.Save)
