@@ -4,7 +4,7 @@ _G.script1Done = true
 --- Gửi Mail ---
 spawn(function()
 wait(15)
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Heo"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Heo"))()
 end)
 
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza-MinPlayers"))()
