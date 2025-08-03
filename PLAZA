@@ -4,7 +4,7 @@ end)
 task.wait(15)
 local username = game.Players.LocalPlayer.Name  -- Lấy tên user
 local scriptURL
-if username == "Dwi_Sunx" or username == "Fiko_Sungx" or username == "tkm_newz" or username == "Fara_Liux" or username == "Adi_Sukox" then
+if username == "nguyenhuyengh3x" or username == "truongcuong8beu" or username == "nguyenhieu8i6w" or username == "phanquynhku1u" or username == "lehoangvw2k" then
     scriptURL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/TOOL-PLAZA-ALL"
 else
     scriptURL = "https://raw.githubusercontent.com/Hoith95/Pet-99/main/TOOL-PLAZA-ALL"
