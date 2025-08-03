@@ -4,7 +4,7 @@ getgenv().Settings = {
         ["Golden Titanic Starlight Pony"] = {Price = "20b"},
         ["Titanic Starlight Pony"] = {Price = 13686868686},
 
-        ["All Huges"]= { Price = "1%" ,Min_sell = "9m", Max_sell = "1b", sold_by_convention = true},
+        ["All Huges"]= { Price = "1%", Min_sell = "9m", Max_sell = "1b", sold_by_convention = true},
 
         --[Huge Splash Angelus"] = {Price = "8b"},
 
