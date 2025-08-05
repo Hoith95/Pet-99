@@ -1,3 +1,9 @@
+if _G.MAST then
+    return
+end
+
+_G.MAST = true
+
 spawn(function()
     -- Khai báo các tham số của tác vụ
     local args = {
