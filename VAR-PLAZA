@@ -149,15 +149,6 @@ task.spawn(function()
     end
 end)
 
--- Lắng nghe player mới vào; nếu là excluded -> hop ngay
-Players.PlayerAdded:Connect(function(p)
-    task.wait(0.5) -- nhỏ delay cho chắc
-    if isExcludedUsername(p.Name) then
-        print("[PlayerAdded] Phát hiện excluded ("..tostring(p.Name)..") -> hop ngay.")
-        serverHop()
-    end
-end)
-
 -- Check diamonds sau 1 giờ (chạy 1 lần)
 task.spawn(function()
     print("[Diamonds] Initial: " .. tostring(initialDiamonds))
