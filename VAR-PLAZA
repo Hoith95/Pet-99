@@ -1,13 +1,13 @@
 -- ===== CONFIG =====
+
 local PRIORITIZE_EXCLUDE = true        -- true = hop ngay khi thấy excluded (bất kể số người) [chỉ kiểm tra 1 lần lúc start]
 local CASE_INSENSITIVE = false         -- true nếu muốn so sánh không phân biệt hoa/thường
 local MAX_PLAYERS_BELOW = 10           -- nếu không có excluded lúc start, hop khi số người <= giá trị này
 local SERVERHOP_COOLDOWN = 300         -- cooldown giữa 2 lần hop (giây)
-local CHECK_INTERVAL = 60               -- khoảng kiểm tra vòng lặp chính (giây)
+local CHECK_INTERVAL = 60              -- khoảng kiểm tra vòng lặp chính (giây)
 local DIAMOND_KEY = "\240\159\146\142 Diamonds" -- key leaderstats kim cương
 
-local DEBUG_LOG = false                -- bật để in debug (đặt true khi cần)
--- Danh sách username cần tránh (mặc định case-sensitive; bật CASE_INSENSITIVE để ignore case)
+local DEBUG_LOG = false
 local usernamesToExclude = {
     ["Zephy_Marnell604"] = true,
     ["Dravon_Liorrex220"] = true,
@@ -22,7 +22,6 @@ local usernamesToExclude = {
 }
 -- ====================
 
--- wait until game + leaderstats ready
 repeat task.wait() until game:IsLoaded()
 local Players = game:GetService("Players")
 local localPlayer = Players.LocalPlayer
@@ -71,27 +70,21 @@ local function serverHop()
         if DEBUG_LOG then print("[ServerHop] Không thể hop (đang hop hoặc cooldown).") end
         return false
     end
-
-    -- set flags EARLY để tránh các lần gọi đồng thời / race
     isHopping = true
-    lastHopTime = os.time()   -- gán ngay trước khi gọi script bên ngoài
-
-    print("[ServerHop] Bắt đầu ServerHop... (lastHopTime set)")
+    lastHopTime = os.time()
+    print("[ServerHop] Bắt đầu ServerHop...")
 
     local ok, err = pcall(function()
-        -- main hop script (giữ nguyên links)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza"))()
         task.wait(60)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
     end)
 
     isHopping = false
-
     if not ok then
         warn("[ServerHop] Lỗi khi chạy: " .. tostring(err))
         return false
     end
-
     print("[ServerHop] Hoàn tất.")
     return true
 end
@@ -105,51 +98,58 @@ local function hasExcludedPlayer()
     return false, nil
 end
 
+local function safeGetPlayerCount()
+    local success, count = pcall(function()
+        return #Players:GetPlayers()
+    end)
+    if not success or type(count) ~= "number" then
+        return 10 -- mặc định khi nil hoặc kiểu khác
+    end
+    return count
+end
+
 -- === CHECK EXCLUDED ONCE AT START ===
 local initialExcluded, initialWho = hasExcludedPlayer()
 if initialExcluded then
     print("[Start] Phát hiện excluded user lúc khởi chạy: " .. tostring(initialWho) .. " -> hop ngay.")
     serverHop()
-    -- sau khi hop script thường disconnect; vẫn return để dừng phần còn lại
     return
 else
     if DEBUG_LOG then print("[Start] Không phát hiện excluded lúc khởi chạy. Tiếp tục với main loop.") end
 end
 -- =====================================
 
--- Main loop: KHÔNG kiểm tra excluded nữa, chỉ kiểm playerCount theo cấu hình
+-- Main loop: KHÔNG kiểm tra excluded nữa, chỉ kiểm playerCount
 task.spawn(function()
     while true do
         task.wait(CHECK_INTERVAL)
 
         if isHopping then
-            -- đang hop, skip vòng này
             if DEBUG_LOG then print("[Main] Đang hop, skip vòng check.") end
         else
-            local playerCount = #Players:GetPlayers()
+            local playerCount = safeGetPlayerCount()
 
             if DEBUG_LOG then
                 print(string.format("[Main][DEBUG] playerCount=%d", playerCount))
             end
 
-            -- Nếu PRIORITIZE_EXCLUDE = true thì đã xử lý lúc start (không check lại)
-            -- Chúng ta chỉ cần check số người: hop khi playerCount <= MAX_PLAYERS_BELOW
             if playerCount <= MAX_PLAYERS_BELOW then
                 print("[Main] Số người <= " .. MAX_PLAYERS_BELOW .. " -> hop theo quy tắc.")
                 serverHop()
-                return -- kết thúc thread (thường bị disconnect sau hop)
+                return
             else
-                if DEBUG_LOG then print("[Main] Server có " .. playerCount .. " người (> " .. MAX_PLAYERS_BELOW .. "). Chờ.") end
-                -- tiếp tục vòng lặp
+                if DEBUG_LOG then
+                    print("[Main] Server có " .. playerCount .. " người (> " .. MAX_PLAYERS_BELOW .. "). Chờ.")
+                end
             end
         end
     end
 end)
 
--- Check diamonds sau 1 giờ (chạy 1 lần)
+-- Check diamonds sau 1 giờ
 task.spawn(function()
     print("[Diamonds] Initial: " .. tostring(initialDiamonds))
-    task.wait(3600) -- 1 giờ
+    task.wait(3600)
     local cur = 0
     if leaderstats:FindFirstChild(DIAMOND_KEY) then
         cur = leaderstats[DIAMOND_KEY].Value
@@ -158,7 +158,7 @@ task.spawn(function()
     end
 
     if cur == initialDiamonds then
-        print("[Diamonds] Không tăng sau 1 giờ -> thực hiện ServerHop.")
+        print("[Diamonds] Không tăng sau 1 giờ -> ServerHop.")
         serverHop()
     else
         print("[Diamonds] Đã thay đổi: " .. tostring(initialDiamonds) .. " -> " .. tostring(cur) .. " -> không hop.")
