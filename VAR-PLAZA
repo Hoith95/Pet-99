@@ -3,7 +3,7 @@ local PRIORITIZE_EXCLUDE = true        -- true = hop ngay khi thấy excluded (b
 local CASE_INSENSITIVE = false         -- true nếu muốn so sánh không phân biệt hoa/thường
 local MAX_PLAYERS_BELOW = 10           -- nếu không có excluded lúc start, hop khi số người <= giá trị này
 local SERVERHOP_COOLDOWN = 300         -- cooldown giữa 2 lần hop (giây)
-local CHECK_INTERVAL = 5               -- khoảng kiểm tra vòng lặp chính (giây)
+local CHECK_INTERVAL = 60               -- khoảng kiểm tra vòng lặp chính (giây)
 local DIAMOND_KEY = "\240\159\146\142 Diamonds" -- key leaderstats kim cương
 
 local DEBUG_LOG = false                -- bật để in debug (đặt true khi cần)
