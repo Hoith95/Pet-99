@@ -2,9 +2,6 @@ getgenv().Settings = {
 ["Items"] = {
         {Name = "MVP Key", Data = {Price = "1%"}},
 
-        {Name = "Huge Starry Eye Bunny", Data = {Price = "9m"}},
-        {Name = "Huge Mushroom Dragon", Data = {Price = "9m"}},
-
         {Name = "Huge Splash Angelus", Data = {Price = "20b"}},
         {Name = "Golden Huge Splash Angelus", Data = {Price = "22b"}},
         {Name = "Rainbow Huge Splash Angelus", Data = {Price = "100b"}},
@@ -27,6 +24,9 @@ getgenv().Settings = {
         {Name = "Void Key", Data = {Price = "+5%"}},
         {Name = "Fantasy Key", Data = {Price = "+5%"}},
         {Name = "Fantasy Spinny Wheel Ticket", Data = {Price = "+5%"}},
+
+        {Name = "Huge Starry Eye Bunny", Data = {Price = "9m"}},
+        {Name = "Huge Mushroom Dragon", Data = {Price = "9m"}},
 
         {Name = "All Huges", Data = {Price = "1%", Min_sell = "9m", Max_sell = "30m", sold_by_convention = true}},
         {Name = "Shiny Rainbow All Huges", Data = {Price = "5%", Min_sell = "1.5b", Max_sell = "5b"}},
