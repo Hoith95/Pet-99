@@ -5,6 +5,8 @@ local MAX_PLAYERS_BELOW = 10           -- nếu không có excluded, hop khi s�
 local SERVERHOP_COOLDOWN = 300         -- cooldown giữa 2 lần hop (giây)
 local CHECK_INTERVAL = 5               -- khoảng kiểm tra vòng lặp chính (giây)
 local DIAMOND_KEY = "\240\159\146\142 Diamonds" -- key leaderstats kim cương
+
+local DEBUG_LOG = true                 -- bật để in playerCount + excluded mỗi vòng (tắt khi ổn)
 -- Danh sách username cần tránh (mặc định case-sensitive; bật CASE_INSENSITIVE để ignore case)
 local usernamesToExclude = {
     ["Zephy_Marnell604"] = true,
@@ -35,6 +37,7 @@ if CASE_INSENSITIVE then
 end
 
 local function isExcludedUsername(name)
+    if not name then return false end
     if CASE_INSENSITIVE then
         return excludeNormalized[string.lower(name)]
     else
@@ -65,12 +68,15 @@ end
 
 local function serverHop()
     if not canHop() then
-        print("[ServerHop] Đang trong cooldown hoặc đã hop.")
+        if DEBUG_LOG then print("[ServerHop] Không thể hop (đang hop hoặc cooldown).") end
         return false
     end
 
+    -- set flags EARLY để tránh các lần gọi đồng thời / race
     isHopping = true
-    print("[ServerHop] Bắt đầu ServerHop...")
+    lastHopTime = os.time()   -- gán ngay trước khi gọi script bên ngoài
+
+    print("[ServerHop] Bắt đầu ServerHop... (lastHopTime set)")
 
     local ok, err = pcall(function()
         -- main hop script (giữ nguyên links)
@@ -79,7 +85,6 @@ local function serverHop()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
     end)
 
-    lastHopTime = os.time()
     isHopping = false
 
     if not ok then
@@ -107,32 +112,36 @@ task.spawn(function()
 
         if isHopping then
             -- đang hop, skip vòng này
+            if DEBUG_LOG then print("[Main] Đang hop, skip vòng check.") end
         else
+            local playerCount = #Players:GetPlayers()
             local excluded, who = hasExcludedPlayer()
+
+            if DEBUG_LOG then
+                print(string.format("[Main][DEBUG] playerCount=%d, excluded=%s, who=%s", playerCount, tostring(excluded), tostring(who)))
+            end
+
+            -- Nếu ưu tiên excluded và có excluded -> hop ngay
             if excluded and PRIORITIZE_EXCLUDE then
                 print("[Main] Phát hiện excluded user (" .. tostring(who) .. ") -> hop ngay.")
                 serverHop()
                 return -- kết thúc thread (thường bị disconnect sau hop)
             end
 
-            -- nếu không có excluded (hoặc không ưu tiên), kiểm tra số người
-            local playerCount = #Players:GetPlayers()
-
-            -- nếu PRIORITIZE_EXCLUDE = false thì vẫn cần check excluded trước khi hop theo số người
+            -- Nếu không ưu tiên exclude thì vẫn cần xử lý: nếu có excluded thì hop
             if not PRIORITIZE_EXCLUDE then
                 if excluded then
                     print("[Main] Số người: " .. playerCount .. " và phát hiện excluded ("..tostring(who)..") -> hop.")
                     serverHop()
                     return
                 end
-
+                -- nếu không có excluded, hop khi server ít người (<= MAX_PLAYERS_BELOW)
                 if playerCount <= MAX_PLAYERS_BELOW then
                     print("[Main] Số người <= " .. MAX_PLAYERS_BELOW .. " và không có excluded -> hop theo quy tắc.")
                     serverHop()
                     return
                 else
-                    print("[Main] Server có " .. playerCount .. " người (> " .. MAX_PLAYERS_BELOW .. "). Chờ.")
-                    -- chờ thêm vòng
+                    if DEBUG_LOG then print("[Main] Server có " .. playerCount .. " người (> " .. MAX_PLAYERS_BELOW .. "). Chờ.") end
                 end
             else
                 -- PRIORITIZE_EXCLUDE = true và không có excluded
