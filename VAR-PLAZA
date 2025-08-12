@@ -1,5 +1,4 @@
 -- ===== CONFIG =====
-
 local PRIORITIZE_EXCLUDE = true        -- true = hop ngay khi thấy excluded (bất kể số người) [chỉ kiểm tra 1 lần lúc start]
 local CASE_INSENSITIVE = false         -- true nếu muốn so sánh không phân biệt hoa/thường
 local MAX_PLAYERS_BELOW = 10           -- nếu không có excluded lúc start, hop khi số người <= giá trị này
@@ -89,10 +88,15 @@ local function serverHop()
     return true
 end
 
+-- Sửa: bỏ qua chính localPlayer khi kiểm tra excluded
 local function hasExcludedPlayer()
     for _, p in ipairs(Players:GetPlayers()) do
-        if isExcludedUsername(p.Name) then
-            return true, p.Name
+        if p == localPlayer then
+            -- bỏ qua chính bạn
+        else
+            if isExcludedUsername(p.Name) then
+                return true, p.Name
+            end
         end
     end
     return false, nil
@@ -118,7 +122,6 @@ else
     if DEBUG_LOG then print("[Start] Không phát hiện excluded lúc khởi chạy. Tiếp tục với main loop.") end
 end
 -- =====================================
-
 -- Main loop: KHÔNG kiểm tra excluded nữa, chỉ kiểm playerCount
 task.spawn(function()
     while true do
