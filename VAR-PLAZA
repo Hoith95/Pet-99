@@ -1,12 +1,12 @@
 -- ===== CONFIG =====
-local PRIORITIZE_EXCLUDE = true        -- true = hop ngay khi thấy excluded (bất kể số người)
+local PRIORITIZE_EXCLUDE = true        -- true = hop ngay khi thấy excluded (bất kể số người) [chỉ kiểm tra 1 lần lúc start]
 local CASE_INSENSITIVE = false         -- true nếu muốn so sánh không phân biệt hoa/thường
-local MAX_PLAYERS_BELOW = 10           -- nếu không có excluded, hop khi số người <= giá trị này
+local MAX_PLAYERS_BELOW = 10           -- nếu không có excluded lúc start, hop khi số người <= giá trị này
 local SERVERHOP_COOLDOWN = 300         -- cooldown giữa 2 lần hop (giây)
 local CHECK_INTERVAL = 5               -- khoảng kiểm tra vòng lặp chính (giây)
 local DIAMOND_KEY = "\240\159\146\142 Diamonds" -- key leaderstats kim cương
 
-local DEBUG_LOG = true                 -- bật để in playerCount + excluded mỗi vòng (tắt khi ổn)
+local DEBUG_LOG = false                -- bật để in debug (đặt true khi cần)
 -- Danh sách username cần tránh (mặc định case-sensitive; bật CASE_INSENSITIVE để ignore case)
 local usernamesToExclude = {
     ["Zephy_Marnell604"] = true,
@@ -105,7 +105,19 @@ local function hasExcludedPlayer()
     return false, nil
 end
 
--- Main loop: ưu tiên check excluded, nếu không có thì check số người
+-- === CHECK EXCLUDED ONCE AT START ===
+local initialExcluded, initialWho = hasExcludedPlayer()
+if initialExcluded then
+    print("[Start] Phát hiện excluded user lúc khởi chạy: " .. tostring(initialWho) .. " -> hop ngay.")
+    serverHop()
+    -- sau khi hop script thường disconnect; vẫn return để dừng phần còn lại
+    return
+else
+    if DEBUG_LOG then print("[Start] Không phát hiện excluded lúc khởi chạy. Tiếp tục với main loop.") end
+end
+-- =====================================
+
+-- Main loop: KHÔNG kiểm tra excluded nữa, chỉ kiểm playerCount theo cấu hình
 task.spawn(function()
     while true do
         task.wait(CHECK_INTERVAL)
@@ -115,44 +127,20 @@ task.spawn(function()
             if DEBUG_LOG then print("[Main] Đang hop, skip vòng check.") end
         else
             local playerCount = #Players:GetPlayers()
-            local excluded, who = hasExcludedPlayer()
 
             if DEBUG_LOG then
-                print(string.format("[Main][DEBUG] playerCount=%d, excluded=%s, who=%s", playerCount, tostring(excluded), tostring(who)))
+                print(string.format("[Main][DEBUG] playerCount=%d", playerCount))
             end
 
-            -- Nếu ưu tiên excluded và có excluded -> hop ngay
-            if excluded and PRIORITIZE_EXCLUDE then
-                print("[Main] Phát hiện excluded user (" .. tostring(who) .. ") -> hop ngay.")
+            -- Nếu PRIORITIZE_EXCLUDE = true thì đã xử lý lúc start (không check lại)
+            -- Chúng ta chỉ cần check số người: hop khi playerCount <= MAX_PLAYERS_BELOW
+            if playerCount <= MAX_PLAYERS_BELOW then
+                print("[Main] Số người <= " .. MAX_PLAYERS_BELOW .. " -> hop theo quy tắc.")
                 serverHop()
                 return -- kết thúc thread (thường bị disconnect sau hop)
-            end
-
-            -- Nếu không ưu tiên exclude thì vẫn cần xử lý: nếu có excluded thì hop
-            if not PRIORITIZE_EXCLUDE then
-                if excluded then
-                    print("[Main] Số người: " .. playerCount .. " và phát hiện excluded ("..tostring(who)..") -> hop.")
-                    serverHop()
-                    return
-                end
-                -- nếu không có excluded, hop khi server ít người (<= MAX_PLAYERS_BELOW)
-                if playerCount <= MAX_PLAYERS_BELOW then
-                    print("[Main] Số người <= " .. MAX_PLAYERS_BELOW .. " và không có excluded -> hop theo quy tắc.")
-                    serverHop()
-                    return
-                else
-                    if DEBUG_LOG then print("[Main] Server có " .. playerCount .. " người (> " .. MAX_PLAYERS_BELOW .. "). Chờ.") end
-                end
             else
-                -- PRIORITIZE_EXCLUDE = true và không có excluded
-                if playerCount <= MAX_PLAYERS_BELOW then
-                    print("[Main] Không có excluded và số người <= " .. MAX_PLAYERS_BELOW .. " -> hop.")
-                    serverHop()
-                    return
-                else
-                    -- server đông và không có excluded -> tiếp tục vòng lặp
-                    -- (không in quá nhiều log để tránh spam)
-                end
+                if DEBUG_LOG then print("[Main] Server có " .. playerCount .. " người (> " .. MAX_PLAYERS_BELOW .. "). Chờ.") end
+                -- tiếp tục vòng lặp
             end
         end
     end
