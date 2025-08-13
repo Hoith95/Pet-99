@@ -10,7 +10,8 @@ getgenv().Settings = {
         {Name = "Golden Titanic Starlight Pony", Data = {Price = "12b"}},
         {Name = "Titanic Starlight Pony", Data = {Price = 8686868686}},
 
-        {Name = "Time Trial Gift", Data = {Price = "1%"}},
+        {Name = "Time Trial Gift", Data = {Price = "268k"}},
+        {Name = "Basketball Gift", Data = {Price = "1%"}},
 
         {Name = "Huge Machine Egg 5", Data = {Price = "1%"}},
         {Name = "Hype Egg 2", Data = {Price = "9%"}},
