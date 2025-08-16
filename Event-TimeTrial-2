@@ -121,7 +121,7 @@ end
 
 -- 🕐 Chờ đến khi đạt Max Zone
 local function waitUntilReachMaxZone(useCustomZone)
-	local maxMapZone = useCustomZone and 269 or getMaxZoneFromMap4()
+	local maxMapZone = useCustomZone and 274 or getMaxZoneFromMap4()
 
 	while true do
 		local success, data = pcall(function()
@@ -142,8 +142,8 @@ local function waitUntilReachMaxZone(useCustomZone)
 end
 
 -- 🧪 Gọi hàm với tùy chọn
---waitUntilReachMaxZone(true)  -- Dùng zone cố định 269
-waitUntilReachMaxZone(false) -- Dùng zone lấy từ Map4
+waitUntilReachMaxZone(true)  -- Dùng zone cố định 274
+--waitUntilReachMaxZone(false) -- Dùng zone lấy từ Map4
 
 -- ⏱️ Monitor 12 phút không tăng lượt/TotalRuns trực tiếp
 local function startMonitor12Min()
@@ -476,7 +476,7 @@ end
 
 -- ✅ VÒNG LẶP CHÍNH
 task.spawn(function()
-	waitUntilReachMaxZone(false)
+	waitUntilReachMaxZone(true)
 	startMonitor12Min()
 
 	while true do
