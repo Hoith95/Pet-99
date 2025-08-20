@@ -153,7 +153,7 @@ local function startGuiUpdater()
         tilesLabel.Text   = tostring(#game:GetService("Workspace").__THINGS.Tiles:GetChildren()) .. " | TILES"
         updateLabelSize(tilesLabel)
 
-        coinsLabel.Text   = Formatint(getCurrencyAmount("FantasyCoins")) .. " | COINS"
+        coinsLabel.Text   = Formatint(getCurrencyAmount("BlockPartyCoins")) .. " | COINS"
         updateLabelSize(coinsLabel)
 
         chanceLabel.Text  = tostring(_G.CURRENT_HUGE_CHANCE or 0) .. "x | HUGE"
