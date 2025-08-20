@@ -444,12 +444,25 @@ local function startAllBlockPartyTasks()
 
 	-- 🧩 LUỒNG 3: Hatch HUGE
 	task.spawn(function()
+		local Save = require(ReplicatedStorage.Library.Client.Save)
 		while true do
-			while getTotalTileCount() < 169 do
+			-- chờ đủ cả 2 điều kiện: tiles >= 169 và tileRebirth >= 15
+			local function ready()
+				local saveData = Save.Get()
+				local tileRebirth = saveData.TileRebirth or 0
+				return getTotalTileCount() >= 169 and tileRebirth >= 15
+			end
+
+			while not ready() do
+				-- cập nhật mỗi 2s để tránh busy-loop
 				task.wait(2)
 			end
-			print("✅ Đã khởi động LUỒNG 3: Hatch HUGE CHANCE")
+
+			print("✅ Đã khởi động LUỒNG 3: Hatch HUGE CHANCE (Tiles ≥169 và TileRebirth ≥15)")
 			startAutoHatchHuge()
+
+			-- nếu startAutoHatchHuge kết thúc (ví dụ do rejoin/stop), chờ 5s rồi kiểm tra lại điều kiện
+			task.wait(5)
 		end
 	end)
 
