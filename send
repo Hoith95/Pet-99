@@ -8,7 +8,7 @@ _G.GMAIL_ITEMS = {
 ["Lucky Eggs"] = {Class = "Enchant",Id = "Lucky Eggs",Tier = 7, Amount = 1},
 ["Criticals"] = {Class = "Enchant",Id = "Criticals",Tier = 7, Amount = 1},
 ["Treasure Hunter"] = {Class = "Enchant",Id = "Treasure Hunter",Tier = 7, Amount = 1},
-["Tap Power"] = {Class = "Enchant",Id = "Lucky Eggs",Tier = 7, Amount = 1},
+["Tap Power"] = {Class = "Enchant",Id = "Tap Power",Tier = 7, Amount = 1},
 }
 _G.GMAIL_RECEIVERS = {
 "NexusStealth_Craft20",
