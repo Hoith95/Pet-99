@@ -1,4 +1,4 @@
--- ✅ Combo Event Script + GUI Progress - Heo Edition
+-- ✅ Combo Event Script + GUI Progress Bar - Heo Edition
 
 if _G.COMBO_EVENT then
     warn("⛔ Script đã chạy trước đó!")
@@ -74,7 +74,7 @@ local function updateProgress(which)
     saveData()
 end
 
--- GUI tạo ở góc phải dưới
+-- GUI tạo ở góc phải dưới (có progress bar)
 local function createGUI()
     if PlayerGui:FindFirstChild("EventProgressUI") then
         PlayerGui.EventProgressUI:Destroy()
@@ -85,37 +85,53 @@ local function createGUI()
     screenGui.Parent = PlayerGui
 
     local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(0, 220, 0, 70)
-    frame.Position = UDim2.new(1, -230, 1, -80)
+    frame.Size = UDim2.new(0, 250, 0, 90)
+    frame.Position = UDim2.new(1, -260, 1, -100)
     frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-    frame.BackgroundTransparency = 0.3
+    frame.BackgroundTransparency = 0.25
     frame.BorderSizePixel = 0
     frame.Parent = screenGui
 
     local uiCorner = Instance.new("UICorner", frame)
     uiCorner.CornerRadius = UDim.new(0, 12)
 
-    local farmLabel = Instance.new("TextLabel")
-    farmLabel.Size = UDim2.new(1, -10, 0, 30)
-    farmLabel.Position = UDim2.new(0, 5, 0, 5)
-    farmLabel.BackgroundTransparency = 1
-    farmLabel.TextColor3 = Color3.fromRGB(200, 255, 200)
-    farmLabel.TextXAlignment = Enum.TextXAlignment.Left
-    farmLabel.Font = Enum.Font.SourceSansBold
-    farmLabel.TextSize = 18
-    farmLabel.Text = "Farm: 0%"
-    farmLabel.Parent = frame
+    -- Helper tạo progress row
+    local function createProgressRow(parent, text, yPos, color)
+        local label = Instance.new("TextLabel")
+        label.Size = UDim2.new(1, -10, 0, 20)
+        label.Position = UDim2.new(0, 5, 0, yPos)
+        label.BackgroundTransparency = 1
+        label.TextColor3 = Color3.fromRGB(230, 230, 230)
+        label.TextXAlignment = Enum.TextXAlignment.Left
+        label.Font = Enum.Font.GothamBold
+        label.TextSize = 32
+        label.Text = text .. ": 0%"
+        label.Parent = parent
 
-    local fishLabel = Instance.new("TextLabel")
-    fishLabel.Size = UDim2.new(1, -10, 0, 30)
-    fishLabel.Position = UDim2.new(0, 5, 0, 35)
-    fishLabel.BackgroundTransparency = 1
-    fishLabel.TextColor3 = Color3.fromRGB(200, 200, 255)
-    fishLabel.TextXAlignment = Enum.TextXAlignment.Left
-    fishLabel.Font = Enum.Font.SourceSansBold
-    fishLabel.TextSize = 18
-    fishLabel.Text = "Fishing: 0%"
-    fishLabel.Parent = frame
+        local barBg = Instance.new("Frame")
+        barBg.Size = UDim2.new(1, -10, 0, 12)
+        barBg.Position = UDim2.new(0, 5, 0, yPos + 22)
+        barBg.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        barBg.BorderSizePixel = 0
+        barBg.Parent = parent
+
+        local uiCornerBg = Instance.new("UICorner", barBg)
+        uiCornerBg.CornerRadius = UDim.new(0, 6)
+
+        local bar = Instance.new("Frame")
+        bar.Size = UDim2.new(0, 0, 1, 0)
+        bar.BackgroundColor3 = color
+        bar.BorderSizePixel = 0
+        bar.Parent = barBg
+
+        local uiCornerBar = Instance.new("UICorner", bar)
+        uiCornerBar.CornerRadius = UDim.new(0, 6)
+
+        return label, bar
+    end
+
+    local farmLabel, farmBar = createProgressRow(frame, "Farm", 5, Color3.fromRGB(100, 255, 100))
+    local fishLabel, fishBar = createProgressRow(frame, "Fishing", 50, Color3.fromRGB(100, 150, 255))
 
     -- Update loop
     spawn(function()
@@ -124,14 +140,10 @@ local function createGUI()
             local fishPct = math.min(100, math.floor((runtime.fish.total / REQUIRED_SECONDS) * 100))
 
             farmLabel.Text = string.format("Farm: %d%%", farmPct)
-            fishLabel.Text = string.format("Fishing: %d%%", fishPct)
+            farmBar.Size = UDim2.new(farmPct / 100, 0, 1, 0)
 
-            if runtime.farm.done then
-                farmLabel.TextColor3 = Color3.fromRGB(100, 255, 100)
-            end
-            if runtime.fish.done then
-                fishLabel.TextColor3 = Color3.fromRGB(100, 100, 255)
-            end
+            fishLabel.Text = string.format("Fishing: %d%%", fishPct)
+            fishBar.Size = UDim2.new(fishPct / 100, 0, 1, 0)
 
             wait(1)
         end
@@ -163,7 +175,7 @@ local function teleportToFarm()
     local tp = workspace.__THINGS.Instances.FarmingWorld.Teleports:GetChildren()[5]
     local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
     if tp and hrp then
-        hrp.CFrame = tp.CFrame
+        hrp.CFrame = tp.CFrame + Vector3.new(0, 3, 0)
     else
         TeleportService:Teleport(FARM_PLACEID, player)
     end
@@ -173,7 +185,7 @@ local function teleportToFishing()
     local tp = workspace.__THINGS.Instances.FishingEvent.Teleports.Enter
     local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
     if tp and hrp then
-        hrp.CFrame = tp.CFrame
+        hrp.CFrame = tp.CFrame + Vector3.new(0, 3, 0)
     else
         TeleportService:Teleport(FISH_PLACEID, player)
     end
@@ -235,5 +247,4 @@ local function main()
         end
     end
 end
-
 main()
