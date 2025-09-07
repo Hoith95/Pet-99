@@ -401,4 +401,4 @@ local function main()
     end
 end
 
-pcall(main
+pcall(main)
