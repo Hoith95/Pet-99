@@ -1,53 +1,52 @@
--- ✅ Combo Event Script + GUI Progress Bar - Heo Edition
 if _G.COMBO_EVENT then
     warn("⛔ Script đã chạy trước đó!")
     return
 end
 _G.COMBO_EVENT = true
 
--- ⚙️ Service & Data
+-- Services & data
 local Players = game:GetService("Players")
 local TeleportService = game:GetService("TeleportService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local HttpService = game:GetService("HttpService")
 local player = Players.LocalPlayer
 local PlayerGui = player:WaitForChild("PlayerGui")
-local Save = require(ReplicatedStorage.Library.Client.Save)
-local HttpService = game:GetService("HttpService")
 
--- 🗺️ Map IDs
+local okSave, Save = pcall(function() return require(ReplicatedStorage.Library.Client.Save) end)
+if not okSave then Save = nil end
+
 local FARM_PLACEID = 119454325063278
 local FISH_PLACEID = 95635359880599
+local LOBBY_PLACEID_SPECIAL = 140403681187145 -- special lobby id
+local WORLD4_REMOTE_NAME = "World4Teleport"
+local REQUIRED_SECONDS = 30 * 60 -- 30 minutes
 
--- ⏱️ Thời gian yêu cầu (30 phút mỗi event)
-local REQUIRED_SECONDS = 30 * 60
-
--- 📂 Data runtime
 local runtime = {
     farm = { total = 0, last = os.time(), done = false },
     fish = { total = 0, last = os.time(), done = false },
     lastDay = os.date("%d/%m/%Y"),
+    reset23Date = nil
 }
 
--- 🛠️ Load/Save
-local function getFileName()
-    return "comboEventLog.json"
-end
+local function getFileName() return "comboEventLog.json" end
 
 local function loadData()
     if isfile(getFileName()) then
-        local ok, data = pcall(function()
-            return HttpService:JSONDecode(readfile(getFileName()))
-        end)
-        if ok and data then runtime = data end
+        local ok, data = pcall(function() return HttpService:JSONDecode(readfile(getFileName())) end)
+        if ok and type(data) == "table" then
+            runtime = data
+            runtime.farm = runtime.farm or { total = 0, last = os.time(), done = false }
+            runtime.fish = runtime.fish or { total = 0, last = os.time(), done = false }
+            runtime.lastDay = runtime.lastDay or os.date("%d/%m/%Y")
+        end
     end
 end
 
 local function saveData()
     runtime.lastDay = os.date("%d/%m/%Y")
-    writefile(getFileName(), HttpService:JSONEncode(runtime))
+    pcall(function() writefile(getFileName(), HttpService:JSONEncode(runtime)) end)
 end
 
--- 🔄 Reset theo ngày
 local function resetIfNewDay()
     local today = os.date("%d/%m/%Y")
     if runtime.lastDay ~= today then
@@ -55,28 +54,54 @@ local function resetIfNewDay()
             farm = { total = 0, last = os.time(), done = false },
             fish = { total = 0, last = os.time(), done = false },
             lastDay = today,
+            reset23Date = nil
         }
         saveData()
     end
 end
 
--- 📊 Time tracking
+local function getVNNow()
+    local now = os.date("!*t", os.time(os.date("!*t")) + 7 * 3600)
+    return now
+end
+
+local function checkResetAt23()
+    local vn = getVNNow()
+    if not vn then return end
+    local vnDateStr = string.format("%02d/%02d/%04d", vn.day, vn.month, vn.year)
+    if vn.hour == 23 then
+        if runtime.reset23Date ~= vnDateStr then
+            runtime.farm.total = 0
+            runtime.farm.last = os.time()
+            runtime.farm.done = false
+            runtime.fish.total = 0
+            runtime.fish.last = os.time()
+            runtime.fish.done = false
+            runtime.reset23Date = vnDateStr
+            runtime.lastDay = vnDateStr
+            saveData()
+            warn(("🔁 Reset progress at 23:00 VN (%s)"):format(vnDateStr))
+        end
+    else
+        -- do nothing; reset23Date kept until new day or next 23:00
+    end
+end
+
 local function updateProgress(which)
     local now = os.time()
     local data = runtime[which]
-    data.total = data.total + (now - data.last)
+    if not data then return end
+    if type(data.last) ~= "number" then data.last = now end
+    local delta = math.max(0, now - data.last)
+    data.total = (data.total or 0) + delta
     data.last = now
-    if data.total >= REQUIRED_SECONDS then
-        data.done = true
-    end
+    if data.total >= REQUIRED_SECONDS then data.done = true end
     saveData()
 end
 
--- 🎨 GUI progress
+-- GUI creation (right-bottom small progress)
 local function createGUI()
-    if PlayerGui:FindFirstChild("EventProgressUI") then
-        PlayerGui.EventProgressUI:Destroy()
-    end
+    if PlayerGui:FindFirstChild("EventProgressUI") then PlayerGui.EventProgressUI:Destroy() end
 
     local screenGui = Instance.new("ScreenGui")
     screenGui.Name = "EventProgressUI"
@@ -85,166 +110,295 @@ local function createGUI()
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(0, 250, 0, 68)
     frame.Position = UDim2.new(1, -260, 1, -100)
-    frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    frame.BackgroundColor3 = Color3.fromRGB(25,25,25)
     frame.BackgroundTransparency = 0.25
     frame.BorderSizePixel = 0
     frame.Parent = screenGui
-    Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
+    Instance.new("UICorner", frame).CornerRadius = UDim.new(0,12)
 
-    local function createProgressRow(parent, text, yPos, color)
-        local label = Instance.new("TextLabel")
-        label.Size = UDim2.new(1, -10, 0, 20)
-        label.Position = UDim2.new(0, 5, 0, yPos)
-        label.BackgroundTransparency = 1
-        label.TextColor3 = Color3.fromRGB(230, 230, 230)
-        label.TextXAlignment = Enum.TextXAlignment.Left
-        label.Font = Enum.Font.GothamBold
-        label.TextSize = 30
-        label.Text = text .. ": 0%"
-        label.Parent = parent
+    local function createRow(parent, text, y, color)
+        local lbl = Instance.new("TextLabel")
+        lbl.Size = UDim2.new(1, -10, 0, 20)
+        lbl.Position = UDim2.new(0,5,0,y)
+        lbl.BackgroundTransparency = 1
+        lbl.TextColor3 = Color3.fromRGB(230,230,230)
+        lbl.TextXAlignment = Enum.TextXAlignment.Left
+        lbl.Font = Enum.Font.SourceSansBold
+        lbl.TextSize = 26
+        lbl.Text = text .. ": 0%"
+        lbl.Parent = parent
 
-        local barBg = Instance.new("Frame")
-        barBg.Size = UDim2.new(1, -10, 0, 12)
-        barBg.Position = UDim2.new(0, 5, 0, yPos + 22)
-        barBg.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-        barBg.BorderSizePixel = 0
-        barBg.Parent = parent
-        Instance.new("UICorner", barBg).CornerRadius = UDim.new(0, 6)
+        local bg = Instance.new("Frame")
+        bg.Size = UDim2.new(1, -10, 0, 12)
+        bg.Position = UDim2.new(0,5,0,y + 22)
+        bg.BackgroundColor3 = Color3.fromRGB(60,60,60)
+        bg.BorderSizePixel = 0
+        bg.Parent = parent
+        Instance.new("UICorner", bg).CornerRadius = UDim.new(0,6)
 
         local bar = Instance.new("Frame")
-        bar.Size = UDim2.new(0, 0, 1, 0)
+        bar.Size = UDim2.new(0,0,1,0)
         bar.BackgroundColor3 = color
         bar.BorderSizePixel = 0
-        bar.Parent = barBg
-        Instance.new("UICorner", bar).CornerRadius = UDim.new(0, 6)
+        bar.Parent = bg
+        Instance.new("UICorner", bar).CornerRadius = UDim.new(0,6)
 
-        return label, bar
+        return lbl, bar
     end
 
-    local farmLabel, farmBar = createProgressRow(frame, "Farm", 5, Color3.fromRGB(100, 255, 100))
-    local fishLabel, fishBar = createProgressRow(frame, "Fishing", 50, Color3.fromRGB(100, 150, 255))
+    local farmLbl, farmBar = createRow(frame, "Farm", 5, Color3.fromRGB(100,255,100))
+    local fishLbl, fishBar = createRow(frame, "Fishing", 36, Color3.fromRGB(100,150,255))
 
-    spawn(function()
+    task.spawn(function()
         while screenGui.Parent do
-            local farmPct = math.min(100, math.floor((runtime.farm.total / REQUIRED_SECONDS) * 100))
-            local fishPct = math.min(100, math.floor((runtime.fish.total / REQUIRED_SECONDS) * 100))
+            local farmPct = math.min(100, math.floor((runtime.farm.total or 0) / REQUIRED_SECONDS * 100))
+            local fishPct = math.min(100, math.floor((runtime.fish.total or 0) / REQUIRED_SECONDS * 100))
 
-            farmLabel.Text = string.format("Farm: %d%%", farmPct)
-            farmBar.Size = UDim2.new(farmPct / 100, 0, 1, 0)
-            fishLabel.Text = string.format("Fishing: %d%%", fishPct)
-            fishBar.Size = UDim2.new(fishPct / 100, 0, 1, 0)
+            farmLbl.Text = string.format("Farm: %d%%", farmPct)
+            farmBar.Size = UDim2.new(farmPct/100, 0, 1, 0)
 
-            wait(1)
+            fishLbl.Text = string.format("Fishing: %d%%", fishPct)
+            fishBar.Size = UDim2.new(fishPct/100, 0, 1, 0)
+
+            task.wait(1)
         end
     end)
 end
 
--- 🧭 Teleport
-local function teleportToFarm()
-    local tp = workspace.__THINGS.Instances.FarmingWorld.Teleports:GetChildren()[5]
-    local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-    if tp and hrp then
-        hrp.CFrame = tp.CFrame + Vector3.new(0, 3, 0)
-        runtime.farm.last = os.time() -- 🔥 Reset timer khi vào Farm
-    else
-        TeleportService:Teleport(FARM_PLACEID, player)
-    end
+local function getRunsUsed()
+    if not Save then return 0 end
+    local ok, res = pcall(function() return Save.Get() end)
+    if not ok or not res then return 0 end
+    return res and res.TimeTrialStats and (res.TimeTrialStats.DailyRuns or 0) or 0
 end
 
-local function teleportToFishing()
-    local tp = workspace.__THINGS.Instances.FishingEvent.Teleports.Enter
-    local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-    if tp and hrp then
-        hrp.CFrame = tp.CFrame + Vector3.new(0, 3, 0)
-        runtime.fish.last = os.time() -- 🔥 Reset timer khi vào Fishing
-    else
-        TeleportService:Teleport(FISH_PLACEID, player)
-    end
+local function invokeWorld4()
+    pcall(function()
+        local net = ReplicatedStorage:FindFirstChild("Network")
+        if net then
+            local w4 = net:FindFirstChild(WORLD4_REMOTE_NAME)
+            if w4 and w4.InvokeServer then
+                pcall(function() w4:InvokeServer() end)
+            end
+        end
+    end)
 end
 
--- ⏳ Tracker Farm
+local function serverhopToFishing()
+    local ok = false
+    pcall(function()
+        ok = loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-Fish"))() or true
+    end)
+    return ok
+end
+local function serverhopToFarm()
+    local ok = false
+    pcall(function()
+        ok = loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-World"))() or true
+    end)
+    return ok
+end
+
+local function teleportToFarmInServer()
+    local ok, children = pcall(function() return workspace.__THINGS.Instances.FarmingWorld.Teleports:GetChildren() end)
+    if not ok or type(children) ~= "table" then return false end
+    local enter = children[5]
+    if not enter then return false end
+    local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    if hrp and enter:IsA("BasePart") then
+        hrp.CFrame = enter.CFrame + Vector3.new(0,3,0)
+        runtime.farm.last = os.time()
+        saveData()
+        return true
+    end
+    return false
+end
+local function teleportToFishingInServer()
+    local ok, enter = pcall(function() return workspace.__THINGS.Instances.FishingEvent.Teleports.Enter end)
+    if not ok or not enter then return false end
+    local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    if hrp and enter:IsA("BasePart") then
+        hrp.CFrame = enter.CFrame + Vector3.new(0,3,0)
+        runtime.fish.last = os.time()
+        saveData()
+        return true
+    end
+    return false
+end
+
 local function trackFarm()
-    spawn(function()
+    task.spawn(function()
         while not runtime.farm.done do
             updateProgress("farm")
-            wait(10)
+            task.wait(10)
         end
         if not runtime.fish.done then
-            teleportToFishing()
-            trackFishing()
+            pcall(serverhopToFishing)
         end
     end)
 end
 
--- 🎣 Tracker Fishing
 local function trackFishing()
-    spawn(function()
+    task.spawn(function()
         while not runtime.fish.done do
             updateProgress("fish")
-            wait(10)
+            task.wait(10)
         end
         if not runtime.farm.done then
-            teleportToFarm()
-            trackFarm()
+            pcall(serverhopToFarm)
         end
     end)
 end
 
--- 🕒 Time Trial Checker
-local function getRunsUsed()
-    local saveData = Save.Get()
-    return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.DailyRuns or 0) or 0
+local function waitUntilRunsUsed()
+    while true do
+        local runs = 0
+        local ok, res = pcall(getRunsUsed)
+        if ok and type(res) == "number" then runs = res end
+        if runs >= 10 then break end
+        task.wait(30)
+    end
 end
 
-local function waitUntilMaxRuns()
+local function waitForNewDay()
+    local initial = os.date("%d/%m/%Y")
     while true do
-        local used = getRunsUsed()
-        if used >= 10 then
+        task.wait(60)
+        if os.date("%d/%m/%Y") ~= initial then
+            resetIfNewDay()
             break
-        else
-            wait(300)
         end
     end
 end
 
--- 🚦 Main
+task.spawn(function()
+    while true do
+        pcall(function() checkResetAt23() end)
+        task.wait(60)
+    end
+end)
+
 local function main()
     loadData()
     resetIfNewDay()
-    createGUI()
-    waitUntilMaxRuns()
+
+    task.spawn(function()
+        task.wait(90)
+        pcall(createGUI)
+    end)
+
+    -- read runs
+    local runs = 0
+    local ok, res = pcall(getRunsUsed)
+    if ok and type(res) == "number" then runs = res else runs = 0 end
 
     local placeId = game.PlaceId
 
-    if runtime.farm.done and runtime.fish.done then
-        if placeId == FARM_PLACEID or placeId == FISH_PLACEID then
-            game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World4Teleport"):InvokeServer()
+    if runs < 10 then
+        -- If player is in special lobby id 140403681187145, wait until runs used, then proceed
+        if placeId == LOBBY_PLACEID_SPECIAL then
+            -- wait until runs used up
+            waitUntilRunsUsed()
+            loadData()
+            resetIfNewDay()
+
+            if runtime.farm.done and runtime.fish.done then
+                waitForNewDay()
+                return
+            end
+
+            if not runtime.fish.done then
+                task.wait(180) -- 3 minutes
+                loadData()
+                resetIfNewDay()
+                if runtime.fish.done and runtime.farm.done then
+                    waitForNewDay()
+                    return
+                end
+                if game.PlaceId == FISH_PLACEID then
+                    runtime.fish.last = os.time()
+                    saveData()
+                    trackFishing()
+                    return
+                end
+                local okHop = pcall(serverhopToFishing)
+                if not okHop then
+                    teleportToFishingInServer()
+                end
+                return
+            else
+                if game.PlaceId == FARM_PLACEID then
+                    runtime.farm.last = os.time()
+                    saveData()
+                    trackFarm()
+                    return
+                end
+                local okHop = pcall(serverhopToFarm)
+                if not okHop then teleportToFarmInServer() end
+                return
+            end
+
+        else
+            invokeWorld4()
+            return
         end
+    end
+
+    if runtime.farm.done and runtime.fish.done then
+        invokeWorld4()
         return
     end
 
     if placeId == FARM_PLACEID then
-        if not runtime.farm.done then
-            runtime.farm.last = os.time() -- 🔥 Reset khi detect đang ở Farm
+        runtime.farm.last = os.time()
+        saveData()
+        if (not runtime.farm.done) and (not runtime.fish.done) then
+            local okHop = pcall(serverhopToFishing)
+            if not okHop then teleportToFishingInServer() end
+            return
+        end
+        if (not runtime.farm.done) and runtime.fish.done then
             trackFarm()
-        elseif not runtime.fish.done then
-            teleportToFishing()
+            return
         end
-
-    elseif placeId == FISH_PLACEID then
-        if not runtime.fish.done then
-            runtime.fish.last = os.time() -- 🔥 Reset khi detect đang ở Fishing
-            trackFishing()
-        elseif not runtime.farm.done then
-            teleportToFarm()
-        end
-
-    else
-        if not runtime.farm.done then
-            teleportToFarm()
-        elseif not runtime.fish.done then
-            teleportToFishing()
+        if runtime.farm.done and (not runtime.fish.done) then
+            local okHop = pcall(serverhopToFishing)
+            if not okHop then teleportToFishingInServer() end
+            return
         end
     end
+
+    if placeId == FISH_PLACEID then
+        runtime.fish.last = os.time()
+        saveData()
+        if not runtime.fish.done then
+            trackFishing()
+            return
+        end
+        if not runtime.farm.done then
+            local okHop = pcall(serverhopToFarm)
+            if not okHop then teleportToFarmInServer() end
+            return
+        end
+    end
+
+    if (not runtime.fish.done) and (not runtime.farm.done) then
+        local okHop = pcall(serverhopToFishing)
+        if not okHop then teleportToFishingInServer() end
+        return
+    end
+
+    if runtime.fish.done and (not runtime.farm.done) then
+        local okHop = pcall(serverhopToFarm)
+        if not okHop then teleportToFarmInServer() end
+        return
+    end
+
+    if runtime.farm.done and (not runtime.fish.done) then
+        local okHop = pcall(serverhopToFishing)
+        if not okHop then teleportToFishingInServer() end
+        return
+    end
 end
-main()
+
+pcall(main
