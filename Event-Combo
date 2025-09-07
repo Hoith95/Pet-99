@@ -1,10 +1,72 @@
--- Combo Event Tracker (Exploit) - Tele farm bằng GetChildren()[5]
-local player = game.Players.LocalPlayer
+-- Combined: TimeTrial check -> SmartTeleport -> Combo Event (Farm -> Fish)
+-- Global guard
+if _G.COMBO_EVENTS then
+    warn("Script đã được chạy trước đó!")
+    return
+end
+_G.COMBO_EVENTS = true
+
+-- Time Trial Checker & Smart Teleport - Heo
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local okReq, Save = pcall(function() return require(game.ReplicatedStorage.Library.Client.Save) end)
+if not okReq then
+    -- nếu require thất bại, Save sẽ nil; getRunsUsed sẽ trả 0 và script chờ
+    Save = nil
+end
+
+local TARGET_POS = Vector3.new(-14251, 16.24, 2159)
+local TELEPORT_THRESHOLD = 2 -- sai số cho phép trước khi teleport lại
+
+local function getRunsUsed()
+    if not Save then return 0 end
+    local ok, saveData = pcall(function() return Save.Get() end)
+    if not ok or not saveData then return 0 end
+    return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.DailyRuns or 0) or 0
+end
+
+local function startSmartTeleportLoop()
+    warn("✅ Đã hoàn tất Time Trial (10/10 lượt) → Bắt đầu giám sát vị trí và teleport khi lệch.")
+    task.spawn(function()
+        while true do
+            local character = player.Character or player.CharacterAdded:Wait()
+            local hrp = character:FindFirstChild("HumanoidRootPart") or character:WaitForChild("HumanoidRootPart", 5)
+            if hrp then
+                local currentPos = hrp.Position
+                if (currentPos - TARGET_POS).Magnitude > TELEPORT_THRESHOLD then
+                    warn("↩️ Vị trí lệch, teleport về vị trí cố định.")
+                    hrp.CFrame = CFrame.new(TARGET_POS)
+                end
+            end
+            task.wait(365)
+        end
+    end)
+end
+
+local function monitorUntilMaxRuns()
+    while true do
+        local runsUsed = 0
+        local ok, res = pcall(function() return getRunsUsed() end)
+        if ok and type(res) == "number" then runsUsed = res end
+
+        local runsLeft = 10 - runsUsed
+        if runsUsed >= 10 then
+            startSmartTeleportLoop()
+            break
+        else
+            warn("⏳ Còn lại " .. tostring(runsLeft) .. " lượt Time Trial → kiểm tra lại sau 5 phút.")
+            task.wait(300)
+        end
+    end
+end
+
+-- =========================
+-- Combo Event code (minimal, no logs)
+-- =========================
 local logFile = "ComboEventsLog.txt"
 local placeFarm = 119454325063278
 local placeFish = 95635359880599
 local requiredTime = 1800 -- 30 phút (giây)
-
 local updateInterval = 10 -- giây
 
 local function getToday() return os.date("%d/%m/%Y") end
@@ -152,7 +214,7 @@ local function trackFish()
     end
 end
 
--- Main logic: tele farm trước nếu cả 2 chưa done
+-- Main combo flow (không chạy ngay; sẽ được gọi sau khi Time Trial hết lượt)
 local function runSessionLoop()
     local data = readComboData()
     writeComboData(data)
@@ -224,12 +286,13 @@ local function runSessionLoop()
         end
     end
 
+    -- fallback watcher
     task.spawn(function()
         while true do
-            data = readComboData()
-            if data.farmDone and data.fishDone then
+            local data2 = readComboData()
+            if data2.farmDone and data2.fishDone then
                 _G.COMBO_EVENT = true
-                local initialDay = data.date
+                local initialDay = data2.date
                 while true do
                     task.wait(60)
                     if getToday() ~= initialDay then
@@ -244,6 +307,9 @@ local function runSessionLoop()
     end)
 end
 
-pcall(function()
+-- ====== Start sequence: đợi hết lượt Time Trial rồi chạy combo ======
+task.spawn(function()
+    monitorUntilMaxRuns()    -- chặn cho đến khi Time Trial done
+    -- Khi ra khỏi hàm monitor => đã đủ 10 lượt
     runSessionLoop()
 end)
