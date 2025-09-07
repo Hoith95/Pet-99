@@ -1,5 +1,4 @@
 -- ✅ Combo Event Script + GUI Progress Bar - Heo Edition
-
 if _G.COMBO_EVENT then
     warn("⛔ Script đã chạy trước đó!")
     return
@@ -14,6 +13,7 @@ local player = Players.LocalPlayer
 local PlayerGui = player:WaitForChild("PlayerGui")
 
 local Save = require(ReplicatedStorage.Library.Client.Save)
+local HttpService = game:GetService("HttpService")
 
 -- 🗺️ Map IDs
 local FARM_PLACEID = 119454325063278
@@ -23,14 +23,13 @@ local FISH_PLACEID = 95635359880599
 local REQUIRED_SECONDS = 30 * 60
 
 -- 📂 Data runtime
-local HttpService = game:GetService("HttpService")
 local runtime = {
     farm = { total = 0, last = os.time(), done = false },
     fish = { total = 0, last = os.time(), done = false },
     lastDay = os.date("%d/%m/%Y"),
 }
 
--- 🛠️ Load/Save vào local file
+-- 🛠️ Load/Save
 local function getFileName()
     return "comboEventLog.json"
 end
@@ -74,7 +73,7 @@ local function updateProgress(which)
     saveData()
 end
 
--- GUI tạo ở góc phải dưới (có progress bar)
+-- 🎨 GUI progress
 local function createGUI()
     if PlayerGui:FindFirstChild("EventProgressUI") then
         PlayerGui.EventProgressUI:Destroy()
@@ -91,11 +90,8 @@ local function createGUI()
     frame.BackgroundTransparency = 0.25
     frame.BorderSizePixel = 0
     frame.Parent = screenGui
+    Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
 
-    local uiCorner = Instance.new("UICorner", frame)
-    uiCorner.CornerRadius = UDim.new(0, 12)
-
-    -- Helper tạo progress row
     local function createProgressRow(parent, text, yPos, color)
         local label = Instance.new("TextLabel")
         label.Size = UDim2.new(1, -10, 0, 20)
@@ -114,18 +110,14 @@ local function createGUI()
         barBg.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
         barBg.BorderSizePixel = 0
         barBg.Parent = parent
-
-        local uiCornerBg = Instance.new("UICorner", barBg)
-        uiCornerBg.CornerRadius = UDim.new(0, 6)
+        Instance.new("UICorner", barBg).CornerRadius = UDim.new(0, 6)
 
         local bar = Instance.new("Frame")
         bar.Size = UDim2.new(0, 0, 1, 0)
         bar.BackgroundColor3 = color
         bar.BorderSizePixel = 0
         bar.Parent = barBg
-
-        local uiCornerBar = Instance.new("UICorner", bar)
-        uiCornerBar.CornerRadius = UDim.new(0, 6)
+        Instance.new("UICorner", bar).CornerRadius = UDim.new(0, 6)
 
         return label, bar
     end
@@ -133,7 +125,6 @@ local function createGUI()
     local farmLabel, farmBar = createProgressRow(frame, "Farm", 5, Color3.fromRGB(100, 255, 100))
     local fishLabel, fishBar = createProgressRow(frame, "Fishing", 50, Color3.fromRGB(100, 150, 255))
 
-    -- Update loop
     spawn(function()
         while screenGui.Parent do
             local farmPct = math.min(100, math.floor((runtime.farm.total / REQUIRED_SECONDS) * 100))
@@ -150,27 +141,7 @@ local function createGUI()
     end)
 end
 
--- ⏳ Tracker Farm
-local function trackFarm()
-    spawn(function()
-        while not runtime.farm.done do
-            updateProgress("farm")
-            wait(10)
-        end
-    end)
-end
-
--- 🎣 Tracker Fishing
-local function trackFishing()
-    spawn(function()
-        while not runtime.fish.done do
-            updateProgress("fish")
-            wait(10)
-        end
-    end)
-end
-
--- 🧭 Smart Teleport
+-- 🧭 Teleport
 local function teleportToFarm()
     local tp = workspace.__THINGS.Instances.FarmingWorld.Teleports:GetChildren()[5]
     local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
@@ -191,6 +162,34 @@ local function teleportToFishing()
     end
 end
 
+-- ⏳ Tracker Farm
+local function trackFarm()
+    spawn(function()
+        while not runtime.farm.done do
+            updateProgress("farm")
+            wait(10)
+        end
+        if not runtime.fish.done then
+            teleportToFishing()
+            trackFishing()
+        end
+    end)
+end
+
+-- 🎣 Tracker Fishing
+local function trackFishing()
+    spawn(function()
+        while not runtime.fish.done do
+            updateProgress("fish")
+            wait(10)
+        end
+        if not runtime.farm.done then
+            teleportToFarm()
+            trackFarm()
+        end
+    end)
+end
+
 -- 🕒 Time Trial Checker
 local function getRunsUsed()
     local saveData = Save.Get()
@@ -208,7 +207,7 @@ local function waitUntilMaxRuns()
     end
 end
 
--- 🚦 Main Controller
+-- 🚦 Main
 local function main()
     loadData()
     resetIfNewDay()
@@ -217,7 +216,6 @@ local function main()
 
     local placeId = game.PlaceId
 
-    -- Nếu đã đủ cả farm & fishing
     if runtime.farm.done and runtime.fish.done then
         if placeId == FARM_PLACEID or placeId == FISH_PLACEID then
             player:Kick("🎉 Đã xong cả Farm & Fishing 30p, nghỉ thôi!")
