@@ -1,0 +1,249 @@
+-- Combo Event Tracker (Exploit) - Tele farm bằng GetChildren()[5]
+local player = game.Players.LocalPlayer
+local logFile = "ComboEventsLog.txt"
+local placeFarm = 119454325063278
+local placeFish = 95635359880599
+local requiredTime = 1800 -- 30 phút (giây)
+
+local updateInterval = 10 -- giây
+
+local function getToday() return os.date("%d/%m/%Y") end
+
+local function safeIsFile(name)
+    local ok, res = pcall(isfile, name)
+    return ok and res
+end
+local function safeReadFile(name)
+    local ok, res = pcall(readfile, name)
+    if ok then return res else return nil end
+end
+local function safeWriteFile(name, content)
+    pcall(function()
+        if isfile(name) then delfile(name) end
+        writefile(name, content)
+    end)
+end
+
+local function readComboData()
+    if not safeIsFile(logFile) then
+        return { date = getToday(), farmSeconds = 0, farmDone = false, fishSeconds = 0, fishDone = false }
+    end
+    local raw = safeReadFile(logFile)
+    if not raw then
+        return { date = getToday(), farmSeconds = 0, farmDone = false, fishSeconds = 0, fishDone = false }
+    end
+    local date, farmS, farmD, fishS, fishD = raw:match("([%d/]+)|(%d+)|(%a+)|(%d+)|(%a+)")
+    local today = getToday()
+    if date == today then
+        return {
+            date = date,
+            farmSeconds = tonumber(farmS) or 0,
+            farmDone = (farmD == "true"),
+            fishSeconds = tonumber(fishS) or 0,
+            fishDone = (fishD == "true")
+        }
+    else
+        return { date = today, farmSeconds = 0, farmDone = false, fishSeconds = 0, fishDone = false }
+    end
+end
+
+local function writeComboData(data)
+    data = data or {}
+    local line = string.format("%s|%d|%s|%d|%s\n",
+        data.date or getToday(),
+        data.farmSeconds or 0,
+        tostring(data.farmDone == true),
+        data.fishSeconds or 0,
+        tostring(data.fishDone == true)
+    )
+    safeWriteFile(logFile, line)
+end
+
+local function kickMsg(msg)
+    pcall(function() game.Players.LocalPlayer:Kick(msg) end)
+end
+
+-- Teleport trực tiếp tới Farming using GetChildren()[5]
+local function teleportToFarmDirect()
+    local ok, children = pcall(function()
+        return workspace.__THINGS and workspace.__THINGS.Instances and workspace.__THINGS.Instances.FarmingWorld and workspace.__THINGS.Instances.FarmingWorld.Teleports and workspace.__THINGS.Instances.FarmingWorld.Teleports:GetChildren()
+    end)
+    if not ok or type(children) ~= "table" then return false end
+    local enter = children[5]
+    if not enter then return false end
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and enter:IsA("BasePart") then
+        local hrp = player.Character.HumanoidRootPart
+        hrp.CFrame = enter.CFrame + Vector3.new(0,3,0)
+        return true
+    end
+    return false
+end
+
+-- Teleport trực tiếp tới Fishing Enter (giữ nguyên)
+local function teleportToFishingDirect()
+    local ok, enter = pcall(function()
+        return workspace.__THINGS and workspace.__THINGS.Instances and workspace.__THINGS.Instances.FishingEvent and workspace.__THINGS.Instances.FishingEvent.Teleports and workspace.__THINGS.Instances.FishingEvent.Teleports.Enter
+    end)
+    enter = (ok and enter) and enter or nil
+    if not enter then return false end
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and enter:IsA("BasePart") then
+        local hrp = player.Character.HumanoidRootPart
+        hrp.CFrame = enter.CFrame + Vector3.new(0,3,0)
+        return true
+    end
+    return false
+end
+
+-- Track FARM (cộng dồn)
+local function trackFarm()
+    local data = readComboData()
+    if data.farmDone then return data end
+    local baseFarmSeconds = data.farmSeconds or 0
+    local sessionStart = os.time()
+
+    while true do
+        task.wait(updateInterval)
+        if getToday() ~= data.date then
+            data = { date = getToday(), farmSeconds = 0, farmDone = false, fishSeconds = data.fishSeconds or 0, fishDone = data.fishDone or false }
+            writeComboData(data)
+            return data
+        end
+
+        local sessionSeconds = os.time() - sessionStart
+        local total = baseFarmSeconds + sessionSeconds
+        data.farmSeconds = math.min(total, requiredTime)
+        writeComboData(data)
+
+        if total >= requiredTime and not data.farmDone then
+            data.farmSeconds = requiredTime
+            data.farmDone = true
+            writeComboData(data)
+            return data
+        end
+    end
+end
+
+-- Track FISH (cộng dồn)
+local function trackFish()
+    local data = readComboData()
+    if data.fishDone then return data end
+    local baseFishSeconds = data.fishSeconds or 0
+    local sessionStart = os.time()
+
+    while true do
+        task.wait(updateInterval)
+        if getToday() ~= data.date then
+            data = { date = getToday(), farmSeconds = data.farmSeconds or 0, farmDone = data.farmDone or false, fishSeconds = 0, fishDone = false }
+            writeComboData(data)
+            return data
+        end
+
+        local sessionSeconds = os.time() - sessionStart
+        local total = baseFishSeconds + sessionSeconds
+        data.fishSeconds = math.min(total, requiredTime)
+        writeComboData(data)
+
+        if total >= requiredTime and not data.fishDone then
+            data.fishSeconds = requiredTime
+            data.fishDone = true
+            writeComboData(data)
+            return data
+        end
+    end
+end
+
+-- Main logic: tele farm trước nếu cả 2 chưa done
+local function runSessionLoop()
+    local data = readComboData()
+    writeComboData(data)
+
+    if data.farmDone and data.fishDone then
+        _G.COMBO_EVENT = true
+        task.spawn(function()
+            local initialDay = data.date
+            while true do
+                task.wait(60)
+                if getToday() ~= initialDay then
+                    kickMsg("Đã qua ngày mới Heo chạy 2 Event nào!")
+                    break
+                end
+            end
+        end)
+        return
+    end
+
+    if not data.farmDone and not data.fishDone then
+        teleportToFarmDirect()
+        task.wait(2)
+        data = trackFarm()
+        teleportToFishingDirect()
+        task.wait(2)
+        data = readComboData()
+        if not data.fishDone then
+            data = trackFish()
+        end
+        data = readComboData()
+        if data.farmDone and data.fishDone then
+            _G.COMBO_EVENT = true
+            kickMsg("Heo chạy đủ 2 Event rồi!")
+            task.spawn(function()
+                local initialDay = data.date
+                while true do
+                    task.wait(60)
+                    if getToday() ~= initialDay then
+                        kickMsg("Đã qua ngày mới Heo chạy 2 Event nào!")
+                        break
+                    end
+                end
+            end)
+            return
+        end
+    end
+
+    if not data.farmDone and data.fishDone then
+        teleportToFarmDirect()
+        task.wait(2)
+        data = trackFarm()
+        data = readComboData()
+        if data.farmDone and data.fishDone then
+            _G.COMBO_EVENT = true
+            kickMsg("Heo chạy đủ 2 Event rồi!")
+            return
+        end
+    end
+
+    if data.farmDone and not data.fishDone then
+        teleportToFishingDirect()
+        task.wait(2)
+        data = trackFish()
+        data = readComboData()
+        if data.farmDone and data.fishDone then
+            _G.COMBO_EVENT = true
+            kickMsg("Heo chạy đủ 2 Event rồi!")
+            return
+        end
+    end
+
+    task.spawn(function()
+        while true do
+            data = readComboData()
+            if data.farmDone and data.fishDone then
+                _G.COMBO_EVENT = true
+                local initialDay = data.date
+                while true do
+                    task.wait(60)
+                    if getToday() ~= initialDay then
+                        kickMsg("Đã qua ngày mới Heo chạy 2 Event nào!")
+                        break
+                    end
+                end
+                break
+            end
+            task.wait(5)
+        end
+    end)
+end
+
+pcall(function()
+    runSessionLoop()
+end)
