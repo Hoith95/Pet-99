@@ -85,7 +85,7 @@ local function createGUI()
     screenGui.Parent = PlayerGui
 
     local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(0, 250, 0, 90)
+    frame.Size = UDim2.new(0, 250, 0, 68)
     frame.Position = UDim2.new(1, -260, 1, -100)
     frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
     frame.BackgroundTransparency = 0.25
@@ -104,7 +104,7 @@ local function createGUI()
         label.TextColor3 = Color3.fromRGB(230, 230, 230)
         label.TextXAlignment = Enum.TextXAlignment.Left
         label.Font = Enum.Font.GothamBold
-        label.TextSize = 32
+        label.TextSize = 30
         label.Text = text .. ": 0%"
         label.Parent = parent
 
