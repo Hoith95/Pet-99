@@ -12,7 +12,7 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local Save = require(game.ReplicatedStorage.Library.Client.Save)
 
-local TARGET_POS = Vector3.new(-14251, 17.39, 2154)
+local TARGET_POS = Vector3.new(-14251, 16.24, 2159)
 local TELEPORT_THRESHOLD = 2 -- sai số cho phép trước khi teleport lại
 
 local function getRunsUsed()
