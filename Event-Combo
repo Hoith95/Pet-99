@@ -218,7 +218,7 @@ local function main()
 
     if runtime.farm.done and runtime.fish.done then
         if placeId == FARM_PLACEID or placeId == FISH_PLACEID then
-            game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World4Teleport"):InvokeServer()
+            player:Kick("🎉 Đã xong cả Farm & Fishing 30p, nghỉ thôi!")
         end
         return
     end
