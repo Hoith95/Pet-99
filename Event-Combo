@@ -1,4 +1,4 @@
--- ✅ Combo Event Script - Heo Edition
+-- ✅ Combo Event Script + GUI Progress - Heo Edition
 
 if _G.COMBO_EVENT then
     warn("⛔ Script đã chạy trước đó!")
@@ -11,6 +11,7 @@ local Players = game:GetService("Players")
 local TeleportService = game:GetService("TeleportService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local player = Players.LocalPlayer
+local PlayerGui = player:WaitForChild("PlayerGui")
 
 local Save = require(ReplicatedStorage.Library.Client.Save)
 
@@ -22,6 +23,7 @@ local FISH_PLACEID = 95635359880599
 local REQUIRED_SECONDS = 30 * 60
 
 -- 📂 Data runtime
+local HttpService = game:GetService("HttpService")
 local runtime = {
     farm = { total = 0, last = os.time(), done = false },
     fish = { total = 0, last = os.time(), done = false },
@@ -29,7 +31,6 @@ local runtime = {
 }
 
 -- 🛠️ Load/Save vào local file
-local HttpService = game:GetService("HttpService")
 local function getFileName()
     return "comboEventLog.json"
 end
@@ -39,10 +40,7 @@ local function loadData()
         local ok, data = pcall(function()
             return HttpService:JSONDecode(readfile(getFileName()))
         end)
-        if ok and data then
-            runtime = data
-            warn("📂 Đã load data:", data)
-        end
+        if ok and data then runtime = data end
     end
 end
 
@@ -61,7 +59,6 @@ local function resetIfNewDay()
             lastDay = today,
         }
         saveData()
-        warn("🆕 Reset log cho ngày mới:", today)
     end
 end
 
@@ -77,6 +74,70 @@ local function updateProgress(which)
     saveData()
 end
 
+-- GUI tạo ở góc phải dưới
+local function createGUI()
+    if PlayerGui:FindFirstChild("EventProgressUI") then
+        PlayerGui.EventProgressUI:Destroy()
+    end
+
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "EventProgressUI"
+    screenGui.Parent = PlayerGui
+
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(0, 220, 0, 70)
+    frame.Position = UDim2.new(1, -230, 1, -80)
+    frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    frame.BackgroundTransparency = 0.3
+    frame.BorderSizePixel = 0
+    frame.Parent = screenGui
+
+    local uiCorner = Instance.new("UICorner", frame)
+    uiCorner.CornerRadius = UDim.new(0, 12)
+
+    local farmLabel = Instance.new("TextLabel")
+    farmLabel.Size = UDim2.new(1, -10, 0, 30)
+    farmLabel.Position = UDim2.new(0, 5, 0, 5)
+    farmLabel.BackgroundTransparency = 1
+    farmLabel.TextColor3 = Color3.fromRGB(200, 255, 200)
+    farmLabel.TextXAlignment = Enum.TextXAlignment.Left
+    farmLabel.Font = Enum.Font.SourceSansBold
+    farmLabel.TextSize = 18
+    farmLabel.Text = "Farm: 0%"
+    farmLabel.Parent = frame
+
+    local fishLabel = Instance.new("TextLabel")
+    fishLabel.Size = UDim2.new(1, -10, 0, 30)
+    fishLabel.Position = UDim2.new(0, 5, 0, 35)
+    fishLabel.BackgroundTransparency = 1
+    fishLabel.TextColor3 = Color3.fromRGB(200, 200, 255)
+    fishLabel.TextXAlignment = Enum.TextXAlignment.Left
+    fishLabel.Font = Enum.Font.SourceSansBold
+    fishLabel.TextSize = 18
+    fishLabel.Text = "Fishing: 0%"
+    fishLabel.Parent = frame
+
+    -- Update loop
+    spawn(function()
+        while screenGui.Parent do
+            local farmPct = math.min(100, math.floor((runtime.farm.total / REQUIRED_SECONDS) * 100))
+            local fishPct = math.min(100, math.floor((runtime.fish.total / REQUIRED_SECONDS) * 100))
+
+            farmLabel.Text = string.format("Farm: %d%%", farmPct)
+            fishLabel.Text = string.format("Fishing: %d%%", fishPct)
+
+            if runtime.farm.done then
+                farmLabel.TextColor3 = Color3.fromRGB(100, 255, 100)
+            end
+            if runtime.fish.done then
+                fishLabel.TextColor3 = Color3.fromRGB(100, 100, 255)
+            end
+
+            wait(1)
+        end
+    end)
+end
+
 -- ⏳ Tracker Farm
 local function trackFarm()
     spawn(function()
@@ -84,7 +145,6 @@ local function trackFarm()
             updateProgress("farm")
             wait(10)
         end
-        warn("🌾 Farm đủ 30 phút!")
     end)
 end
 
@@ -95,7 +155,6 @@ local function trackFishing()
             updateProgress("fish")
             wait(10)
         end
-        warn("🎣 Fishing đủ 30 phút!")
     end)
 end
 
@@ -105,7 +164,6 @@ local function teleportToFarm()
     local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
     if tp and hrp then
         hrp.CFrame = tp.CFrame
-        warn("🚀 Teleport tới Farm")
     else
         TeleportService:Teleport(FARM_PLACEID, player)
     end
@@ -116,13 +174,12 @@ local function teleportToFishing()
     local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
     if tp and hrp then
         hrp.CFrame = tp.CFrame
-        warn("🚀 Teleport tới Fishing")
     else
         TeleportService:Teleport(FISH_PLACEID, player)
     end
 end
 
--- 🕒 Time Trial Checker (khi đủ 10/10 thì mới bắt đầu combo event)
+-- 🕒 Time Trial Checker
 local function getRunsUsed()
     local saveData = Save.Get()
     return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.DailyRuns or 0) or 0
@@ -132,11 +189,8 @@ local function waitUntilMaxRuns()
     while true do
         local used = getRunsUsed()
         if used >= 10 then
-            warn("✅ Đã đủ 10/10 Time Trial → Bắt đầu combo event")
             break
         else
-            local left = 10 - used
-            warn("⏳ Time Trial còn " .. left .. " lượt, đợi 5 phút...")
             wait(300)
         end
     end
@@ -146,6 +200,7 @@ end
 local function main()
     loadData()
     resetIfNewDay()
+    createGUI()
     waitUntilMaxRuns()
 
     local placeId = game.PlaceId
@@ -154,13 +209,10 @@ local function main()
     if runtime.farm.done and runtime.fish.done then
         if placeId == FARM_PLACEID or placeId == FISH_PLACEID then
             player:Kick("🎉 Đã xong cả Farm & Fishing 30p, nghỉ thôi!")
-        else
-            warn("✅ Đã xong cả Farm & Fishing nhưng đang ở map khác → Không kick")
         end
         return
     end
 
-    -- Nếu chưa đủ → xử lý theo map hiện tại
     if placeId == FARM_PLACEID then
         if not runtime.farm.done then
             trackFarm()
@@ -176,7 +228,6 @@ local function main()
         end
 
     else
-        -- Map khác → Tele sang event cần làm
         if not runtime.farm.done then
             teleportToFarm()
         elseif not runtime.fish.done then
