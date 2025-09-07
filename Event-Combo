@@ -1,315 +1,188 @@
--- Combined: TimeTrial check -> SmartTeleport -> Combo Event (Farm -> Fish)
--- Global guard
-if _G.COMBO_EVENTS then
-    warn("Script đã được chạy trước đó!")
+-- ✅ Combo Event Script - Heo Edition
+
+if _G.COMBO_EVENT then
+    warn("⛔ Script đã chạy trước đó!")
     return
 end
-_G.COMBO_EVENTS = true
+_G.COMBO_EVENT = true
 
--- Time Trial Checker & Smart Teleport - Heo
+-- ⚙️ Service & Data
 local Players = game:GetService("Players")
+local TeleportService = game:GetService("TeleportService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local player = Players.LocalPlayer
-local okReq, Save = pcall(function() return require(game.ReplicatedStorage.Library.Client.Save) end)
-if not okReq then
-    -- nếu require thất bại, Save sẽ nil; getRunsUsed sẽ trả 0 và script chờ
-    Save = nil
+
+local Save = require(ReplicatedStorage.Library.Client.Save)
+
+-- 🗺️ Map IDs
+local FARM_PLACEID = 119454325063278
+local FISH_PLACEID = 95635359880599
+
+-- ⏱️ Thời gian yêu cầu (30 phút mỗi event)
+local REQUIRED_SECONDS = 30 * 60
+
+-- 📂 Data runtime
+local runtime = {
+    farm = { total = 0, last = os.time(), done = false },
+    fish = { total = 0, last = os.time(), done = false },
+    lastDay = os.date("%d/%m/%Y"),
+}
+
+-- 🛠️ Load/Save vào local file
+local HttpService = game:GetService("HttpService")
+local function getFileName()
+    return "comboEventLog.json"
 end
 
-local TARGET_POS = Vector3.new(-14251, 16.24, 2159)
-local TELEPORT_THRESHOLD = 2 -- sai số cho phép trước khi teleport lại
+local function loadData()
+    if isfile(getFileName()) then
+        local ok, data = pcall(function()
+            return HttpService:JSONDecode(readfile(getFileName()))
+        end)
+        if ok and data then
+            runtime = data
+            warn("📂 Đã load data:", data)
+        end
+    end
+end
 
+local function saveData()
+    runtime.lastDay = os.date("%d/%m/%Y")
+    writefile(getFileName(), HttpService:JSONEncode(runtime))
+end
+
+-- 🔄 Reset theo ngày
+local function resetIfNewDay()
+    local today = os.date("%d/%m/%Y")
+    if runtime.lastDay ~= today then
+        runtime = {
+            farm = { total = 0, last = os.time(), done = false },
+            fish = { total = 0, last = os.time(), done = false },
+            lastDay = today,
+        }
+        saveData()
+        warn("🆕 Reset log cho ngày mới:", today)
+    end
+end
+
+-- 📊 Time tracking
+local function updateProgress(which)
+    local now = os.time()
+    local data = runtime[which]
+    data.total = data.total + (now - data.last)
+    data.last = now
+    if data.total >= REQUIRED_SECONDS then
+        data.done = true
+    end
+    saveData()
+end
+
+-- ⏳ Tracker Farm
+local function trackFarm()
+    spawn(function()
+        while not runtime.farm.done do
+            updateProgress("farm")
+            wait(10)
+        end
+        warn("🌾 Farm đủ 30 phút!")
+    end)
+end
+
+-- 🎣 Tracker Fishing
+local function trackFishing()
+    spawn(function()
+        while not runtime.fish.done do
+            updateProgress("fish")
+            wait(10)
+        end
+        warn("🎣 Fishing đủ 30 phút!")
+    end)
+end
+
+-- 🧭 Smart Teleport
+local function teleportToFarm()
+    local tp = workspace.__THINGS.Instances.FarmingWorld.Teleports:GetChildren()[5]
+    local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    if tp and hrp then
+        hrp.CFrame = tp.CFrame
+        warn("🚀 Teleport tới Farm")
+    else
+        TeleportService:Teleport(FARM_PLACEID, player)
+    end
+end
+
+local function teleportToFishing()
+    local tp = workspace.__THINGS.Instances.FishingEvent.Teleports.Enter
+    local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    if tp and hrp then
+        hrp.CFrame = tp.CFrame
+        warn("🚀 Teleport tới Fishing")
+    else
+        TeleportService:Teleport(FISH_PLACEID, player)
+    end
+end
+
+-- 🕒 Time Trial Checker (khi đủ 10/10 thì mới bắt đầu combo event)
 local function getRunsUsed()
-    if not Save then return 0 end
-    local ok, saveData = pcall(function() return Save.Get() end)
-    if not ok or not saveData then return 0 end
+    local saveData = Save.Get()
     return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.DailyRuns or 0) or 0
 end
 
-local function startSmartTeleportLoop()
-    warn("✅ Đã hoàn tất Time Trial (10/10 lượt) → Bắt đầu giám sát vị trí và teleport khi lệch.")
-    task.spawn(function()
-        while true do
-            local character = player.Character or player.CharacterAdded:Wait()
-            local hrp = character:FindFirstChild("HumanoidRootPart") or character:WaitForChild("HumanoidRootPart", 5)
-            if hrp then
-                local currentPos = hrp.Position
-                if (currentPos - TARGET_POS).Magnitude > TELEPORT_THRESHOLD then
-                    warn("↩️ Vị trí lệch, teleport về vị trí cố định.")
-                    hrp.CFrame = CFrame.new(TARGET_POS)
-                end
-            end
-            task.wait(365)
-        end
-    end)
-end
-
-local function monitorUntilMaxRuns()
+local function waitUntilMaxRuns()
     while true do
-        local runsUsed = 0
-        local ok, res = pcall(function() return getRunsUsed() end)
-        if ok and type(res) == "number" then runsUsed = res end
-
-        local runsLeft = 10 - runsUsed
-        if runsUsed >= 10 then
-            startSmartTeleportLoop()
+        local used = getRunsUsed()
+        if used >= 10 then
+            warn("✅ Đã đủ 10/10 Time Trial → Bắt đầu combo event")
             break
         else
-            warn("⏳ Còn lại " .. tostring(runsLeft) .. " lượt Time Trial → kiểm tra lại sau 5 phút.")
-            task.wait(300)
+            local left = 10 - used
+            warn("⏳ Time Trial còn " .. left .. " lượt, đợi 5 phút...")
+            wait(300)
         end
     end
 end
 
--- =========================
--- Combo Event code (minimal, no logs)
--- =========================
-local logFile = "ComboEventsLog.txt"
-local placeFarm = 119454325063278
-local placeFish = 95635359880599
-local requiredTime = 1800 -- 30 phút (giây)
-local updateInterval = 10 -- giây
+-- 🚦 Main Controller
+local function main()
+    loadData()
+    resetIfNewDay()
+    waitUntilMaxRuns()
 
-local function getToday() return os.date("%d/%m/%Y") end
+    local placeId = game.PlaceId
 
-local function safeIsFile(name)
-    local ok, res = pcall(isfile, name)
-    return ok and res
-end
-local function safeReadFile(name)
-    local ok, res = pcall(readfile, name)
-    if ok then return res else return nil end
-end
-local function safeWriteFile(name, content)
-    pcall(function()
-        if isfile(name) then delfile(name) end
-        writefile(name, content)
-    end)
-end
-
-local function readComboData()
-    if not safeIsFile(logFile) then
-        return { date = getToday(), farmSeconds = 0, farmDone = false, fishSeconds = 0, fishDone = false }
-    end
-    local raw = safeReadFile(logFile)
-    if not raw then
-        return { date = getToday(), farmSeconds = 0, farmDone = false, fishSeconds = 0, fishDone = false }
-    end
-    local date, farmS, farmD, fishS, fishD = raw:match("([%d/]+)|(%d+)|(%a+)|(%d+)|(%a+)")
-    local today = getToday()
-    if date == today then
-        return {
-            date = date,
-            farmSeconds = tonumber(farmS) or 0,
-            farmDone = (farmD == "true"),
-            fishSeconds = tonumber(fishS) or 0,
-            fishDone = (fishD == "true")
-        }
-    else
-        return { date = today, farmSeconds = 0, farmDone = false, fishSeconds = 0, fishDone = false }
-    end
-end
-
-local function writeComboData(data)
-    data = data or {}
-    local line = string.format("%s|%d|%s|%d|%s\n",
-        data.date or getToday(),
-        data.farmSeconds or 0,
-        tostring(data.farmDone == true),
-        data.fishSeconds or 0,
-        tostring(data.fishDone == true)
-    )
-    safeWriteFile(logFile, line)
-end
-
-local function kickMsg(msg)
-    pcall(function() game.Players.LocalPlayer:Kick(msg) end)
-end
-
--- Teleport trực tiếp tới Farming using GetChildren()[5]
-local function teleportToFarmDirect()
-    local ok, children = pcall(function()
-        return workspace.__THINGS and workspace.__THINGS.Instances and workspace.__THINGS.Instances.FarmingWorld and workspace.__THINGS.Instances.FarmingWorld.Teleports and workspace.__THINGS.Instances.FarmingWorld.Teleports:GetChildren()
-    end)
-    if not ok or type(children) ~= "table" then return false end
-    local enter = children[5]
-    if not enter then return false end
-    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and enter:IsA("BasePart") then
-        local hrp = player.Character.HumanoidRootPart
-        hrp.CFrame = enter.CFrame + Vector3.new(0,3,0)
-        return true
-    end
-    return false
-end
-
--- Teleport trực tiếp tới Fishing Enter (giữ nguyên)
-local function teleportToFishingDirect()
-    local ok, enter = pcall(function()
-        return workspace.__THINGS and workspace.__THINGS.Instances and workspace.__THINGS.Instances.FishingEvent and workspace.__THINGS.Instances.FishingEvent.Teleports and workspace.__THINGS.Instances.FishingEvent.Teleports.Enter
-    end)
-    enter = (ok and enter) and enter or nil
-    if not enter then return false end
-    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and enter:IsA("BasePart") then
-        local hrp = player.Character.HumanoidRootPart
-        hrp.CFrame = enter.CFrame + Vector3.new(0,3,0)
-        return true
-    end
-    return false
-end
-
--- Track FARM (cộng dồn)
-local function trackFarm()
-    local data = readComboData()
-    if data.farmDone then return data end
-    local baseFarmSeconds = data.farmSeconds or 0
-    local sessionStart = os.time()
-
-    while true do
-        task.wait(updateInterval)
-        if getToday() ~= data.date then
-            data = { date = getToday(), farmSeconds = 0, farmDone = false, fishSeconds = data.fishSeconds or 0, fishDone = data.fishDone or false }
-            writeComboData(data)
-            return data
+    -- Nếu đã đủ cả farm & fishing
+    if runtime.farm.done and runtime.fish.done then
+        if placeId == FARM_PLACEID or placeId == FISH_PLACEID then
+            player:Kick("🎉 Đã xong cả Farm & Fishing 30p, nghỉ thôi!")
+        else
+            warn("✅ Đã xong cả Farm & Fishing nhưng đang ở map khác → Không kick")
         end
-
-        local sessionSeconds = os.time() - sessionStart
-        local total = baseFarmSeconds + sessionSeconds
-        data.farmSeconds = math.min(total, requiredTime)
-        writeComboData(data)
-
-        if total >= requiredTime and not data.farmDone then
-            data.farmSeconds = requiredTime
-            data.farmDone = true
-            writeComboData(data)
-            return data
-        end
-    end
-end
-
--- Track FISH (cộng dồn)
-local function trackFish()
-    local data = readComboData()
-    if data.fishDone then return data end
-    local baseFishSeconds = data.fishSeconds or 0
-    local sessionStart = os.time()
-
-    while true do
-        task.wait(updateInterval)
-        if getToday() ~= data.date then
-            data = { date = getToday(), farmSeconds = data.farmSeconds or 0, farmDone = data.farmDone or false, fishSeconds = 0, fishDone = false }
-            writeComboData(data)
-            return data
-        end
-
-        local sessionSeconds = os.time() - sessionStart
-        local total = baseFishSeconds + sessionSeconds
-        data.fishSeconds = math.min(total, requiredTime)
-        writeComboData(data)
-
-        if total >= requiredTime and not data.fishDone then
-            data.fishSeconds = requiredTime
-            data.fishDone = true
-            writeComboData(data)
-            return data
-        end
-    end
-end
-
--- Main combo flow (không chạy ngay; sẽ được gọi sau khi Time Trial hết lượt)
-local function runSessionLoop()
-    local data = readComboData()
-    writeComboData(data)
-
-    if data.farmDone and data.fishDone then
-        _G.COMBO_EVENT = true
-        task.spawn(function()
-            local initialDay = data.date
-            while true do
-                task.wait(60)
-                if getToday() ~= initialDay then
-                    kickMsg("Đã qua ngày mới Heo chạy 2 Event nào!")
-                    break
-                end
-            end
-        end)
         return
     end
 
-    if not data.farmDone and not data.fishDone then
-        teleportToFarmDirect()
-        task.wait(2)
-        data = trackFarm()
-        teleportToFishingDirect()
-        task.wait(2)
-        data = readComboData()
-        if not data.fishDone then
-            data = trackFish()
+    -- Nếu chưa đủ → xử lý theo map hiện tại
+    if placeId == FARM_PLACEID then
+        if not runtime.farm.done then
+            trackFarm()
+        elseif not runtime.fish.done then
+            teleportToFishing()
         end
-        data = readComboData()
-        if data.farmDone and data.fishDone then
-            _G.COMBO_EVENT = true
-            kickMsg("Heo chạy đủ 2 Event rồi!")
-            task.spawn(function()
-                local initialDay = data.date
-                while true do
-                    task.wait(60)
-                    if getToday() ~= initialDay then
-                        kickMsg("Đã qua ngày mới Heo chạy 2 Event nào!")
-                        break
-                    end
-                end
-            end)
-            return
+
+    elseif placeId == FISH_PLACEID then
+        if not runtime.fish.done then
+            trackFishing()
+        elseif not runtime.farm.done then
+            teleportToFarm()
+        end
+
+    else
+        -- Map khác → Tele sang event cần làm
+        if not runtime.farm.done then
+            teleportToFarm()
+        elseif not runtime.fish.done then
+            teleportToFishing()
         end
     end
-
-    if not data.farmDone and data.fishDone then
-        teleportToFarmDirect()
-        task.wait(2)
-        data = trackFarm()
-        data = readComboData()
-        if data.farmDone and data.fishDone then
-            _G.COMBO_EVENT = true
-            kickMsg("Heo chạy đủ 2 Event rồi!")
-            return
-        end
-    end
-
-    if data.farmDone and not data.fishDone then
-        teleportToFishingDirect()
-        task.wait(2)
-        data = trackFish()
-        data = readComboData()
-        if data.farmDone and data.fishDone then
-            _G.COMBO_EVENT = true
-            kickMsg("Heo chạy đủ 2 Event rồi!")
-            return
-        end
-    end
-
-    -- fallback watcher
-    task.spawn(function()
-        while true do
-            local data2 = readComboData()
-            if data2.farmDone and data2.fishDone then
-                _G.COMBO_EVENT = true
-                local initialDay = data2.date
-                while true do
-                    task.wait(60)
-                    if getToday() ~= initialDay then
-                        kickMsg("Đã qua ngày mới Heo chạy 2 Event nào!")
-                        break
-                    end
-                end
-                break
-            end
-            task.wait(5)
-        end
-    end)
 end
 
--- ====== Start sequence: đợi hết lượt Time Trial rồi chạy combo ======
-task.spawn(function()
-    monitorUntilMaxRuns()    -- chặn cho đến khi Time Trial done
-    -- Khi ra khỏi hàm monitor => đã đủ 10 lượt
-    runSessionLoop()
-end)
+main()
