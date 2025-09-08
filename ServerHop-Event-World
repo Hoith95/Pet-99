@@ -73,7 +73,7 @@ local function teleportToLeastPopulatedServer(placeId, runScriptOnJoin, retryLim
             end
 
             task.wait(0.5)
-        until #validServers >= 3 or not cursor or pagesChecked >= 5
+        until #validServers >= 3 or not cursor or pagesChecked >= 9
 
         if #validServers >= 1 then
             table.sort(validServers, function(a, b)
