@@ -16,8 +16,13 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/N
 end)
 
 spawn(function()
-wait(68)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-2"))()
+    local targetPlaceId = 140403681187145
+    if game.PlaceId == targetPlaceId then
+        wait(68)
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-2"))()
+    else
+        warn("⛔ Không đúng PlaceId, bỏ qua script.")
+    end
 end)
 
 spawn(function()
