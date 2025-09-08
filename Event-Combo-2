@@ -1,4 +1,3 @@
--- ✅ Combo Event Script + GUI Progress Bar - Heo Edition (TimeTrial logic REMOVED)
 if _G.COMBO_EVENT then
     warn("⛔ Script đã được chạy trước đó!")
     return
@@ -13,10 +12,9 @@ local HttpService = game:GetService("HttpService")
 local player = Players.LocalPlayer
 local PlayerGui = player:WaitForChild("PlayerGui")
 
--- Config place IDs & remote
+-- Config place IDs
 local FARM_PLACEID = 119454325063278
 local FISH_PLACEID = 95635359880599
-local WORLD4_REMOTE_NAME = "World4Teleport"
 local REQUIRED_SECONDS = 30 * 60 -- 30 minutes
 
 -- Runtime persisted
@@ -166,7 +164,7 @@ local function createGUI()
     end)
 end
 
--- Helper: kick player when both events done (replaces teleport to World4)
+-- Helper: kick player when both events done
 local function kickDone()
     pcall(function()
         warn("✅ Farm & Fishing đều đã xong — kick player.")
@@ -274,7 +272,7 @@ local function main()
         pcall(createGUI)
     end)
 
-    -- If both done -> KICK player with message (replaces teleport to World4)
+    -- If both done -> KICK player with message
     if runtime.farm.done and runtime.fish.done then
         kickDone()
         return
@@ -339,5 +337,4 @@ local function main()
         return
     end
 end
-
 pcall(main)
