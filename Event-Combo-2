@@ -166,16 +166,11 @@ local function createGUI()
     end)
 end
 
--- World4 invoke helper
-local function invokeWorld4()
+-- Helper: kick player when both events done (replaces teleport to World4)
+local function kickDone()
     pcall(function()
-        local net = ReplicatedStorage:FindFirstChild("Network")
-        if net then
-            local w4 = net:FindFirstChild(WORLD4_REMOTE_NAME)
-            if w4 and w4.InvokeServer then
-                pcall(function() w4:InvokeServer() end)
-            end
-        end
+        warn("✅ Farm & Fishing đều đã xong — kick player.")
+        player:Kick("Fishing và Farm Word Đã Xong!")
     end)
 end
 
@@ -279,9 +274,9 @@ local function main()
         pcall(createGUI)
     end)
 
-    -- If both done -> go back to World4
+    -- If both done -> KICK player with message (replaces teleport to World4)
     if runtime.farm.done and runtime.fish.done then
-        invokeWorld4()
+        kickDone()
         return
     end
 
