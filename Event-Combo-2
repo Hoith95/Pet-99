@@ -12,9 +12,10 @@ local HttpService = game:GetService("HttpService")
 local player = Players.LocalPlayer
 local PlayerGui = player:WaitForChild("PlayerGui")
 
--- Config place IDs
+-- Config place IDs & remote
 local FARM_PLACEID = 119454325063278
 local FISH_PLACEID = 95635359880599
+local WORLD4_REMOTE_NAME = "World4Teleport"
 local REQUIRED_SECONDS = 30 * 60 -- 30 minutes
 
 -- Runtime persisted
@@ -164,11 +165,16 @@ local function createGUI()
     end)
 end
 
--- Helper: kick player when both events done
-local function kickDone()
+-- World4 invoke helper
+local function invokeWorld4()
     pcall(function()
-        warn("✅ Farm & Fishing đều đã xong — kick player.")
-        player:Kick("Fishing và Farm Word Đã Xong!")
+        local net = ReplicatedStorage:FindFirstChild("Network")
+        if net then
+            local w4 = net:FindFirstChild(WORLD4_REMOTE_NAME)
+            if w4 and w4.InvokeServer then
+                pcall(function() w4:InvokeServer() end)
+            end
+        end
     end)
 end
 
@@ -272,9 +278,9 @@ local function main()
         pcall(createGUI)
     end)
 
-    -- If both done -> KICK player with message
+    -- If both done -> go back to World4
     if runtime.farm.done and runtime.fish.done then
-        kickDone()
+        invokeWorld4()
         return
     end
 
