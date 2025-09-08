@@ -20,6 +20,10 @@ spawn(function()
 end)
 
 spawn(function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_TeleEvent"))()
+end)
+
+spawn(function()
 wait(2168)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-TELE-2"))()
 end)
