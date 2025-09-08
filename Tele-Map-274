@@ -7,51 +7,105 @@ end
 -- Đánh dấu script đã được chạy
 _G.TELEMAP = true
 
--- Time Trial Checker & Smart Teleport - Heo
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local Save = require(game.ReplicatedStorage.Library.Client.Save)
-
+-- ======= CẤU HÌNH =======
+local TARGET_PLACE_ID = 140403681187145 -- chỉ chạy khi đúng PlaceId này
 local TARGET_POS = Vector3.new(-14251, 16.24, 2159)
-local TELEPORT_THRESHOLD = 2 -- sai số cho phép trước khi teleport lại
+local TELEPORT_THRESHOLD = 2      -- sai số cho phép trước khi teleport lại (units)
+local TELEPORT_INTERVAL = 365     -- (giây) khoảng thời gian giữa các lần kiểm tra vị trí khi đã vào loop
+local CHECK_INTERVAL_WHILE_WAIT = 300 -- (giây) thời gian chờ khi vẫn chưa đạt 10 lượt
+local MAX_DAILY_RUNS = 10
+-- ========================
 
-local function getRunsUsed()
-	local saveData = Save.Get()
-	return saveData and saveData.TimeTrialStats and (saveData.TimeTrialStats.DailyRuns or 0) or 0
+-- Kiểm tra PlaceId ngay lập tức
+if game.PlaceId ~= TARGET_PLACE_ID then
+    warn("⛔ PlaceId không khớp. Script chỉ chạy ở PlaceId: " .. tostring(TARGET_PLACE_ID) .. " (hiện tại: " .. tostring(game.PlaceId) .. ").")
+    return
 end
 
-local function startSmartTeleportLoop()
-	warn("✅ Đã hoàn tất Time Trial (10/10 lượt) → Bắt đầu giám sát vị trí và teleport khi lệch.")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+if not player then
+    -- chờ LocalPlayer nếu chưa có
+    repeat task.wait() player = Players.LocalPlayer until player
+end
 
-	spawn(function()
-		while true do
-			local character = player.Character or player.CharacterAdded:Wait()
-			local hrp = character:WaitForChild("HumanoidRootPart", 5)
-			if hrp then
-				local currentPos = hrp.Position
-				if (currentPos - TARGET_POS).Magnitude > TELEPORT_THRESHOLD then
-					warn("↩️ Vị trí lệch, teleport về vị trí cố định.")
-					hrp.CFrame = CFrame.new(TARGET_POS)
-				end
-			end
-			wait(365)
-		end
-	end)
+-- Safe require Save (tránh lỗi nếu module không tồn tại)
+local Save
+do
+    local ok, res = pcall(function()
+        return require(game:GetService("ReplicatedStorage").Library.Client.Save)
+    end)
+    if ok then
+        Save = res
+    else
+        warn("⚠️ Không thể require Save module: " .. tostring(res))
+        Save = nil
+    end
+end
+
+-- Lấy số lượt đã dùng một cách an toàn
+local function getRunsUsed()
+    if not Save then return 0 end
+    local ok, data = pcall(function() return Save.Get() end)
+    if not ok then
+        warn("⚠️ Lỗi khi gọi Save.Get(): " .. tostring(data))
+        return 0
+    end
+    if data and data.TimeTrialStats then
+        return data.TimeTrialStats.DailyRuns or 0
+    end
+    return 0
+end
+
+-- Tránh start loop nhiều lần
+local loopStarted = false
+
+local function startSmartTeleportLoop()
+    if loopStarted then
+        warn("🔁 Smart teleport loop đã chạy, bỏ qua lần start tiếp theo.")
+        return
+    end
+    loopStarted = true
+
+    warn("✅ Đã hoàn tất Time Trial (" .. tostring(MAX_DAILY_RUNS) .. "/" .. tostring(MAX_DAILY_RUNS) .. ") → Bắt đầu giám sát vị trí và teleport khi lệch.")
+
+    task.spawn(function()
+        while true do
+            local character = player.Character or player.CharacterAdded:Wait()
+            local hrp = character:FindFirstChild("HumanoidRootPart") or character:WaitForChild("HumanoidRootPart", 5)
+            if hrp then
+                local currentPos = hrp.Position
+                if (currentPos - TARGET_POS).Magnitude > TELEPORT_THRESHOLD then
+                    warn("↩️ Vị trí lệch (" .. math.floor((currentPos - TARGET_POS).Magnitude * 100)/100 .. " units) — teleport về vị trí cố định.")
+                    local ok, err = pcall(function()
+                        hrp.CFrame = CFrame.new(TARGET_POS)
+                    end)
+                    if not ok then
+                        warn("⚠️ Đã xảy ra lỗi khi teleport: " .. tostring(err))
+                    end
+                end
+            else
+                warn("⚠️ Không tìm thấy HumanoidRootPart, sẽ thử lại sau.")
+            end
+            task.wait(TELEPORT_INTERVAL)
+        end
+    end)
 end
 
 local function monitorUntilMaxRuns()
-	while true do
-		local runsUsed = getRunsUsed()
-		local runsLeft = 10 - runsUsed
+    while true do
+        local runsUsed = getRunsUsed()
+        local runsLeft = math.max(0, MAX_DAILY_RUNS - runsUsed)
 
-		if runsUsed >= 10 then
-			startSmartTeleportLoop()
-			break
-		else
-			warn("⏳ Còn lại " .. tostring(runsLeft) .. " lượt Time Trial → kiểm tra lại sau 5 phút.")
-			wait(300)
-		end
-	end
+        if runsUsed >= MAX_DAILY_RUNS then
+            startSmartTeleportLoop()
+            break
+        else
+            warn("⏳ Còn lại " .. tostring(runsLeft) .. " lượt Time Trial → kiểm tra lại sau " .. tostring(CHECK_INTERVAL_WHILE_WAIT/60) .. " phút.")
+            task.wait(CHECK_INTERVAL_WHILE_WAIT)
+        end
+    end
 end
 
+-- Bắt đầu
 monitorUntilMaxRuns()
