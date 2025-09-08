@@ -1,0 +1,50 @@
+-- Kiểm tra PlaceId và kick nếu có người khác (ngoại trừ LocalPlayer)
+if _G.CHECK_HEO_SCRIPT then
+    warn("Script CHECK_HEO_SCRIPT đã chạy trước đó!")
+    return
+end
+_G.CHECK_HEO_SCRIPT = true
+
+local TARGET_PLACE = 140403681187145
+
+-- Đợi game load xong
+repeat task.wait() until game:IsLoaded()
+
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+
+-- Nếu không đúng PlaceId thì dừng
+if game.PlaceId ~= TARGET_PLACE then
+    warn("Không phải PlaceId mục tiêu. Dừng script.")
+    return
+end
+
+-- Kiểm tra có player nào khác ngoài LocalPlayer không
+local function hasOtherPlayers()
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= localPlayer then
+            return true
+        end
+    end
+    return false
+end
+
+-- Nếu có người khác thì kick luôn
+if hasOtherPlayers() then
+    pcall(function()
+        localPlayer:Kick("Có Heo Khác")
+    end)
+    return
+end
+
+-- Nếu chỉ có mình, lắng nghe người join sau này
+local conn
+conn = Players.PlayerAdded:Connect(function(p)
+    if p ~= localPlayer then
+        -- ngắt kết nối listener để tránh gọi nhiều lần
+        if conn then conn:Disconnect() end
+        pcall(function()
+            localPlayer:Kick("Có Heo Khác")
+        end)
+    end
+end)
