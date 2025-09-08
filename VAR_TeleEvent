@@ -23,15 +23,14 @@ local function readComboLog()
     return decoded
 end
 
--- 🚪 Hàm teleport riêng cho World4 (có remote)
+-- 🚪 Hàm teleport riêng cho World4
 local function teleportWorld4()
-    local teleportFunc = ReplicatedStorage:WaitForChild("Network"):WaitForChild("World4Teleport")
-    teleportFunc:InvokeServer()
+    game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World4Teleport"):InvokeServer()
     task.wait(180) -- chờ 3 phút
 
     if game.PlaceId ~= PLACE_WORLD_4 then
         print("⚠️ Teleport World4 lần 1 thất bại, thử lại...")
-        teleportFunc:InvokeServer()
+        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World4Teleport"):InvokeServer()
         task.wait(180)
 
         if game.PlaceId ~= PLACE_WORLD_4 then
