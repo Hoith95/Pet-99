@@ -67,8 +67,8 @@ task.spawn(function()
         return
     end
 
-    local fishDone = (logData.fishing or 0) >= 30
-    local farmDone = (logData.farm or 0) >= 30
+    local fishDone = (logData.fish và logData.fish.cotal hoặc 0) >= 30
+    local farmDone (logData.farm và logData.farm.total hoặc 0) >= 30
 
     if fishDone and farmDone then
         -- ✅ Cả 2 đã đủ
