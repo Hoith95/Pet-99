@@ -30,7 +30,7 @@ wait(30)
 game:GetService("ReplicatedStorage").Network:FindFirstChild("Login Streaks: Claim"):InvokeServer()
 end)
 
-getgenv().GLOOTBOXES = {"Locked Hype Egg"}
+getgenv().GLOOTBOXES = {"Locked Hype Egg", "Tropical Gift"}
 
 getgenv().GPROGRESS_MODE = "Hybrid" -- Hatch
 getgenv().GGFX_MODE = 1
