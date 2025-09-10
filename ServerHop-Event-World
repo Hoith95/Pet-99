@@ -41,7 +41,7 @@ end
 
 -- Hàm teleport tới server ít người của placeId
 local function teleportToLeastPopulatedServer(placeId, runScriptOnJoin, retryLimit)
-    retryLimit = retryLimit or 5
+    retryLimit = retryLimit or 7
     local attempts = 0
     local cursor = nil
 
