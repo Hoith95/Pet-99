@@ -173,14 +173,14 @@ end
 local function serverhopToFishing()
     local ok = false
     pcall(function()
-        ok = loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-Fish"))() or true
+        ok = loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-Fish-2"))() or true
     end)
     return ok
 end
 local function serverhopToFarm()
     local ok = false
     pcall(function()
-        ok = loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-World"))() or true
+        ok = loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-World-2"))() or true
     end)
     return ok
 end
