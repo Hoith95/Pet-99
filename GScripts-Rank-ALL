@@ -30,6 +30,33 @@ wait(30)
 game:GetService("ReplicatedStorage").Network:FindFirstChild("Login Streaks: Claim"):InvokeServer()
 end)
 
+spawn(function()
+    local eventId = game.PlaceId
+
+    if eventId == 119454325063278 then
+        -- Farming world event
+        getgenv().GDO_FARMING_WORLD = true
+        getgenv().GEVENT_UPGRADES = {
+            "FarmingHugeChance",
+            "FarmingTitanicChance",
+            "FarmingPixelRainbowLuck",
+            "FarmingGoldHatchChance",
+            "FarmingRainbowHatchChance",
+            "FarmingShinyHatchChance"
+        }
+        print("✅ Config: Farming world set")
+
+    elseif eventId == 95635359880599 then
+        -- Fishing event
+        getgenv().GDO_FISHING_EVENT = true
+        getgenv().GUSE_BOOSTS = true
+        print("✅ Config: Fishing event set")
+
+    else
+        warn("⛔ Không phải event được hỗ trợ — không set gì.")
+    end
+end)
+
 --getgenv().GDO_BLOCK_PARTY = true
 --getgenv().GBLOCK_PARTY_STOP_REBIRTHING_ON_TITANIC = true
 --getgenv().GBLOCK_PARTY_STOP_REBIRTHING_ON_MULTIPLIER2 = 25
