@@ -25,7 +25,6 @@ local runtime = {
     lastDay = os.date("%d/%m/%Y"),
     reset23Date = nil
 }
-
 -- File helpers
 local function getFileName() return "comboEventLog.json" end
 
@@ -221,6 +220,7 @@ local function trackFarm()
             updateProgress("farm")
             task.wait(10)
         end
+        -- Khi farm xong, nếu fishing chưa xong thì chuyển sang fishing
         if not runtime.fish.done then
             pcall(serverhopToFishing)
         end
@@ -233,6 +233,7 @@ local function trackFishing()
             updateProgress("fish")
             task.wait(10)
         end
+        -- Khi fishing xong, nếu farm chưa xong thì chuyển sang farm
         if not runtime.farm.done then
             pcall(serverhopToFarm)
         end
@@ -259,7 +260,7 @@ task.spawn(function()
     end
 end)
 
--- Main flow (TimeTrial logic removed)
+-- Main flow (prioritize FARM world)
 local function main()
     loadData()
     resetIfNewDay()
@@ -278,22 +279,18 @@ local function main()
 
     local placeId = game.PlaceId
 
-    -- If player is already in Farm place:
+    -- If player is in FARM place: stay and track farm (priority)
     if placeId == FARM_PLACEID then
         runtime.farm.last = os.time()
         saveData()
-        -- If both not done -> prioritize serverhop to Fishing (as before)
-        if (not runtime.farm.done) and (not runtime.fish.done) then
-            local okHop = pcall(serverhopToFishing)
-            if not okHop then teleportToFishingInServer() end
-            return
-        end
-        -- If farm not done but fish done -> track farm here
-        if (not runtime.farm.done) and runtime.fish.done then
+
+        -- Nếu farm chưa xong -> track farm luôn
+        if not runtime.farm.done then
             trackFarm()
             return
         end
-        -- If farm done but fish not -> serverhop to Fishing
+
+        -- Nếu farm đã xong nhưng fishing chưa -> serverhop sang fishing
         if runtime.farm.done and (not runtime.fish.done) then
             local okHop = pcall(serverhopToFishing)
             if not okHop then teleportToFishingInServer() end
@@ -301,14 +298,26 @@ local function main()
         end
     end
 
-    -- If player is already in Fishing place:
+    -- If player is in FISHING place
     if placeId == FISH_PLACEID then
         runtime.fish.last = os.time()
         saveData()
+
+        -- Nếu fishing chưa xong
         if not runtime.fish.done then
-            trackFishing()
-            return
+            -- Nhưng nếu farm vẫn chưa xong -> ưu tiên farm: chuyển serverhop về farm
+            if not runtime.farm.done then
+                local okHop = pcall(serverhopToFarm)
+                if not okHop then teleportToFarmInServer() end
+                return
+            else
+                -- Farm đã xong, tiếp tục track fishing
+                trackFishing()
+                return
+            end
         end
+
+        -- Nếu fishing đã xong nhưng farm chưa -> chuyển sang farm
         if not runtime.farm.done then
             local okHop = pcall(serverhopToFarm)
             if not okHop then teleportToFarmInServer() end
@@ -316,10 +325,11 @@ local function main()
         end
     end
 
-    -- If in other map:
+    -- Nếu ở map khác
     if (not runtime.fish.done) and (not runtime.farm.done) then
-        local okHop = pcall(serverhopToFishing)
-        if not okHop then teleportToFishingInServer() end
+        -- ưu tiên đi serverhop tới FARM trước
+        local okHop = pcall(serverhopToFarm)
+        if not okHop then teleportToFarmInServer() end
         return
     end
 
