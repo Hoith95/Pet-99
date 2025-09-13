@@ -7,6 +7,9 @@ _G.CHECK_HEO_SCRIPT = true
 
 local TARGET_PLACE = 140403681187145
 
+-- Tuỳ chọn: giới hạn thời gian chờ (giây). Đặt = nil để chờ vô hạn.
+local WAIT_TIMEOUT = 3600
+
 -- Đợi game load xong
 repeat task.wait() until game:IsLoaded()
 
@@ -23,20 +26,41 @@ if game.PlaceId ~= TARGET_PLACE then
     return
 end
 
--- Kiểm tra có player khác ngoài LocalPlayer không
-local hasOther = false
-for _, p in ipairs(Players:GetPlayers()) do
-    if p ~= localPlayer then
-        hasOther = true
-        break
+-- Hàm kiểm tra presence của player khác và kick nếu có
+local function checkAndKickIfOther()
+    local hasOther = false
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= localPlayer then
+            hasOther = true
+            break
+        end
+    end
+
+    if hasOther then
+        -- pcall để an toàn, tránh lỗi gây crash script
+        pcall(function()
+            localPlayer:Kick("Có Heo Khác")
+        end)
+    else
+        print("Chỉ có mình bạn trong server. Dừng script.")
     end
 end
 
-if hasOther then
-    pcall(function()
-        localPlayer:Kick("Có Heo Khác")
-    end)
-else
-    -- Chỉ có mình -> dừng script (không lắng nghe thêm)
-    print("Chỉ có mình bạn trong server. Dừng script.")
+-- Nếu đã hoàn thành Time Trial thì kiểm tra ngay
+if _G.Time_Trial_Done == true then
+    checkAndKickIfOther()
+    return
 end
+
+-- Nếu chưa hoàn thành, chờ tới khi _G.Time_Trial_Done = true rồi kiểm tra
+local startTime = os.time()
+while not _G.Time_Trial_Done do
+    task.wait(1)
+    if WAIT_TIMEOUT and (os.time() - startTime) >= WAIT_TIMEOUT then
+        warn("Hết thời gian chờ _G.Time_Trial_Done. Dừng script mà chưa kiểm tra.")
+        return
+    end
+end
+
+-- Khi tới đây _G.Time_Trial_Done == true
+checkAndKickIfOther()
