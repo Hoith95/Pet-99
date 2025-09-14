@@ -57,7 +57,8 @@ local startTime = os.time()
 while not _G.Time_Trial_Done do
     task.wait(1)
     if WAIT_TIMEOUT and (os.time() - startTime) >= WAIT_TIMEOUT then
-        warn("Hết thời gian chờ _G.Time_Trial_Done. Dừng script mà chưa kiểm tra.")
+        warn("Hết thời gian chờ _G.Time_Trial_Done. Bắt đầu kiểm tra.")
+        checkAndKickIfOther()
         return
     end
 end
