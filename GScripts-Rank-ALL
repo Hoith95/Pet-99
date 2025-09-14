@@ -26,7 +26,6 @@ spawn(function()
 end)
 
 spawn(function()
-wait(30)
 game:GetService("ReplicatedStorage").Network:FindFirstChild("Login Streaks: Claim"):InvokeServer()
 end)
 
