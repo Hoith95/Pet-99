@@ -56,10 +56,10 @@ spawn(function()
     end
 end)
 
---getgenv().GDO_BLOCK_PARTY = true
---getgenv().GBLOCK_PARTY_STOP_REBIRTHING_ON_TITANIC = true
---getgenv().GBLOCK_PARTY_STOP_REBIRTHING_ON_MULTIPLIER2 = 25
---getgenv().GBLOCK_PARTY_MAKE_TROPICAL_GIFTS = true
+getgenv().GDO_BLOCK_PARTY = true
+getgenv().GBLOCK_PARTY_STOP_REBIRTHING_ON_TITANIC = true
+getgenv().GBLOCK_PARTY_STOP_REBIRTHING_ON_MULTIPLIER2 = 25
+getgenv().GBLOCK_PARTY_MAKE_TROPICAL_GIFTS = true
 
 getgenv().GLOOTBOXES = {"Locked Hype Egg", "Tropical Gift", "Deep Sea Treasure Chest"}
 
