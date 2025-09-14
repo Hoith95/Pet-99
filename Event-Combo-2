@@ -164,9 +164,40 @@ local function createGUI()
     end)
 end
 
--- World4 invoke helper
-local function invokeWorld4()
-    game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World4Teleport"):InvokeServer()
+-- World4 invoke helper (safe, retry + check)
+local WORLD4_PLACEID = 140403681187145 -- <-- CẬP NHẬT nếu World4 có PlaceId khác
+
+local function safeInvokeWorld4()
+    local attempts = 3
+    for i = 1, attempts do
+        local ok, err = pcall(function()
+            game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World4Teleport"):InvokeServer()
+        end)
+
+        if ok then
+            warn(("✅ Gửi lệnh Tele World4 (attempt %d)"):format(i))
+        else
+            warn(("⚠️ Lỗi khi gửi lệnh Tele World4 (attempt %d): %s"):format(i, tostring(err)))
+        end
+
+        -- Chờ 60s sau mỗi lần gửi lệnh rồi kiểm tra PlaceId
+        task.wait(60)
+        if game.PlaceId == WORLD4_PLACEID then
+            warn(("🚀 Đã vào World4 (PlaceId=%s)"):format(tostring(WORLD4_PLACEID)))
+            return true
+        else
+            warn(("⏱️ Sau attempt %d: chưa vào World4, PlaceId hiện tại = %s"):format(i, tostring(game.PlaceId)))
+        end
+    end
+
+    -- Nếu sau 3 lần vẫn chưa vào World4 -> kick với thông báo
+    pcall(function()
+        local pl = Players.LocalPlayer
+        if pl and pl.Parent then
+            pl:Kick("Heo Tele World 4 Thất Bại")
+        end
+    end)
+    return false
 end
 
 -- Serverhop links (as requested)
@@ -273,7 +304,7 @@ local function main()
 
     -- If both done -> go back to World4
     if runtime.farm.done and runtime.fish.done then
-        invokeWorld4()
+        safeInvokeWorld4()
         return
     end
 
