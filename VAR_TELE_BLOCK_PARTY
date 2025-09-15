@@ -1,3 +1,9 @@
+if _G.VAR_TELE_BLOCK_PARTY then
+    warn("⛔ VAR_TELE_BLOCK_PARTY đã chạy trước đó!")
+    return
+end
+_G.VAR_TELE_BLOCK_PARTY = true
+
 local player = game.Players.LocalPlayer
 local char = player.Character or player.CharacterAdded:Wait()
 local hrp = char:FindFirstChild("HumanoidRootPart")
