@@ -1,0 +1,17 @@
+local player = game.Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
+local hrp = char:FindFirstChild("HumanoidRootPart")
+
+local activeContainer = workspace.__THINGS.__INSTANCE_CONTAINER:FindFirstChild("Active")
+local inBlockParty = activeContainer and activeContainer:FindFirstChild("BlockParty")
+
+if inBlockParty then
+    print("✅ Đang ở BlockParty, không teleport.")
+else
+    if hrp then
+        hrp.CFrame = CFrame.new(-15850, 39, -194)
+        print("⚡ Teleport đến BlockParty.")
+    else
+        warn("❌ Không tìm thấy HumanoidRootPart.")
+    end
+end
