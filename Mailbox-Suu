@@ -1,6 +1,6 @@
 _G.script1Done = true
 --_G.MAILBOX_STOP = true
-
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World4Teleport"):InvokeServer()
 --- Gửi Mail ---
 spawn(function()
 wait(15)
