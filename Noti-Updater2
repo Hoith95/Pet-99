@@ -128,7 +128,7 @@ spawn(function()
             -- nếu lỗi, giữ nguyên giá trị hiện tại, tránh crash
             -- warn("Lỗi khi quét Tiles:", best)
         end
-        task.wait(0.5) -- quét mỗi 0.5s
+        task.wait(30) -- quét mỗi 30s
     end
 end)
 
