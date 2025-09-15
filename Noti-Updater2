@@ -7,9 +7,11 @@ _G.VAR_GUI_UPDATER = true
 -- Dịch vụ cơ bản
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 local Save = require(ReplicatedStorage.Library.Client.Save)
+local TilesFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("Tiles")
 
 -- Hàm format số lớn thành chuỗi dạng 1.23M, 4.56B...
 local function Formatint(int)
@@ -84,6 +86,51 @@ local function getMiscAmount(itemId)
     end
     return 0
 end
+
+-- Hàm lấy giá trị Huge Luck từ TextLabel (tương tự pattern cũ)
+local function extractHugeLuckValue(text)
+    if not text or type(text) ~= "string" then return 0 end
+    local value = text:match("(%d+)x%s+Huge%s+Luck!?")
+    return tonumber(value or "0")
+end
+
+-- Hàm tìm giá trị Huge Luck cao nhất từ tất cả tiles
+local function findBestHugeValue()
+    local bestValue = -1
+    -- phòng trường hợp folder chưa có children
+    local tiles = TilesFolder:GetChildren()
+    for _, tile in pairs(tiles) do
+        local success, label = pcall(function()
+            return tile:FindFirstChild("Sign")
+                and tile.Sign:FindFirstChild("SurfaceGui")
+                and tile.Sign.SurfaceGui:FindFirstChild("Frame")
+                and tile.Sign.SurfaceGui.Frame:FindFirstChild("Frame")
+                and tile.Sign.SurfaceGui.Frame.Frame:FindFirstChild("TextLabel")
+        end)
+        if success and label and label:IsA("TextLabel") then
+            local value = extractHugeLuckValue(label.Text)
+            if value > bestValue then
+                bestValue = value
+            end
+        end
+    end
+    if bestValue < 0 then bestValue = 0 end
+    return bestValue
+end
+
+-- thread quét tiles liên tục và cập nhật _G.CURRENT_HUGE_CHANCE
+spawn(function()
+    while _G.VAR_GUI_UPDATER do
+        local ok, best = pcall(findBestHugeValue)
+        if ok then
+            _G.CURRENT_HUGE_CHANCE = best or 0
+        else
+            -- nếu lỗi, giữ nguyên giá trị hiện tại, tránh crash
+            -- warn("Lỗi khi quét Tiles:", best)
+        end
+        task.wait(0.5) -- quét mỗi 0.5s
+    end
+end)
 
 -- Hàm khởi tạo GUI và cập nhật
 local function startGuiUpdater()
