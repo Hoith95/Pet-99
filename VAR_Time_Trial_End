@@ -1,0 +1,16 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Save = require(ReplicatedStorage.Library.Client.Save)
+
+local function getDailyRuns()
+    local ok, sd = pcall(Save.Get)
+    if not ok or not sd then return 0 end
+    return (sd.TimeTrialStats and sd.TimeTrialStats.DailyRuns) or 0
+end
+
+local used = getDailyRuns()
+if used >= 10 then
+    _G.Time_Trial_End = true
+    warn("✅ Đã đủ 10 lượt — _G.Time_Trial_End = true")
+else
+    warn(("ℹ️ Hiện %d lượt — chưa đủ 10 lượt."):format(used))
+end
