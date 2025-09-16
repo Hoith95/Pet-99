@@ -56,10 +56,17 @@ spawn(function()
     end
 end)
 
-getgenv().GDO_BLOCK_PARTY = true
-getgenv().GBLOCK_PARTY_STOP_REBIRTHING_ON_TITANIC = true
-getgenv().GBLOCK_PARTY_STOP_REBIRTHING_ON_MULTIPLIER2 = 25
-getgenv().GBLOCK_PARTY_MAKE_TROPICAL_GIFTS = true
+spawn(function()
+    if _G.Time_Trial_End == true then
+        getgenv().GDO_BLOCK_PARTY = true
+        getgenv().GBLOCK_PARTY_STOP_REBIRTHING_ON_TITANIC = true
+        getgenv().GBLOCK_PARTY_STOP_REBIRTHING_ON_MULTIPLIER2 = 25
+        getgenv().GBLOCK_PARTY_MAKE_TROPICAL_GIFTS = true
+        print("✅ Config: BLOCK_PARTY set because _G.Time_Trial_End = true")
+    else 
+        warn("ℹ️ _G.Time_Trial_End chưa true — không set gì.")
+    end
+end)
 
 getgenv().GLOOTBOXES = {"Locked Hype Egg", "Tropical Gift", "Deep Sea Treasure Chest"}
 
