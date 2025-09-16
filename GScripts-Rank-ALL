@@ -16,16 +16,6 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/N
 end)
 
 spawn(function()
-    local targetPlaceId = 140403681187145
-    if game.PlaceId == targetPlaceId then
-        wait(68)
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-2"))()
-    else
-        warn("⛔ Không đúng PlaceId, bỏ qua script.")
-    end
-end)
-
-spawn(function()
 game:GetService("ReplicatedStorage").Network:FindFirstChild("Login Streaks: Claim"):InvokeServer()
 end)
 
@@ -58,13 +48,16 @@ spawn(function()
             getgenv().GBLOCK_PARTY_STOP_REBIRTHING_ON_TITANIC = true
             getgenv().GBLOCK_PARTY_STOP_REBIRTHING_ON_MULTIPLIER2 = 25
             getgenv().GBLOCK_PARTY_MAKE_TROPICAL_GIFTS = true
+			spawn(function()
+			wait(68)
+        	loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-2"))()
+			end)
             print("✅ Config: Block Party set (Time_Trial_End)")
         else
             warn("⛔ _G.Time_Trial_End chưa true — set Block Party.")
 			spawn(function()
-			_G.VAR_STOP_BLOCK_PARTY = false
-			_G.VAR_START_BLOCK_PARTY = true
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Block-Party-3"))()
+			wait(68)
+        	loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-3"))()
 			end)
         end
 
