@@ -37,6 +37,8 @@ getgenv().Settings = {
         {Name = "Fantasy Spinny Wheel Ticket", Data = {Price = "5%"}},
 
         {Name = "Huge Starry Eye Bunny", Data = {Price = "9m"}},
+        {Name = "Huge Pixel Griffin", Data = {Price = "9m"}},
+        {Name = "Huge Stingray", Data = {Price = "9m"}},
         {Name = "Huge Pixel Otter", Data = {Price = "9m"}},
         {Name = "Huge Chill Parrot", Data = {Price = "9m"}},
         {Name = "Huge Chill Ducky", Data = {Price = "9m"}},
