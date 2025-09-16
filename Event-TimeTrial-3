@@ -121,7 +121,7 @@ end
 
 -- 🕐 Chờ đến khi đạt Max Zone
 local function waitUntilReachMaxZone(useCustomZone)
-	local maxMapZone = useCustomZone and 269 or getMaxZoneFromMap4()
+	local maxMapZone = useCustomZone and 274 or getMaxZoneFromMap4()
 
 	while true do
 		local success, data = pcall(function()
@@ -142,7 +142,7 @@ local function waitUntilReachMaxZone(useCustomZone)
 end
 
 -- 🧪 Gọi hàm với tùy chọn
-waitUntilReachMaxZone(true)  -- Dùng zone cố định 269
+waitUntilReachMaxZone(true)  -- Dùng zone cố định 274
 --waitUntilReachMaxZone(false) -- Dùng zone lấy từ Map4
 
 -- ⏱️ Monitor 12 phút không tăng lượt/TotalRuns trực tiếp
@@ -529,19 +529,20 @@ task.spawn(function()
 
 		warn("🎉 Hoàn tất 10/10 lượt Time Trial.")
 		claimReward()
-		task.wait(30)
+		task.wait(60)
+		_G.Time_Trial_Done = true
 		cleanupAllThreads()
-
+		
         	-- **Chỉ bắt đầu auto-claim sau khi đã hoàn tất 10 lượt**
        		--warn("🔄 Khởi động Auto-Claim sau 10/10 lượt.")
 		--task.wait(68)
 		--startAutoClaim()
 
-       		warn("🔄 Khởi động Event Block Party sau 10/10 lượt.")
+       		warn("🔄 Khởi động Combo Event sau 10/10 lượt.")
 		spawn(function()
 		_G.VAR_STOP_BLOCK_PARTY = false
 		_G.VAR_START_BLOCK_PARTY = true
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Block-Party"))()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Block-Party-3"))()
 		end)
 
 		warn("⏳ Theo dõi reset DailyRuns...")
@@ -549,8 +550,10 @@ task.spawn(function()
 
 		warn("🔁 DailyRuns reset → tiếp tục farm.")
 		if monitor12minThread then pcall(task.cancel, monitor12minThread) monitor12minThread = nil end
-		_G.VAR_STOP_BLOCK_PARTY = true
-		_G.VAR_START_BLOCK_PARTY = false
+		--_G.VAR_STOP_BLOCK_PARTY = true
+		--_G.VAR_START_BLOCK_PARTY = false
+		task.wait(5)
+		game.Players.LocalPlayer:Kick("Heo Reset 23H")
 		task.wait(5)
 		startMonitor12Min()
 	end
