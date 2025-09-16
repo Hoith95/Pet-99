@@ -39,6 +39,7 @@ getgenv().Settings = {
         {Name = "Huge Starry Eye Bunny", Data = {Price = "9m"}},
         {Name = "Huge Pixel Otter", Data = {Price = "9m"}},
         {Name = "Huge Chill Parrot", Data = {Price = "9m"}},
+        {Name = "Huge Chill Ducky", Data = {Price = "9m"}},
 
         {Name = "All Huges", Data = {Price = "1%", Min_sell = "9m", Max_sell = "30m", sold_by_convention = true}},
         {Name = "Shiny Rainbow All Huges", Data = {Price = "5%", Min_sell = "1.5b", Max_sell = "5b"}},
