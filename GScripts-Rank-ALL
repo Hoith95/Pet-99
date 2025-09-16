@@ -61,9 +61,11 @@ spawn(function()
             print("✅ Config: Block Party set (Time_Trial_End)")
         else
             warn("⛔ _G.Time_Trial_End chưa true — set Block Party.")
-            _G.VAR_STOP_BLOCK_PARTY = false
-		    _G.VAR_START_BLOCK_PARTY = true
-		    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Block-Party-3"))()
+			spawn(function()
+			_G.VAR_STOP_BLOCK_PARTY = false
+			_G.VAR_START_BLOCK_PARTY = true
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Block-Party-3"))()
+			end)
         end
 
     else
