@@ -1,9 +1,9 @@
 -- ===== CONFIG =====
-local PRIORITIZE_EXCLUDE = true        -- chưa dùng trực tiếp (keep), logic: luôn hop khi thấy excluded trong main loop
+local PRIORITIZE_EXCLUDE = true        -- true = hop ngay khi thấy excluded (bất kể số người) [chỉ kiểm tra 1 lần lúc start]
 local CASE_INSENSITIVE = false         -- true nếu muốn so sánh không phân biệt hoa/thường
 local MAX_PLAYERS_BELOW = 10           -- nếu không có excluded lúc start, hop khi số người <= giá trị này
 local SERVERHOP_COOLDOWN = 300         -- cooldown giữa 2 lần hop (giây)
-local CHECK_INTERVAL = 60              -- khoảng kiểm tra vòng lặp chính (giây) -> 60s = 1 phút
+local CHECK_INTERVAL = 60              -- khoảng kiểm tra vòng lặp chính (giây)
 local DIAMOND_KEY = "\240\159\146\142 Diamonds" -- key leaderstats kim cương
 
 local DEBUG_LOG = false
@@ -20,7 +20,6 @@ local usernamesToExclude = {
     ["lehoangvw2k"] = true,
 }
 -- ====================
-
 repeat task.wait() until game:IsLoaded()
 local Players = game:GetService("Players")
 local localPlayer = Players.LocalPlayer
@@ -33,7 +32,6 @@ if CASE_INSENSITIVE then
         excludeNormalized[string.lower(k)] = v
     end
 end
-
 local function isExcludedUsername(name)
     if not name then return false end
     if CASE_INSENSITIVE then
@@ -91,7 +89,9 @@ end
 -- Sửa: bỏ qua chính localPlayer khi kiểm tra excluded
 local function hasExcludedPlayer()
     for _, p in ipairs(Players:GetPlayers()) do
-        if p ~= localPlayer then
+        if p == localPlayer then
+            -- bỏ qua chính bạn
+        else
             if isExcludedUsername(p.Name) then
                 return true, p.Name
             end
@@ -110,7 +110,7 @@ local function safeGetPlayerCount()
     return count
 end
 
--- === CHECK EXCLUDED ONCE AT START (vẫn giữ để check ngay khi chạy) ===
+-- === CHECK EXCLUDED ONCE AT START ===
 local initialExcluded, initialWho = hasExcludedPlayer()
 if initialExcluded then
     print("[Start] Phát hiện excluded user lúc khởi chạy: " .. tostring(initialWho) .. " -> hop ngay.")
@@ -120,23 +120,15 @@ else
     if DEBUG_LOG then print("[Start] Không phát hiện excluded lúc khởi chạy. Tiếp tục với main loop.") end
 end
 -- =====================================
+-- Main loop: KHÔNG kiểm tra excluded nữa, chỉ kiểm playerCount
 
--- Main loop: kiểm tra excluded MỖI VÒNG (mặc định 60s) và hop ngay nếu thấy excluded (bất kể số người)
 task.spawn(function()
     while true do
-        -- nếu đang hop thì skip check
+        task.wait(CHECK_INTERVAL)
+
         if isHopping then
             if DEBUG_LOG then print("[Main] Đang hop, skip vòng check.") end
         else
-            -- 1) Kiểm tra excluded mỗi vòng (bất kể số người)
-            local excludedFound, who = hasExcludedPlayer()
-            if excludedFound then
-                print("[Main] Phát hiện excluded user: " .. tostring(who) .. " -> hop ngay (bất kể số người).")
-                serverHop()
-                return
-            end
-
-            -- 2) Nếu không có excluded, kiểm tra số người (như cũ)
             local playerCount = safeGetPlayerCount()
             if DEBUG_LOG then
                 print(string.format("[Main][DEBUG] playerCount=%d", playerCount))
@@ -153,11 +145,11 @@ task.spawn(function()
             end
         end
 
-        task.wait(CHECK_INTERVAL)
+
     end
 end)
 
--- Check diamonds sau 1 giờ (giữ nguyên)
+-- Check diamonds sau 1 giờ
 task.spawn(function()
     print("[Diamonds] Initial: " .. tostring(initialDiamonds))
     task.wait(3600)
@@ -176,7 +168,7 @@ task.spawn(function()
     end
 end)
 
--- Claim Mailbox mỗi 3 phút (giữ nguyên)
+-- Claim Mailbox mỗi 3 phút
 task.spawn(function()
     while true do
         task.wait(180)
