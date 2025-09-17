@@ -321,22 +321,22 @@ local function main()
         end
     end
 
-    -- Nếu đang ở World4: kiểm tra _G.Time_Trial_Done
+    -- Nếu đang ở World4: kiểm tra _G.Time_Trial_End
     if game.PlaceId == WORLD4_PLACEID then
-        if _G.Time_Trial_Done ~= true then
-            warn("⏳ Waiting for _G.Time_Trial_Done to become true (timeout 1 hour)")
+        if _G.Time_Trial_End ~= true then
+            warn("⏳ Waiting for _G.Time_Trial_End to become true (timeout 1 hour)")
             local waited = 0
             local interval = 5 -- giây giữa các lần kiểm tra
             while waited < 3600 do -- 1 hour timeout
-                if _G.Time_Trial_Done == true then
-                    warn(("✅ _G.Time_Trial_Done set after %d seconds"):format(waited))
+                if _G.Time_Trial_End == true then
+                    warn(("✅ _G.Time_Trial_End set after %d seconds"):format(waited))
                     break
                 end
                 task.wait(interval)
                 waited = waited + interval
             end
-            if _G.Time_Trial_Done ~= true then
-                warn("⛔ Timeout waiting for _G.Time_Trial_Done — kicking player")
+            if _G.Time_Trial_End ~= true then
+                warn("⛔ Timeout waiting for _G.Time_Trial_End — kicking player")
                 pcall(function()
                     local pl = Players.LocalPlayer
                     if pl and pl.Parent then
@@ -346,7 +346,7 @@ local function main()
                 return
             end
         else
-            warn("✅ _G.Time_Trial_Done already true — continuing")
+            warn("✅ _G.Time_Trial_End already true — continuing")
         end
     end
 
