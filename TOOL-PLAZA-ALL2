@@ -43,6 +43,21 @@ getgenv().Settings = {
         {Name = "Huge Chill Parrot", Data = {Price = "9m"}},
         {Name = "Huge Chill Ducky", Data = {Price = "9m"}},
 
+        {Name = "Huge Telescope Owl", Data = {Price = "9.5m"}},
+        {Name = "Huge Flamingo Cat", Data = {Price = "9.5m"}},
+        {Name = "Huge Chill Turtle", Data = {Price = "9.5m"}},
+        {Name = "Huge Flamingo Hippo", Data = {Price = "15m"}},
+
+        {Name = "Golden Huge Starry Eye Bunny", Data = {Price = "10.5m"}},
+        {Name = "Golden Huge Pixel Griffin", Data = {Price = "10.5m"}},
+        {Name = "Golden Huge Stingray", Data = {Price = "10.5m"}},
+        {Name = "Golden Huge Pixel Otter", Data = {Price = "10.5m"}},
+        {Name = "Golden Huge Chill Ducky", Data = {Price = "10.5m"}},
+        {Name = "Golden Huge Flamingo Cat", Data = {Price = "10.5m"}},
+        {Name = "Golden Huge Chill Turtle", Data = {Price = "10.5m"}},
+        {Name = "Golden Huge Flamingo Hippo", Data = {Price = "20m"}},
+        {Name = "Golden Huge Telescope Owl", Data = {Price = "29.5m"}},
+
         {Name = "All Huges", Data = {Price = "1%", Min_sell = "9m", Max_sell = "30m", sold_by_convention = true}},
         {Name = "Shiny Rainbow All Huges", Data = {Price = "5%", Min_sell = "1.5b", Max_sell = "5b"}},
 		{Name = "Shiny Golden All Huges", Data = {Price = "5%", Min_sell = "1b", Max_sell = "5b"}},
