@@ -48,6 +48,7 @@ end
 
 -- Nếu đã hoàn thành Time Trial thì kiểm tra ngay
 if _G.Time_Trial_Done == true then
+    task.wait(60)
     checkAndKickIfOther()
     return
 end
