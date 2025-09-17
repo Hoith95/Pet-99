@@ -531,6 +531,7 @@ task.spawn(function()
 		claimReward()
 		task.wait(60)
 		_G.Time_Trial_Done = true
+		_G.Time_Trial_End = true
 		cleanupAllThreads()
 		
         	-- **Chỉ bắt đầu auto-claim sau khi đã hoàn tất 10 lượt**
