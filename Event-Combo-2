@@ -279,12 +279,6 @@ local function trackFishing()
         end
     end)
 end
-        -- Khi fishing xong, nếu farm chưa xong thì chuyển sang farm
-        if not runtime.farm.done then
-            pcall(serverhopToFarm)
-        end
-    end)
-end
 
 -- Wait for new day helper (used if needed)
 local function waitForNewDay()
@@ -355,7 +349,6 @@ local function main()
             warn("✅ _G.Time_Trial_Done already true — continuing")
         end
     end
-    -- === END new check ===
 
     -- If both done -> go back to World4
     if runtime.farm.done and runtime.fish.done then
