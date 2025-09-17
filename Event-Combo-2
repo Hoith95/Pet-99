@@ -15,6 +15,7 @@ local PlayerGui = player:WaitForChild("PlayerGui")
 -- Config place IDs & remote
 local FARM_PLACEID = 119454325063278
 local FISH_PLACEID = 95635359880599
+local WORLD4_PLACEID = 140403681187145 -- cập nhật nếu cần
 local WORLD4_REMOTE_NAME = "World4Teleport"
 local REQUIRED_SECONDS = 30 * 60 -- 30 minutes
 
@@ -166,8 +167,6 @@ local function createGUI()
 end
 
 -- World4 invoke helper (safe + retry + check)
-local WORLD4_PLACEID = 140403681187145 -- cập nhật nếu cần
-
 local function safeInvokeWorld4()
     local attempts = 3
     for i = 1, attempts do
@@ -181,8 +180,7 @@ local function safeInvokeWorld4()
             warn(("⚠️ Lỗi khi gửi lệnh Tele World4 (attempt %d): %s"):format(i, tostring(err)))
         end
 
-        -- Chờ 60s sau mỗi lần gửi lệnh rồi kiểm tra PlaceId
-        task.wait(60)
+        task.wait(10)
         if game.PlaceId == WORLD4_PLACEID then
             warn(("🚀 Đã vào World4 (PlaceId=%s)"):format(tostring(WORLD4_PLACEID)))
             return true
@@ -205,14 +203,14 @@ end
 local function serverhopToFishing()
     local ok = false
     pcall(function()
-        ok = loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-Fish"))() or true
+        ok = loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-Fish-2"))() or true
     end)
     return ok
 end
 local function serverhopToFarm()
     local ok = false
     pcall(function()
-        ok = loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-World"))() or true
+        ok = loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-World-2"))() or true
     end)
     return ok
 end
@@ -300,7 +298,40 @@ task.spawn(function()
     end
 end)
 
--- Main flow (prioritize FARM world)
+-- === NEW: Wait for _G.Time_Trial_End helper ===
+local function waitForTimeTrialEnd(timeoutSeconds)
+    local startTime = os.time()
+    while os.time() - startTime < (timeoutSeconds or 3600) do
+        if _G.Time_Trial_End == true then
+            warn("✅ _G.Time_Trial_End đã được bật, tiếp tục logic chính.")
+            return true
+        end
+
+        -- nếu không ở World4 thì cố gắng vào World4
+        if game.PlaceId ~= WORLD4_PLACEID then
+            local ok = pcall(safeInvokeWorld4)
+            if not ok and game.PlaceId ~= WORLD4_PLACEID then
+                -- nếu fail tiếp thì return false để xử lý (safeInvokeWorld4 sẽ kick nếu failed)
+                return false
+            end
+        end
+
+        -- nếu vẫn ở World4 nhưng chưa true -> đợi 1s trước khi check lại
+        task.wait(1)
+    end
+
+    -- timeout
+    warn(("⛔ Đợi _G.Time_Trial_End quá %d giây, sẽ kick người chơi."):format(timeoutSeconds or 3600))
+    pcall(function()
+        local pl = Players.LocalPlayer
+        if pl and pl.Parent then
+            pl:Kick("Timeout waiting for Time Trial to start (60 minutes).")
+        end
+    end)
+    return false
+end
+
+-- Main flow (prioritize FARM world) with Time Trial gating
 local function main()
     loadData()
     resetIfNewDay()
@@ -311,48 +342,27 @@ local function main()
         pcall(createGUI)
     end)
 
-    if game.PlaceId ~= WORLD4_PLACEID then
-        warn("📡 Not in World4 at script start — attempting to tele to World4...")
-        pcall(safeInvokeWorld4)
-        -- Sau thử, nếu vẫn không ở World4 thì dừng script ở đây (safeInvokeWorld4 sẽ kick nếu thất bại)
+    -- === NEW: Check _G.Time_Trial_End first ===
+    if _G.Time_Trial_End ~= true then
+        warn("ℹ️ _G.Time_Trial_End hiện đang false. Chuyển hướng sang World4 và chờ tối đa 60 phút.")
+        -- nếu chưa ở World4, cố gắng vào World4
         if game.PlaceId ~= WORLD4_PLACEID then
-            warn("⚠️ Still not in World4 after attempt — aborting main flow")
+            local ok = pcall(safeInvokeWorld4)
+            if not ok and game.PlaceId ~= WORLD4_PLACEID then
+                -- safeInvokeWorld4 đã kick hoặc thất bại -> kết thúc
+                return
+            end
+        end
+
+        -- bây giờ ở world4 (hoặc đã cố gắng vào). Chờ Time_Trial_End
+        local resumed = waitForTimeTrialEnd(60 * 60) -- 60 phút
+        if not resumed then
             return
         end
     end
 
-    -- Nếu đang ở World4: kiểm tra _G.Time_Trial_End
-    if game.PlaceId == WORLD4_PLACEID then
-        if _G.Time_Trial_End ~= true then
-            warn("⏳ Waiting for _G.Time_Trial_End to become true (timeout 1 hour)")
-            local waited = 0
-            local interval = 5 -- giây giữa các lần kiểm tra
-            while waited < 3600 do -- 1 hour timeout
-                if _G.Time_Trial_End == true then
-                    warn(("✅ _G.Time_Trial_End set after %d seconds"):format(waited))
-                    break
-                end
-                task.wait(interval)
-                waited = waited + interval
-            end
-            if _G.Time_Trial_End ~= true then
-                warn("⛔ Timeout waiting for _G.Time_Trial_End — kicking player")
-                pcall(function()
-                    local pl = Players.LocalPlayer
-                    if pl and pl.Parent then
-                        pl:Kick("TimeTrial not ready after 1 hour")
-                    end
-                end)
-                return
-            end
-        else
-            warn("✅ _G.Time_Trial_End already true — continuing")
-        end
-    end
-
-    -- If both done -> go back to World4
     if runtime.farm.done and runtime.fish.done then
-        pcall(safeInvokeWorld4)
+        safeInvokeWorld4()
         return
     end
 
