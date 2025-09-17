@@ -1,7 +1,3 @@
--- Combo Event tracker
--- Version: farm-priority
--- Thay đổi: ưu tiên FARM world (nếu có thể thì ở lại Farm để track), chỉ sang Fishing khi Farm đã xong.
-
 if _G.COMBO_EVENT then
     warn("⛔ Script đã được chạy trước đó!")
     return
