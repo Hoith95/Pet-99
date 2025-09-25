@@ -25,7 +25,7 @@ _G.script1Done = true
 do
     local defaultKey = "hHJqncRPZjHqdvDxwJcwwDmpwstZQtrA"     -- fallback
     if _G.Line1 then
-        script_key="IgJZDHuVeiCsdHaakZzHZJdhqLkgVrxg";       -- Line 1
+        script_key="MqecHedshHEVyKwajNZtPvbdLkZceNYP";       -- Line 1
         --script_key="nutqpLooYQJqoyGXdyQIQYuUvjRoQIfi";       -- Line 1
     elseif _G.Line2 then
         --script_key="zyASrVQpIdOqcyKBqFDFPADvHlhCTDVo";       -- Line 2
