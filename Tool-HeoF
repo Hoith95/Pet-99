@@ -31,7 +31,7 @@ do
         --script_key="zyASrVQpIdOqcyKBqFDFPADvHlhCTDVo";       -- Line 2
         script_key="PBgqFQESzNhuTfgQatfaWcLbqQSoMvXK";       -- Line 2
     elseif _G.Line3 then
-        script_key="PBgqFQESzNhuTfgQatfaWcLbqQSoMvXK";       -- Line 3
+        script_key="MqecHedshHEVyKwajNZtPvbdLkZceNYP";       -- Line 3
         --script_key="rNbCKzbKLEEjXeEXYEtLeFuubVUOqCYq";       -- Line 3
     elseif _G.Line4 then
         script_key="fpAiAhNtXhwOUUeKHzlHcvYOQHhsWSHN";       -- Line 4
