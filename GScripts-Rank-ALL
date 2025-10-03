@@ -39,6 +39,7 @@ spawn(function()
         -- Fishing event
         getgenv().GDO_FISHING_EVENT = true
         getgenv().GUSE_BOOSTS = true
+		getgenv().GENCHANTS = {"Lucky Eggs","Lucky Eggs","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
         print("✅ Config: Fishing event set")
 
     elseif eventId == 140403681187145 then
