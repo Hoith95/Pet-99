@@ -48,6 +48,7 @@ spawn(function()
             getgenv().GBLOCK_PARTY_STOP_REBIRTHING_ON_TITANIC = true
             getgenv().GBLOCK_PARTY_STOP_REBIRTHING_ON_MULTIPLIER2 = 25
             getgenv().GBLOCK_PARTY_MAKE_TROPICAL_GIFTS = true
+			getgenv().GENCHANTS = {"Lucky Eggs","Lucky Eggs","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
 			spawn(function()
 			wait(68)
         	loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-2"))()
@@ -55,6 +56,7 @@ spawn(function()
             print("✅ Config: Block Party set (Time_Trial_End)")
         else
             warn("⛔ _G.Time_Trial_End chưa true — set Block Party.")
+			getgenv().GENCHANTS = {"Criticals","Tap Power","Strong Pets","Treasure Hunter","Tap Power","Lucky Eggs"}
 			spawn(function()
 			wait(38)
         	loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-3"))()
@@ -102,7 +104,6 @@ getgenv().GPOTIONS = {"Coins","Lucky","The Cocktail","Huge","Treasure Hunter","W
 getgenv().GPOTIONS_MAX_TIER = 99
 --getgenv().GENCHANTS = {"Criticals","Treasure Hunter","Diamonds","Coins","Tap Power","Strong Pets"}
 --getgenv().GENCHANTS = {"Criticals","Tap Power","Strong Pets","Treasure Hunter","Diamonds","Lucky Eggs","Huge Hunter"}
-getgenv().GENCHANTS = {"Criticals","Tap Power","Treasure Hunter","Diamonds","Lucky Eggs","Huge Hunter"}
 --getgenv().GENCHANTS = {"Lucky Eggs","Lucky Eggs","Huge Hunter","Shiny Hunter","Diamonds","Treasure Hunter"}
 --loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/ba2dcad2127dcfc04301dfe52ce6c61c.lua"))()
 loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/34915da4ad87a5028e1fd64efbe3543f.lua"))()
