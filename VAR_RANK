@@ -1,0 +1,47 @@
+-- Dịch vụ & Save module
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Save = require(ReplicatedStorage.Library.Client.Save)
+
+-- Reset các flag ban đầu
+_G.Rank_Min = false
+_G.Rank_Max = false
+_G.Rank_Low = false
+
+-- Hàm kiểm tra rank
+local function checkRank()
+    local success, data = pcall(function()
+        return Save.Get()
+    end)
+
+    if success and data and data.Rank then
+        local rank = data.Rank
+
+        -- Reset trước
+        _G.Rank_Min = false
+        _G.Rank_Max = false
+        _G.Rank_Low = false
+
+        if rank >= 20 then
+            _G.Rank_Max = true
+            print("[Rank Check] Rank:", rank, "→ _G.Rank_Max = true")
+        elseif rank >= 15 then
+            _G.Rank_Min = true
+            print("[Rank Check] Rank:", rank, "→ _G.Rank_Min = true")
+        else
+            _G.Rank_Low = true
+            print("[Rank Check] Rank:", rank, "→ _G.Rank_Low = true")
+        end
+    else
+        warn("[Rank Check] Không thể lấy dữ liệu Save!")
+    end
+end
+
+-- Vòng lặp kiểm tra mỗi 10 giây
+task.spawn(function()
+    while task.wait(10) do
+        checkRank()
+    end
+end)
+
+-- Chạy lần đầu ngay khi script load
+checkRank()
