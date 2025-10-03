@@ -33,6 +33,7 @@ spawn(function()
             "FarmingRainbowHatchChance",
             "FarmingShinyHatchChance"
         }
+		getgenv().GENCHANTS = {"Lucky Eggs","Lucky Eggs","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
         print("✅ Config: Farming world set")
 
     elseif eventId == 95635359880599 then
