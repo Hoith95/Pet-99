@@ -19,7 +19,7 @@ local function checkPlayers()
     if eventId == 119454325063278 then
         -- Farming event
         if getPlayerCount() >= 10 then
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-World-2"))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-World"))()
         else
             task.delay(15, checkPlayers) -- chưa đủ -> kiểm tra lại sau 15s
         end
@@ -27,7 +27,7 @@ local function checkPlayers()
     elseif eventId == 95635359880599 then
         -- Fishing event
         if getPlayerCount() >= 20 then
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-Fish-2"))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-Fish"))()
         else
             task.delay(15, checkPlayers) -- chưa đủ -> kiểm tra lại sau 15s
         end
