@@ -5,38 +5,27 @@ end
 _G.VAR_USER = true
 
 local Players = game:GetService("Players")
-local HttpService = game:GetService("HttpService")
-
 local eventId = game.PlaceId
 
--- Hàm đếm số lượng người chơi hiện tại
-local function getPlayerCount()
-    return #Players:GetPlayers()
-end
+-- Đếm số lượng người chơi hiện tại (bao gồm cả bạn)
+local playerCount = #Players:GetPlayers()
 
--- Hàm kiểm tra và xử lý theo PlaceId
-local function checkPlayers()
-    if eventId == 119454325063278 then
-        -- Farming event
-        if getPlayerCount() >= 10 then
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-World"))()
-        else
-            task.delay(15, checkPlayers) -- chưa đủ -> kiểm tra lại sau 15s
-        end
-
-    elseif eventId == 95635359880599 then
-        -- Fishing event
-        if getPlayerCount() >= 20 then
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-Fish"))()
-        else
-            task.delay(15, checkPlayers) -- chưa đủ -> kiểm tra lại sau 15s
-        end
-
+if eventId == 119454325063278 then
+    -- Farming event
+    if playerCount >= 10 then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-World-2"))()
     else
-        warn("Không thuộc eventId hợp lệ, script sẽ dừng.")
-        return
+        print("[Farming Event] Số lượng người chơi hiện tại:", playerCount, "(<10) → Dừng script.")
     end
-end
 
--- Bắt đầu kiểm tra
-checkPlayers()
+elseif eventId == 95635359880599 then
+    -- Fishing event
+    if playerCount >= 20 then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-Fish-2"))()
+    else
+        print("[Fishing Event] Số lượng người chơi hiện tại:", playerCount, "(<20) → Dừng script.")
+    end
+
+else
+    warn("Không thuộc eventId hợp lệ, script sẽ dừng.")
+end
