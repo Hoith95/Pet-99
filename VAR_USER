@@ -12,18 +12,18 @@ local playerCount = #Players:GetPlayers()
 
 if eventId == 119454325063278 then
     -- Farming event
-    if playerCount >= 10 then
+    if playerCount >= 7 then
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-World-2"))()
     else
-        print("[Farming Event] Số lượng người chơi hiện tại:", playerCount, "(<10) → Dừng script.")
+        print("[Farming Event] Số lượng người chơi hiện tại:", playerCount, "(<7) → Dừng script.")
     end
 
 elseif eventId == 95635359880599 then
     -- Fishing event
-    if playerCount >= 20 then
+    if playerCount >= 15 then
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-Fish-2"))()
     else
-        print("[Fishing Event] Số lượng người chơi hiện tại:", playerCount, "(<20) → Dừng script.")
+        print("[Fishing Event] Số lượng người chơi hiện tại:", playerCount, "(<15) → Dừng script.")
     end
 
 else
