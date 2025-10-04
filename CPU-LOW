@@ -3,8 +3,6 @@ if _G.CPULOW then
 end
 _G.CPULOW = true
 
-task.wait(168)
-
 local LocalPlayer = game.Players.LocalPlayer
 local Lighting = game:GetService("Lighting")
 local MaterialService = game:GetService("MaterialService")
