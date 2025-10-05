@@ -5,7 +5,47 @@ end
 _G.VAR_USER = true
 
 local Players = game:GetService("Players")
+local HttpService = game:GetService("HttpService")
 local eventId = game.PlaceId
+local teleFileName = "tele_state.json"
+
+-- Hàm đọc dữ liệu từ file
+local function readTeleState()
+    if isfile and isfile(teleFileName) then
+        local data = readfile(teleFileName)
+        if data and #data > 0 then
+            local success, decoded = pcall(function()
+                return HttpService:JSONDecode(data)
+            end)
+            if success then
+                return decoded
+            end
+        end
+    end
+    return nil
+end
+
+-- Hàm ghi dữ liệu vào file
+local function writeTeleState(data)
+    if writefile then
+        writefile(teleFileName, HttpService:JSONEncode(data))
+    end
+end
+
+-- Hàm xóa file
+local function resetTeleState()
+    if delfile and isfile(teleFileName) then
+        delfile(teleFileName)
+    end
+end
+
+-- Kiểm tra xem có tele gần đây không
+local state = readTeleState()
+if state and state.lastTele and (os.time() - state.lastTele < 900) then -- 900s = 15 phút
+    print("⏳ Đã tele cách đây ít phút → Bỏ qua lần này và reset file.")
+    resetTeleState()
+    return
+end
 
 -- Đếm số lượng người chơi hiện tại (bao gồm cả bạn)
 local playerCount = #Players:GetPlayers()
@@ -13,6 +53,8 @@ local playerCount = #Players:GetPlayers()
 if eventId == 119454325063278 then
     -- Farming event
     if playerCount >= 7 then
+        print("✅ Tele sang server mới (Farming Event)...")
+        writeTeleState({ lastTele = os.time() })
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-World"))()
     else
         print("[Farming Event] Số lượng người chơi hiện tại:", playerCount, "(<7) → Dừng script.")
@@ -21,6 +63,8 @@ if eventId == 119454325063278 then
 elseif eventId == 95635359880599 then
     -- Fishing event
     if playerCount >= 15 then
+        print("✅ Tele sang server mới (Fishing Event)...")
+        writeTeleState({ lastTele = os.time() })
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-Fish"))()
     else
         print("[Fishing Event] Số lượng người chơi hiện tại:", playerCount, "(<15) → Dừng script.")
