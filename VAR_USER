@@ -55,7 +55,7 @@ if eventId == 119454325063278 then
     if playerCount >= 7 then
         print("✅ Tele sang server mới (Farming Event)...")
         writeTeleState({ lastTele = os.time() })
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-World"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-World-2"))()
     else
         print("[Farming Event] Số lượng người chơi hiện tại:", playerCount, "(<7) → Dừng script.")
     end
@@ -65,7 +65,7 @@ elseif eventId == 95635359880599 then
     if playerCount >= 15 then
         print("✅ Tele sang server mới (Fishing Event)...")
         writeTeleState({ lastTele = os.time() })
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-Fish"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-Fish-2"))()
     else
         print("[Fishing Event] Số lượng người chơi hiện tại:", playerCount, "(<15) → Dừng script.")
     end
