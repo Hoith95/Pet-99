@@ -544,6 +544,7 @@ task.spawn(function()
 		--_G.VAR_START_BLOCK_PARTY = true
 		--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Block-Party-3"))()
 		--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_TELE_BLOCK_PARTY"))()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Tele-Map-274"))()
 		end)
 
 		warn("⏳ Theo dõi reset DailyRuns...")
