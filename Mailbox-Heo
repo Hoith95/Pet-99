@@ -26,7 +26,7 @@ getgenv().AutoMail = {
         ['Time Trial Gift'] = { Class = "Lootbox", MinAmount = 18, Amount = "Max" },
         --['Deep Sea Treasure Chest'] = { Class = "Lootbox", MinAmount = 5, Amount = "Max" },
         --['Summer Block Party Ticket'] = { Class = "Misc", MinAmount = 150, Amount = "Max" },
-        --['Tropical Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
+        ['Tropical Gift'] = { Class = "Lootbox", MinAmount = 250, Amount = "Max" },
         ['Gym Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
         ['Tower Defense Gift 3'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
         ['Tower Defense Gift 2'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
