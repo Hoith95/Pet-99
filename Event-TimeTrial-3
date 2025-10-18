@@ -541,9 +541,10 @@ task.spawn(function()
 
        		warn("🔄 Khởi động Combo Event sau 10/10 lượt.")
 		spawn(function()
-		_G.VAR_STOP_BLOCK_PARTY = false
-		_G.VAR_START_BLOCK_PARTY = true
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Block-Party-3"))()
+		--_G.VAR_STOP_BLOCK_PARTY = false
+		--_G.VAR_START_BLOCK_PARTY = true
+		--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Block-Party-3"))()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Tele-Map-274"))()
 		end)
 
 		warn("⏳ Theo dõi reset DailyRuns...")
