@@ -46,14 +46,10 @@ spawn(function()
     elseif eventId == 140403681187145 then
         -- World 4: check _G.Time_Trial_End một lần
         if _G.Time_Trial_End == true then
-            getgenv().GDO_BLOCK_PARTY = true
-            getgenv().GBLOCK_PARTY_STOP_REBIRTHING_ON_TITANIC = true
-            getgenv().GBLOCK_PARTY_STOP_REBIRTHING_ON_MULTIPLIER2 = 25
-            getgenv().GBLOCK_PARTY_MAKE_TROPICAL_GIFTS = true
-			getgenv().GENCHANTS = {"Lucky Eggs","Lucky Eggs","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
+			getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
 			spawn(function()
-			wait(68)
-        	loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-2"))()
+			wait(38)
+        	loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-3"))()
 			end)
             print("✅ Config: Block Party set (Time_Trial_End)")
         else
