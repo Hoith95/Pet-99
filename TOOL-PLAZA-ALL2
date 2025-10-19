@@ -2,6 +2,10 @@ getgenv().Settings = {
 ["Items"] = {
         {Name = "MVP Key", Data = {Price = "1%"}},
 
+		{Name = "Gargantuan Super Cat", Data = {Price = "99.99b"}},
+		{Name = "Titanic Noob", Data = {Price = "6.9b"}},
+		{Name = "Halloween Lucky Block Gift", Data = {Price = "68m"}},
+
         {Name = "Huge Splash Angelus", Data = {Price = "8.6b"}},
         {Name = "Golden Huge Splash Angelus", Data = {Price = "1%"}},
         {Name = "Rainbow Huge Splash Angelus", Data = {Price = "1%"}},
@@ -21,6 +25,7 @@ getgenv().Settings = {
         {Name = "Time Trial Gift", Data = {Price = "199k"}},
         {Name = "Tropical Gift", Data = {Price = "50k"}},
         {Name = "Basketball Gift", Data = {Price = "1%"}},
+        {Name = "Spider Gift", Data = {Price = "1%"}},
 
         {Name = "Huge Machine Egg 5", Data = {Price = "1%"}},
         {Name = "Hype Egg 2", Data = {Price = "9%"}},
@@ -55,6 +60,9 @@ getgenv().Settings = {
         {Name = "Golden Huge Starry Eye Bunny", Data = {Price = "10.5m"}},
         {Name = "Golden Huge Pixel Otter", Data = {Price = "10.5m"}},
         {Name = "Golden Huge Chill Parrot", Data = {Price = "10.5m"}},
+
+		{Name = "Exclusive Egg 56", Data = {Price = "115m"}},
+
         {Name = "Golden Huge Flamingo Hippo", Data = {Price = "20m"}},
         {Name = "Golden Huge Telescope Owl", Data = {Price = "25.5m"}},
         {Name = "Golden Huge Chill Parrot", Data = {Price = "29.5m"}},
