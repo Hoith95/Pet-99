@@ -1,0 +1,114 @@
+-- Thu kẹo
+while true do
+    local args = { [1] = 1 }
+    game:GetService("ReplicatedStorage").Network.HalloweenWorld_Claim:InvokeServer(unpack(args))
+
+    local args = { [1] = 2 }
+    game:GetService("ReplicatedStorage").Network.HalloweenWorld_Claim:InvokeServer(unpack(args))
+
+    local args = { [1] = 3 }
+    game:GetService("ReplicatedStorage").Network.HalloweenWorld_Claim:InvokeServer(unpack(args))
+
+    local args = { [1] = 4 }
+    game:GetService("ReplicatedStorage").Network.HalloweenWorld_Claim:InvokeServer(unpack(args))
+
+    local args = { [1] = 5 }
+    game:GetService("ReplicatedStorage").Network.HalloweenWorld_Claim:InvokeServer(unpack(args))
+
+    local args = { [1] = 6 }
+    game:GetService("ReplicatedStorage").Network.HalloweenWorld_Claim:InvokeServer(unpack(args))
+
+    local args = { [1] = 7 }
+    game:GetService("ReplicatedStorage").Network.HalloweenWorld_Claim:InvokeServer(unpack(args))
+
+    local args = { [1] = 8 }
+    game:GetService("ReplicatedStorage").Network.HalloweenWorld_Claim:InvokeServer(unpack(args))
+
+    local args = { [1] = 9 }
+    game:GetService("ReplicatedStorage").Network.HalloweenWorld_Claim:InvokeServer(unpack(args))
+
+    local args = { [1] = 10 }
+    game:GetService("ReplicatedStorage").Network.HalloweenWorld_Claim:InvokeServer(unpack(args))
+
+    task.wait(0.05)
+end
+
+-- ấp egg
+task.wait(5)
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local player = Players.LocalPlayer
+local Save = require(ReplicatedStorage.Library.Client.Save)
+
+-- Hàm kiểm tra số lượng HalloweenCandy
+local function getCurrencyAmount(currencyId)
+    local Inventory = Save.Get().Inventory
+    for _, v in pairs(Inventory.Currency) do
+        if v.id == currencyId then
+            return v._am or 0
+        end
+    end
+    return 0
+end
+
+-- Xác định plotId của user
+local function getPlayerPlotId()
+    local plotsFolder = workspace:WaitForChild("__THINGS"):WaitForChild("Plots")
+    for _, plot in pairs(plotsFolder:GetChildren()) do
+        local titlePath = plot:FindFirstChild("Build")
+        if titlePath and titlePath:FindFirstChild("Sign") then
+            local host = titlePath.Sign:FindFirstChild("Host")
+            if host and host:FindFirstChild("SurfaceGui") then
+                local frame = host.SurfaceGui:FindFirstChild("Frame")
+                if frame and frame:FindFirstChild("Title") then
+                    local titleText = frame.Title.Text
+                    if string.find(titleText, player.Name) then
+                        return tonumber(plot.Name)
+                    end
+                end
+            end
+        end
+    end
+    return nil
+end
+
+local plotId = getPlayerPlotId()
+if not plotId then
+    warn("❌ Không tìm thấy plot của người chơi!")
+    return
+end
+
+warn("✅ Plot của bạn là:", plotId)
+
+-- Vòng lặp chính
+while true do
+    local candy = getCurrencyAmount("HalloweenCoins")
+    local tier = 1
+
+    if candy >= 30000000 then
+        tier = 5
+    elseif candy >= 5000000 then
+        tier = 4
+    elseif candy >= 500000 then
+        tier = 3
+    elseif candy >= 50000 then
+        tier = 2
+    else
+        tier = 1
+    end
+
+    if tier ~= lastTier then
+        warn(string.format("🍬 Candy: %s → Chọn Tier [%d]", candy, tier))
+        lastTier = tier
+    end
+
+    local args = {
+        [1] = plotId,
+        [2] = "PurchaseEgg",
+        [3] = tier,
+        [4] = 3
+    }
+
+    game:GetService("ReplicatedStorage").Network.Plots_Invoke:InvokeServer(unpack(args))
+    task.wait(0.005) -- chỉnh tốc độ lặp
+end
