@@ -30,7 +30,7 @@ while true do
     local args = { [1] = 10 }
     game:GetService("ReplicatedStorage").Network.HalloweenWorld_Claim:InvokeServer(unpack(args))
 
-    task.wait(0.05)
+    task.wait(0.005)
 end
 
 -- ấp egg
