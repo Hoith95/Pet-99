@@ -16,7 +16,7 @@ if inHalloweenWorld then
     print("✅ Đang ở HalloweenWorld, không teleport.")
 else
         local TeleportService = game:GetService("TeleportService")
-        local placeId = 119454325063278
+        local placeId = 131952481663528
         TeleportService:Teleport(placeId, game.Players.LocalPlayer)
         print("⚡ Teleport đến HalloweenWorld.")
     else
