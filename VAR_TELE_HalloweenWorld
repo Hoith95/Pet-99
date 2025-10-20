@@ -1,0 +1,25 @@
+if _G.VAR_TELE_HalloweenWorld then
+    warn("⛔ VAR_TELE_HalloweenWorld đã chạy trước đó!")
+    return
+end
+_G.VAR_TELE_HalloweenWorld = true
+
+local player = game.Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
+local hrp = char:FindFirstChild("HumanoidRootPart")
+
+local activeContainer = workspace.__THINGS.__INSTANCE_CONTAINER:FindFirstChild("Active")
+local inHalloweenWorld = activeContainer and activeContainer:FindFirstChild("HalloweenWorld")
+
+if inHalloweenWorld then
+    _G.HalloweenWorld = true
+    print("✅ Đang ở HalloweenWorld, không teleport.")
+else
+        local TeleportService = game:GetService("TeleportService")
+        local placeId = 119454325063278
+        TeleportService:Teleport(placeId, game.Players.LocalPlayer)
+        print("⚡ Teleport đến HalloweenWorld.")
+    else
+        warn("❌ Không tìm thấy HumanoidRootPart.")
+    end
+end
