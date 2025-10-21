@@ -540,7 +540,7 @@ task.spawn(function()
 
     while true do
         local totalRate = _G.TotalRate or 0
-        if totalRate < 12000 then
+        if totalRate < 20000 then
             pcall(function() Network.Plots_Invoke:InvokeServer(plotId, "PurchaseHouse", houseParam) end)
             houseParam = houseParam < 5 and houseParam + 1 or 2
         end
