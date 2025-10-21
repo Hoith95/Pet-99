@@ -138,8 +138,8 @@ local function startGuiUpdater()
         return label
     end
 
-    local chanceLabel     = createLabel("ChanceLabel",       rightRegion,   Color3.fromRGB(34, 139, 34))
     local tilesLabel      = createLabel("TilesLabel",        rightRegion,   Color3.fromRGB(34, 139, 34))
+    local chanceLabel     = createLabel("ChanceLabel",       rightRegion,   Color3.fromRGB(34, 139, 34))
     --local rebirthLabel    = createLabel("RebirthLabel",      rightRegion,   Color3.fromRGB(34, 139, 34))
     local coinsLabel      = createLabel("CoinsLabel",        rightRegion,   Color3.fromRGB(34, 139, 34))
     --local giftLabel       = createLabel("TropicalGiftLabel", rightRegion,   Color3.fromRGB(34, 139, 34))
