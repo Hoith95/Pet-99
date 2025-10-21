@@ -253,7 +253,8 @@ local function trackFarm()
         -- Khi farm xong
         if runtime.fish.done then
             -- nếu fishing cũng xong thì tele World4
-            pcall(safeInvokeWorld4)
+            --pcall(safeInvokeWorld4)
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Halloween"))()
         else
             -- nếu fishing chưa xong thì chuyển sang fishing
             pcall(serverhopToFishing)
@@ -270,7 +271,8 @@ local function trackFishing()
         -- Khi fishing xong
         if runtime.farm.done then
             -- nếu farm cũng xong thì tele World4
-            pcall(safeInvokeWorld4)
+            --pcall(safeInvokeWorld4)
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Halloween"))()
         else
             -- nếu farm chưa xong thì chuyển sang farm
             pcall(serverhopToFarm)
