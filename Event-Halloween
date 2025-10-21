@@ -30,7 +30,7 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-    wait(5)
+    wait(9)
     pcall(function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Utra-FPS"))()
     end)
