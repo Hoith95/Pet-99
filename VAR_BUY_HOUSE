@@ -1,0 +1,24 @@
+if _G.VAR_BUY_HOUSE then
+    warn("⛔ VAR_BUY_HOUSE đã chạy trước đó!")
+    return
+end
+_G.VAR_BUY_HOUSE = true
+
+task.spawn(function()
+    repeat task.wait(1) until _G.CurrentPlotId and _G.TotalRate
+
+    local plotId = _G.CurrentPlotId
+    local Network = game:GetService("ReplicatedStorage").Network
+    local param = 2
+
+    while (_G.TotalRate or 0) < 20000 do
+        pcall(function()
+            Network.Plots_Invoke:InvokeServer(plotId, "PurchaseHouse", param)
+        end)
+
+        param = param < 5 and param + 1 or 2
+        task.wait(1)
+    end
+
+    print("✅ Đạt totalRate >= 20000, dừng mua House Egg")
+end)
