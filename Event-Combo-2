@@ -362,7 +362,8 @@ local function main()
     end
 
     if runtime.farm.done and runtime.fish.done then
-        safeInvokeWorld4()
+        --safeInvokeWorld4()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Halloween"))()
         return
     end
 
