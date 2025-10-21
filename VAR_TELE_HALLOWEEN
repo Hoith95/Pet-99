@@ -1,0 +1,12 @@
+if _G.VAR_TELE_HALLOWEEN then
+    warn("⛔ VAR_TELE_HALLOWEEN đã chạy trước đó!")
+    return
+end
+_G.VAR_TELE_HALLOWEEN = true
+
+local TeleportService = game:GetService("TeleportService")
+local placeId = 131952481663528
+if game.PlaceId ~= placeId then
+    TeleportService:Teleport(placeId, player)
+    return
+end
