@@ -1,3 +1,7 @@
+repeat task.wait() until game:IsLoaded()
+local LocalPlayer = game:GetService('Players').LocalPlayer
+repeat task.wait() until not LocalPlayer.PlayerGui:FindFirstChild('__INTRO')
+
 _G.HW = _G.HW or {}
 _G.HW.DebugMode = _G.HW.DebugMode or false
 _G.HW.SwapInterval = _G.HW.SwapInterval or 0.1
@@ -81,6 +85,16 @@ task.spawn(function()
         task.wait(_G.HW.BaseWait)
     end
 end)
+
+repeat task.wait() until _G.CurrentPlotId
+local p = workspace.__THINGS.Plots:WaitForChild(tostring(_G.CurrentPlotId))
+local m; repeat task.wait() m = p:FindFirstChild("Interactable") and p.Interactable.Machines:FindFirstChild("HalloweenPetCraftingMachine") until m
+local hrp = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+repeat
+	local pos = m.Model:GetPivot().Position
+	if (hrp.Position - pos).Magnitude > 3 then hrp.CFrame = CFrame.new(pos + Vector3.new(0,0,0)) end
+	task.wait(1)
+until (hrp.Position - m.Model:GetPivot().Position).Magnitude <= 3
 
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.CurrentPlotId
@@ -286,6 +300,7 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+    task.wait(9)
     local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
     local SaveModule = nil
     while not SaveModule do
@@ -559,5 +574,110 @@ task.spawn(function()
             break
         end
         task.wait(_G.HW.BaseWait)
+    end
+end)
+
+task.spawn(function()
+    repeat task.wait(_G.HW.BaseWait) until _G.TotalRate
+
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
+    local Network = ReplicatedStorage:WaitForChild("Network")
+
+    local function craft(recipeIndex)
+        local args = {
+            [1] = "HalloweenPetCraftingMachine",
+            [2] = recipeIndex,
+            [3] = {
+                ["shiny"] = false,
+                ["pt"] = 0
+            }
+        }
+        pcall(function()
+            Network:FindFirstChild("HalloweenCraftingMachine_StartCraft"):InvokeServer(unpack(args))
+        end)
+        task.wait(5)
+    end
+
+    local function claimCraft(id)
+        local args = { id }
+        pcall(function()
+            Network:FindFirstChild("HalloweenCraftingMachine_Claim"):InvokeServer(unpack(args))
+        end)
+        task.wait(5)
+    end
+
+    local function getCraftQueue()
+        local data = PlayerSave.Get().HalloweenCraftingQueue or {}
+        local ids = {}
+        for id, v in pairs(data) do
+            if v.Result and v.Result.Data and v.Result.Data.id then
+                table.insert(ids, id)
+            end
+        end
+        return ids
+    end
+
+    while task.wait(5) do
+        local rate = _G.TotalRate or 0
+        local queue = getCraftQueue()
+
+        if #queue > 0 then
+            for _, id in ipairs(queue) do
+                claimCraft(id)
+            end
+        end
+
+        if rate <= 20000 then
+            craft(5) craft(4) craft(3) craft(2) craft(1)
+        else
+            craft(5) craft(4)
+        end
+    end
+end)
+
+task.spawn(function()
+    repeat task.wait(_G.HW.BaseWait) until _G.TotalRate
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local Network = ReplicatedStorage.Network
+    local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
+
+    local function getItemIdByName(invType, name)
+        local inv = PlayerSave.Get().Inventory[invType]
+        if not inv then return nil end
+        for uid, data in pairs(inv) do
+            if data.id == name then return uid end
+        end
+    end
+
+    while task.wait(5) do
+        local inv = PlayerSave.Get().Inventory
+        local eggHave = false
+        for _, data in pairs(inv.EggHalloween or {}) do
+            if data.id == "Coffin Egg" or data.id == "Reaper Egg" then
+                eggHave = true
+                break
+            end
+        end
+
+        if eggHave then
+            local luckyEggId = getItemIdByName("Consumable", "Halloween Lucky Egg")
+            local trickLuckId = getItemIdByName("Consumable", "Halloween Trick or Treat Luck")
+
+            if luckyEggId then
+                pcall(function()
+                    Network.Consumables_Consume:InvokeServer(luckyEggId, 1)
+                end)
+                task.wait(1)
+            end
+
+            if trickLuckId then
+                pcall(function()
+                    Network.Consumables_Consume:InvokeServer(trickLuckId, 1)
+                end)
+            end
+        end
+
+        task.wait(600)
     end
 end)
