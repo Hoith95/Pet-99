@@ -555,7 +555,7 @@ task.spawn(function()
             end
         end
 
-        if totalRate >= 12000 and isMax(u) then
+        if totalRate >= 20000 and isMax(u) then
             break
         end
         task.wait(_G.HW.BaseWait)
