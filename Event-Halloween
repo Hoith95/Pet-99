@@ -310,13 +310,13 @@ task.spawn(function()
         local totalRate = _G.TotalRate or 0
         local tier = lastTier or 1
 
-        if totalRate >= 20000 then
+        if totalRate >= 15000 then
             if tier == 5 then
                 if candy < 15000000 then tier = 1 end
             else
                 if candy >= 90000000 then tier = 5 end
             end
-        elseif totalRate >= 12000 then
+        elseif totalRate >= 10000 then
             if tier == 4 then
                 if candy < 2400000 then tier = 3 end
             else
