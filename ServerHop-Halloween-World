@@ -1,15 +1,6 @@
 repeat task.wait() until game:IsLoaded()
 
 local targetPlaceId = 131952481663528
-
-if game.PlaceId == targetPlaceId then
-    print("✅ Nhân vật đang ở trong Place ID: " .. targetPlaceId)
-    return
-end
-
-print("❌ Nhân vật KHÔNG ở trong Place ID: " .. targetPlaceId)
-print("Hiện tại đang ở Place ID: " .. tostring(game.PlaceId))
-
 local HttpService = game:GetService("HttpService")
 local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
