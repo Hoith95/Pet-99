@@ -86,42 +86,55 @@ task.spawn(function()
     end
 end)
 
-repeat task.wait() until _G.CurrentPlotId
-local p = workspace.__THINGS.Plots:WaitForChild(tostring(_G.CurrentPlotId))
+task.spawn(function()
+	local TeleportService = game:GetService("TeleportService")
+	local player = game.Players.LocalPlayer
+	local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
--- Chờ máy craft tồn tại hoàn toàn
-local m
-repeat
-    task.wait(1)
-    m = p:FindFirstChild("Interactable")
-        and p.Interactable:FindFirstChild("Machines")
-        and p.Interactable.Machines:FindFirstChild("HalloweenPetCraftingMachine")
-until m and m:FindFirstChild("Model") and m.Model.PrimaryPart
+	repeat task.wait() until _G.CurrentPlotId
+	repeat task.wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 
--- Lấy HRP
-local hrp = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+	local hrp = player.Character:WaitForChild("HumanoidRootPart")
+	local plot = workspace.__THINGS.Plots:WaitForChild(tostring(_G.CurrentPlotId))
+	local machine
 
--- Di chuyển tới máy craft, có kiểm tra lỗi & retry
-local tries = 0
-while tries < 10 do
-    local ok, pos = pcall(function()
-        return m.Model:GetPivot().Position
-    end)
-    if ok and pos then
-        if (hrp.Position - pos).Magnitude > 3 then
-            hrp.CFrame = CFrame.new(pos)
-        end
-        if (hrp.Position - pos).Magnitude <= 3 then
-            break
-        end
-    else
-        warn("⚠️ Craft machine chưa load đủ, retry...")
-    end
-    tries += 1
-    task.wait(1.5)
-end
-task.wait(5)
-_G.TeleDone = true
+	-- Đợi máy xuất hiện
+	local timeout = tick()
+	repeat
+		task.wait()
+		local inter = plot:FindFirstChild("Interactable")
+		if inter and inter:FindFirstChild("Machines") then
+			machine = inter.Machines:FindFirstChild("HalloweenPetCraftingMachine")
+		end
+	until machine and machine:HasProperty("WorldPivot") or tick() - timeout > 20
+
+	-- Nếu quá 20s vẫn không có máy => nhảy server
+	if not machine or not machine:HasProperty("WorldPivot") then
+		TeleportService:Teleport(game.PlaceId, player)
+		return
+	end
+
+	-- Teleport liên tục cho tới khi đứng trong bán kính 3 stud
+	local function teleportToMachine()
+		local pos = machine.WorldPivot.Position
+		if (hrp.Position - pos).Magnitude > 3 then
+			hrp.CFrame = CFrame.new(pos)
+		end
+	end
+
+	local startTime = tick()
+	repeat
+		pcall(teleportToMachine)
+		task.wait(1)
+	until (hrp.Position - machine.WorldPivot.Position).Magnitude <= 3 or tick() - startTime > 20
+
+	-- Nếu quá 20s vẫn chưa tới nơi => nhảy server
+	if (hrp.Position - machine.WorldPivot.Position).Magnitude > 3 then
+		TeleportService:Teleport(game.PlaceId, player)
+	else
+		_G.TeleDone = true
+	end
+end)
 
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.CurrentPlotId and _G.TeleDone
