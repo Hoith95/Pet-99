@@ -1,0 +1,38 @@
+if _G.VAR_TELE_CRAFT then
+    warn("⛔ VAR_TELE_CRAFT đã chạy trước đó!")
+    return
+end
+_G.VAR_TELE_CRAFT = true
+
+task.spawn(function()
+	repeat task.wait() until _G.CurrentPlotId
+	local player = game.Players.LocalPlayer
+	local TeleportService = game:GetService("TeleportService")
+	local p = workspace.__THINGS.Plots:WaitForChild(tostring(_G.CurrentPlotId))
+	local m; repeat task.wait() m = p:FindFirstChild("Interactable") and p.Interactable.Machines:FindFirstChild("HalloweenPetCraftingMachine") until m and m:FindFirstChild("Model")
+
+	local targetPos = m.Model:GetPivot().Position
+	local hrp = player.Character:WaitForChild("HumanoidRootPart")
+
+	local reached = false
+	for i = 1, 10 do
+		if (hrp.Position - targetPos).Magnitude <= 3 then
+			reached = true
+			break
+		end
+		task.wait(2)
+	end
+
+	if not reached then
+		local placeId = 131952481663528 -- 🎃 Halloween World
+		if game.PlaceId ~= placeId then
+			pcall(function()
+				TeleportService:Teleport(placeId, player)
+			end)
+		else
+			pcall(function()
+				TeleportService:TeleportToPlaceInstance(placeId, game.JobId, player)
+			end)
+		end
+	end
+end)
