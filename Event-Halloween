@@ -88,13 +88,38 @@ end)
 
 repeat task.wait() until _G.CurrentPlotId
 local p = workspace.__THINGS.Plots:WaitForChild(tostring(_G.CurrentPlotId))
-local m; repeat task.wait() m = p:FindFirstChild("Interactable") and p.Interactable.Machines:FindFirstChild("HalloweenPetCraftingMachine") until m
-local hrp = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+
+-- Chờ máy craft tồn tại hoàn toàn
+local m
 repeat
-	local pos = m.Model:GetPivot().Position
-	if (hrp.Position - pos).Magnitude > 3 then hrp.CFrame = CFrame.new(pos + Vector3.new(0,0,0)) end
-	task.wait(1)
-until (hrp.Position - m.Model:GetPivot().Position).Magnitude <= 3
+    task.wait(1)
+    m = p:FindFirstChild("Interactable")
+        and p.Interactable:FindFirstChild("Machines")
+        and p.Interactable.Machines:FindFirstChild("HalloweenPetCraftingMachine")
+until m and m:FindFirstChild("Model") and m.Model.PrimaryPart
+
+-- Lấy HRP
+local hrp = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+
+-- Di chuyển tới máy craft, có kiểm tra lỗi & retry
+local tries = 0
+while tries < 10 do
+    local ok, pos = pcall(function()
+        return m.Model:GetPivot().Position
+    end)
+    if ok and pos then
+        if (hrp.Position - pos).Magnitude > 3 then
+            hrp.CFrame = CFrame.new(pos)
+        end
+        if (hrp.Position - pos).Magnitude <= 3 then
+            break
+        end
+    else
+        warn("⚠️ Craft machine chưa load đủ, retry...")
+    end
+    tries += 1
+    task.wait(1.5)
+end
 task.wait(5)
 _G.TeleDone = true
 
