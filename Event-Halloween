@@ -103,9 +103,8 @@ task.spawn(function()
 	until (machine and machine:IsA("Model")) or tick() - start > 20
 
 	if not machine then return TeleportService:Teleport(game.PlaceId, player) end
-	task.wait(3)
 
-	local ok, pos = pcall(function() return machine:GetPivot().Position end)
+local ok, pos = pcall(function() return machine:GetPivot().Position end)
 	if not ok or not pos then return TeleportService:Teleport(game.PlaceId, player) end
 
 	-- 🚀 Teleport liên tục cho tới khi đứng trong bán kính 3 stud
@@ -119,6 +118,7 @@ task.spawn(function()
 	if (hrp.Position - pos).Magnitude > 5 then
 		TeleportService:Teleport(game.PlaceId, player)
 	else
+		task.wait(3)
 		_G.TeleDone = true
 	end
 end)
