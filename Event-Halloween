@@ -527,11 +527,11 @@ task.spawn(function()
     local houseParam = 2
 
     local priority = {
-        HalloweenCandyMultiplier = 6,
-        HalloweenTrickOrTreatLuck = 5,
-        HalloweenMoreWitchHats = 6,
-        HalloweenMoreDiamonds = 5,
-        HalloweenEggLuck = 5
+        HalloweenCandyMultiplier = 10,
+        HalloweenTrickOrTreatLuck = 10,
+        HalloweenMoreWitchHats = 10,
+        HalloweenMoreDiamonds = 10,
+        HalloweenEggLuck = 10
     }
     local final = { HalloweenHugeLuck = 10, HalloweenTitanicLuck = 10 }
 
