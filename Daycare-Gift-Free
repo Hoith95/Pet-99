@@ -48,7 +48,7 @@ local function getRainbowAxolotlPets()
             local petType = getPetType(PetData.pt)
             if petType == "Rainbow" then
                 table.insert(rainbowAxolotlUIDs, PetUID)
-                if #rainbowAxolotlUIDs >= 2 then break end
+                if #rainbowAxolotlUIDs >= 30 then break end
             end
         end
     end
