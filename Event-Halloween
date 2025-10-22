@@ -106,18 +106,28 @@ task.spawn(function()
 		if inter and inter:FindFirstChild("Machines") then
 			machine = inter.Machines:FindFirstChild("HalloweenPetCraftingMachine")
 		end
-	until machine and machine:HasProperty("WorldPivot") or tick() - timeout > 20
+	until (machine and machine:IsA("Model")) or tick() - timeout > 20
 
 	-- Nếu quá 20s vẫn không có máy => nhảy server
-	if not machine or not machine:HasProperty("WorldPivot") then
+	if not (machine and machine:IsA("Model")) then
 		TeleportService:Teleport(game.PlaceId, player)
 		return
 	end
 
-	-- Teleport liên tục cho tới khi đứng trong bán kính 3 stud
+	-- Lấy vị trí máy (Model → GetPivot)
+	local pos
+	pcall(function()
+		pos = machine:GetPivot().Position
+	end)
+
+	if not pos then
+		TeleportService:Teleport(game.PlaceId, player)
+		return
+	end
+
+	-- Teleport liên tục cho tới khi đứng trong bán kính 5 stud
 	local function teleportToMachine()
-		local pos = machine.WorldPivot.Position
-		if (hrp.Position - pos).Magnitude > 3 then
+		if (hrp.Position - pos).Magnitude > 5 then
 			hrp.CFrame = CFrame.new(pos)
 		end
 	end
@@ -126,10 +136,10 @@ task.spawn(function()
 	repeat
 		pcall(teleportToMachine)
 		task.wait(1)
-	until (hrp.Position - machine.WorldPivot.Position).Magnitude <= 3 or tick() - startTime > 20
+	until (hrp.Position - pos).Magnitude <= 5 or tick() - startTime > 20
 
 	-- Nếu quá 20s vẫn chưa tới nơi => nhảy server
-	if (hrp.Position - machine.WorldPivot.Position).Magnitude > 3 then
+	if (hrp.Position - pos).Magnitude > 5 then
 		TeleportService:Teleport(game.PlaceId, player)
 	else
 		_G.TeleDone = true
