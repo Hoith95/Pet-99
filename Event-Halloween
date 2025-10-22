@@ -89,59 +89,56 @@ end)
 
 task.spawn(function()
 	local TeleportService = game:GetService("TeleportService")
-	local player = game.Players.LocalPlayer
-	repeat task.wait() until _G.CurrentPlotId and player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-	local hrp = player.Character.HumanoidRootPart
-	local plot = workspace.__THINGS.Plots:WaitForChild(tostring(_G.CurrentPlotId))
-	local machine, start = nil, tick()
+	local Players = game:GetService("Players")
+	local Workspace = game:GetService("Workspace")
+	local player = Players.LocalPlayer
 
-	-- ⏳ Đợi máy xuất hiện
+	local function safeTeleport()
+		TeleportService:Teleport(game.PlaceId, player)
+	end
+
+	local character = player.Character or player.CharacterAdded:Wait()
+	local hrp = character:WaitForChild("HumanoidRootPart")
+	local humanoid = character:WaitForChild("Humanoid")
+	repeat task.wait() until _G.CurrentPlotId
+	local plot = Workspace.__THINGS.Plots:WaitForChild(tostring(_G.CurrentPlotId))
+	local machine
+	local startTime = tick()
 	repeat
 		task.wait()
 		local inter = plot:FindFirstChild("Interactable")
 		machine = inter and inter:FindFirstChild("Machines") and inter.Machines:FindFirstChild("HalloweenPetCraftingMachine")
-	until (machine and machine:IsA("Model")) or tick() - start > 20
+	until (machine and machine:IsA("Model")) or tick() - startTime > 20
+	if not machine then return safeTeleport() end
+	local ok, pos = pcall(function() return machine:GetPivot().Position end)
+	if not ok or not pos then return safeTeleport() end
+	startTime = tick()
+	while (hrp.Position - pos).Magnitude > 6 and tick() - startTime <= 20 do
+		local target = pos + Vector3.new(0, 6, 0)
+		if (hrp.Position - target).Magnitude > 6 then
+			hrp.CFrame = CFrame.new(target)
+		end
+		task.wait(0.3)
+	end
 
-	if not machine then return TeleportService:Teleport(game.PlaceId, player) end
-
-    local ok, pos = pcall(function() return machine:GetPivot().Position end)
-	if not ok or not pos then return TeleportService:Teleport(game.PlaceId, player) end
-
-	-- 🚀 Teleport liên tục cho tới khi đứng trong bán kính 3 stud
-	start = tick()
-	repeat
-		local target = pos + Vector3.new(0, 6, 0) -- nhảy cao 6 stud
-		if (hrp.Position - target).Magnitude > 6 then hrp.CFrame = CFrame.new(target) end
-		task.wait(1)
-	until (hrp.Position - pos).Magnitude <= 6 or tick() - start > 20
 	if (hrp.Position - pos).Magnitude > 6 then
-		TeleportService:Teleport(game.PlaceId, player)
+		safeTeleport()
 	else
 		task.wait(3)
+		humanoid.PlatformStand = true
+		hrp.Anchored = true
+		local rng = Random.new()
+		local randomOffset = Vector3.new(rng:NextInteger(-30,10), -30, rng:NextInteger(-30,10))
+		hrp.CFrame = hrp.CFrame + randomOffset
+		local platform = Instance.new("Part")
+		platform.Size = Vector3.new(5,1,5)
+		platform.CFrame = hrp.CFrame + Vector3.new(0,-5,0)
+		platform.Anchored = true
+		platform.Transparency = 1
+		platform.CanCollide = true
+		platform.Parent = Workspace
 		_G.TeleDone = true
 	end
-end)
-
-task.spawn(function()
-    repeat task.wait(5) until _G.CurrentPlotId and _G.TeleDone
-    local plotsFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("Plots")
-    local Workspace = game:GetService("Workspace")
-    local myPlotId = tostring(_G.CurrentPlotId)
-    local destroyedPlots = {}
-
-    while true do
-        local children = plotsFolder:GetChildren()
-        for i = 1, #children do
-            local plot = children[i]
-            if plot:IsA("Model") and plot.Name ~= myPlotId and not destroyedPlots[plot] then
-                pcall(function()
-                    destroyedPlots[plot] = true
-                    plot:Destroy()
-                end)
-            end
-        end
-        task.wait(1)
-    end
 end)
 
 task.spawn(function()
@@ -636,7 +633,6 @@ end)
 
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.TotalRate and _G.TeleDone
-
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local Network = ReplicatedStorage.Network
     local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
