@@ -7,10 +7,9 @@ end
 -- Đánh dấu script đã được chạy
 _G.DAYGIFTFREES = true
 
--- Cải thiện các hàm để tránh gọi lại các giá trị không thay đổi
-local daycareCmds = require(game.ReplicatedStorage.Library.Client.DaycareCmds)
-local saveModule = require(game.ReplicatedStorage.Library.Client.Save)
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local daycareCmds = require(ReplicatedStorage.Library.Client.DaycareCmds)
+local saveModule = require(ReplicatedStorage.Library.Client.Save)
 
 -- Kiểm tra xem có thú cưng nào đang trong máy chăm sóc hay không
 local petInDaycare = function()
@@ -20,7 +19,6 @@ end
 -- Tính toán thời gian còn lại của thú cưng trong máy chăm sóc
 local getRemainingTime = function()
     local remainingTime = 0
-    -- Tìm thời gian còn lại lớn nhất từ các thú cưng đang trong máy chăm sóc
     for petId, _ in pairs(daycareCmds.GetActive()) do
         local petRemainingTime = daycareCmds.ComputeRemainingTime(petId)
         if petRemainingTime > remainingTime then
@@ -30,14 +28,13 @@ local getRemainingTime = function()
     return remainingTime
 end
 
--- Hàm lấy pet loại Rainbow từ Inventory
-local function getRainbowFoxPets()
+-- Hàm lấy pet loại Rainbow Blooming Axolotl từ Inventory
+local function getRainbowAxolotlPets()
     local inventory = saveModule.Get() and saveModule.Get().Inventory and saveModule.Get().Inventory.Pet
     if not inventory then
         return nil
     end
 
-    -- Hàm xác định loại thú cưng
     local function getPetType(pt)
         if pt == 1 then return "Golden"
         elseif pt == 2 then return "Rainbow"
@@ -45,41 +42,34 @@ local function getRainbowFoxPets()
         end
     end
 
-    -- Danh sách UID pet "Player Fox" loại Rainbow
-    local rainbowFoxUIDs = {}
+    local rainbowAxolotlUIDs = {}
 
-    -- Tìm pet phù hợp
     for PetUID, PetData in pairs(inventory) do
-        if PetData.id and string.find(PetData.id, "Player Fox") then
+        if PetData.id and string.find(PetData.id, "Blooming Axolotl") then
             local petType = getPetType(PetData.pt)
             if petType == "Rainbow" then
-                table.insert(rainbowFoxUIDs, PetUID)
-                if #rainbowFoxUIDs >= 2 then break end -- Chỉ lấy tối đa 2 UID
+                table.insert(rainbowAxolotlUIDs, PetUID)
+                if #rainbowAxolotlUIDs >= 2 then break end -- chỉ lấy tối đa 2 UID
             end
         end
     end
 
-    return rainbowFoxUIDs
+    return rainbowAxolotlUIDs
 end
 
 -- Kiểm tra và thực hiện hành động nếu thú cưng đã hết thời gian trong Daycare
 local checkDaycareAndReEnroll = function()
-    -- Nếu có thú cưng trong daycare
     if petInDaycare() then
-        -- Kiểm tra thời gian còn lại
         local remainingTime = getRemainingTime()
-        -- Nếu thời gian hết hoặc không xác định, thu hồi thú cưng
         if remainingTime <= 0 then
-            game:GetService("ReplicatedStorage").Network:FindFirstChild("Daycare: Claim"):InvokeServer()
+            ReplicatedStorage.Network:FindFirstChild("Daycare: Claim"):InvokeServer()
         end
     end
 
-    -- Lấy danh sách Rainbow Player Fox pets
-    local rainbowFoxUIDs = getRainbowFoxPets()
-    if not rainbowFoxUIDs then return end
+    local rainbowAxolotlUIDs = getRainbowAxolotlPets()
+    if not rainbowAxolotlUIDs then return end
 
-    -- Thử từng UID
-    for _, uid in ipairs(rainbowFoxUIDs) do
+    for _, uid in ipairs(rainbowAxolotlUIDs) do
         local args = {
             [1] = {
                 [uid] = 30
@@ -87,12 +77,10 @@ local checkDaycareAndReEnroll = function()
         }
 
         local success, result = pcall(function()
-            return game:GetService("ReplicatedStorage").Network:FindFirstChild("Daycare: Enroll"):InvokeServer(unpack(args))
+            return ReplicatedStorage.Network:FindFirstChild("Daycare: Enroll"):InvokeServer(unpack(args))
         end)
 
-        if success then
-            break -- Dừng nếu thành công
-        end
+        if success then break end
     end
 end
 
@@ -104,15 +92,14 @@ local redeemGifts = function()
             pcall(function()
                 redeemEvent:InvokeServer(i)
             end)
-
-            wait(1) -- tránh spam server quá nhanh
+            wait(1)
         end
     end
 end
 
 -- Chạy kiểm tra mỗi 1 phút
 while true do
-    wait(68)  -- Chờ 1 phút
-    checkDaycareAndReEnroll()  -- Kiểm tra và thực hiện hành động
-    redeemGifts()  -- Kiểm tra và nhận quà
+    wait(68)
+    checkDaycareAndReEnroll()
+    redeemGifts()
 end
