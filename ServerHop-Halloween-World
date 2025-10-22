@@ -113,7 +113,7 @@ local function monitorPlayerCount()
 			print("🧘 Server yên tĩnh (" .. count .. " người). Kiểm tra lại sau 3 tiếng.")
 		else
 			warn("🚨 Server đông (" .. count .. " người)! Nhảy sang server mới...")
-			task.wait(3)
+			task.wait(1)
 			teleportToLeastPopulatedServer(targetPlaceId, false, 5)
 			break
 		end
