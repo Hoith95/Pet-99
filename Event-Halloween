@@ -650,7 +650,7 @@ task.spawn(function()
         end
     end
 
-    while task.wait(5) do
+    while task.wait(0.5) do
         local inv = PlayerSave.Get().Inventory
         local eggHave = false
         for _, data in pairs(inv.EggHalloween or {}) do
@@ -660,6 +660,7 @@ task.spawn(function()
             end
         end
 
+        local used = false
         if eggHave then
             local luckyEggId = getItemIdByName("Consumable", "Halloween Lucky Egg")
             local trickLuckId = getItemIdByName("Consumable", "Halloween Trick or Treat Luck")
@@ -668,6 +669,7 @@ task.spawn(function()
                 pcall(function()
                     Network.Consumables_Consume:InvokeServer(luckyEggId, 1)
                 end)
+                used = true
                 task.wait(1)
             end
 
@@ -675,9 +677,10 @@ task.spawn(function()
                 pcall(function()
                     Network.Consumables_Consume:InvokeServer(trickLuckId, 1)
                 end)
+                used = true
             end
         end
 
-        task.wait(600)
+        task.wait(used and 600 or 0.5)
     end
 end)
