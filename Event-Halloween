@@ -23,8 +23,6 @@ if game.PlaceId ~= placeId then
     return
 end
 
-wait(30)
-
 task.spawn(function()
     pcall(function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/AntiAFK2"))()
@@ -91,53 +89,32 @@ end)
 task.spawn(function()
 	local TeleportService = game:GetService("TeleportService")
 	local player = game.Players.LocalPlayer
+	repeat task.wait() until _G.CurrentPlotId and player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 
-	repeat task.wait() until _G.CurrentPlotId
-	repeat task.wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-
-	local hrp = player.Character:WaitForChild("HumanoidRootPart")
+	local hrp = player.Character.HumanoidRootPart
 	local plot = workspace.__THINGS.Plots:WaitForChild(tostring(_G.CurrentPlotId))
-	local machine
+	local machine, start = nil, tick()
 
-	-- 🔸 Đợi máy xuất hiện
-	local timeout = tick()
+	-- ⏳ Đợi máy xuất hiện
 	repeat
 		task.wait()
 		local inter = plot:FindFirstChild("Interactable")
-		if inter and inter:FindFirstChild("Machines") then
-			machine = inter.Machines:FindFirstChild("HalloweenPetCraftingMachine")
-		end
-	until (machine and machine:IsA("Model")) or tick() - timeout > 20
+		machine = inter and inter:FindFirstChild("Machines") and inter.Machines:FindFirstChild("HalloweenPetCraftingMachine")
+	until (machine and machine:IsA("Model")) or tick() - start > 20
 
-	if not (machine and machine:IsA("Model")) then
-		TeleportService:Teleport(game.PlaceId, player)
-		return
-	end
+	if not machine then return TeleportService:Teleport(game.PlaceId, player) end
+	task.wait(3)
 
-	task.wait(5)
+	local ok, pos = pcall(function() return machine:GetPivot().Position end)
+	if not ok or not pos then return TeleportService:Teleport(game.PlaceId, player) end
 
-	local pos
-	pcall(function()
-		pos = machine:GetPivot().Position
-	end)
-	if not pos then
-		TeleportService:Teleport(game.PlaceId, player)
-		return
-	end
-
-	-- 🔹 Lần đầu tele xuống thấp
-	hrp.CFrame = CFrame.new(pos + Vector3.new(0, -10, 0))
-	task.wait(6)
-
-	-- 🔹 Sau đó tele lên cao rồi kiểm tra vị trí
-	local startTime = tick()
+	-- 🚀 Teleport liên tục cho tới khi đứng trong bán kính 3 stud
+	start = tick()
 	repeat
-		local target = pos + Vector3.new(0, 6, 0)
-		if (hrp.Position - target).Magnitude > 5 then
-			hrp.CFrame = CFrame.new(target)
-		end
+		local target = pos + Vector3.new(0, 6, 0) -- nhảy cao 6 stud
+		if (hrp.Position - target).Magnitude > 5 then hrp.CFrame = CFrame.new(target) end
 		task.wait(1)
-	until (hrp.Position - pos).Magnitude <= 5 or tick() - startTime > 20
+	until (hrp.Position - pos).Magnitude <= 5 or tick() - start > 20
 
 	if (hrp.Position - pos).Magnitude > 5 then
 		TeleportService:Teleport(game.PlaceId, player)
