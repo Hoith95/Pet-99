@@ -1,9 +1,6 @@
-if _G.HALLOWEEN_TELE then return end
-_G.HALLOWEEN_TELE = true
-
 repeat task.wait() until game:IsLoaded()
 
-local targetPlaceId = 131952481663528
+local placeId = 131952481663528
 local HttpService = game:GetService("HttpService")
 local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
@@ -34,7 +31,6 @@ local function getPlayerCount()
 	print("👥 Số người trong server hiện tại:", count)
 	return count
 end
-
 -------------------------------------------------------
 -- ⚡ Teleport sang server ít người
 -------------------------------------------------------
@@ -101,11 +97,25 @@ local function teleportToLeastPopulatedServer(placeId, runScriptOnJoin, retryLim
 
 		task.wait(5)
 	end
-
+	-------------------------------------------------------
+	-- ⛔ Teleport thất bại sau nhiều lần -> về place gốc
+	-------------------------------------------------------
 	warn("⛔ Teleport thất bại sau " .. retryLimit .. " lần thử!")
+
+	if game.PlaceId ~= placeId then
+		warn("🔁 Đang không ở đúng Place ID, teleport về gốc...")
+		local ok, err = pcall(function()
+			TeleportService:Teleport(placeId, LocalPlayer)
+		end)
+		if not ok then
+			warn("❌ Teleport về gốc thất bại:", tostring(err))
+		else
+			print("✅ Đã gửi yêu cầu teleport về Place ID gốc:", placeId)
+		end
+	end
+
 	return false
 end
-
 -------------------------------------------------------
 -- 🕒 Theo dõi 3 tiếng một lần
 -------------------------------------------------------
@@ -116,14 +126,13 @@ local function monitorPlayerCount()
 			print("🧘 Server yên tĩnh (" .. count .. " người). Kiểm tra lại sau 3 tiếng.")
 		else
 			warn("🚨 Server đông (" .. count .. " người)! Nhảy sang server mới...")
-			task.wait(1)
-			teleportToLeastPopulatedServer(targetPlaceId, false, 5)
+			task.wait(3)
+			teleportToLeastPopulatedServer(placeId, false, 5)
 			break
 		end
 		task.wait(10800) -- 3 tiếng = 10800 giây
 	end
 end
-
 -------------------------------------------------------
-print("🔁 Bắt đầu theo dõi server Place ID:", targetPlaceId)
+print("🔁 Bắt đầu theo dõi server Place ID:", placeId)
 monitorPlayerCount()
