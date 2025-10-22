@@ -1,3 +1,6 @@
+if _G.HALLOWEEN_TELE then return end
+_G.HALLOWEEN_TELE = true
+
 repeat task.wait() until game:IsLoaded()
 
 local targetPlaceId = 131952481663528
