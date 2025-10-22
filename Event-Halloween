@@ -112,7 +112,7 @@ task.spawn(function()
 		return
 	end
 
-	task.wait(3)
+	task.wait(5)
 
 	local pos
 	pcall(function()
@@ -125,7 +125,7 @@ task.spawn(function()
 
 	-- 🔹 Lần đầu tele xuống thấp
 	hrp.CFrame = CFrame.new(pos + Vector3.new(0, -10, 0))
-	task.wait(5)
+	task.wait(6)
 
 	-- 🔹 Sau đó tele lên cao rồi kiểm tra vị trí
 	local startTime = tick()
@@ -145,7 +145,7 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-    repeat task.wait(_G.HW.BaseWait) until _G.CurrentPlotId and _G.TeleDone
+    repeat task.wait(15) until _G.CurrentPlotId and _G.TeleDone
     local plotsFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("Plots")
     local Workspace = game:GetService("Workspace")
     local myPlotId = tostring(_G.CurrentPlotId)
