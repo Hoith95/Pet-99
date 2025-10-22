@@ -12,7 +12,7 @@ task.spawn(function()
 	local set = setfpscap or setfpscap
 	local place = game.PlaceId
 	local t = workspace:WaitForChild("__THINGS")
-	while task.wait(0.5) do
+	while task.wait(0.05) do
 		local tt = t:FindFirstChild("__INSTANCE_CONTAINER")
 			and t.__INSTANCE_CONTAINER:FindFirstChild("Active")
 			and t.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial")
