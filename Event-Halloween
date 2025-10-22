@@ -578,6 +578,7 @@ end)
 
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.TotalRate and _G.TeleDone
+
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
     local Network = ReplicatedStorage:WaitForChild("Network")
@@ -677,3 +678,6 @@ task.spawn(function()
                 used = true
             end
         end
+        task.wait(used and 600 or 0.5)
+    end
+end)
