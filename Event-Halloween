@@ -111,11 +111,11 @@ local ok, pos = pcall(function() return machine:GetPivot().Position end)
 	start = tick()
 	repeat
 		local target = pos + Vector3.new(0, 6, 0) -- nhảy cao 6 stud
-		if (hrp.Position - target).Magnitude > 5 then hrp.CFrame = CFrame.new(target) end
+		if (hrp.Position - target).Magnitude > 6 then hrp.CFrame = CFrame.new(target) end
 		task.wait(1)
-	until (hrp.Position - pos).Magnitude <= 5 or tick() - start > 20
+	until (hrp.Position - pos).Magnitude <= 6 or tick() - start > 20
 
-	if (hrp.Position - pos).Magnitude > 5 then
+	if (hrp.Position - pos).Magnitude > 6 then
 		TeleportService:Teleport(game.PlaceId, player)
 	else
 		task.wait(3)
@@ -124,7 +124,7 @@ local ok, pos = pcall(function() return machine:GetPivot().Position end)
 end)
 
 task.spawn(function()
-    repeat task.wait(15) until _G.CurrentPlotId and _G.TeleDone
+    repeat task.wait(5) until _G.CurrentPlotId and _G.TeleDone
     local plotsFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("Plots")
     local Workspace = game:GetService("Workspace")
     local myPlotId = tostring(_G.CurrentPlotId)
