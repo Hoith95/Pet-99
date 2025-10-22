@@ -7,14 +7,6 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
 -------------------------------------------------------
--- 🧭 Kiểm tra đúng map
--------------------------------------------------------
-if game.PlaceId ~= targetPlaceId then
-	warn("⚠️ Bạn không ở đúng Place ID (" .. tostring(targetPlaceId) .. "). Script sẽ không chạy.")
-	return
-end
-
--------------------------------------------------------
 -- 🧮 Hàm đếm số người chơi hiện tại
 -------------------------------------------------------
 local function getPlayerCount()
