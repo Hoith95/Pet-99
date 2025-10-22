@@ -92,11 +92,9 @@ task.spawn(function()
 	local Players = game:GetService("Players")
 	local Workspace = game:GetService("Workspace")
 	local player = Players.LocalPlayer
-
 	local function safeTeleport()
 		TeleportService:Teleport(game.PlaceId, player)
 	end
-
 	local character = player.Character or player.CharacterAdded:Wait()
 	local hrp = character:WaitForChild("HumanoidRootPart")
 	local humanoid = character:WaitForChild("Humanoid")
@@ -120,7 +118,6 @@ task.spawn(function()
 		end
 		task.wait(0.3)
 	end
-
 	if (hrp.Position - pos).Magnitude > 6 then
 		safeTeleport()
 	else
@@ -200,13 +197,11 @@ local function scanDebris()
     if DEBRIS_SCAN_LOCK then return end
     DEBRIS_SCAN_LOCK = true
     _G.PillarPets = {}
-
     if not debrisFolder then debrisFolder = findDebrisFolder() end
     if not debrisFolder then
         DEBRIS_SCAN_LOCK = false
         return
     end
-
     local PetByPillar = {}
     for _, petFolder in pairs(debrisFolder:GetChildren()) do
         local rootPart = petFolder:FindFirstChild("RootPart")
@@ -257,7 +252,6 @@ local function scanDebris()
             if previousPetCodes[pid] ~= s then previousPetCodes[pid] = s; changed = true end
         end
     end
-
     if changed or not next(_G.PillarTotalRateById) then
         _G.PillarPets = PetByPillar
         _G.PillarTotalRateById = _G.PillarTotalRateById or {}
@@ -274,7 +268,6 @@ local function scanDebris()
             end
         end
         _G.TotalRate = totalRate
-
         _G.PillarDisplayText = {}
         for pid, pets in pairs(_G.PillarPets) do
             if not _G.CurrentEggPillars[pid] then
@@ -327,17 +320,32 @@ task.spawn(function()
         local ok, data = pcall(function() return SaveModule.Get() end)
         if not ok or not data or not data.Inventory or not data.Inventory.Currency then return 0 end
         for _, v in pairs(data.Inventory.Currency) do
-            if v.id == currencyId then return v._am or 0 end
+            if v.id == currencyId then return tonumber(v._am) or 0 end
         end
         return 0
     end
-
+    local function rateCategory(totalRate)
+        totalRate = tonumber(totalRate) or 0
+        if totalRate >= 15000 then
+            return 3
+        elseif totalRate >= 10000 then
+            return 2
+        elseif totalRate >= 6000 then
+            return 1
+        else
+            return 0
+        end
+    end
     local lastTier = nil
+    local prevCategory = rateCategory(_G.TotalRate)
     repeat task.wait(_G.HW.BaseWait) until _G.PillarScanDone and _G.TeleDone
-
     while true do
         local candy = getCurrencyAmount("HalloweenCoins")
-        local totalRate = _G.TotalRate or 0
+        local totalRate = tonumber(_G.TotalRate) or 0
+        local currCategory = rateCategory(totalRate)
+        if currCategory ~= prevCategory then
+            lastTier = nil
+        end
         local tier = lastTier or 1
         if totalRate >= 15000 then
             if tier == 5 then
@@ -358,6 +366,7 @@ task.spawn(function()
                 if candy >= 500000 then tier = 3 end
             end
         else
+            -- totalRate < 6000:
             if candy >= 30000000 then
                 tier = 5
             elseif candy >= 5000000 then
@@ -371,6 +380,7 @@ task.spawn(function()
             end
         end
         lastTier = tier
+        prevCategory = currCategory
         pcall(function()
             Network.Plots_Invoke:InvokeServer(_G.CurrentPlotId, "PurchaseEgg", tier, 3)
         end)
@@ -380,14 +390,11 @@ end)
 
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.PillarScanDone and _G.TeleDone
-
     local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
     local SaveModule = safeRequire(Client.Save)
     while not SaveModule do task.wait(_G.HW.BaseWait); SaveModule = safeRequire(Client.Save) end
-
     local eggPriority = {"Coffin Egg","Reaper Egg","Spider Egg","Cauldron Egg","Ghost Egg","Bat Egg","Grave Egg","Pumpkin Egg"}
     local currentEgg = nil
-
     while true do
         local ok, saveData = pcall(function() return SaveModule.Get() end)
         if not ok or not saveData or not saveData.Inventory then
@@ -447,12 +454,10 @@ local function getPower(id, pt)
     local bonus = (pt or 0) * 3
     return base + bonus
 end
-
 local SaveModule = nil
 local ClientLib = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
 SaveModule = safeRequire(ClientLib.Save)
 while not SaveModule do task.wait(_G.HW.BaseWait); SaveModule = safeRequire(ClientLib.Save) end
-
 local function getBestPet()
     local ok, data = pcall(function() return SaveModule.Get() end)
     if not ok or not data or not data.Inventory then return {power=-1}, 0 end
@@ -527,7 +532,6 @@ task.spawn(function()
     while not PlayerSave do task.wait(_G.HW.BaseWait); PlayerSave = safeRequire(ReplicatedStorage.Library.Client.Save) end
     local plotId = _G.CurrentPlotId
     local houseParam = 2
-
     local priority = {
         HalloweenCandyMultiplier = 10,
         HalloweenTrickOrTreatLuck = 10,
@@ -575,7 +579,6 @@ end)
 
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.TotalRate and _G.TeleDone
-
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
     local Network = ReplicatedStorage:WaitForChild("Network")
@@ -593,7 +596,6 @@ task.spawn(function()
         end)
         task.wait(5)
     end
-
     local function claimCraft(id)
         local args = { id }
         pcall(function()
@@ -601,7 +603,6 @@ task.spawn(function()
         end)
         task.wait(5)
     end
-
     local function getCraftQueue()
         local data = PlayerSave.Get().HalloweenCraftingQueue or {}
         local ids = {}
@@ -612,17 +613,14 @@ task.spawn(function()
         end
         return ids
     end
-
     while task.wait(5) do
         local rate = _G.TotalRate or 0
         local queue = getCraftQueue()
-
         if #queue > 0 then
             for _, id in ipairs(queue) do
                 claimCraft(id)
             end
         end
-
         if rate <= 50000 then
             craft(4) craft(3) craft(2) craft(1)
         else
@@ -643,7 +641,6 @@ task.spawn(function()
             if data.id == name then return uid end
         end
     end
-
     while task.wait(0.5) do
         local inv = PlayerSave.Get().Inventory
         local eggHave = false
@@ -653,12 +650,10 @@ task.spawn(function()
                 break
             end
         end
-
         local used = false
         if eggHave then
             local luckyEggId = getItemIdByName("Consumable", "Halloween Lucky Egg")
             local trickLuckId = getItemIdByName("Consumable", "Halloween Trick or Treat Luck")
-
             if luckyEggId then
                 pcall(function()
                     Network.Consumables_Consume:InvokeServer(luckyEggId, 1)
@@ -666,7 +661,6 @@ task.spawn(function()
                 used = true
                 task.wait(1)
             end
-
             if trickLuckId then
                 pcall(function()
                     Network.Consumables_Consume:InvokeServer(trickLuckId, 1)
