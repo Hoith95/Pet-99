@@ -1,7 +1,7 @@
 repeat task.wait() until game:IsLoaded()
 local LocalPlayer = game:GetService('Players').LocalPlayer
 repeat task.wait() until not LocalPlayer.PlayerGui:FindFirstChild('__INTRO')
-
+wait(30)
 _G.HW = _G.HW or {}
 _G.HW.DebugMode = _G.HW.DebugMode or false
 _G.HW.SwapInterval = _G.HW.SwapInterval or 0.1
