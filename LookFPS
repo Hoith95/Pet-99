@@ -1,0 +1,26 @@
+if _G.LOOKFPS then
+    warn("Script đã được chạy trước đó!")
+    return
+end
+
+_G.LOOKFPS = true
+
+----------------------------------------------------------
+-- ⚙️ AUTO FPS CONTROL (by Heo)
+----------------------------------------------------------
+task.spawn(function()
+	local set = setfpscap or setfpscap
+	local place = game.PlaceId
+	local t = workspace:WaitForChild("__THINGS")
+	while task.wait(0.5) do
+		local tt = t:FindFirstChild("__INSTANCE_CONTAINER")
+			and t.__INSTANCE_CONTAINER:FindFirstChild("Active")
+			and t.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial")
+
+		if place == 140403681187145 then
+			set(tt and 7 or 3)
+		elseif place == 95635359880599 or place == 119454325063278 or place == 131952481663528 then
+			set(5)
+		end
+	end
+end)
