@@ -95,9 +95,11 @@ repeat
 	if (hrp.Position - pos).Magnitude > 3 then hrp.CFrame = CFrame.new(pos + Vector3.new(0,0,0)) end
 	task.wait(1)
 until (hrp.Position - m.Model:GetPivot().Position).Magnitude <= 3
+task.wait(5)
+_G.TeleDone = true
 
 task.spawn(function()
-    repeat task.wait(_G.HW.BaseWait) until _G.CurrentPlotId
+    repeat task.wait(_G.HW.BaseWait) until _G.CurrentPlotId and _G.TeleDone
     local plotsFolder = Workspace:WaitForChild("__THINGS"):WaitForChild("Plots")
     local Workspace = game:GetService("Workspace")
     local myPlotId = tostring(_G.CurrentPlotId)
@@ -285,7 +287,7 @@ local function scheduleScan()
 end
 
 task.spawn(function()
-    repeat task.wait(_G.HW.BaseWait) until _G.CurrentPlotId
+    repeat task.wait(_G.HW.BaseWait) until _G.CurrentPlotId and _G.TeleDone
     local plotFolder = workspace:WaitForChild("__THINGS"):WaitForChild("Plots")
     local myPlot = plotFolder:FindFirstChild(tostring(_G.CurrentPlotId))
     if myPlot then buildPillarsCFrames(myPlot) end
@@ -318,7 +320,7 @@ task.spawn(function()
     end
 
     local lastTier = nil
-    repeat task.wait(_G.HW.BaseWait) until _G.PillarScanDone
+    repeat task.wait(_G.HW.BaseWait) until _G.PillarScanDone and _G.TeleDone
 
     while true do
         local candy = getCurrencyAmount("HalloweenCoins")
@@ -368,7 +370,7 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-    repeat task.wait(_G.HW.BaseWait) until _G.PillarScanDone
+    repeat task.wait(_G.HW.BaseWait) until _G.PillarScanDone and _G.TeleDone
 
     local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
     local SaveModule = safeRequire(Client.Save)
@@ -518,7 +520,7 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-    repeat task.wait(_G.HW.BaseWait) until _G.CurrentPlotId and _G.TotalRate
+    repeat task.wait(_G.HW.BaseWait) until _G.CurrentPlotId and _G.TotalRate and _G.TeleDone
 
     local PlayerSave = safeRequire(ReplicatedStorage.Library.Client.Save)
     while not PlayerSave do task.wait(_G.HW.BaseWait); PlayerSave = safeRequire(ReplicatedStorage.Library.Client.Save) end
@@ -578,7 +580,7 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-    repeat task.wait(_G.HW.BaseWait) until _G.TotalRate
+    repeat task.wait(_G.HW.BaseWait) until _G.TotalRate and _G.TeleDone
 
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
@@ -637,7 +639,7 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-    repeat task.wait(_G.HW.BaseWait) until _G.TotalRate
+    repeat task.wait(_G.HW.BaseWait) until _G.TotalRate and _G.TeleDone
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local Network = ReplicatedStorage.Network
     local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
