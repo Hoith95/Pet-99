@@ -1,119 +1,100 @@
--- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
-if _G.DAYGIFTFREES then
-    warn("⛔ Script đã được chạy trước đó!")
-    return
-end
-
--- Đánh dấu script đã được chạy
+if _G.DAYGIFTFREES then return end
 _G.DAYGIFTFREES = true
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local daycareCmds = require(ReplicatedStorage.Library.Client.DaycareCmds)
 local saveModule = require(ReplicatedStorage.Library.Client.Save)
 
--- Kiểm tra xem có thú cưng nào đang trong máy chăm sóc hay không
-local petInDaycare = function()
+local enrollRemote = ReplicatedStorage.Network:FindFirstChild("Daycare: Enroll")
+local claimRemote = ReplicatedStorage.Network:FindFirstChild("Daycare: Claim")
+local redeemEvent = ReplicatedStorage.Network:FindFirstChild("Redeem Free Gift")
+
+local function petInDaycare()
     local active = daycareCmds.GetActive()
     return type(active) == "table" and next(active) ~= nil
 end
 
--- Tính toán thời gian còn lại của thú cưng trong máy chăm sóc
-local getRemainingTime = function()
+local function getRemainingTime()
     local remainingTime = 0
-    for petId, _ in pairs(daycareCmds.GetActive()) do
-        local petRemainingTime = daycareCmds.ComputeRemainingTime(petId)
-        if petRemainingTime > remainingTime then
-            remainingTime = petRemainingTime
+    for petId, _ in pairs(daycareCmds.GetActive() or {}) do
+        local success, petRemaining = pcall(function() return daycareCmds.ComputeRemainingTime(petId) end)
+        if success and type(petRemaining) == "number" and petRemaining > remainingTime then
+            remainingTime = petRemaining
         end
     end
     return remainingTime
 end
 
--- Hàm lấy pet loại Rainbow Blooming Axolotl từ Inventory
-local function getRainbowAxolotlPets()
-    local inventory = saveModule.Get() and saveModule.Get().Inventory and saveModule.Get().Inventory.Pet
-    if not inventory then
-        return nil
+local function getRainbowBloomingUIDs(maxCount)
+    maxCount = maxCount or 30
+    local result = {}
+    local save = saveModule.Get()
+    local inventory = save and save.Inventory and save.Inventory.Pet
+    if not inventory then return result end
+    local function isBloomingRainbow(petData)
+        if not petData or not petData.id then return false end
+        if tostring(petData.id):lower():find("blooming axolotl") and petData.pt == 2 then
+            return true
+        end
+        return false
     end
-
-    local function getPetType(pt)
-        if pt == 1 then return "Golden"
-        elseif pt == 2 then return "Rainbow"
-        else return "Normal" end
-    end
-
-    local rainbowAxolotlUIDs = {}
-    for PetUID, PetData in pairs(inventory) do
-        if PetData.id and string.find(PetData.id, "Blooming Axolotl") then
-            local petType = getPetType(PetData.pt)
-            if petType == "Rainbow" then
-                table.insert(rainbowAxolotlUIDs, PetUID)
-                if #rainbowAxolotlUIDs >= 30 then break end
+    for uid, petData in pairs(inventory) do
+        if #result >= maxCount then break end
+        if isBloomingRainbow(petData) then
+            local amount = tonumber(petData._am) or 1
+            local take = math.min(amount, maxCount - #result)
+            for i = 1, take do
+                table.insert(result, uid)
+                if #result >= maxCount then break end
             end
         end
     end
-    return rainbowAxolotlUIDs
+    return result
 end
 
--- Kiểm tra và thực hiện hành động nếu thú cưng đã hết thời gian trong Daycare
-local checkDaycareAndReEnroll = function()
+local function checkDaycareAndReEnroll()
     if petInDaycare() then
         local remainingTime = getRemainingTime()
         if remainingTime <= 0 then
-            print("🎁 Thú cưng đã hoàn thành, nhận thưởng...")
-            pcall(function()
-                ReplicatedStorage.Network:FindFirstChild("Daycare: Claim"):InvokeServer()
-            end)
+            if claimRemote then
+                pcall(function() claimRemote:InvokeServer() end)
+            end
         else
-            print(("⏳ Thú cưng vẫn đang trong daycare, còn %.0f giây"):format(remainingTime))
-            return -- chưa xong thì không enroll lại
+            return
         end
     end
 
-    -- Nếu không có pet hoặc vừa nhận xong → gửi lại 30 Rainbow Blooming Axolotl
-    local rainbowAxolotlUIDs = getRainbowAxolotlPets()
-    if not rainbowAxolotlUIDs or #rainbowAxolotlUIDs == 0 then
-        warn("⚠️ Không tìm thấy Rainbow Blooming Axolotl trong kho!")
-        return
-    end
+    if not enrollRemote then return end
 
-    local enrollTable = {}
-    for _, uid in ipairs(rainbowAxolotlUIDs) do
-        enrollTable[uid] = 30
-    end
+    local toSend = getRainbowBloomingUIDs(30)
+    if not toSend or #toSend == 0 then return end
 
-    local success, result = pcall(function()
-        return ReplicatedStorage.Network:FindFirstChild("Daycare: Enroll"):InvokeServer(enrollTable)
-    end)
-
-    if success then
-        print("✅ Đã gửi", #rainbowAxolotlUIDs, "Rainbow Blooming Axolotl vào Daycare!")
-    else
-        warn("❌ Lỗi khi gửi pet vào Daycare:", result)
+    for _, uid in ipairs(toSend) do
+        local args = {
+            [1] = {
+                [uid] = 1
+            }
+        }
+        pcall(function()
+            enrollRemote:InvokeServer(unpack(args))
+        end)
+        wait(0.2)
     end
 end
 
--- Tính năng "Redeem Free Gift"
-local redeemEvent = ReplicatedStorage.Network:FindFirstChild("Redeem Free Gift")
-local redeemGifts = function()
+local function redeemGifts()
     if redeemEvent then
         for i = 1, 12 do
-            pcall(function()
-                redeemEvent:InvokeServer(i)
-            end)
+            pcall(function() redeemEvent:InvokeServer(i) end)
             wait(1)
         end
-        print("🎉 Đã nhận toàn bộ Free Gifts!")
     end
 end
 
--- 🚀 Kiểm tra ban đầu: nhận thưởng hoặc enroll 30 pet trước khi bắt đầu loop
-print("🔍 Đang kiểm tra Daycare ban đầu...")
 checkDaycareAndReEnroll()
 wait(5)
 redeemGifts()
 
--- 🔁 Chạy kiểm tra mỗi 1 phút
 while true do
     wait(68)
     checkDaycareAndReEnroll()
