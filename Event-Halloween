@@ -89,7 +89,6 @@ end)
 task.spawn(function()
 	local TeleportService = game:GetService("TeleportService")
 	local player = game.Players.LocalPlayer
-	local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 	repeat task.wait() until _G.CurrentPlotId
 	repeat task.wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")
@@ -98,7 +97,7 @@ task.spawn(function()
 	local plot = workspace.__THINGS.Plots:WaitForChild(tostring(_G.CurrentPlotId))
 	local machine
 
-	-- Đợi máy xuất hiện
+	-- 🔸 Đợi máy xuất hiện
 	local timeout = tick()
 	repeat
 		task.wait()
@@ -108,40 +107,36 @@ task.spawn(function()
 		end
 	until (machine and machine:IsA("Model")) or tick() - timeout > 20
 
-	-- Nếu quá 20s vẫn không có máy => nhảy server
 	if not (machine and machine:IsA("Model")) then
 		TeleportService:Teleport(game.PlaceId, player)
 		return
 	end
 
-	task.wait(5)
+	task.wait(3)
 
-	-- Lấy vị trí máy (Model → GetPivot)
 	local pos
 	pcall(function()
 		pos = machine:GetPivot().Position
 	end)
-
 	if not pos then
 		TeleportService:Teleport(game.PlaceId, player)
 		return
 	end
 
-	-- Teleport liên tục cho tới khi đứng trong bán kính 3 stud
-	local function teleportToMachine()
-		local targetPos = pos + Vector3.new(0, 6, 0) -- 🆙 nhảy cao lên 6 stud
-		if (hrp.Position - targetPos).Magnitude > 5 then
-			hrp.CFrame = CFrame.new(targetPos)
-		end
-	end
+	-- 🔹 Lần đầu tele xuống thấp
+	hrp.CFrame = CFrame.new(pos + Vector3.new(0, -10, 0))
+	task.wait(5)
 
+	-- 🔹 Sau đó tele lên cao rồi kiểm tra vị trí
 	local startTime = tick()
 	repeat
-		pcall(teleportToMachine)
+		local target = pos + Vector3.new(0, 6, 0)
+		if (hrp.Position - target).Magnitude > 5 then
+			hrp.CFrame = CFrame.new(target)
+		end
 		task.wait(1)
 	until (hrp.Position - pos).Magnitude <= 5 or tick() - startTime > 20
 
-	-- Nếu quá 20s vẫn chưa tới nơi => nhảy server
 	if (hrp.Position - pos).Magnitude > 5 then
 		TeleportService:Teleport(game.PlaceId, player)
 	else
