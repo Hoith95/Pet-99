@@ -108,11 +108,6 @@ end
 -------------------------------------------------------
 local function monitorPlayerCount()
 	while true do
-		if game.PlaceId ~= targetPlaceId then
-			warn("⛔ Đã rời khỏi Place ID mục tiêu. Dừng theo dõi.")
-			break
-		end
-
 		local count = getPlayerCount()
 		if count <= 3 then
 			print("🧘 Server yên tĩnh (" .. count .. " người). Kiểm tra lại sau 3 tiếng.")
