@@ -125,10 +125,11 @@ task.spawn(function()
 		return
 	end
 
-	-- Teleport liên tục cho tới khi đứng trong bán kính 5 stud
+	-- Teleport liên tục cho tới khi đứng trong bán kính 3 stud
 	local function teleportToMachine()
-		if (hrp.Position - pos).Magnitude > 5 then
-			hrp.CFrame = CFrame.new(pos)
+		local targetPos = pos + Vector3.new(0, 6, 0) -- 🆙 nhảy cao lên 6 stud
+		if (hrp.Position - targetPos).Magnitude > 5 then
+			hrp.CFrame = CFrame.new(targetPos)
 		end
 	end
 
