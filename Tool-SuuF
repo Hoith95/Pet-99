@@ -30,6 +30,7 @@ spawn(function()
 end)
 
 _G.script1Done = true
+_G.Event = true
 
 do
     local defaultKey = "hHJqncRPZjHqdvDxwJcwwDmpwstZQtrA"     -- fallback
