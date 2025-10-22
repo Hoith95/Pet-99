@@ -114,7 +114,7 @@ task.spawn(function()
 		return
 	end
 
-	task.wait(7)
+	task.wait(5)
 
 	-- Lấy vị trí máy (Model → GetPivot)
 	local pos
