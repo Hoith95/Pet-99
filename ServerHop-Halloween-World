@@ -6,9 +6,17 @@ local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
--------------------------------------
--- 🧭 Hàm kiểm tra số lượng người chơi
--------------------------------------
+-------------------------------------------------------
+-- 🧭 Kiểm tra đúng map
+-------------------------------------------------------
+if game.PlaceId ~= targetPlaceId then
+	warn("⚠️ Bạn không ở đúng Place ID (" .. tostring(targetPlaceId) .. "). Script sẽ không chạy.")
+	return
+end
+
+-------------------------------------------------------
+-- 🧮 Hàm đếm số người chơi hiện tại
+-------------------------------------------------------
 local function getPlayerCount()
 	local count
 	local ok, result = pcall(function()
@@ -32,9 +40,9 @@ local function getPlayerCount()
 	return count
 end
 
--------------------------------------
--- ⚡ Hàm teleport đến server ít người
--------------------------------------
+-------------------------------------------------------
+-- ⚡ Teleport sang server ít người
+-------------------------------------------------------
 local function teleportToLeastPopulatedServer(placeId, runScriptOnJoin, retryLimit)
 	retryLimit = retryLimit or 3
 	local attempts = 0
@@ -86,7 +94,7 @@ local function teleportToLeastPopulatedServer(placeId, runScriptOnJoin, retryLim
 				end)
 
 				if ok then
-					print(("✅ Đã teleport đến server mới (ID: %s, %d/%d players)"):format(selectedServer.id, selectedServer.playing, selectedServer.maxPlayers))
+					print(("✅ Teleport thành công (ID: %s, %d/%d players)"):format(selectedServer.id, selectedServer.playing, selectedServer.maxPlayers))
 					return true
 				else
 					warn(("⚠️ Teleport thất bại (Lần %d): %s"):format(attempts, tostring(err)))
@@ -104,20 +112,25 @@ local function teleportToLeastPopulatedServer(placeId, runScriptOnJoin, retryLim
 end
 
 -------------------------------------------------------
--- 🕒 Kiểm tra định kỳ: nếu quá 3 người thì teleport
+-- 🕒 Theo dõi 3 tiếng một lần
 -------------------------------------------------------
 local function monitorPlayerCount()
 	while true do
+		if game.PlaceId ~= targetPlaceId then
+			warn("⛔ Đã rời khỏi Place ID mục tiêu. Dừng theo dõi.")
+			break
+		end
+
 		local count = getPlayerCount()
 		if count <= 3 then
-			print("🧘 Server đang yên (" .. count .. " người). Sẽ kiểm tra lại sau 3 tiếng.")
+			print("🧘 Server yên tĩnh (" .. count .. " người). Kiểm tra lại sau 3 tiếng.")
 		else
-			warn("🚨 Server đã quá đông (" .. count .. " người)! Chuẩn bị nhảy server mới...")
+			warn("🚨 Server đông (" .. count .. " người)! Nhảy sang server mới...")
 			task.wait(3)
 			teleportToLeastPopulatedServer(targetPlaceId, false, 5)
 			break
 		end
-		task.wait(10800) -- 3 tiếng
+		task.wait(10800) -- 3 tiếng = 10800 giây
 	end
 end
 
