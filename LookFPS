@@ -1,5 +1,5 @@
 if _G.LOOKFPS then
-    warn("Script đã được chạy trước đó!")
+    warn("⛔ Script đã được chạy trước đó!")
     return
 end
 
@@ -12,6 +12,8 @@ task.spawn(function()
 	local set = setfpscap or setfpscap
 	local place = game.PlaceId
 	local t = workspace:WaitForChild("__THINGS")
+	local startTime = os.clock() -- Thời điểm bắt đầu chạy script
+
 	while task.wait(0.05) do
 		local tt = t:FindFirstChild("__INSTANCE_CONTAINER")
 			and t.__INSTANCE_CONTAINER:FindFirstChild("Active")
@@ -19,8 +21,18 @@ task.spawn(function()
 
 		if place == 140403681187145 then
 			set(tt and 7 or 3)
-		elseif place == 95635359880599 or place == 119454325063278 or place == 131952481663528 then
+
+		elseif place == 95635359880599 or place == 119454325063278 then
 			set(5)
+
+		elseif place == 131952481663528 then
+			-- Nếu đã qua 6 tiếng kể từ lúc script bắt đầu chạy thì set fps = 4
+			local elapsed = os.clock() - startTime
+			if elapsed >= 21600 then
+				set(4)
+			else
+				set(5)
+			end
 		end
 	end
 end)
