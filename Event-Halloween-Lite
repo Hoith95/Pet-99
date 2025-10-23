@@ -277,7 +277,7 @@ task.spawn(function()
         if currCategory ~= prevCategory then
             lastTier = nil
         end
-        local tier = lastTier or 1
+        local tier = lastTier or 2
         if totalRate >= 15000 then
             if tier == 5 then
                 if candy < 15000000 then tier = 2 end
@@ -292,7 +292,7 @@ task.spawn(function()
             end
         elseif totalRate >= 6000 then
             if tier == 3 then
-                if candy < 50000 then tier = 1 end
+                if candy < 50000 then tier = 2 end
             else
                 if candy >= 500000 then tier = 3 end
             end
@@ -307,7 +307,7 @@ task.spawn(function()
             elseif candy >= 50000 then
                 tier = 2
             else
-                tier = 1
+                tier = 2
             end
         end
         lastTier = tier
