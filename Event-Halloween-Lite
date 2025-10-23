@@ -9,7 +9,7 @@ _G.HW.ScanDebounce = _G.HW.ScanDebounce or 0.5
 _G.HW.ClaimInterval = _G.HW.ClaimInterval or 5
 _G.HW.PlaceEggInterval = _G.HW.PlaceEggInterval or 0.5
 _G.HW.BaseWait = _G.HW.BaseWait or 0.5
-_G.EggPillarCount = _G.EggPillarCount or 2
+_G.EggPillarCount = _G.EggPillarCount or 1
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
