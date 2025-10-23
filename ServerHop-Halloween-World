@@ -123,14 +123,14 @@ local function monitorPlayerCount()
 	while true do
 		local count = getPlayerCount()
 		if count <= 3 then
-			print("🧘 Server yên tĩnh (" .. count .. " người). Kiểm tra lại sau 3 tiếng.")
+			print("🧘 Server yên tĩnh (" .. count .. " người). Kiểm tra lại sau 6 tiếng.")
 		else
 			warn("🚨 Server đông (" .. count .. " người)! Nhảy sang server mới...")
 			task.wait(3)
 			teleportToLeastPopulatedServer(placeId, false, 5)
 			break
 		end
-		task.wait(10800) -- 3 tiếng = 10800 giây
+		task.wait(21600) -- 6 tiếng = 21600 giây
 	end
 end
 -------------------------------------------------------
