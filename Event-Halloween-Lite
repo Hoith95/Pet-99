@@ -80,7 +80,7 @@ task.spawn(function()
     local hrp = c and c:FindFirstChild("HumanoidRootPart")
     local hum = c and c:FindFirstChild("Humanoid")
     if not (hrp and hum) then return end
-    task.wait(5)
+    task.wait(9)
     pcall(function()
         hum.PlatformStand, hrp.Anchored = true, true
         hrp.CFrame += Vector3.new(math.random(-30,10), -30, math.random(-30,10))
