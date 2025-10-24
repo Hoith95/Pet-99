@@ -7,6 +7,12 @@ end
 -- Đánh dấu script đã được chạy
 _G.VARGEMS = true
 
+local TARGET_PLACE_ID = 131952481663528
+if game.PlaceId ~= TARGET_PLACE_ID then
+    warn("⚠️ Script chỉ hoạt động tại map có ID: " .. TARGET_PLACE_ID .. ". Hiện tại đang ở: " .. game.PlaceId)
+    return
+end
+
 -- Lấy dịch vụ Players
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
