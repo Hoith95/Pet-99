@@ -8,32 +8,40 @@ end
 _G.VARGEMS = true
 
 -- Lấy dịch vụ Players
-local players = game:GetService("Players")
-local leaderstats = game.Players.LocalPlayer.leaderstats
-local initialDiamonds = leaderstats["\240\159\146\142 Diamonds"].Value
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local leaderstats = LocalPlayer:WaitForChild("leaderstats")
+local diamondStat = leaderstats:WaitForChild("💎 Diamonds")
 
--- Kiểm tra số lượng kim cương sau 5 phút
-local function checkDiamonds()
+-- Ngưỡng tăng kim cương tối thiểu để không ServerHop
+local MIN_GAIN = 2500000
+
+-- Hàm kiểm tra kim cương định kỳ
+local function monitorDiamonds()
     while true do
-        -- In ra số lượng kim cương ban đầu
-        print("Số lượng kim cương hiện có ban đầu: " .. initialDiamonds)
+        -- Lấy giá trị ban đầu
+        local initialDiamonds = diamondStat.Value
+        print("💠 Số kim cương ban đầu: " .. initialDiamonds)
 
-        -- Chờ 5 phút (300 giây)
-        wait(300)
+        -- Chờ 10 phút (600 giây)
+        task.wait(600)
 
-        -- Kiểm tra lại số lượng kim cương sau 10 phút
-        local currentDiamonds = leaderstats["\240\159\146\142 Diamonds"].Value
+        -- Lấy giá trị hiện tại
+        local currentDiamonds = diamondStat.Value
+        local diff = currentDiamonds - initialDiamonds
 
-        -- Nếu số lượng kim cương không thay đổi, thực hiện lại ServerHop
-        if currentDiamonds == initialDiamonds then
-            print("Số lượng kim cương không thay đổi, thực hiện lại ServerHop.")
-            setfpscap(15)
+        print(string.format("📊 Sau 10 phút: hiện có %d (tăng %d)", currentDiamonds, diff))
+
+        -- Kiểm tra chênh lệch
+        if diff < MIN_GAIN then
+            print("⚠️ Kim cương tăng dưới " .. MIN_GAIN .. " → Thực hiện ServerHop.")
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
+            return -- Dừng vòng hiện tại, script JoinLow sẽ tự chạy lại
         else
-            print("Số lượng kim cương đã thay đổi, không thực hiện ServerHop.")
+            print("✅ Kim cương tăng đủ (" .. diff .. "), không ServerHop. Tiếp tục theo dõi...")
         end
     end
 end
 
--- Chạy kiểm tra kim cương
-checkDiamonds()
+-- Chạy kiểm tra
+monitorDiamonds()
