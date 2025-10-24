@@ -78,24 +78,7 @@ task.spawn(function()
     end
 end)
 
-task.spawn(function()
-    local p = game.Players.LocalPlayer
-    local c = p and (p.Character or p.CharacterAdded:Wait())
-    local hrp = c and c:FindFirstChild("HumanoidRootPart")
-    local hum = c and c:FindFirstChild("Humanoid")
-    if not (hrp and hum) then return end
-    task.wait(9)
-    pcall(function()
-        hum.PlatformStand, hrp.Anchored = true, true
-        hrp.CFrame += Vector3.new(math.random(-30,10), -30, math.random(-30,10))
-    end)
-    local part = Instance.new("Part")
-    part.Name, part.Size, part.Anchored, part.CanCollide, part.Transparency =
-        "TeleportPlatform", Vector3.new(5,1,5), true, true, 1
-    part.CFrame = hrp.CFrame + Vector3.new(0, -5, 0)
-    part.Parent = workspace
-    _G.TeleDone = true
-end)
+_G.TeleDone = true
 
 local debrisFolder
 local pillarsCFrames = {}
