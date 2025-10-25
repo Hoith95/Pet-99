@@ -527,7 +527,7 @@ task.spawn(function()
             end
         end
 
-        if rate <= 55000 then
+        if rate <= 68000 then
             craft(4) craft(3) craft(2) craft(1)
         else
             craft(4)
