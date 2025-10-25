@@ -1,3 +1,11 @@
+if _G.VARHLW then
+    warn("Script đã được chạy trước đó!")
+    return -- Dừng script nếu đã chạy
+end
+
+-- Đánh dấu script đã được chạy
+_G.VARHLW = true
+
 repeat task.wait() until game:IsLoaded()
 local LocalPlayer = game:GetService('Players').LocalPlayer
 repeat task.wait() until not LocalPlayer.PlayerGui:FindFirstChild('__INTRO')
