@@ -138,7 +138,7 @@ local function startGuiUpdater()
         return label
     end
 
-    local tilesLabel      = createLabel("TilesLabel",        rightRegion,   Color3.fromRGB(34, 139, 34))
+    local rankLabel      = createLabel("RankLabel",        rightRegion,   Color3.fromRGB(34, 139, 34))
     local chanceLabel     = createLabel("ChanceLabel",       rightRegion,   Color3.fromRGB(34, 139, 34))
     --local rebirthLabel    = createLabel("RebirthLabel",      rightRegion,   Color3.fromRGB(34, 139, 34))
     local coinsLabel      = createLabel("CoinsLabel",        rightRegion,   Color3.fromRGB(34, 139, 34))
@@ -152,8 +152,8 @@ local function startGuiUpdater()
     while true do
         local currentTime = os.time()
 
-        tilesLabel.Text   = tostring(#game:GetService("Workspace").__THINGS.Tiles:GetChildren()) .. " | TILES"
-        updateLabelSize(tilesLabel)
+        rankLabel.Text   = tostring(Save.Get().Rank) .. " | RANK"
+        updateLabelSize(rankLabel)
 
         coinsLabel.Text   = Formatint(getCurrencyAmount("HalloweenCoins")) .. " | COINS"
         updateLabelSize(coinsLabel)
