@@ -578,7 +578,7 @@ task.spawn(function()
         task.wait(used and 600 or 0.5)
     end
 end)
--- PHẦN 9: TỰ ĐỘNG TELE TỚI _G.CurrentEggPillars KHI CÓ (KHÔNG CÓ LOG)
+
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.CurrentPlotId and _G.TeleDone and _G.PillarScanDone
     local function ensurePillarsBuilt()
