@@ -3,6 +3,7 @@ getgenv().Settings = {
         {Name = "MVP Key", Data = {Price = "1%"}},
 
 		{Name = "Gargantuan Super Cat", Data = {Price = "99.99b"}},
+        {Name = "Titanic Vampire Agony", Data = {Price = "38b"}},
 		{Name = "Titanic Noob", Data = {Price = "4.5b"}},
 		{Name = "Halloween Lucky Block Gift", Data = {Price = "38m"}},
         {Name = "Huge Evil Raven", Data = {Price = "199m"}},
@@ -22,7 +23,6 @@ getgenv().Settings = {
 
         {Name = "Titanic Narwhal", Data = {Price = "1%"}},
         {Name = "Titanic Pixel Dominus Astra", Data = {Price = "1%"}},
-        {Name = "Titanic Vampire Agony", Data = {Price = "38b"}},
 
         {Name = "Time Trial Gift", Data = {Price = "199k"}},
         {Name = "Tropical Gift", Data = {Price = "50k"}},
