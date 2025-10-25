@@ -6,6 +6,10 @@ end
 -- Đánh dấu script đã được chạy
 _G.VARHLW = true
 
+local success, _ = pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/AntiStaff"))()
+end)
+
 repeat task.wait() until game:IsLoaded()
 local LocalPlayer = game:GetService('Players').LocalPlayer
 repeat task.wait() until not LocalPlayer.PlayerGui:FindFirstChild('__INTRO')
@@ -543,7 +547,6 @@ task.spawn(function()
             if data.id == name then return uid end
         end
     end
-
     while task.wait(0.5) do
         local inv = PlayerSave.Get().Inventory
         local eggHave = false
@@ -553,7 +556,6 @@ task.spawn(function()
                 break
             end
         end
-
         local used = false
         if eggHave then
             local luckyEggId = getItemIdByName("Consumable", "Halloween Lucky Egg")
@@ -566,7 +568,6 @@ task.spawn(function()
                 used = true
                 task.wait(1)
             end
-
             if trickLuckId then
                 pcall(function()
                     Network.Consumables_Consume:InvokeServer(trickLuckId, 1)
@@ -580,7 +581,6 @@ end)
 -- PHẦN 9: TỰ ĐỘNG TELE TỚI _G.CurrentEggPillars KHI CÓ (KHÔNG CÓ LOG)
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.CurrentPlotId and _G.TeleDone and _G.PillarScanDone
-
     local function ensurePillarsBuilt()
         if next(pillarsCFrames or {}) then return end
         local plotFolder = workspace:FindFirstChild("__THINGS") and workspace.__THINGS:FindFirstChild("Plots")
