@@ -68,7 +68,6 @@ spawn(function()
         if _G.Time_Trial_End == true then
 			getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
 			spawn(function()
-			wait(38)
         	loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-3"))()
 			end)
             print("✅ Config: Block Party set (Time_Trial_End)")
@@ -76,7 +75,6 @@ spawn(function()
             warn("⛔ _G.Time_Trial_End chưa true — set Block Party.")
 			getgenv().GENCHANTS = {"Criticals","Criticals","Tap Power","Tap Power","Strong Pets","Strong Pets"}
 			spawn(function()
-			wait(38)
         	loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-3"))()
 			end)
         end
