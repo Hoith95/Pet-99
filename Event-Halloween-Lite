@@ -6,10 +6,6 @@ end
 -- Đánh dấu script đã được chạy
 _G.VARHLW = true
 
-local success, _ = pcall(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/AntiStaff"))()
-end)
-
 repeat task.wait() until game:IsLoaded()
 local LocalPlayer = game:GetService('Players').LocalPlayer
 repeat task.wait() until not LocalPlayer.PlayerGui:FindFirstChild('__INTRO')
