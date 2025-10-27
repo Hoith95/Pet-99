@@ -240,6 +240,7 @@ end
 
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.CurrentPlotId and _G.TeleDone
+
     local plotFolder = workspace:WaitForChild("__THINGS"):WaitForChild("Plots")
     local myPlot = plotFolder:FindFirstChild(tostring(_G.CurrentPlotId))
     if myPlot then buildPillarsCFrames(myPlot) end
@@ -476,6 +477,7 @@ end)
 
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.TotalRate and _G.TeleDone
+
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
     local Network = ReplicatedStorage:WaitForChild("Network")
@@ -533,6 +535,7 @@ end)
 
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.TotalRate and _G.TeleDone
+
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local Network = ReplicatedStorage.Network
     local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
@@ -577,6 +580,7 @@ end)
 
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.CurrentPlotId and _G.TeleDone and _G.PillarScanDone
+
     local function ensurePillarsBuilt()
         if next(pillarsCFrames or {}) then return end
         local plotFolder = workspace:FindFirstChild("__THINGS") and workspace.__THINGS:FindFirstChild("Plots")
