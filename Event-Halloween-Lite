@@ -1,14 +1,14 @@
-if _G.VARHLW then
-    warn("Script đã được chạy trước đó!")
-    return -- Dừng script nếu đã chạy
-end
-
--- Đánh dấu script đã được chạy
-_G.VARHLW = true
-
 repeat task.wait() until game:IsLoaded()
 local LocalPlayer = game:GetService('Players').LocalPlayer
 repeat task.wait() until not LocalPlayer.PlayerGui:FindFirstChild('__INTRO')
+
+local function inHalloweenWorld()
+	local c = workspace:FindFirstChild("__THINGS") and workspace.__THINGS:FindFirstChild("__INSTANCE_CONTAINER")
+	return c and c:FindFirstChild("Active") and c.Active:FindFirstChild("HalloweenWorld")
+end
+
+repeat task.wait(1) until inHalloweenWorld()
+print("🎃 Đã vào HalloweenWorld! Bắt đầu chạy code...")
 
 _G.HW = _G.HW or {}
 _G.HW.DebugMode = _G.HW.DebugMode or false
@@ -24,16 +24,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TeleportService = game:GetService("TeleportService")
 local player = Players.LocalPlayer
 local Network = ReplicatedStorage:WaitForChild("Network")
-
-local placeId = 131952481663528
-if game.PlaceId ~= placeId then
-    TeleportService:Teleport(placeId, player)
-    return
-end
-
-spawn(function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-GEMS2"))()
-end)
 
 _G.PillarPets = _G.PillarPets or {}
 _G.PillarScanDone = _G.PillarScanDone or false
@@ -240,7 +230,6 @@ end
 
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.CurrentPlotId and _G.TeleDone
-
     local plotFolder = workspace:WaitForChild("__THINGS"):WaitForChild("Plots")
     local myPlot = plotFolder:FindFirstChild(tostring(_G.CurrentPlotId))
     if myPlot then buildPillarsCFrames(myPlot) end
@@ -334,7 +323,6 @@ end)
 
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.PillarScanDone and _G.TeleDone
-
     local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
     local SaveModule = safeRequire(Client.Save)
     while not SaveModule do task.wait(_G.HW.BaseWait); SaveModule = safeRequire(Client.Save) end
@@ -477,7 +465,6 @@ end)
 
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.TotalRate and _G.TeleDone
-
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
     local Network = ReplicatedStorage:WaitForChild("Network")
@@ -495,7 +482,6 @@ task.spawn(function()
         end)
         task.wait(5)
     end
-
     local function claimCraft(id)
         local args = { id }
         pcall(function()
@@ -503,7 +489,6 @@ task.spawn(function()
         end)
         task.wait(5)
     end
-
     local function getCraftQueue()
         local data = PlayerSave.Get().HalloweenCraftingQueue or {}
         local ids = {}
@@ -514,7 +499,6 @@ task.spawn(function()
         end
         return ids
     end
-
     while task.wait(5) do
         local rate = _G.TotalRate or 0
         local queue = getCraftQueue()
@@ -524,7 +508,6 @@ task.spawn(function()
                 claimCraft(id)
             end
         end
-
         if rate <= 68000 then
             craft(4) craft(3) craft(2) craft(1)
         else
@@ -535,7 +518,6 @@ end)
 
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.TotalRate and _G.TeleDone
-
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local Network = ReplicatedStorage.Network
     local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
@@ -580,7 +562,6 @@ end)
 
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.CurrentPlotId and _G.TeleDone and _G.PillarScanDone
-
     local function ensurePillarsBuilt()
         if next(pillarsCFrames or {}) then return end
         local plotFolder = workspace:FindFirstChild("__THINGS") and workspace.__THINGS:FindFirstChild("Plots")
