@@ -7,17 +7,17 @@ end
 -- Đánh dấu script đã được chạy
 _G.VARGEMS = true
 
-local TARGET_PLACE_ID = 131952481663528
-if game.PlaceId ~= TARGET_PLACE_ID then
-    warn("⚠️ Script chỉ hoạt động tại map có ID: " .. TARGET_PLACE_ID .. ". Hiện tại đang ở: " .. game.PlaceId)
-    return
-end
-
 -- Lấy dịch vụ Players
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local leaderstats = LocalPlayer:WaitForChild("leaderstats")
 local diamondStat = leaderstats:WaitForChild("💎 Diamonds")
+local function inHalloweenWorld()
+	local c = workspace:FindFirstChild("__THINGS") and workspace.__THINGS:FindFirstChild("__INSTANCE_CONTAINER")
+	return c and c:FindFirstChild("Active") and c.Active:FindFirstChild("HalloweenWorld")
+end
+
+repeat task.wait(1) until inHalloweenWorld()
 
 -- Ngưỡng tăng kim cương tối thiểu để không ServerHop
 local MIN_GAIN = 1680000
@@ -41,7 +41,7 @@ local function monitorDiamonds()
         -- Kiểm tra chênh lệch
         if diff < MIN_GAIN then
             print("⚠️ Kim cương tăng dưới " .. MIN_GAIN .. " → Thực hiện ServerHop.")
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Halloween-World"))()
+            game.Players.LocalPlayer:Kick("Heo VAR")
             return -- Dừng vòng hiện tại, script JoinLow sẽ tự chạy lại
         else
             print("✅ Kim cương tăng đủ (" .. diff .. "), không ServerHop. Tiếp tục theo dõi...")
