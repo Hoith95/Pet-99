@@ -20,7 +20,7 @@ local leaderstats = LocalPlayer:WaitForChild("leaderstats")
 local diamondStat = leaderstats:WaitForChild("💎 Diamonds")
 
 -- Ngưỡng tăng kim cương tối thiểu để không ServerHop
-local MIN_GAIN = 680000
+local MIN_GAIN = 1680000
 
 -- Hàm kiểm tra kim cương định kỳ
 local function monitorDiamonds()
