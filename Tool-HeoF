@@ -27,6 +27,11 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/D
 end)
 
 spawn(function()
+wait(38)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GIFT-GEMS-FAST-2"))()
+end)
+
+spawn(function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Combo-2"))()
 end)
 
