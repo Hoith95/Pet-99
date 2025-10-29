@@ -24,7 +24,7 @@ task.spawn(function()
 			if tt then
 				set(7)
 			elseif inHalloweenWorld() then
-				set(5)
+				set(4)
 			else
 				set(3)
 			end
