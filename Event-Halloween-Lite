@@ -62,7 +62,6 @@ local function findPlayerPlot()
     return nil
 end
 
-
 task.spawn(function()
     while not _G.CurrentPlotId do
         local plot = findPlayerPlot()
@@ -557,63 +556,5 @@ task.spawn(function()
             end
         end
         task.wait(used and 600 or 0.5)
-    end
-end)
-
-task.spawn(function()
-    repeat task.wait(_G.HW.BaseWait) until _G.CurrentPlotId and _G.TeleDone and _G.PillarScanDone
-    local function ensurePillarsBuilt()
-        if next(pillarsCFrames or {}) then return end
-        local plotFolder = workspace:FindFirstChild("__THINGS") and workspace.__THINGS:FindFirstChild("Plots")
-        if not plotFolder then return end
-        local myPlot = plotFolder:FindFirstChild(tostring(_G.CurrentPlotId))
-        if myPlot then buildPillarsCFrames(myPlot) end
-    end
-    local function teleportToCFrameSafe(cf)
-        if not cf then return false end
-        local char = player.Character or player.CharacterAdded:Wait()
-        local hrp = char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("Torso") or char:FindFirstChild("UpperTorso")
-        if not hrp then return false end
-        local target = cf + Vector3.new(0, 3, 0)
-        for i = 1, 6 do
-            local ok = pcall(function() hrp.CFrame = target end)
-            if ok then return true end
-            task.wait(0.12)
-        end
-        return false
-    end
-    local lastSnapshot = nil
-    while true do
-        if _G.CurrentEggPillars and next(_G.CurrentEggPillars) then
-            ensurePillarsBuilt()
-            local keys = {}
-            for k,_ in pairs(_G.CurrentEggPillars) do table.insert(keys, tostring(k)) end
-            table.sort(keys)
-            local s = table.concat(keys, ",")
-            if s ~= lastSnapshot then
-                lastSnapshot = s
-                for pid,_ in pairs(_G.CurrentEggPillars) do
-                    local id = tonumber(pid) or pid
-                    local cf = pillarsCFrames[id]
-                    if not cf then
-                        local plotFolder = workspace:FindFirstChild("__THINGS") and workspace.__THINGS:FindFirstChild("Plots")
-                        if plotFolder then
-                            local myPlot = plotFolder:FindFirstChild(tostring(_G.CurrentPlotId))
-                            if myPlot then buildPillarsCFrames(myPlot); cf = pillarsCFrames[id] end
-                        end
-                    end
-                    if cf then
-                        teleportToCFrameSafe(cf)
-                        task.wait(0.8)
-                    end
-                end
-                task.wait(4)
-            else
-                task.wait(_G.HW.BaseWait)
-            end
-        else
-            lastSnapshot = nil
-            task.wait(_G.HW.BaseWait)
-        end
     end
 end)
