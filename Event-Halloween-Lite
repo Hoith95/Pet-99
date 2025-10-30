@@ -242,6 +242,86 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+    task.wait(9)
+    local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
+    local SaveModule = nil
+    while not SaveModule do
+        SaveModule = safeRequire(Client.Save)
+        if not SaveModule then task.wait(_G.HW.BaseWait) end
+    end
+    local function getCurrencyAmount(currencyId)
+        local ok, data = pcall(function() return SaveModule.Get() end)
+        if not ok or not data or not data.Inventory or not data.Inventory.Currency then return 0 end
+        for _, v in pairs(data.Inventory.Currency) do
+            if v.id == currencyId then return tonumber(v._am) or 0 end
+        end
+        return 0
+    end
+    local function rateCategory(totalRate)
+        totalRate = tonumber(totalRate) or 0
+        if totalRate >= 15000 then
+            return 3
+        elseif totalRate >= 10000 then
+            return 2
+        elseif totalRate >= 6000 then
+            return 1
+        else
+            return 0
+        end
+    end
+    local lastTier = nil
+    local prevCategory = rateCategory(_G.TotalRate)
+    repeat task.wait(_G.HW.BaseWait) until _G.PillarScanDone and _G.TeleDone
+    while true do
+        local candy = getCurrencyAmount("HalloweenCoins")
+        local totalRate = tonumber(_G.TotalRate) or 0
+        local currCategory = rateCategory(totalRate)
+        if currCategory ~= prevCategory then
+            lastTier = nil
+        end
+        local tier = lastTier or 2
+        if totalRate >= 15000 then
+            if tier == 5 then
+                if candy < 15000000 then tier = 2 end
+            else
+                if candy >= 90000000 then tier = 5 end
+            end
+        elseif totalRate >= 10000 then
+            if tier == 4 then
+                if candy < 2400000 then tier = 3 end
+            else
+                if candy >= 10500000 then tier = 4 end
+            end
+        elseif totalRate >= 6000 then
+            if tier == 3 then
+                if candy < 50000 then tier = 2 end
+            else
+                if candy >= 500000 then tier = 3 end
+            end
+        else
+            -- totalRate < 6000:
+            if candy >= 30000000 then
+                tier = 5
+            elseif candy >= 5000000 then
+                tier = 4
+            elseif candy >= 500000 then
+                tier = 3
+            elseif candy >= 50000 then
+                tier = 2
+            else
+                tier = 2
+            end
+        end
+        lastTier = tier
+        prevCategory = currCategory
+        pcall(function()
+            Network.Plots_Invoke:InvokeServer(_G.CurrentPlotId, "PurchaseEgg", tier, 3)
+        end)
+        task.wait(0.05)
+    end
+end)
+
+task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.PillarScanDone and _G.TeleDone
     local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
     local SaveModule = safeRequire(Client.Save)
