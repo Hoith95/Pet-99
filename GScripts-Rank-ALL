@@ -96,7 +96,6 @@ spawn(function()
         	loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-3"))()
 			end)
         end
-
     else
         warn("⛔ Không phải event được hỗ trợ — không set gì.")
     end
