@@ -67,6 +67,7 @@ spawn(function()
     elseif eventId == 140403681187145 then
         -- World 4: check _G.Time_Trial_End một lần
         if _G.Time_Trial_End == true then
+			_G.GEVENT_FPS  = 5
 			getgenv().GDO_HALLOWEEN_WORLD = true
 			getgenv().GEVENT_UPGRADES = {
 				"HalloweenCandyMultiplier",
