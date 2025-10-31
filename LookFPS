@@ -24,7 +24,7 @@ task.spawn(function()
 			if tt then
 				set(7)
 			elseif inHalloweenWorld() then
-				set(6)
+				set(10)
 			else
 				set(3)
 			end
@@ -32,7 +32,7 @@ task.spawn(function()
 			set(5)
 		elseif place == 131952481663528 or inHalloweenWorld() then
 			local elapsed = os.clock() - startTime
-			set(elapsed >= 21600 and 5 or 6)
+			set(elapsed >= 21600 and 9 or 10)
 		end
 	end
 end)
