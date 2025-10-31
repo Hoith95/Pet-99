@@ -1,15 +1,10 @@
 _G.script1Done = true
---_G.MAILBOX_STOP = true
 
 --- Gửi Mail ---
 spawn(function()
 wait(15)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Heo"))()
 end)
-
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Plaza-MinPlayers"))()
-
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop2"))()
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mastery"))()
 
@@ -25,87 +20,5 @@ spawn(function()
 end)
 
 spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Tele-Map-274"))()
-end)
-
-spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Halloween-World"))()
-end)
-
-spawn(function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GIFT-GEMS-FAST"))()
 end)
-
-spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-GEMS2"))()
-end)
-
-spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-X7"))()
-end)
-
-spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-GEMS2"))()
-end)
-
-spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/info-gems"))()
-end)
-
-spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Huge-Webhook"))()
-end)
-
-spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-GemsH"))()
-end)
-
-spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Pira-Daycare"))()
-end)
-
-spawn(function()
-wait(6868)
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
-end)
-
---- Gửi Tất Cả Gems ---
-spawn(function()
-wait(15)
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-GScripts-Heo"))()
-end)
-
-spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TeleMap1-Rank8"))()
-end)
-
-spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Combine-Key"))()
-end)
-
---- Gửi Tất Cả Huge ---
-task.wait(15)
---getgenv().usernames = {"Tru_BatGioi"}
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge"))()
-
---- Gửi Tất Cả Pet Event ---
-task.wait(15)
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Pet-Event"))()
-
---- Gửi Tất Cả Items Event ---
-task.wait(15)
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Items-Heo"))()
-
---- Gửi Tất Cả Titanic ---
-task.wait(15)
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Titanic"))()
-
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-SCRIPT"))()
-
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TeleMap"))()
-
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-Ket-Map"))()
-
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TeleMap1-Rank11"))()
-
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-FPS"))()
