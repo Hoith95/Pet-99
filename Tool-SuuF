@@ -3,10 +3,6 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/L
 end)
 
 spawn(function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPU-LOW"))()
-end)
-
-spawn(function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_Time_Trial_End"))()
 end)
 
