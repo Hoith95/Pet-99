@@ -2,6 +2,7 @@ if _G.COMBO_EVENT then
     warn("⛔ Script đã được chạy trước đó!")
     return
 end
+
 _G.COMBO_EVENT = true
 
 -- Services & data
@@ -56,6 +57,8 @@ local function resetIfNewDay()
             lastDay = today,
             reset23Date = nil
         }
+        -- also clear the global done flag just in case (defensive)
+        pcall(function() _G.COMBO_EVENT_DONE = false end)
         saveData()
     end
 end
@@ -81,9 +84,32 @@ local function checkResetAt23()
             runtime.fish.done = false
             runtime.reset23Date = vnDateStr
             runtime.lastDay = vnDateStr
+            -- reset the global flag as requested
+            pcall(function() _G.COMBO_EVENT_DONE = false end)
             saveData()
             warn(("🔁 Reset progress at 23:00 VN (%s)"):format(vnDateStr))
         end
+    end
+end
+
+-- If global done flag is observed, mark both tasks as done immediately
+local function applyGlobalDone()
+    if _G.COMBO_EVENT_DONE == true then
+        -- mark both as done and ensure totals reach required seconds
+        runtime.farm.done = true
+        runtime.fish.done = true
+        runtime.farm.total = math.max(runtime.farm.total or 0, REQUIRED_SECONDS)
+        runtime.fish.total = math.max(runtime.fish.total or 0, REQUIRED_SECONDS)
+        runtime.farm.last = runtime.farm.last or os.time()
+        runtime.fish.last = runtime.fish.last or os.time()
+        saveData()
+        warn("✅ _G.COMBO_EVENT_DONE detected — Farm & Fishing marked as DONE.")
+        -- if both done, attempt to teleport to World4
+        pcall(function()
+            if runtime.farm.done and runtime.fish.done then
+                pcall(safeInvokeWorld4)
+            end
+        end)
     end
 end
 
@@ -336,6 +362,9 @@ local function main()
     loadData()
     resetIfNewDay()
 
+    -- If a global done flag is present at startup, apply it immediately
+    pcall(applyGlobalDone)
+
     -- Delay GUI 90s (tracking unaffected)
     task.spawn(function()
         task.wait(90)
@@ -434,5 +463,17 @@ local function main()
         return
     end
 end
+
+-- Watcher: if _G.COMBO_EVENT_DONE becomes true at any time, apply immediately
+task.spawn(function()
+    while true do
+        pcall(function()
+            if _G.COMBO_EVENT_DONE == true then
+                applyGlobalDone()
+            end
+        end)
+        task.wait(2)
+    end
+end)
 
 pcall(main)
