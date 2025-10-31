@@ -22,7 +22,7 @@ task.spawn(function()
 		local tt = active and active:FindFirstChild("TimeTrial")
 		if place == 140403681187145 then
 			if tt then
-				set(7)
+				set(10)
 			elseif inHalloweenWorld() then
 				set(10)
 			else
