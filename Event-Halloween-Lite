@@ -283,7 +283,7 @@ task.spawn(function()
             if tier == 5 then
                 if candy < 15000000 then tier = 2 end
             else
-                if candy >= 90000000 then tier = 5 end
+                if candy >= 90000000 then tier = 3 end
             end
         elseif totalRate >= 10000 then
             if tier == 4 then
