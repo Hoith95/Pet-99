@@ -10,7 +10,6 @@ task.spawn(function()
 	local set = setfpscap or setfpscap
 	local place = game.PlaceId
 	local t = workspace:WaitForChild("__THINGS")
-	local startTime = os.clock() -- Thời điểm bắt đầu chạy script
 	local function inHalloweenWorld()
 		local c = workspace:FindFirstChild("__THINGS") and workspace.__THINGS:FindFirstChild("__INSTANCE_CONTAINER")
 		return c and c:FindFirstChild("Active") and c.Active:FindFirstChild("HalloweenWorld")
@@ -24,15 +23,12 @@ task.spawn(function()
 			if tt then
 				set(7)
 			elseif inHalloweenWorld() then
-				set(5)
+				set(6)
 			else
-				set(3)
+				set(5)
 			end
 		elseif place == 95635359880599 or place == 119454325063278 then
 			set(5)
-		elseif place == 131952481663528 or inHalloweenWorld() then
-			local elapsed = os.clock() - startTime
-			set(elapsed >= 21600 and 4 or 5)
 		end
 	end
 end)
