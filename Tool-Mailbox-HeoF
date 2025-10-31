@@ -1,15 +1,3 @@
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/WaitForGameLoad"))()
-
-spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/ServerHop-Event-World"))()
-end)
-
---game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World4Teleport"):InvokeServer()
-
-spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/World4Teleport"))()
-end)
-
 spawn(function()
     while true do
         wait(360)  -- chờ 360 giây (6 phút)
@@ -18,26 +6,6 @@ spawn(function()
 end)
 
 spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-EQPETS"))()
-end)
-
-spawn(function()
 wait(30)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge"))()
-end)
-
-spawn(function()
-wait(30)
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Notifier"))()
-end)
-
-spawn(function()
-wait(183)
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS"))()
-end)
-
-spawn(function()
-wait(33983)
---setfpscap(60)
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/JoinLow"))()
 end)
