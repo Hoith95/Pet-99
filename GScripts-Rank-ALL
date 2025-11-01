@@ -100,7 +100,7 @@ spawn(function()
     end
 end)
 
-getgenv().GLOOTBOXES = {"Locked Hype Egg", "Deep Sea Treasure Chest"}
+--getgenv().GLOOTBOXES = {"Locked Hype Egg", "Deep Sea Treasure Chest"}
 
 getgenv().GPROGRESS_MODE = "Hybrid" -- Hatch
 getgenv().GGFX_MODE = 1
