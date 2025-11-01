@@ -4,6 +4,7 @@ getgenv().Settings = {
 
 		{Name = "Gargantuan Super Cat", Data = {Price = "50.86b"}},
         {Name = "Titanic Vampire Agony", Data = {Price = "20b"}},
+		{Name = "Titanic Pink Lucky Block", Data = {Price = "6b"}},
 		{Name = "Titanic Noob", Data = {Price = "4b"}},
 		{Name = "Halloween Lucky Block Gift", Data = {Price = "38m"}},
 
