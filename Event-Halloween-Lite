@@ -229,7 +229,6 @@ end
 
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.CurrentPlotId and _G.TeleDone
-
     local plotFolder = workspace:WaitForChild("__THINGS"):WaitForChild("Plots")
     local myPlot = plotFolder:FindFirstChild(tostring(_G.CurrentPlotId))
     if myPlot then buildPillarsCFrames(myPlot) end
@@ -279,10 +278,10 @@ task.spawn(function()
         if currCategory ~= prevCategory then
             lastTier = nil
         end
-        local tier = lastTier or 2
+        local tier = lastTier or 0
         if totalRate >= 15000 then
             if tier == 5 then
-                if candy < 15000000 then tier = 2 end
+                if candy < 15000000 then tier = 0 end
             else
                 if candy >= 915000000 then tier = 6 end
             end
@@ -323,7 +322,6 @@ end)
 
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.PillarScanDone and _G.TeleDone
-
     local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
     local SaveModule = safeRequire(Client.Save)
     while not SaveModule do task.wait(_G.HW.BaseWait); SaveModule = safeRequire(Client.Save) end
@@ -466,7 +464,6 @@ end)
 
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.TotalRate and _G.TeleDone
-
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
     local Network = ReplicatedStorage:WaitForChild("Network")
@@ -520,7 +517,6 @@ end)
 
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.TotalRate and _G.TeleDone
-
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local Network = ReplicatedStorage.Network
     local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
@@ -560,20 +556,5 @@ task.spawn(function()
             end
         end
         task.wait(used and 600 or 0.5)
-    end
-end)
-
-task.spawn(function()
-    repeat task.wait(1) until _G.CurrentPlotId and _G.TotalRate
-
-    local plotId = _G.CurrentPlotId
-    local Network = game:GetService("ReplicatedStorage").Network
-    local param = 2
-    while (_G.TotalRate or 0) < 68000 do
-        pcall(function()
-            Network.Plots_Invoke:InvokeServer(plotId, "PurchaseHouse", param)
-        end)
-        param = param < 6 and param + 1 or 2
-        task.wait(1)
     end
 end)
