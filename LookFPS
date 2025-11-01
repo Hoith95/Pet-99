@@ -23,14 +23,14 @@ task.spawn(function()
 		if place == 140403681187145 then
 			if tt then
 				set(10)
-			elseif inHalloweenWorld() then
+			elseif place == 131952481663528 then
 				set(10)
 			else
 				set(3)
 			end
 		elseif place == 95635359880599 or place == 119454325063278 then
 			set(5)
-		elseif place == 131952481663528 or inHalloweenWorld() then
+		elseif inHalloweenWorld() then
 			local elapsed = os.clock() - startTime
 			set(elapsed >= 21600 and 9 or 10)
 		end
