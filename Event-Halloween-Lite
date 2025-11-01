@@ -229,6 +229,7 @@ end
 
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.CurrentPlotId and _G.TeleDone
+
     local plotFolder = workspace:WaitForChild("__THINGS"):WaitForChild("Plots")
     local myPlot = plotFolder:FindFirstChild(tostring(_G.CurrentPlotId))
     if myPlot then buildPillarsCFrames(myPlot) end
@@ -283,7 +284,7 @@ task.spawn(function()
             if tier == 5 then
                 if candy < 15000000 then tier = 2 end
             else
-                if candy >= 90000000 then tier = 3 end
+                if candy >= 915000000 then tier = 6 end
             end
         elseif totalRate >= 10000 then
             if tier == 4 then
@@ -322,11 +323,12 @@ end)
 
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.PillarScanDone and _G.TeleDone
+
     local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
     local SaveModule = safeRequire(Client.Save)
     while not SaveModule do task.wait(_G.HW.BaseWait); SaveModule = safeRequire(Client.Save) end
 
-    local eggPriority = {"Coffin Egg","Reaper Egg","Spider Egg","Cauldron Egg","Ghost Egg","Bat Egg","Grave Egg","Pumpkin Egg"}
+    local eggPriority = {"Clown Egg","Coffin Egg","Reaper Egg","Spider Egg","Cauldron Egg","Ghost Egg","Bat Egg","Grave Egg","Pumpkin Egg"}
     local currentEgg = nil
 
     while true do
@@ -464,6 +466,7 @@ end)
 
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.TotalRate and _G.TeleDone
+
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
     local Network = ReplicatedStorage:WaitForChild("Network")
@@ -517,6 +520,7 @@ end)
 
 task.spawn(function()
     repeat task.wait(_G.HW.BaseWait) until _G.TotalRate and _G.TeleDone
+
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local Network = ReplicatedStorage.Network
     local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
@@ -531,7 +535,7 @@ task.spawn(function()
         local inv = PlayerSave.Get().Inventory
         local eggHave = false
         for _, data in pairs(inv.EggHalloween or {}) do
-            if data.id == "Coffin Egg" or data.id == "Reaper Egg" then
+            if data.id == "Clown Egg" or data.id == "Coffin Egg" then
                 eggHave = true
                 break
             end
@@ -556,5 +560,20 @@ task.spawn(function()
             end
         end
         task.wait(used and 600 or 0.5)
+    end
+end)
+
+task.spawn(function()
+    repeat task.wait(1) until _G.CurrentPlotId and _G.TotalRate
+
+    local plotId = _G.CurrentPlotId
+    local Network = game:GetService("ReplicatedStorage").Network
+    local param = 2
+    while (_G.TotalRate or 0) < 68000 do
+        pcall(function()
+            Network.Plots_Invoke:InvokeServer(plotId, "PurchaseHouse", param)
+        end)
+        param = param < 6 and param + 1 or 2
+        task.wait(1)
     end
 end)
