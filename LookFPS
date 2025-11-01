@@ -22,9 +22,9 @@ task.spawn(function()
 		local tt = active and active:FindFirstChild("TimeTrial")
 		if place == 140403681187145 then
 			if tt then
-				set(10)
+				set(7)
 			elseif inHalloweenWorld() then
-				set(10)
+				set(7)
 			else
 				set(3)
 			end
@@ -32,7 +32,7 @@ task.spawn(function()
 			set(5)
 		elseif place == 131952481663528 or inHalloweenWorld() then
 			local elapsed = os.clock() - startTime
-			set(elapsed >= 21600 and 9 or 10)
+			set(elapsed >= 21600 and 6 or 7)
 		end
 	end
 end)
