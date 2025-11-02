@@ -2,6 +2,7 @@ getgenv().Settings = {
 ["Items"] = {
         {Name = "MVP Key", Data = {Price = "3.8m"}},
 
+		{Name = "Gargantuan Black Balloon Cat", Data = {Price = "83.86b"}},
 		{Name = "Gargantuan Super Cat", Data = {Price = "50.86b"}},
         {Name = "Titanic Vampire Agony", Data = {Price = "20b"}},
 		{Name = "Titanic Pink Lucky Block", Data = {Price = "6b"}},
