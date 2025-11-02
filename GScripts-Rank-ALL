@@ -63,7 +63,7 @@ spawn(function()
         -- World 4: check _G.Time_Trial_End một lần
         if _G.Time_Trial_End == true then
 			_G.GEVENT_FPS  = 7
-			getgenv().GDO_HALLOWEEN_WORLD = true
+			getgenv().GDO_HALLOWEEN_WORLD = false
 			getgenv().GEVENT_UPGRADES = {
 				"HalloweenCandyMultiplier",
 				"HalloweenEggLuck",
