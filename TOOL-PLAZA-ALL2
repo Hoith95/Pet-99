@@ -8,7 +8,6 @@ getgenv().Settings = {
 		{Name = "Titanic Noob", Data = {Price = "4b"}},
 		{Name = "Halloween Lucky Block Gift", Data = {Price = "38m"}},
 
-        {Name = "Huge Skeleton Snake", Data = {Price = "50m"}},
         {Name = "Huge Specter Owl", Data = {Price = "1.6b"}},
         {Name = "Huge Shark Cat", Data = {Price = "3.8b"}},
 
@@ -68,6 +67,7 @@ getgenv().Settings = {
         {Name = "Golden Huge Chill Parrot", Data = {Price = "12.5m"}},
 
 		{Name = "Exclusive Egg 56", Data = {Price = "99m"}},
+        {Name = "Huge Skeleton Snake", Data = {Price = "39m"}},
         {Name = "Huge Evil Raven", Data = {Price = "11m"}},
         {Name = "Huge Frankenpup Dog", Data = {Price = "12m"}},
 
