@@ -32,7 +32,7 @@ _G.PillarTotalRateById   = _G.PillarTotalRateById or {}
 _G.PillarDisplayText     = _G.PillarDisplayText or {}
 _G.CurrentEggPillars     = _G.CurrentEggPillars or {}
 _G.WeakestPillarsFixed   = _G.WeakestPillarsFixed or nil
-_G.TotalRate             = _G.TotalRate or 0
+_G.TotalRate             = _G.TotalRate or 1
 _G.TeleDone = true
 
 local function trim(s) return (s and s:gsub("^%s*(.-)%s*$", "%1")) or "" end
@@ -272,7 +272,7 @@ end)
 task.spawn(function()
 	local SaveModule = safeRequire(ClientLib.Save)
 	while not SaveModule do task.wait(HW.BaseWait); SaveModule = safeRequire(ClientLib.Save) end
-	local eggPriority = {"Clown Egg","Coffin Egg","Reaper Egg","Spider Egg","Cauldron Egg","Ghost Egg","Bat Egg","Grave Egg","Pumpkin Egg"}
+	local eggPriority = {"Clown Egg","Coffin Egg","Reaper Egg"}
 
 	repeat task.wait(HW.BaseWait) until _G.PillarScanDone and _G.TeleDone
 
