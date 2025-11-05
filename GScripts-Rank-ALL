@@ -56,7 +56,9 @@ spawn(function()
 			getgenv().GHALLOWEEN_WORLD_BUY_FROM_SPECIFIC_HOUSE = {1,2}
 			getgenv().GHALLOWEEN_WORLD_HATCH_SPOTS = 0
 			getgenv().GHALLOWEEN_WORLD_RECIPES_TO_DO = {}
-			getgenv().GHALLOWEEN_JOIN_LOCAL = true
+			getgenv().GHALLOWEEN_JOIN_LOCAL = false
+			getgenv().GHOP_ON_STAFF = true
+			getgenv().GALLOW_HOPPING = true
 			--getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
 			getgenv().GENCHANTS = {"Lucky Eggs","Lucky Eggs","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
 			spawn(function()
