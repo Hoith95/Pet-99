@@ -63,7 +63,7 @@ spawn(function()
 			spawn(function()
         	loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-3"))()
 			end)
-            print("✅ Config: Block Party set (Time_Trial_End)")\
+            print("✅ Config: Halloween set (Time_Trial_End)")\
 
     elseif eventId == 140403681187145 then
         -- World 4: check _G.Time_Trial_End một lần
@@ -91,7 +91,7 @@ spawn(function()
 			spawn(function()
         	loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-3"))()
 			end)
-            print("✅ Config: Block Party set (Time_Trial_End)")
+            print("✅ Config: Halloween set (Time_Trial_End)")
         else
             warn("⛔ _G.Time_Trial_End chưa true — set Block Party.")
 			getgenv().GENCHANTS = {"Criticals","Criticals","Tap Power","Tap Power","Strong Pets","Strong Pets"}
