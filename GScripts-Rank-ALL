@@ -56,7 +56,7 @@ spawn(function()
 		getgenv().GHALLOWEEN_WORLD_HATCH_SPOTS = 0
 		getgenv().GHALLOWEEN_WORLD_RECIPES_TO_DO = {}
 		--getgenv().GHALLOWEEN_JOIN_LOCAL = true
-		getgenv().GHOP_ON_STAFF = true
+		getgenv().GKICK_ON_STAFF = true
 		getgenv().GENCHANTS = {"Lucky Eggs","Lucky Eggs","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
 		spawn(function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-3"))()
@@ -82,7 +82,7 @@ spawn(function()
 			getgenv().GHALLOWEEN_WORLD_HATCH_SPOTS = 0
 			getgenv().GHALLOWEEN_WORLD_RECIPES_TO_DO = {}
 			--getgenv().GHALLOWEEN_JOIN_LOCAL = true
-			getgenv().GHOP_ON_STAFF = true
+			getgenv().GKICK_ON_STAFF = true
 			--getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
 			getgenv().GENCHANTS = {"Lucky Eggs","Lucky Eggs","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
 			spawn(function()
