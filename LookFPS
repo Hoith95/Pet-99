@@ -37,11 +37,11 @@ task.spawn(function()
 		elseif inHalloweenWorld() then
 			local elapsed = os.clock() - startTime
 			if elapsed >= 21600 then
-				set(4) -- Sau 6h
+				set(6) -- Sau 6h
 			elseif elapsed >= 14400 then
-				set(5) -- Sau 4h
+				set(7) -- Sau 4h
 			elseif elapsed >= 7200 then
-				set(6) -- Sau 2h
+				set(7) -- Sau 2h
 			else
 				set(7) -- Dưới 2h
 			end
