@@ -1,35 +1,33 @@
 if _G.AUTO_RECONNECT then return end
 _G.AUTO_RECONNECT = true
 
-local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
-local placeId = 131952481663528  -- Place bạn muốn vào lại
+local GuiService = game:GetService("GuiService")
 
 local function rejoin()
-    local player = Players.LocalPlayer
-    pcall(function()
-        TeleportService:Teleport(placeId, player)
-    end)
+	pcall(function()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-HOPSVEVENT"))()
+	end)
 end
 
-CoreGui.RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(gui)
-    task.wait(0.2)
-    local msg = gui:FindFirstChildWhichIsA("TextLabel", true)
-    if not msg or not msg.Text then return end
-    local text = string.lower(msg.Text)
-    if string.find(text, "lost connection") 
-    or string.find(text, "kick") 
-    or string.find(text, "please check your internet") 
-    or string.find(text, "disconnected") then
-        task.wait(2)
-        rejoin()
-    end
+CoreGui:WaitForChild("RobloxPromptGui").promptOverlay.ChildAdded:Connect(function(gui)
+	task.wait(0.2)
+	local msg = gui:FindFirstChildWhichIsA("TextLabel", true)
+	if not msg or not msg.Text then return end
+	local text = string.lower(msg.Text)
+	if string.find(text, "lost connection")
+	or string.find(text, "kick")
+	or string.find(text, "please check your internet")
+	or string.find(text, "disconnected") then
+		task.wait(2)
+		rejoin()
+	end
 end)
 
-game:GetService("GuiService").ErrorMessageChanged:Connect(function(msg)
-    if msg and msg ~= "" then
-        task.wait(2)
-        rejoin()
-    end
+GuiService.ErrorMessageChanged:Connect(function(msg)
+	if msg and msg ~= "" then
+		task.wait(2)
+		rejoin()
+	end
 end)
