@@ -94,3 +94,4 @@ local function teleportToLeastPopulatedServer(placeId, runScriptOnJoin, retryLim
 
 	return false
 end
+teleportToLeastPopulatedServer(placeId, false, 5)
