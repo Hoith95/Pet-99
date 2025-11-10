@@ -22,7 +22,7 @@ HW.ScanDebounce    = HW.ScanDebounce or 0.5
 HW.ClaimInterval   = HW.ClaimInterval or 5
 HW.PlaceEggInterval= HW.PlaceEggInterval or 0.5
 HW.BaseWait        = HW.BaseWait or 0.5
-_G.EggPillarCount  = _G.EggPillarCount or 0
+_G.EggPillarCount  = _G.EggPillarCount or 1
 
 _G.PillarPets            = _G.PillarPets or {}
 _G.PillarScanDone        = _G.PillarScanDone or false
