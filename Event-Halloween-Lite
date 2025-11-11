@@ -242,8 +242,8 @@ task.spawn(function()
 
 	repeat task.wait(HW.BaseWait) until _G.PillarScanDone and _G.TeleDone
 
-	local PURCHASE_THRESHOLD = 915000000
-	local STOP_THRESHOLD     = 90000000
+	local PURCHASE_THRESHOLD = 99000000
+	local STOP_THRESHOLD     = 9000000
 
 	while true do
 		local candy = getCandy()
@@ -251,7 +251,7 @@ task.spawn(function()
 			repeat
 				if not _G.CurrentPlotId then break end
 				pcall(function()
-					Network.Plots_Invoke:InvokeServer(_G.CurrentPlotId, "PurchaseEgg", 6, 3)
+					Network.Plots_Invoke:InvokeServer(_G.CurrentPlotId, "PurchaseEgg", 4, 1)
 				end)
 				task.wait(0.05)
 				candy = getCandy()
