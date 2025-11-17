@@ -43,11 +43,11 @@ do
         script_key="MqecHedshHEVyKwajNZtPvbdLkZceNYP";       -- Line 1
         --script_key="nutqpLooYQJqoyGXdyQIQYuUvjRoQIfi";       -- Line 1
     elseif _G.Line2 then
-        script_key="piOqRqWSJSjicGRdyFxVegfWDywCRVXm";       -- Line 2
-        --script_key="PBgqFQESzNhuTfgQatfaWcLbqQSoMvXK";       -- Line 2
+        --script_key="piOqRqWSJSjicGRdyFxVegfWDywCRVXm";       -- Line 2
+        script_key="PBgqFQESzNhuTfgQatfaWcLbqQSoMvXK";       -- Line 2
     elseif _G.Line3 then
-        --script_key="MqecHedshHEVyKwajNZtPvbdLkZceNYP";       -- Line 3
-        script_key="taMsJLusnSSDiCwNLSiHUbrWFGwmjWln";       -- Line 3
+        script_key="MqecHedshHEVyKwajNZtPvbdLkZceNYP";       -- Line 3
+        --script_key="taMsJLusnSSDiCwNLSiHUbrWFGwmjWln";       -- Line 3
     elseif _G.Line4 then
         script_key="fpAiAhNtXhwOUUeKHzlHcvYOQHhsWSHN";       -- Line 4
         --script_key="VHGZVTQhcQrKWQmIPxytOoJDZQtnwfwW";       -- Line 4
