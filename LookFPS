@@ -28,7 +28,7 @@ task.spawn(function()
 			elseif inHalloweenWorld() then
 				set(7)
 			else
-				set(5)
+				set(4)
 			end
 
 		elseif place == 95635359880599 or place == 119454325063278 then
