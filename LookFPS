@@ -17,7 +17,7 @@ task.spawn(function()
 		return c and c:FindFirstChild("Active") and c.Active:FindFirstChild("HalloweenWorld")
 	end
 
-	while task.wait(0.05) do
+	while task.wait(0.005) do
 		local container = t:FindFirstChild("__INSTANCE_CONTAINER")
 		local active = container and container:FindFirstChild("Active")
 		local tt = active and active:FindFirstChild("TimeTrial")
