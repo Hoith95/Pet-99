@@ -35,7 +35,7 @@ getgenv().Settings = {
 
         {Name = "Huge Machine Egg 5", Data = {Price = "1%"}},
         {Name = "Hype Egg 2", Data = {Price = "9%"}},
-        {Name = "Mini Pinata", Data = {Price = "5%"}},
+        {Name = "Mini Pinata", Data = {Price = "45k"}},
         {Name = "Charm Stone", Data = {Price = "1%"}},
         {Name = "Royalty TN1", Data = {Price = "1%"}},
         {Name = "Overload TN1", Data = {Price = "1%"}},
