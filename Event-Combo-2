@@ -195,6 +195,25 @@ end
 -- World4 invoke helper (safe + retry + check)
 local function safeInvokeWorld4()
     local attempts = 3
+    local Players = game:GetService("Players")
+    local TeleportService = game:GetService("TeleportService")
+
+    -- ✅ Nếu Time Trial kết thúc → Teleport sang place khác (không dùng World4Teleport)
+    if _G.Time_Trial_End == true then
+        local placeId = 131952481663528
+        local player = Players.LocalPlayer
+
+        if game.PlaceId ~= placeId then
+            warn("✅ Time Trial End → Teleport tới placeId: " .. placeId)
+            TeleportService:Teleport(placeId, player)
+            return true
+        else
+            warn("⚠️ Đã ở đúng placeId, không cần Teleport.")
+            return true
+        end
+    end
+
+    -- ✅ Ngược lại → Dùng code gốc Teleport World4
     for i = 1, attempts do
         local ok, err = pcall(function()
             game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World4Teleport"):InvokeServer()
@@ -475,5 +494,4 @@ task.spawn(function()
         task.wait(2)
     end
 end)
-
 pcall(main)
