@@ -251,7 +251,7 @@ task.spawn(function()
 			repeat
 				if not _G.CurrentPlotId then break end
 				pcall(function()
-					Network.Plots_Invoke:InvokeServer(_G.CurrentPlotId, "PurchaseEgg", 4, 1)
+					Network.Plots_Invoke:InvokeServer(_G.CurrentPlotId, "PurchaseEgg", 6, 3)
 				end)
 				task.wait(0.05)
 				candy = getCandy()
