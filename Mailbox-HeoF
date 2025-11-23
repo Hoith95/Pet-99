@@ -22,3 +22,7 @@ end)
 spawn(function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GIFT-GEMS-FAST"))()
 end)
+
+spawn(function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GIFT-GEMS-FAST-2"))()
+end)
