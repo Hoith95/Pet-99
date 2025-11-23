@@ -11,6 +11,7 @@ getgenv().Settings = {
 
         {Name = "Huge Specter Owl", Data = {Price = "3.8b"}},
         {Name = "Huge Shark Cat", Data = {Price = "3.9b"}},
+		{Name = "Exclusive Egg 57", Data = {Price = "115m"}},
 
         {Name = "Huge Splash Angelus", Data = {Price = "8.6b"}},
         {Name = "Golden Huge Splash Angelus", Data = {Price = "1%"}},
