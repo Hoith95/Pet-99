@@ -67,12 +67,13 @@ getgenv().GRANK_TO = 99
 getgenv().GZONE_TO = 299
 getgenv().GREBIRTH_TO = 99
 getgenv().GKICK_ON_STAFF = true
-getgenv().GAUTO_UPGRADE_PETS = false
+getgenv().GAUTO_UPGRADE_PETS = true
 getgenv().GHATCH_GOLDEN_EGGS = false
 getgenv().GCLEAR_FAVORITE_PETS = true
 getgenv().GHATCH_SPEED_MS = 0
 getgenv().GMAX_HATCH = 99
 getgenv().GHUGE_COUNT = 83
+getgenv().GDAYCARE = false
 
 getgenv().GWAIT_AT_GATES_TILL_RANK = 5
 getgenv().GMAX_EGG_SLOTS = 99
