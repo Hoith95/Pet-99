@@ -16,6 +16,11 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/N
 end)
 
 spawn(function()
+wait(168)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Tele-Map-274"))()
+end)
+
+spawn(function()
     local eventId = game.PlaceId
     if eventId == 119454325063278 then
         -- Farming world event
