@@ -60,13 +60,6 @@ getgenv().DISABLE_OVERLAY = true
 
 getgenv().GMAIL_ITEMS = {
     ["All Huges"] = {Class = "Pet", Id = "All Huges"},
-    ["Coins"] = {Class = "Enchant",Id = "Coins",Tier = 8, KeepAmount = 2, MinAmount = 3, Amount = "Max"},
-    ["Diamonds"] = {Class = "Enchant",Id = "Diamonds",Tier = 8, KeepAmount = 2, MinAmount = 3, Amount = "Max"},
-    ["Strong Pets"] = {Class = "Enchant",Id = "Strong Pets",Tier = 8, KeepAmount = 2, MinAmount = 3, Amount = "Max"},
-    ["Lucky Eggs"] = {Class = "Enchant",Id = "Lucky Eggs",Tier = 8, KeepAmount = 3, MinAmount = 4, Amount = "Max"},
-    ["Criticals"] = {Class = "Enchant",Id = "Criticals",Tier = 8, KeepAmount = 2, MinAmount = 3, Amount = "Max"},
-    ["Treasure Hunter"] = {Class = "Enchant",Id = "Treasure Hunter",Tier = 8, KeepAmount = 2, MinAmount = 3, Amount = "Max"},
-    ["Tap Power"] = {Class = "Enchant",Id = "Tap Power",Tier = 8, KeepAmount = 2, MinAmount = 3, Amount = "Max"},
     ["Send all Diamonds"] = {Class = "Currency", Id = "Diamonds", KeepAmount = "5m", MinAmount  = "25m"},
     ["Secret pet1"] = {Class = "Pet", Id = "Rainbow Swirl", MinAmount = 1, AllVariants = true},
     ["Secret pet2"] = {Class = "Pet", Id = "Banana", MinAmount = 1, AllVariants = true},
