@@ -1,0 +1,36 @@
+local function PreTeleportCleanup()
+    local ContentProvider = game:GetService("ContentProvider")
+    -- Giảm thread load
+    pcall(function()
+        ContentProvider:SetThreadPool(1)
+    end)
+
+    -- GC lần 1
+    pcall(function()
+        collectgarbage("collect")
+    end)
+    task.wait(0.5)
+
+    if game:IsLoaded() and workspace then
+        pcall(function()
+            for _, v in ipairs(workspace:GetDescendants()) do
+                if v:IsA("BasePart") then
+                    pcall(function()
+                        v:ClearAllChildren()
+                    end)
+                end
+            end
+        end)
+    end
+
+    -- Chờ engine ổn định
+    task.wait(0.5)
+
+    -- GC lần 2
+    pcall(function()
+        collectgarbage("collect")
+    end)
+    task.wait(0.5)
+end
+
+PreTeleportCleanup()
