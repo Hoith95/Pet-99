@@ -2,7 +2,7 @@ getgenv().Settings = {
 ["Items"] = {
         {Name = "MVP Key", Data = {Price = "4.5m"}},
 
-		{Name = "Gargantuan Black Balloon Cat", Data = {Price = "69.86b"}},
+		{Name = "Gargantuan Black Balloon Cat", Data = {Price = "86.86b"}},
 		{Name = "Gargantuan Super Cat", Data = {Price = "50.86b"}},
         {Name = "Titanic Vampire Agony", Data = {Price = "18b"}},
 		{Name = "Titanic Pink Lucky Block", Data = {Price = "6b"}},
@@ -26,7 +26,7 @@ getgenv().Settings = {
         {Name = "Golden Titanic Pineapple Dog", Data = {Price = "5.3b"}},
         {Name = "Titanic Pineapple Dog", Data = {Price = "1%"}},
 
-        {Name = "Titanic Narwhal", Data = {Price = "1%"}},
+        {Name = "Titanic Narwhal", Data = {Price = "6b"}},
         {Name = "Titanic Pixel Dominus Astra", Data = {Price = "1%"}},
 
         {Name = "Time Trial Gift", Data = {Price = "199k"}},
