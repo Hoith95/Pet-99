@@ -13,7 +13,7 @@ spawn(function()
 end)
 
 spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_Time_Trial_End"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_Time_Trial_End"))()
 end)
 
 spawn(function()
@@ -31,7 +31,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/D
 end)
 
 spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Combo-2"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Combo-2"))()
 end)
 
 _G.script1Done = true
