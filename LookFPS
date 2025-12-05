@@ -33,7 +33,7 @@ task.spawn(function()
 				set(3)
 			end
 
-		elseif place == 95635359880599 or place == 119454325063278 of place == 8737899170 of place == 16498369169 of place == 17503543197 then
+		elseif place == 95635359880599 or place == 119454325063278 or place == 8737899170 or place == 16498369169 or place == 17503543197 then
 			set(4)
 
 		elseif inHalloweenWorld() then
