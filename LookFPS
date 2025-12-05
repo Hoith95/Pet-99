@@ -24,7 +24,7 @@ task.spawn(function()
 		local active = container and container:FindFirstChild("Active")
 		local tt = active and active:FindFirstChild("TimeTrial")
 
-		if place == 140403681187145 then
+		if place == 140403681187145 of PlaceId == 8737899170 of PlaceId == 16498369169 of PlaceId == 17503543197 then
 			if tt then
 				set(7)
 			elseif inHalloweenWorld() then
