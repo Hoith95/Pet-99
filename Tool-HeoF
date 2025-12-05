@@ -40,7 +40,7 @@ _G.Event = true
 do
     local defaultKey = "hHJqncRPZjHqdvDxwJcwwDmpwstZQtrA"     -- fallback
     if _G.Line1 then
-        script_key="MqecHedshHEVyKwajNZtPvbdLkZceNYP";       -- Line 1
+        script_key="rWeZsrmnSdBMGeqCGmINcIlrlrcyhXcY";       -- Line 1
         --script_key="nutqpLooYQJqoyGXdyQIQYuUvjRoQIfi";       -- Line 1
     elseif _G.Line2 then
         --script_key="piOqRqWSJSjicGRdyFxVegfWDywCRVXm";       -- Line 2
