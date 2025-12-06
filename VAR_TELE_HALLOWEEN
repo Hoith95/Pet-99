@@ -1,4 +1,3 @@
--- Prevent chạy lại nhiều lần
 if _G.VAR_TELE_HALLOWEEN then return end
 _G.VAR_TELE_HALLOWEEN = true
 
@@ -12,12 +11,10 @@ end
 
 local player = game.Players.LocalPlayer
 
--- ❌ Nếu KHÔNG ở Halloween → Kick
 if not inHalloweenWorld() then
     player:Kick("Bạn không ở Halloween World!")
     return
 end
 
--- ✅ Nếu đang ở đúng Halloween Instance → DỪNG SCRIPT (không làm gì nữa)
 print("🎃 Đang ở Halloween Instance — DỪNG SCRIPT.")
 return
