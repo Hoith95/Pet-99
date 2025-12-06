@@ -20,6 +20,15 @@ spawn(function()
 end)
 
 spawn(function()
+    local targetPlaceId = 140403681187145
+    if game.PlaceId == targetPlaceId then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_TELE_HALLOWEEN"))()
+    else
+        warn("⛔ Không đúng PlaceId, bỏ qua script.")
+    end
+end)
+
+spawn(function()
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GIFT-GEMS-FAST"))()
 end)
 
