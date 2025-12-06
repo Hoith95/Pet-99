@@ -73,6 +73,7 @@ spawn(function()
         -- World 4: check _G.Time_Trial_End một lần
         if _G.Time_Trial_End == true then
 		getgenv().GDO_HALLOWEEN_WORLD = true
+		getgenv().GHALLOWEEN_JOIN_LOCAL = true
 		getgenv().GEVENT_UPGRADES = {
 			"HalloweenCandyMultiplier",
 			"HalloweenEggLuck",
@@ -89,7 +90,6 @@ spawn(function()
 		getgenv().GKICK_ON_STAFF = true
 		getgenv().GENCHANTS = {"Lucky Eggs","Lucky Eggs","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
 		spawn(function()
-		wait(68)
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Halloween-Lite"))()
 		end)
 			--getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
