@@ -1,12 +1,23 @@
-if _G.VAR_TELE_HALLOWEEN then
-    warn("⛔ VAR_TELE_HALLOWEEN đã chạy trước đó!")
-    return
-end
+-- Prevent chạy lại nhiều lần
+if _G.VAR_TELE_HALLOWEEN then return end
 _G.VAR_TELE_HALLOWEEN = true
 
-local TeleportService = game:GetService("TeleportService")
-local placeId = 131952481663528
-if game.PlaceId ~= placeId then
-    TeleportService:Teleport(placeId, player)
+-- Detect Halloween Instance
+local function inHalloweenWorld()
+    local inst = workspace:FindFirstChild("__THINGS")
+        and workspace.__THINGS:FindFirstChild("__INSTANCE_CONTAINER")
+        and workspace.__THINGS.__INSTANCE_CONTAINER:FindFirstChild("Active")
+    return inst and inst:FindFirstChild("HalloweenWorld") ~= nil
+end
+
+local player = game.Players.LocalPlayer
+
+-- ❌ Nếu KHÔNG ở Halloween → Kick
+if not inHalloweenWorld() then
+    player:Kick("Bạn không ở Halloween World!")
     return
 end
+
+-- ✅ Nếu đang ở đúng Halloween Instance → DỪNG SCRIPT (không làm gì nữa)
+print("🎃 Đang ở Halloween Instance — DỪNG SCRIPT.")
+return
