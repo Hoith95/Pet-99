@@ -40,14 +40,14 @@ _G.Event = true
 do
     local defaultKey = "hHJqncRPZjHqdvDxwJcwwDmpwstZQtrA"     -- fallback
     if _G.Line1 then
-        --script_key="rWeZsrmnSdBMGeqCGmINcIlrlrcyhXcY";       -- Line 1
-        script_key="hrhQaxMtkEnfoQVFaQbHbeQddOQKOeJH";       -- Line 1 - phụ
+        script_key="rWeZsrmnSdBMGeqCGmINcIlrlrcyhXcY";       -- Line 1
+        --script_key="hrhQaxMtkEnfoQVFaQbHbeQddOQKOeJH";       -- Line 1 - phụ
     elseif _G.Line2 then
-        --script_key="PBgqFQESzNhuTfgQatfaWcLbqQSoMvXK";       -- Line 2
-        script_key="PtgWruYDyquYErztXqHimtNZZQAbJrIX";       -- Line 2 - phụ
+        script_key="PBgqFQESzNhuTfgQatfaWcLbqQSoMvXK";       -- Line 2
+        --script_key="PtgWruYDyquYErztXqHimtNZZQAbJrIX";       -- Line 2 - phụ
     elseif _G.Line3 then
-        --script_key="MqecHedshHEVyKwajNZtPvbdLkZceNYP";       -- Line 3
-        script_key="XppKPCzbSqmRSFIWTvBhqHVvmeMsbrtC";       -- Line 3 - phụ
+        script_key="MqecHedshHEVyKwajNZtPvbdLkZceNYP";       -- Line 3
+        --script_key="XppKPCzbSqmRSFIWTvBhqHVvmeMsbrtC";       -- Line 3 - phụ
     elseif _G.Line4 then
         script_key="HDYuxcdpCBScUeYhGfwpSmXppyhajreW";       -- Line 4
     else
