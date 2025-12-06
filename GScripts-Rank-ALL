@@ -89,7 +89,6 @@ spawn(function()
 		getgenv().GKICK_ON_STAFF = true
 		getgenv().GENCHANTS = {"Lucky Eggs","Lucky Eggs","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
 		spawn(function()
-        --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-3"))()
 		wait(68)
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Halloween-Lite"))()
 		end)
