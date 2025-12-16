@@ -358,20 +358,20 @@ local function claimReward()
     local currentDay = now.wday
     local currentHour = now.hour
 
-    -- Nếu Thứ 4 trước 23h thì đổi hết, ngược lại chỉ đổi hộp 3
-    local isSaturdayFull = (currentDay == 4) and (currentHour < 23)
+    -- Nếu Thứ 3 trước 23h thì đổi hết, ngược lại chỉ đổi hộp 3
+    local isSaturdayFull = (currentDay == 3) and (currentHour < 23)
 
     -- Tính số lượng từng loại hộp
     local chest3, chest2, chest1 = 0, 0, 0
     if isSaturdayFull then
-        warn("📆 Hôm nay là Thứ 4 (giờ VN) và chưa tới 23h → Đổi hết toàn bộ điểm.")
+        warn("📆 Hôm nay là Thứ 3 (giờ VN) và chưa tới 23h → Đổi hết toàn bộ điểm.")
         chest3 = math.floor(points / 5000)
         points = points - chest3 * 5000
         chest2 = math.floor(points / 3000)
         points = points - chest2 * 3000
         chest1 = math.floor(points / 1000)
     else
-        warn("📆 Chỉ đổi hộp 3 (Thứ 4 sau 23h hoặc không phải Thứ 4 - giờ VN).")
+        warn("📆 Chỉ đổi hộp 3 (Thứ 3 sau 23h hoặc không phải Thứ 3 - giờ VN).")
         chest3 = math.floor(points / 5000)
     end
 
@@ -461,8 +461,8 @@ local function startAutoClaim()
 
             -- Giờ VN
             local d = os.date("!*t", os.time(os.date("!*t")) + 7 * 3600)
-            local can = (d.wday == 4 and d.hour < 23 and pts >= 1000)
-                    or (d.wday ~= 4 and pts >= 5000)
+            local can = (d.wday == 3 and d.hour < 23 and pts >= 1000)
+                    or (d.wday ~= 3 and pts >= 5000)
 
             if can then
                 warn("🔔 Auto-claim: đủ điều kiện (giờ VN) → chạy claimReward().")
