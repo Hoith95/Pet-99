@@ -1,0 +1,8 @@
+while true do
+    local args = {
+        [1] = "Charm Stone"
+    }
+    game:GetService("ReplicatedStorage").Network.GiftBag_Open:InvokeServer(unpack(args))
+
+    task.wait(0.05)
+end
