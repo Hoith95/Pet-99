@@ -72,7 +72,24 @@ spawn(function()
     elseif eventId == 140403681187145 then
         -- World 4: check _G.Time_Trial_End một lần
         if _G.Time_Trial_End == true then
-		getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
+		getgenv().GDO_HALLOWEEN_WORLD = true
+		getgenv().GHALLOWEEN_JOIN_LOCAL = true
+		getgenv().GEVENT_UPGRADES = {
+			"HalloweenCandyMultiplier",
+			"HalloweenEggLuck",
+			"HalloweenTrickOrTreatLuck",
+			"HalloweenMoreDiamonds",
+			"HalloweenMoreWitchHats",
+			"HalloweenHugeLuck",
+			"HalloweenTitanicLuck"
+		}
+		getgenv().GHALLOWEEN_WORLD_BUY_FROM_HOUSES_BELOW = true
+		getgenv().GHALLOWEEN_WORLD_BUY_FROM_SPECIFIC_HOUSE = {1,2,3}
+		getgenv().GHALLOWEEN_WORLD_HATCH_SPOTS = 0
+		getgenv().GHALLOWEEN_WORLD_RECIPES_TO_DO = {}
+		getgenv().GKICK_ON_STAFF = true
+		getgenv().GENCHANTS = {"Lucky Eggs","Lucky Eggs","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
+		--getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
 		spawn(function()
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-3"))()
 		end)
