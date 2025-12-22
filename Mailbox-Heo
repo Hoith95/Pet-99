@@ -23,6 +23,7 @@ getgenv().AutoMail = {
         ['Huge Machine Egg 5'] = { Class = "Egg", Amount = 1 },
         ['Exclusive Egg 56'] = { Class = "Egg", Amount = 1 },
         ['Exclusive Egg 57'] = { Class = "Egg", Amount = 1 },
+        ['Exclusive Egg 58'] = { Class = "Egg", Amount = 1 },
         ['Halloween Lucky Block Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
         ['Spider Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
         --['Pixel Prism'] = { Class = "Misc", MinAmount = 1, Amount = "Max" },
