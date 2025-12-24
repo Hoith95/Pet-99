@@ -4,49 +4,36 @@ _G.VAR_OPTIMIZE_XMASWORLD = true
 -- =====================================================
 -- 🎄 AUTO MANAGER FOR XmasWorld
 -- =====================================================
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
+local active = false
 
-local activeFlag = false
-local safeFloor = nil
-
--- =====================================================
--- 🧱 CREATE SAFE FLOOR
--- =====================================================
-local function createFloor(hrp, xmas)
-    local floor = Instance.new("Part")
-    floor.Name = "__XMAS_SAFE_FLOOR__"
-    floor.Size = Vector3.new(1200000, 6, 1200000)
-    floor.Transparency = 1
-    floor.Anchored = true
-    floor.CanCollide = true
-    floor.CanTouch = false
-    floor.CanQuery = false
-    floor.CastShadow = false
-    floor.CFrame = CFrame.new(hrp.Position.X, hrp.Position.Y - 6, hrp.Position.Z)
-    floor.Parent = xmas
-    return floor
+-- -----------------------------------------------------
+-- Get Train
+-- -----------------------------------------------------
+local function getTrain()
+    local things = workspace:FindFirstChild("__THINGS")
+    local inst = things and things:FindFirstChild("__INSTANCE_CONTAINER")
+    local activeNode = inst and inst:FindFirstChild("Active")
+    local xmas = activeNode and activeNode:FindFirstChild("XmasWorld")
+    local interact = xmas and xmas:FindFirstChild("INTERACT")
+    return interact and interact:FindFirstChild("Train")
 end
 
--- =====================================================
--- 🚀 OPTIMIZE XmasWorld
--- =====================================================
-local function optimizeXmas(xmas, floor)
+-- -----------------------------------------------------
+-- Optimize Train (SAFE-HARD)
+-- -----------------------------------------------------
+local function optimizeTrain(train)
     local FAR_CFRAME = CFrame.new(0, -1e6, 0)
 
-    for _, obj in ipairs(xmas:GetDescendants()) do
-        if obj == floor then
-            continue
-        end
+    for _, obj in ipairs(train:GetDescendants()) do
 
         if obj:IsA("BasePart") then
             obj.LocalTransparencyModifier = 1
             obj.Transparency = 1
-            obj.Size = Vector3.new(0.01, 0.01, 0.01)
+
             obj.CanCollide = false
             obj.CanTouch = false
             obj.CanQuery = false
-            obj.Anchored = true
+
             obj.CastShadow = false
             obj.CFrame = FAR_CFRAME
 
@@ -64,25 +51,10 @@ local function optimizeXmas(xmas, floor)
             or obj:IsA("SurfaceLight")
             or obj:IsA("SpotLight") then
             obj.Enabled = false
-
-        elseif obj:IsA("Constraint")
-            or obj:IsA("Weld")
-            or obj:IsA("Motor6D")
-            or obj:IsA("RodConstraint")
-            or obj:IsA("SpringConstraint") then
-            obj:Destroy()
-
-        elseif obj:IsA("Animator") then
-            for _, track in ipairs(obj:GetPlayingAnimationTracks()) do
-                track:Stop()
-            end
-
-        elseif obj:IsA("LocalScript") then
-            obj.Disabled = true
         end
     end
 
-    for _, m in ipairs(xmas:GetChildren()) do
+    for _, m in ipairs(train:GetChildren()) do
         if m:IsA("Model") then
             pcall(function()
                 m:PivotTo(FAR_CFRAME)
@@ -91,67 +63,31 @@ local function optimizeXmas(xmas, floor)
     end
 end
 
--- =====================================================
--- 🎄 ENABLE XmasWorld MODE
--- =====================================================
-local function enableXmasMode(xmas)
-    if activeFlag then
-        return
-    end
-    activeFlag = true
-
-    local char = player.Character or player.CharacterAdded:Wait()
-    local hrp = char:WaitForChild("HumanoidRootPart")
-
-    hrp.Anchored = true
-
-    safeFloor = createFloor(hrp, xmas)
-
-    task.wait()
-    hrp.Anchored = false
-
-    optimizeXmas(xmas, safeFloor)
+-- -----------------------------------------------------
+-- Enable / Disable
+-- -----------------------------------------------------
+local function enable(train)
+    if active then return end
+    active = true
+    optimizeTrain(train)
 end
 
--- =====================================================
--- ❌ DISABLE XmasWorld MODE
--- =====================================================
-local function disableXmasMode()
-    if not activeFlag then
-        return
-    end
-    activeFlag = false
-
-    if safeFloor then
-        pcall(function()
-            safeFloor:Destroy()
-        end)
-        safeFloor = nil
-    end
+local function disable()
+    if not active then return end
+    active = false
 end
 
--- =====================================================
--- 🔄 MONITOR XmasWorld ENTER / EXIT
--- =====================================================
-local function checkXmas()
-    local things = workspace:FindFirstChild("__THINGS")
-    local inst = things and things:FindFirstChild("__INSTANCE_CONTAINER")
-    local active = inst and inst:FindFirstChild("Active")
-    local xmas = active and active:FindFirstChild("XmasWorld")
-
-    if xmas then
-        enableXmasMode(xmas)
-    else
-        disableXmasMode()
-    end
-end
-
--- =====================================================
--- 🚦 WATCH LOOP (LIGHTWEIGHT)
--- =====================================================
+-- -----------------------------------------------------
+-- Watch Train spawn / despawn
+-- -----------------------------------------------------
 task.spawn(function()
     while true do
-        checkXmas()
-        task.wait(0.5) -- nhẹ, không leak, đủ nhanh
+        local train = getTrain()
+        if train then
+            enable(train)
+        else
+            disable()
+        end
+        task.wait(1)
     end
 end)
