@@ -28,7 +28,7 @@ local function inXmasWorld()
 			if tt then
 				set(7)
 			elseif inXmasWorld() then
-				set(3)
+				set(5)
 			else
 				set(3)
 			end
@@ -39,13 +39,13 @@ local function inXmasWorld()
 		elseif inXmasWorld() then
 			local elapsed = os.clock() - startTime
 			if elapsed >= 21600 then
-				set(3) -- Sau 6h
+				set(5) -- Sau 6h
 			elseif elapsed >= 14400 then
-				set(3) -- Sau 4h
+				set(5) -- Sau 4h
 			elseif elapsed >= 7200 then
-				set(3) -- Sau 2h
+				set(5) -- Sau 2h
 			else
-				set(3) -- Dưới 2h
+				set(5) -- Dưới 2h
 			end
 		end
 	end
