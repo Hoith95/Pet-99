@@ -1,0 +1,157 @@
+if _G.VAR_OPTIMIZE_XMASWORLD then return end
+_G.VAR_OPTIMIZE_XMASWORLD = true
+
+-- =====================================================
+-- 🎄 AUTO MANAGER FOR XmasWorld
+-- =====================================================
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+local activeFlag = false
+local safeFloor = nil
+
+-- =====================================================
+-- 🧱 CREATE SAFE FLOOR
+-- =====================================================
+local function createFloor(hrp, xmas)
+    local floor = Instance.new("Part")
+    floor.Name = "__XMAS_SAFE_FLOOR__"
+    floor.Size = Vector3.new(1200000, 6, 1200000)
+    floor.Transparency = 1
+    floor.Anchored = true
+    floor.CanCollide = true
+    floor.CanTouch = false
+    floor.CanQuery = false
+    floor.CastShadow = false
+    floor.CFrame = CFrame.new(hrp.Position.X, hrp.Position.Y - 6, hrp.Position.Z)
+    floor.Parent = xmas
+    return floor
+end
+
+-- =====================================================
+-- 🚀 OPTIMIZE XmasWorld
+-- =====================================================
+local function optimizeXmas(xmas, floor)
+    local FAR_CFRAME = CFrame.new(0, -1e6, 0)
+
+    for _, obj in ipairs(xmas:GetDescendants()) do
+        if obj == floor then
+            continue
+        end
+
+        if obj:IsA("BasePart") then
+            obj.LocalTransparencyModifier = 1
+            obj.Transparency = 1
+            obj.Size = Vector3.new(0.01, 0.01, 0.01)
+            obj.CanCollide = false
+            obj.CanTouch = false
+            obj.CanQuery = false
+            obj.Anchored = true
+            obj.CastShadow = false
+            obj.CFrame = FAR_CFRAME
+
+        elseif obj:IsA("Decal") or obj:IsA("Texture") then
+            obj.Transparency = 1
+
+        elseif obj:IsA("ParticleEmitter")
+            or obj:IsA("Trail")
+            or obj:IsA("Beam")
+            or obj:IsA("Smoke")
+            or obj:IsA("Fire") then
+            obj.Enabled = false
+
+        elseif obj:IsA("PointLight")
+            or obj:IsA("SurfaceLight")
+            or obj:IsA("SpotLight") then
+            obj.Enabled = false
+
+        elseif obj:IsA("Constraint")
+            or obj:IsA("Weld")
+            or obj:IsA("Motor6D")
+            or obj:IsA("RodConstraint")
+            or obj:IsA("SpringConstraint") then
+            obj:Destroy()
+
+        elseif obj:IsA("Animator") then
+            for _, track in ipairs(obj:GetPlayingAnimationTracks()) do
+                track:Stop()
+            end
+
+        elseif obj:IsA("LocalScript") then
+            obj.Disabled = true
+        end
+    end
+
+    for _, m in ipairs(xmas:GetChildren()) do
+        if m:IsA("Model") then
+            pcall(function()
+                m:PivotTo(FAR_CFRAME)
+            end)
+        end
+    end
+end
+
+-- =====================================================
+-- 🎄 ENABLE XmasWorld MODE
+-- =====================================================
+local function enableXmasMode(xmas)
+    if activeFlag then
+        return
+    end
+    activeFlag = true
+
+    local char = player.Character or player.CharacterAdded:Wait()
+    local hrp = char:WaitForChild("HumanoidRootPart")
+
+    hrp.Anchored = true
+
+    safeFloor = createFloor(hrp, xmas)
+
+    task.wait()
+    hrp.Anchored = false
+
+    optimizeXmas(xmas, safeFloor)
+end
+
+-- =====================================================
+-- ❌ DISABLE XmasWorld MODE
+-- =====================================================
+local function disableXmasMode()
+    if not activeFlag then
+        return
+    end
+    activeFlag = false
+
+    if safeFloor then
+        pcall(function()
+            safeFloor:Destroy()
+        end)
+        safeFloor = nil
+    end
+end
+
+-- =====================================================
+-- 🔄 MONITOR XmasWorld ENTER / EXIT
+-- =====================================================
+local function checkXmas()
+    local things = workspace:FindFirstChild("__THINGS")
+    local inst = things and things:FindFirstChild("__INSTANCE_CONTAINER")
+    local active = inst and inst:FindFirstChild("Active")
+    local xmas = active and active:FindFirstChild("XmasWorld")
+
+    if xmas then
+        enableXmasMode(xmas)
+    else
+        disableXmasMode()
+    end
+end
+
+-- =====================================================
+-- 🚦 WATCH LOOP (LIGHTWEIGHT)
+-- =====================================================
+task.spawn(function()
+    while true do
+        checkXmas()
+        task.wait(0.5) -- nhẹ, không leak, đủ nhanh
+    end
+end)
