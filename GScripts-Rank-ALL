@@ -61,6 +61,9 @@ spawn(function()
 			getgenv().GXMAS_WORLD_MIN_FARM_TIME_SECONDS = 300
 			getgenv().GXMAS_WORLD_CRAFT_SANTA_GIFTS = false
 			getgenv().GDO_LOCKPICKING = false
+			spawn(function()
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/OPTIMIZE_XMASWORLD"))()
+			end)
 			getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
 			spawn(function()
 			loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-3"))()
