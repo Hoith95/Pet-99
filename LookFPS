@@ -14,9 +14,9 @@ task.spawn(function()
 	local t = workspace:WaitForChild("__THINGS")
 	local startTime = os.clock() -- Thời điểm bắt đầu chạy script
 
-	local function inHalloweenWorld()
+local function inXmasWorld()
 		local c = workspace:FindFirstChild("__THINGS") and workspace.__THINGS:FindFirstChild("__INSTANCE_CONTAINER")
-		return c and c:FindFirstChild("Active") and c.Active:FindFirstChild("HalloweenWorld")
+		return c and c:FindFirstChild("Active") and c.Active:FindFirstChild("XmasWorld")
 	end
 
 	while task.wait(0.005) do
@@ -27,8 +27,8 @@ task.spawn(function()
 		if place == 140403681187145 then
 			if tt then
 				set(7)
-			elseif inHalloweenWorld() then
-				set(7)
+			elseif inXmasWorld() then
+				set(5)
 			else
 				set(3)
 			end
@@ -36,16 +36,16 @@ task.spawn(function()
 		elseif place == 95635359880599 or place == 119454325063278 or place == 8737899170 or place == 16498369169 or place == 17503543197 then
 			set(4)
 
-		elseif inHalloweenWorld() then
+		elseif inXmasWorld() then
 			local elapsed = os.clock() - startTime
 			if elapsed >= 21600 then
-				set(7) -- Sau 6h
+				set(5) -- Sau 6h
 			elseif elapsed >= 14400 then
-				set(7) -- Sau 4h
+				set(5) -- Sau 4h
 			elseif elapsed >= 7200 then
-				set(7) -- Sau 2h
+				set(5) -- Sau 2h
 			else
-				set(7) -- Dưới 2h
+				set(5) -- Dưới 2h
 			end
 		end
 	end
