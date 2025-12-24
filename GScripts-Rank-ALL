@@ -59,7 +59,7 @@ spawn(function()
 			getgenv().GXMAS_WORLD_DO_ICE_BLOCKS = true
 			getgenv().GXMAS_WORLD_MIN_HATCH_REQUESTS_PER_CYCLE = 25
 			getgenv().GXMAS_WORLD_MIN_FARM_TIME_SECONDS = 300
-			getgenv().GXMAS_WORLD_CRAFT_SANTA_GIFTS = false -- if you put to true it cannot buy the upgrades as they also use santa hats
+			getgenv().GXMAS_WORLD_CRAFT_SANTA_GIFTS = false
 			getgenv().GDO_LOCKPICKING = false
 			getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
 			spawn(function()
