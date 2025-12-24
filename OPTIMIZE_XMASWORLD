@@ -7,7 +7,7 @@ _G.VAR_OPTIMIZE_XMASWORLD = true
 
 local active = false
 local lastOptimize = 0
-local REOPT_INTERVAL = 60 -- 5 phút (60 giây)
+local REOPT_INTERVAL = 60 -- 1 phút (60 giây)
 
 -- -----------------------------------------------------
 -- Get Train
