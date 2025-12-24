@@ -1,0 +1,20 @@
+if _G.VAR_TELE_XMAS then return end
+_G.VAR_TELE_Xmas = true
+
+-- Detect Xmas Instance
+local function inXmasWorld()
+    local inst = workspace:FindFirstChild("__THINGS")
+        and workspace.__THINGS:FindFirstChild("__INSTANCE_CONTAINER")
+        and workspace.__THINGS.__INSTANCE_CONTAINER:FindFirstChild("Active")
+    return inst and inst:FindFirstChild("XmasWorld") ~= nil
+end
+
+local player = game.Players.LocalPlayer
+
+if not inXmasWorld() then
+    player:Kick("Bạn không ở Xmas World!")
+    return
+end
+
+print("🎃 Đang ở Xmas Instance — DỪNG SCRIPT.")
+return
