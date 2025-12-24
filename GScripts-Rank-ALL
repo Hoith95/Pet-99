@@ -43,39 +43,28 @@ spawn(function()
 		getgenv().GENCHANTS = {"Lucky Eggs","Lucky Eggs","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
         print("✅ Config: Fishing event set")
 
-    elseif eventId == 131952481663528 then
-        -- Halloween event
-        _G.GEVENT_FPS  = 7
-		getgenv().GDO_HALLOWEEN_WORLD = true
-		getgenv().GEVENT_UPGRADES = {
-			"HalloweenCandyMultiplier",
-			"HalloweenEggLuck",
-			"HalloweenTrickOrTreatLuck",
-			"HalloweenMoreDiamonds",
-			"HalloweenMoreWitchHats",
-			"HalloweenHugeLuck",
-			"HalloweenTitanicLuck"
-		}
-		getgenv().GHALLOWEEN_WORLD_BUY_FROM_HOUSES_BELOW = true
-		getgenv().GHALLOWEEN_WORLD_BUY_FROM_SPECIFIC_HOUSE = {1,2,3}
-		getgenv().GHALLOWEEN_WORLD_HATCH_SPOTS = 1
-		getgenv().GHALLOWEEN_WORLD_RECIPES_TO_DO = {}
-		getgenv().GKICK_ON_STAFF = true
-		getgenv().GENCHANTS = {"Lucky Eggs","Lucky Eggs","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
-		spawn(function()
-        --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-3"))()
-		wait(168)
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Halloween-Lite"))()
-		end)
-        print("✅ Config: Halloween event set")
-
     elseif eventId == 140403681187145 then
         -- World 4: check _G.Time_Trial_End một lần
         if _G.Time_Trial_End == true then
-		getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
-		spawn(function()
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-3"))()
-		end)
+			getgenv().GDO_XMAS_WORLD = true
+			getgenv().GHOP_ON_STAFF = true
+			getgenv().GEVENT_UPGRADES = {
+				"MegaPresentGrowFaster",
+				"MegaPresentMoreLoot",
+				"MegaPresentEggLuckBoost",
+				"MegaPresentHigherHugeChance",
+				"MegaPresentHigherTitanicChance",
+				"MegaPresentHigherGargantuanChance"
+			}
+			getgenv().GXMAS_WORLD_DO_ICE_BLOCKS = true
+			getgenv().GXMAS_WORLD_MIN_HATCH_REQUESTS_PER_CYCLE = 25
+			getgenv().GXMAS_WORLD_MIN_FARM_TIME_SECONDS = 300
+			getgenv().GXMAS_WORLD_CRAFT_SANTA_GIFTS = false -- if you put to true it cannot buy the upgrades as they also use santa hats
+			getgenv().GDO_LOCKPICKING = false
+			getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
+			spawn(function()
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-3"))()
+			end)
             print("✅ Config: Halloween set (Time_Trial_End)")
         else
             warn("⛔ _G.Time_Trial_End chưa true — set Block Party.")
