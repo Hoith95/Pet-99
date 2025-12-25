@@ -1,4 +1,5 @@
 _G.script1Done = true
+_G.Time_Trial_Var = true
 
 --- Gửi Mail ---
 spawn(function()
