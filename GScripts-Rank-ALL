@@ -65,10 +65,6 @@ spawn(function()
 			--getgenv().GXMAS_WORLD_OPEN_MEGA_PRESENT_IF_LUCK_REACH = 8000
 			getgenv().GXMAS_WORLD_PETS_EXCLUDED_FROM_SENDING = {"Gingerbread Angelus", "Holiday Owl"}
 			spawn(function()
-			wait(38)
-			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-2883, 387.75, -1539)
-			end)
-			spawn(function()
 			loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/OPTIMIZE_XMASWORLD"))()
 			end)
 			getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
