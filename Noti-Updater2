@@ -143,7 +143,7 @@ local function startGuiUpdater()
     --local rebirthLabel    = createLabel("RebirthLabel",        rightRegion,   Color3.fromRGB(34, 139, 34))
     --local coinsLabel      = createLabel("CoinsLabel",          rightRegion,   Color3.fromRGB(34, 139, 34))
     local giftLabel       = createLabel("GiftLabel",           rightRegion,   Color3.fromRGB(34, 139, 34))
-    local gift2Label      = createLabel("Gift2Label",          rightRegion,   Color3.fromRGB(34, 139, 34))
+    --local gift2Label      = createLabel("Gift2Label",          rightRegion,   Color3.fromRGB(34, 139, 34))
     --local ticketLabel     = createLabel("SBPTicketLabel",      rightRegion,   Color3.fromRGB(34, 139, 34))
 
     local timeTrialLabel  = createLabel("timeTrialLabel",      leftRegion,    Color3.fromRGB(34, 139, 34))
@@ -165,11 +165,11 @@ local function startGuiUpdater()
         --rebirthLabel.Text = tostring(Save.Get().TileRebirth or 0) .. " | REBIRTH"
         --updateLabelSize(rebirthLabel)
 
-        giftLabel.Text    = tostring(getLootboxAmount("Santa Gift")) .. " | Santa Gift"
+        giftLabel.Text    = tostring(getLootboxAmount("CandyCane Gift")) .. " | CandyCane Gift"
         updateLabelSize(giftLabel)
 
-        gift2Label.Text    = tostring(getLootboxAmount("CandyCane Gift")) .. " | CandyCane Gift"
-        updateLabelSize(gift2Label)
+        --gift2Label.Text    = tostring(getLootboxAmount("CandyCane Gift")) .. " | CandyCane Gift"
+        --updateLabelSize(gift2Label)
 
         --ticketLabel.Text  = tostring(getMiscAmount("Summer Block Party Ticket")) .. " | Summer Ticket"
         --updateLabelSize(ticketLabel)
