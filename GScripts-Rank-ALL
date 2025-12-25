@@ -63,7 +63,7 @@ spawn(function()
 			getgenv().GDO_LOCKPICKING = false
 			--getgenv().GXMAS_WORLD_DO_MEGA_PRESENT = true
 			--getgenv().GXMAS_WORLD_OPEN_MEGA_PRESENT_IF_LUCK_REACH = 8000
-			getgenv().GXMAS_WORLD_PETS_EXCLUDED_FROM_SENDING = {"Gingerbread Angelus"}
+			getgenv().GXMAS_WORLD_PETS_EXCLUDED_FROM_SENDING = {"Gingerbread Angelus", "Holiday Owl"}
 			spawn(function()
 			loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/OPTIMIZE_XMASWORLD"))()
 			end)
