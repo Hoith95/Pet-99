@@ -168,8 +168,8 @@ local function startGuiUpdater()
         giftLabel.Text    = tostring(getLootboxAmount("Santa Gift")) .. " | Santa Gift"
         updateLabelSize(giftLabel)
 
-        --gift2Label.Text    = tostring(getLootboxAmount("Candycane Gift")) .. " | CandyCane Gift"
-        --updateLabelSize(gift2Label)
+        gift2Label.Text    = tostring(getLootboxAmount("Candycane Gift")) .. " | CandyCane Gift"
+        updateLabelSize(gift2Label)
 
         --ticketLabel.Text  = tostring(getMiscAmount("Summer Block Party Ticket")) .. " | Summer Ticket"
         --updateLabelSize(ticketLabel)
