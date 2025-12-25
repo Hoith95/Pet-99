@@ -1,63 +1,38 @@
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local httpRequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request)
-
--- Cấu hình webhook URL (đặt URL webhook của bạn tại đây)
 _G.webhookURL = "https://discord.com/api/webhooks/1356162679923933335/7XMSEFJ9TVt1cQnyPCkseCwPdZPh-luEkVVjDbvVFIfTG6WlNSrVOnDOu9eP1bHqitzl"
--- Cấu hình _G.UserID (ID người chơi bạn muốn ping)
 _G.UserID = "344054115539615745"  -- Thay thế bằng UserID thực tế của người chơi bạn muốn ping
-
--- Hàm gửi thông tin vị trí qua webhook và ping người chơi
 local function sendPositionWebhook(position, username)
     if _G.webhookURL == "" then
         warn("Webhook URL chưa được cấu hình.")
         return
     end
-
-    -- Tạo mention cho người chơi (ping người chơi trong Discord)
     local ping = string.format("<@%s>", _G.UserID)  -- Sử dụng _G.UserID thay vì player.UserId
-
-    -- Payload dữ liệu cho webhook
     local payload = {
         username = "Thông tin Vị trí Nhân vật",
         avatar_url = "https://cdn.discordapp.com/embed/avatars/0.png", -- URL avatar (có thể tùy chỉnh)
         content = string.format("Thông báo từ người chơi: **%s** %s", username, ping), -- Thêm phần ping người chơi
         embeds = {
-            {
-                title = "Vị trí nhân vật",
-                type = "rich",
-                color = 1127128, -- Mã màu
-                fields = {
-                    { name = "Vị trí hiện tại", value = string.format("X: %.2f, Y: %.2f, Z: %.2f", position.X, position.Y, position.Z), inline = false }
+            {title = "Vị trí nhân vật", type = "rich", color = 1127128, fields = {{ name = "Vị trí hiện tại", value = string.format("X: %.2f, Y: %.2f, Z: %.2f", position.X, position.Y, position.Z), inline = false }
                 },
                 footer = { text = "Thông báo từ Player Position System", icon_url = "https://cdn.discordapp.com/embed/avatars/0.png" }
             }
         }
     }
-
-    -- Gửi yêu cầu tới webhook
     local response = httpRequest({
         Url = _G.webhookURL,
         Method = "POST",
         Headers = { ["Content-Type"] = "application/json" },
         Body = HttpService:JSONEncode(payload)
     })
-
     if not response or not response.Success then
         warn("Gửi webhook thất bại.")
     end
 end
-
--- Lấy nhân vật và HumanoidRootPart của người chơi
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-
--- Lấy vị trí hiện tại của nhân vật
 local currentPos = humanoidRootPart.Position
-
--- In ra vị trí hiện tại của nhân vật
 print("Vị trí hiện tại của nhân vật:", currentPos)
-
--- Gửi vị trí nhân vật qua webhook và ping người chơi
 sendPositionWebhook(currentPos, player.Name)
