@@ -19,8 +19,6 @@ getgenv().Settings = {
 
         {Name = "Huge Specter Owl", Data = {Price = "6.8b"}},
         {Name = "Huge Shark Cat", Data = {Price = "3.9b"}},
-		{Name = "Exclusive Egg 57", Data = {Price = "115m"}},
-		{Name = "Exclusive Egg 58", Data = {Price = "119m"}},
 
         {Name = "Huge Splash Angelus", Data = {Price = "8.6b"}},
         {Name = "Golden Huge Splash Angelus", Data = {Price = "1%"}},
@@ -37,6 +35,9 @@ getgenv().Settings = {
 
         {Name = "Titanic Narwhal", Data = {Price = "6b"}},
         {Name = "Titanic Pixel Dominus Astra", Data = {Price = "1%"}},
+
+		{Name = "Exclusive Egg 57", Data = {Price = "115m"}},
+		{Name = "Exclusive Egg 58", Data = {Price = "119m"}},
 
         {Name = "Time Trial Gift", Data = {Price = "199k"}},
         {Name = "Tropical Gift", Data = {Price = "50k"}},
