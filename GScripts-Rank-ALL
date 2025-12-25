@@ -46,27 +46,7 @@ spawn(function()
     elseif eventId == 140403681187145 then
         -- World 4: check _G.Time_Trial_End một lần
         if _G.Time_Trial_End == true then
-			getgenv().GDO_XMAS_WORLD = true
-			getgenv().GHOP_ON_STAFF = true
-			getgenv().GEVENT_UPGRADES = {
-				"MegaPresentGrowFaster",
-				"MegaPresentMoreLoot",
-				"MegaPresentEggLuckBoost",
-				"MegaPresentHigherHugeChance",
-				"MegaPresentHigherTitanicChance",
-				"MegaPresentHigherGargantuanChance"
-			}
-			getgenv().GXMAS_WORLD_DO_ICE_BLOCKS = true
-			getgenv().GXMAS_WORLD_MIN_HATCH_REQUESTS_PER_CYCLE = 225
-			getgenv().GXMAS_WORLD_MIN_FARM_TIME_SECONDS = 600
-			getgenv().GXMAS_WORLD_CRAFT_SANTA_GIFTS = false
-			getgenv().GDO_LOCKPICKING = false
-			--getgenv().GXMAS_WORLD_DO_MEGA_PRESENT = true
-			--getgenv().GXMAS_WORLD_OPEN_MEGA_PRESENT_IF_LUCK_REACH = 8000
-			getgenv().GXMAS_WORLD_PETS_EXCLUDED_FROM_SENDING = {"Gingerbread Angelus", "Holiday Owl"}
-			spawn(function()
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/OPTIMIZE_XMASWORLD"))()
-			end)
+			_G.Time_Trial_Var = true
 			getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
 			spawn(function()
 			loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-3"))()
