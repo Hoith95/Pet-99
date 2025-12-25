@@ -1,4 +1,5 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
 local Save = require(ReplicatedStorage.Library.Client.Save)
 
 local function getDailyRuns()
@@ -8,9 +9,22 @@ local function getDailyRuns()
 end
 
 local used = getDailyRuns()
+
 if used >= 10 then
     _G.Time_Trial_End = true
     warn("✅ Đã đủ 10 lượt — _G.Time_Trial_End = true")
+
+    if _G.Time_Trial_Var ~= true then
+        warn("⛔ _G.Time_Trial_Var chưa true — kick do chưa đổi ENCHANTS")
+
+        local player = Players.LocalPlayer
+        if player then
+            player:Kick("⛔ Time Trial kết thúc nhưng ENCHANTS chưa được đổi.")
+        end
+    else
+        warn("✅ _G.Time_Trial_Var = true — ENCHANTS hợp lệ, tiếp tục.")
+    end
+
 else
     warn(("ℹ️ Hiện %d lượt — chưa đủ 10 lượt."):format(used))
 end
