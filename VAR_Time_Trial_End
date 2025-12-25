@@ -13,7 +13,6 @@ local used = getDailyRuns()
 if used >= 10 then
     _G.Time_Trial_End = true
     warn("✅ Đã đủ 10 lượt — _G.Time_Trial_End = true")
-    warn("⏳ Đợi 60 giây để kiểm tra ENCHANTS...")
 
     task.delay(60, function()
 
