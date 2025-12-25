@@ -139,10 +139,11 @@ local function startGuiUpdater()
     end
 
     local rankLabel      = createLabel("RankLabel",        rightRegion,   Color3.fromRGB(34, 139, 34))
-    local chanceLabel     = createLabel("ChanceLabel",       rightRegion,   Color3.fromRGB(34, 139, 34))
+    --local chanceLabel     = createLabel("ChanceLabel",       rightRegion,   Color3.fromRGB(34, 139, 34))
     --local rebirthLabel    = createLabel("RebirthLabel",      rightRegion,   Color3.fromRGB(34, 139, 34))
-    local coinsLabel      = createLabel("CoinsLabel",        rightRegion,   Color3.fromRGB(34, 139, 34))
-    --local giftLabel       = createLabel("TropicalGiftLabel", rightRegion,   Color3.fromRGB(34, 139, 34))
+    --local coinsLabel      = createLabel("CoinsLabel",        rightRegion,   Color3.fromRGB(34, 139, 34))
+    local giftLabel       = createLabel("TropicalGiftLabel", rightRegion,   Color3.fromRGB(34, 139, 34))
+    local gift2Label       = createLabel("TropicalGiftLabel", rightRegion,   Color3.fromRGB(34, 139, 34))
     --local ticketLabel     = createLabel("SBPTicketLabel",    rightRegion,   Color3.fromRGB(34, 139, 34))
 
     local timeTrialLabel  = createLabel("timeTrialLabel",    leftRegion,    Color3.fromRGB(34, 139, 34))
@@ -155,17 +156,20 @@ local function startGuiUpdater()
         rankLabel.Text   = tostring(Save.Get().Rank) .. " | RANK"
         updateLabelSize(rankLabel)
 
-        coinsLabel.Text   = Formatint(getCurrencyAmount("HalloweenCoins")) .. " | COINS"
-        updateLabelSize(coinsLabel)
+        --coinsLabel.Text   = Formatint(getCurrencyAmount("HalloweenCoins")) .. " | COINS"
+        --updateLabelSize(coinsLabel)
 
-        chanceLabel.Text  = tostring(_G.TotalRate or 0) .. "/s | TEAM"
-        updateLabelSize(chanceLabel)
+        --chanceLabel.Text  = tostring(_G.TotalRate or 0) .. "/s | TEAM"
+        --updateLabelSize(chanceLabel)
 
         --rebirthLabel.Text = tostring(Save.Get().TileRebirth or 0) .. " | REBIRTH"
         --updateLabelSize(rebirthLabel)
 
-        --giftLabel.Text    = tostring(getLootboxAmount("Tropical Gift")) .. " | Tropical Gift"
-        --updateLabelSize(giftLabel)
+        giftLabel.Text    = tostring(getLootboxAmount("Santa Gift")) .. " | Santa Gift"
+        updateLabelSize(giftLabel)
+
+        gift2Label.Text    = tostring(getLootboxAmount("CandyCane Gift")) .. " | CandyCane Gift"
+        updateLabelSize(gift2Label)
 
         --ticketLabel.Text  = tostring(getMiscAmount("Summer Block Party Ticket")) .. " | Summer Ticket"
         --updateLabelSize(ticketLabel)
