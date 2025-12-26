@@ -48,7 +48,6 @@ spawn(function()
         if _G.Time_Trial_End == true then
 			_G.Time_Trial_Var = true
 			getgenv().GDO_XMAS_WORLD = true
-			getgenv().GHOP_ON_STAFF = true
 			getgenv().GEVENT_UPGRADES = {
 				"MegaPresentGrowFaster",
 				"MegaPresentMoreLoot",
