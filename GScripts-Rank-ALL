@@ -62,10 +62,10 @@ spawn(function()
 			getgenv().GXMAS_WORLD_CRAFT_SANTA_GIFTS = false
 			getgenv().GDO_LOCKPICKING = false
 			getgenv().GDO_ADVENT_CALENDAR = true
-			getgenv().GXMAS_WORLD_PET_ORDER_GOOD_TO_BAD = {"Elf Golem", "Candycane Kitsune", "Hippomint", "Krampus"}
+			getgenv().GXMAS_WORLD_PET_ORDER_GOOD_TO_BAD = {"Hippomint", "Candycane Kitsune", "Elf Golem", "Krampus"}
 			--getgenv().GXMAS_WORLD_DO_MEGA_PRESENT = true
 			--getgenv().GXMAS_WORLD_OPEN_MEGA_PRESENT_IF_LUCK_REACH = 8000
-			--getgenv().GXMAS_WORLD_PETS_EXCLUDED_FROM_SENDING = {"Gingerbread Angelus", "Holiday Owl"}
+			--getgenv().GXMAS_WORLD_PETS_EXCLUDED_FROM_SENDING = {"Elf Golem", "Candycane Kitsune", "Hippomint", "Krampus","Gingerbread Angelus", "Holiday Owl", "Snowflake Dragon", "Merry Mule"}
 			spawn(function()
 			loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/OPTIMIZE_XMASWORLD"))()
 			end)
