@@ -1,7 +1,8 @@
 if _G.VAR_TELE_XMAS then return end
 _G.VAR_TELE_Xmas = true
 
--- Detect Xmas Instance
+wait(15)
+
 local function inXmasWorld()
     local inst = workspace:FindFirstChild("__THINGS")
         and workspace.__THINGS:FindFirstChild("__INSTANCE_CONTAINER")
