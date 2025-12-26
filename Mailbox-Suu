@@ -29,6 +29,19 @@ spawn(function()
 end)
 
 spawn(function()
+    local targetPlaceId = 140403681187145
+    if game.PlaceId ~= targetPlaceId then
+        warn("⛔ Không đúng PlaceId, bỏ qua script.")
+        return
+    end
+    if _G.Time_Trial_Done ~= true then
+        warn("⛔ _G.Time_Trial_Done chưa true, không chạy script.")
+        return
+    end
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_TELE_XMAS"))()
+end)
+
+spawn(function()
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GIFT-GEMS-FAST"))()
 end)
 
