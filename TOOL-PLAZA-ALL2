@@ -37,7 +37,7 @@ getgenv().Settings = {
         {Name = "Titanic Pixel Dominus Astra", Data = {Price = "1%"}},
 
 		{Name = "Exclusive Egg 57", Data = {Price = "115m"}},
-		{Name = "Exclusive Egg 58", Data = {Price = "119m"}},
+		{Name = "Exclusive Egg 58", Data = {Price = "115m"}},
 
         {Name = "Time Trial Gift", Data = {Price = "199k"}},
         {Name = "Tropical Gift", Data = {Price = "50k"}},
