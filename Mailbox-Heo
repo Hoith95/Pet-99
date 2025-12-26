@@ -14,6 +14,7 @@ task.wait(60)  -- Đảm bảo chờ đúng 60 giây trước khi thực thi
 getgenv().AutoMail = {
     ['Items'] = {
         --['All Huges'] = { Class = "Pet", AllVariants = true, Amount = 1 },
+        ['Huge Festive Bear'] = { Class = "Pet", AllVariants = true, Amount = 1 },
         ['Huge Specter Owl'] = { Class = "Pet", AllVariants = true, Amount = 1 },
         ['Huge Shark Cat'] = { Class = "Pet", AllVariants = true, Amount = 1 },
         --['Hippomelon Ball'] = { Class = "Pet", AllVariants = true, Amount = "Max" },
@@ -69,7 +70,7 @@ getgenv().AutoMail = {
     ['Users'] = {"Zephy_Marnell604", "Dravon_Liorrex220", "Taryn_Xelvorn389", "Valric_Solvynn026", "Zarek_Maelith750", "Thien_Hoa9x", "TheRealWillow_cove"},
     ['UserItemPreferences'] = {
         ['TheRealWillow_cove'] = {'MVP Key Lower Half', 'MVP Key Upper Half'},
-        ['Thien_Hoa9x'] = {'Insta Plant Capsule', 'Diamond'},
+        ['Thien_Hoa9x'] = {'Insta Plant Capsule', 'Diamond', 'Huge Festive Bear'},
     }
 }
 
