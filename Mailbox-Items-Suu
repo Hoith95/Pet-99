@@ -70,7 +70,7 @@ getgenv().AutoMail = {
     ['Users'] = {"nguyenhuyengh3x", "truongcuong8beu", "nguyenhieu8i6w", "phanquynhku1u", "lehoangvw2k", "dinhhabb1a", "TheRealWillow_cove"},
     ['UserItemPreferences'] = {
         ['TheRealWillow_cove'] = {'MVP Key Lower Half', 'MVP Key Upper Half'},
-        ['dinhhabb1a'] = {'Insta Plant Capsule', 'Diamond', 'Huge Festive Bear'},
+        ['dinhhabb1a'] = {'Insta Plant Capsule', 'Diamond'},
     }
 }
 
