@@ -32,6 +32,7 @@ local WAIT_RECHECK     = 180
 local WAIT_AFTER_OPEN = 20
 
 local EXCLUDED_HUGE = {
+    ["Huge Festive Bear"] = true,
     ["Huge Bean Balloon Cat"] = true,
     ["Huge Holly Capybara"] = true,
     ["Huge Hot Cocoa Cow"] = true,
