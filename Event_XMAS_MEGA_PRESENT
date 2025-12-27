@@ -17,29 +17,25 @@ local function inXmasWorld()
         and c:FindFirstChild("Active")
         and c.Active:FindFirstChild("XmasWorld")
 end
--- ===================================================
 
 -- ================= REMOTES =================
 local SLEIGH_SUBMIT = Network.SantasSleigh_Submit
 local MEGA_SUBMIT   = Network:FindFirstChild("Mega Present: Submit")
 local MEGA_OPEN     = Network:FindFirstChild("Mega Present: Open")
--- ===========================================
 
 -- ================= CONFIG =================
-local TARGET_SLEIGH_POINTS = 6000
 local TARGET_MEGA_POINTS   = 10000
+local TARGET_SLEIGH_POINTS = 6000
 local MIN_KEEP_HUGE        = 38
 
 local WAIT_RECHECK     = 180
 local WAIT_AFTER_OPEN = 20
 
 local EXCLUDED_HUGE = {
-    ["Huge Festive Bear"] = true,
     ["Huge Bean Balloon Cat"] = true,
     ["Huge Holly Capybara"] = true,
     ["Huge Hot Cocoa Cow"] = true,
 }
--- ==========================================
 
 -- ================= UTIL ===================
 local function getSave()
@@ -47,17 +43,17 @@ local function getSave()
     if ok then return sd end
 end
 
-local function getSleighPoints(sd)
-    return sd
-        and sd.Christmas2025Part2
-        and sd.Christmas2025Part2.RecentSleighPointsSent
-        or 0
-end
-
 local function getMegaPoints(sd)
     return sd
         and sd.Christmas2025Part2
         and sd.Christmas2025Part2.MegaPresentPoints
+        or 0
+end
+
+local function getSleighPoints(sd)
+    return sd
+        and sd.Christmas2025Part2
+        and sd.Christmas2025Part2.RecentSleighPointsSent
         or 0
 end
 
@@ -70,7 +66,6 @@ local function countTotalHuge(sd)
     end
     return c
 end
--- ==========================================
 
 -- ================= COLLECT HUGE =================
 local function collectValidHuge(sd)
@@ -104,7 +99,6 @@ local function collectValidHuge(sd)
 
     return normal, golden
 end
--- ==========================================
 
 -- ================= FIND MEGA ITEM =================
 local function findMegaLuckyGingerbread(sd)
@@ -114,10 +108,9 @@ local function findMegaLuckyGingerbread(sd)
         end
     end
 end
--- ==========================================
 
 -- ================= STATE =================
-local STATE = "CHECK_SLEIGH_POINTS"
+local STATE = "CHECK_MEGA_POINTS"
 
 task.spawn(function()
     while true do
@@ -132,13 +125,37 @@ task.spawn(function()
             continue
         end
 
-        if STATE == "CHECK_SLEIGH_POINTS" then
+        -- ================= CHECK MEGA FIRST =================
+        if STATE == "CHECK_MEGA_POINTS" then
+            if getMegaPoints(sd) >= TARGET_MEGA_POINTS then
+                STATE = "CHECK_SLEIGH_POINTS"
+            else
+                STATE = "SUBMIT_MEGA_ITEM"
+            end
+
+        -- ================= SUBMIT MEGA ITEM =================
+        elseif STATE == "SUBMIT_MEGA_ITEM" then
+            local uid, amount = findMegaLuckyGingerbread(sd)
+            if not uid or amount <= 0 then
+                STATE = "WAIT"
+                continue
+            end
+
+            local args = { [1] = { [uid] = 1 } }
+            MEGA_SUBMIT:InvokeServer(unpack(args))
+            task.wait(2)
+
+            STATE = "CHECK_MEGA_POINTS"
+
+        -- ================= CHECK SLEIGH =================
+        elseif STATE == "CHECK_SLEIGH_POINTS" then
             if getSleighPoints(sd) >= TARGET_SLEIGH_POINTS then
-                STATE = "CHECK_MEGA_POINTS"
+                STATE = "OPEN_MEGA"
             else
                 STATE = "SUBMIT_HUGE"
             end
 
+        -- ================= SUBMIT HUGE =================
         elseif STATE == "SUBMIT_HUGE" then
             local totalHuge = countTotalHuge(sd)
             if totalHuge < MIN_KEEP_HUGE then
@@ -175,36 +192,18 @@ task.spawn(function()
                 end
             end
 
-            STATE = "CHECK_MEGA_POINTS"
+            STATE = "CHECK_SLEIGH_POINTS"
 
-        elseif STATE == "CHECK_MEGA_POINTS" then
-            if getMegaPoints(sd) >= TARGET_MEGA_POINTS then
-                STATE = "OPEN_MEGA"
-            else
-                STATE = "SUBMIT_MEGA_ITEM"
-            end
-
-        elseif STATE == "SUBMIT_MEGA_ITEM" then
-            local uid, amount = findMegaLuckyGingerbread(sd)
-            if not uid or amount <= 0 then
-                STATE = "WAIT"
-                continue
-            end
-
-            local args = { [1] = { [uid] = 1 } }
-            MEGA_SUBMIT:InvokeServer(unpack(args))
-            task.wait(2)
-
-            STATE = "CHECK_MEGA_POINTS"
-
+        -- ================= OPEN =================
         elseif STATE == "OPEN_MEGA" then
             MEGA_OPEN:InvokeServer()
             task.wait(WAIT_AFTER_OPEN)
-            STATE = "CHECK_SLEIGH_POINTS"
+            STATE = "CHECK_MEGA_POINTS"
 
+        -- ================= WAIT =================
         elseif STATE == "WAIT" then
             task.wait(WAIT_RECHECK)
-            STATE = "CHECK_SLEIGH_POINTS"
+            STATE = "CHECK_MEGA_POINTS"
         end
 
         task.wait(0.2)
