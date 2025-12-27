@@ -141,11 +141,11 @@ local function startGuiUpdater()
 
     -- RIGHT
     local rankLabel        = createLabel("RankLabel", right)
+    local giftLabel        = createLabel("GiftLabel", right)
+    local gift2Label       = createLabel("Gift2Label", right)
     local sleighLabel      = createLabel("SleighLabel", right)
     local megaPresentLabel = createLabel("MegaPresentLabel", right)
     local raffleLabel      = createLabel("RaffleLabel", right)
-    local giftLabel        = createLabel("GiftLabel", right)
-    local gift2Label       = createLabel("Gift2Label", right)
 
     -- LEFT / CENTER
     local timeTrialLabel = createLabel("TimeTrialLabel", left)
