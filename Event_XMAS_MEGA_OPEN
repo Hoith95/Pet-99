@@ -1,5 +1,5 @@
 -- ============================================
--- AUTO MEGA PRESENT AUTO OPEN (POINT WATCHER)
+-- AUTO MEGA PRESENT AUTO OPEN (XMAS ONLY)
 -- ============================================
 
 if _G.AUTO_MEGA_OPEN then return end
@@ -18,6 +18,14 @@ local TARGET_MEGA_POINTS   = 8000
 local TARGET_SLEIGH_POINTS = 4000
 local WAIT_BEFORE_OPEN     = 60
 local CHECK_INTERVAL       = 2
+
+-- =============== XMAS CHECK =================
+local function inXmasWorld()
+    local c = workspace:FindFirstChild("__THINGS")
+        and workspace.__THINGS:FindFirstChild("__INSTANCE_CONTAINER")
+    return c and c:FindFirstChild("Active")
+        and c.Active:FindFirstChild("XmasWorld")
+end
 
 -- =============== UTIL =======================
 local function getSave()
@@ -44,6 +52,14 @@ local waiting = false
 
 task.spawn(function()
     while true do
+
+        -- ❌ Không ở XmasWorld → reset trạng thái
+        if not inXmasWorld() then
+            waiting = false
+            task.wait(5)
+            continue
+        end
+
         local sd = getSave()
         if sd then
             local mega   = getMegaPoints(sd)
@@ -54,22 +70,28 @@ task.spawn(function()
 
                 if not waiting then
                     waiting = true
-                    warn("🎁 Đủ điểm Mega + Sleigh → đợi 60s để mở")
+                    warn("🎄 Đủ Mega + Sleigh (XmasWorld) → đợi 60s mở Mega")
 
                     task.delay(WAIT_BEFORE_OPEN, function()
+                        -- nếu rời XmasWorld trong lúc đợi → huỷ
+                        if not inXmasWorld() then
+                            waiting = false
+                            return
+                        end
+
                         local sd2 = getSave()
                         if not sd2 then
                             waiting = false
                             return
                         end
 
-                        -- kiểm tra lại lần cuối trước khi mở
+                        -- re-check cuối
                         if getMegaPoints(sd2) >= TARGET_MEGA_POINTS
                         and getSleighPoints(sd2) >= TARGET_SLEIGH_POINTS then
                             pcall(function()
                                 MEGA_OPEN:InvokeServer()
                             end)
-                            warn("🎉 Đã mở Mega Present")
+                            warn("🎁 Mega Present đã mở")
                         end
 
                         waiting = false
