@@ -47,7 +47,6 @@ local ALLOWED_MEGA_PETS = {
 
 local SPECIAL_KEEP_PET = {
     ["Elf Golem"] = true,
-    ["Gingerbread Angelus"] = true,
 }
 
 local KEEP_NORMAL_PET = {
