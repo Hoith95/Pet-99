@@ -1,11 +1,10 @@
 -- =====================================================
--- AUTO MEGA PRESENT - STATE MACHINE - FINAL v8
--- =====================================================
+-- AUTO MEGA PRESENT - STATE MACHINE (FINAL v8)
 
 if _G.VAR_MEGA_PRESENT then return end
 _G.VAR_MEGA_PRESENT = true
-
 -- =====================================================
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
 local Network = ReplicatedStorage.Network
