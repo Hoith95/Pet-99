@@ -1,0 +1,135 @@
+if _G.AUTO_XMAS_CRAFT then return end
+_G.AUTO_XMAS_CRAFT = true
+
+task.wait(10)
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
+local Network = ReplicatedStorage:WaitForChild("Network")
+
+local RECIPE_INDEX = 1
+local CHECK_INTERVAL_NOT_ENOUGH = 300 -- 5 phút
+local LOOP_WAIT = 5
+
+local REQUIRED_PETS = {
+    ["Elf Golem"] = true,
+    ["Candycane Kitsune"] = true,
+    ["Hippomint"] = true,
+    ["Krampus"] = true,
+}
+
+local REQUIRED_AMOUNT = 8
+
+local function getSave()
+    local ok, sd = pcall(PlayerSave.Get)
+    if ok then return sd end
+end
+
+local function countNormalPets(sd)
+    local count = {
+        ["Elf Golem"] = 0,
+        ["Candycane Kitsune"] = 0,
+        ["Hippomint"] = 0,
+        ["Krampus"] = 0,
+    }
+
+    for _, pet in pairs(sd.Inventory.Pet or {}) do
+        local id = pet.id
+        if REQUIRED_PETS[id] then
+            -- pet thường: không shiny, không pt
+            local isNormal = (pet.sh == nil or pet.sh == false)
+                and (pet.pt == nil or pet.pt == 0)
+
+            if isNormal then
+                count[id] += (pet._am or 1)
+            end
+        end
+    end
+
+    return count
+end
+
+local function hasEnoughPets(sd)
+    local c = countNormalPets(sd)
+    for name, _ in pairs(REQUIRED_PETS) do
+        if (c[name] or 0) < REQUIRED_AMOUNT then
+            return false, c
+        end
+    end
+    return true, c
+end
+
+local function craft(recipeIndex)
+    local args = {
+        [1] = "ChristmasPetCraftingMachine",
+        [2] = recipeIndex,
+        [3] = { shiny = false, pt = 0 }
+    }
+
+    pcall(function()
+        local fn = Network:FindFirstChild("HalloweenCraftingMachine_StartCraft")
+        if fn then
+            fn:InvokeServer(unpack(args))
+        end
+    end)
+
+    task.wait(5)
+end
+
+local function claimCraft(id)
+    pcall(function()
+        local fn = Network:FindFirstChild("HalloweenCraftingMachine_Claim")
+        if fn then
+            fn:InvokeServer(id)
+        end
+    end)
+
+    task.wait(2)
+end
+
+local function getCraftQueue()
+    local sd = getSave()
+    if not sd then return {} end
+
+    local q = sd.HalloweenCraftingQueue or {}
+    local ids = {}
+
+    for id, v in pairs(q) do
+        if v and v.Result and v.Result.Data and v.Result.Data.id then
+            table.insert(ids, id)
+        end
+    end
+
+    return ids
+end
+
+task.spawn(function()
+    while true do
+        task.wait(LOOP_WAIT)
+
+        local sd = getSave()
+        if not sd then
+            task.wait(10)
+            continue
+        end
+
+        -- 1️⃣ Claim toàn bộ craft đã xong
+        local queue = getCraftQueue()
+        if #queue > 0 then
+            for _, id in ipairs(queue) do
+                claimCraft(id)
+            end
+        end
+
+        -- 2️⃣ Kiểm tra pet
+        local ok, detail = hasEnoughPets(sd)
+        if not ok then
+            -- chưa đủ → đợi 5 phút rồi kiểm tra lại
+            task.wait(CHECK_INTERVAL_NOT_ENOUGH)
+            continue
+        end
+
+        -- 3️⃣ Đủ 8 con mỗi loại → craft
+        craft(RECIPE_INDEX)
+    end
+end)
