@@ -24,9 +24,9 @@ local MEGA_OPEN     = Network:FindFirstChild("Mega Present: Open")
 local CRAFT_REMOTE  = Network.CraftingMachine_Craft
 
 -- ================= CONFIG =================
-local TARGET_MEGA_POINTS   = 10000
+local TARGET_MEGA_POINTS   = 8000
 local TARGET_SLEIGH_POINTS = 6000
-local MIN_KEEP_HUGE        = 38
+local MIN_KEEP_HUGE        = 89
 
 local WAIT_RECHECK     = 180
 local WAIT_AFTER_OPEN = 20
@@ -44,9 +44,6 @@ local ALLOWED_MEGA_PETS = {
     ["Hippomint"] = true,
     ["Krampus"] = true,
     ["Gingerbread Angelus"] = true,
-    ["Holiday Owl"] = true,
-    ["Snowflake Dragon"] = true,
-    ["Merry Mule"] = true,
 }
 
 local SPECIAL_KEEP_PET = {
