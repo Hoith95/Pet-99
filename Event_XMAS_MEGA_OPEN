@@ -1,0 +1,83 @@
+-- ============================================
+-- AUTO MEGA PRESENT AUTO OPEN (POINT WATCHER)
+-- ============================================
+
+if _G.AUTO_MEGA_OPEN then return end
+_G.AUTO_MEGA_OPEN = true
+
+task.wait(10)
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
+local Network = ReplicatedStorage.Network
+
+local MEGA_OPEN = Network:FindFirstChild("Mega Present: Open")
+
+-- =============== CONFIG =====================
+local TARGET_MEGA_POINTS   = 8000
+local TARGET_SLEIGH_POINTS = 4000
+local WAIT_BEFORE_OPEN     = 60
+local CHECK_INTERVAL       = 2
+
+-- =============== UTIL =======================
+local function getSave()
+    local ok, sd = pcall(PlayerSave.Get)
+    if ok then return sd end
+end
+
+local function getMegaPoints(sd)
+    return sd
+        and sd.Christmas2025Part2
+        and sd.Christmas2025Part2.MegaPresentPoints
+        or 0
+end
+
+local function getSleighPoints(sd)
+    return sd
+        and sd.Christmas2025Part2
+        and sd.Christmas2025Part2.RecentSleighPointsSent
+        or 0
+end
+
+-- =============== LOOP =======================
+local waiting = false
+
+task.spawn(function()
+    while true do
+        local sd = getSave()
+        if sd then
+            local mega   = getMegaPoints(sd)
+            local sleigh = getSleighPoints(sd)
+
+            if mega >= TARGET_MEGA_POINTS
+            and sleigh >= TARGET_SLEIGH_POINTS then
+
+                if not waiting then
+                    waiting = true
+                    warn("🎁 Đủ điểm Mega + Sleigh → đợi 60s để mở")
+
+                    task.delay(WAIT_BEFORE_OPEN, function()
+                        local sd2 = getSave()
+                        if not sd2 then
+                            waiting = false
+                            return
+                        end
+
+                        -- kiểm tra lại lần cuối trước khi mở
+                        if getMegaPoints(sd2) >= TARGET_MEGA_POINTS
+                        and getSleighPoints(sd2) >= TARGET_SLEIGH_POINTS then
+                            pcall(function()
+                                MEGA_OPEN:InvokeServer()
+                            end)
+                            warn("🎉 Đã mở Mega Present")
+                        end
+
+                        waiting = false
+                    end)
+                end
+            end
+        end
+
+        task.wait(CHECK_INTERVAL)
+    end
+end)
