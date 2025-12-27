@@ -161,13 +161,13 @@ local function startGuiUpdater()
         rankLabel.Text = tostring(sd.Rank or 0) .. " | RANK"
         updateLabelSize(rankLabel)
 
-        sleighLabel.Text = Formatint(getRecentSleighPointsSent()) .. " | Sleigh Sent"
+        sleighLabel.Text = Formatint(getRecentSleighPointsSent()) .. " | Huge Lucky"
         updateLabelSize(sleighLabel)
 
         megaPresentLabel.Text = Formatint(getMegaPresentPoints()) .. " | Mega Present"
         updateLabelSize(megaPresentLabel)
 
-        raffleLabel.Text = Formatint(getRaffleSubmittedTickets()) .. " | Raffle"
+        raffleLabel.Text = Formatint(getRaffleSubmittedTickets()) .. " | Secret Santa"
         updateLabelSize(raffleLabel)
 
         giftLabel.Text = tostring(getLootboxAmount("Santa Gift")) .. " | Santa Gift"
