@@ -104,7 +104,6 @@ local function getCraftQueue()
             table.insert(ids, id)
         end
     end
-
     return ids
 end
 
@@ -135,7 +134,6 @@ task.spawn(function()
             task.wait(WAIT_NOT_ENOUGH)
             continue
         end
-
         craft(RECIPE_INDEX)
     end
 end)
