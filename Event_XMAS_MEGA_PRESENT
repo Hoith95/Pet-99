@@ -1,9 +1,11 @@
 -- =====================================================
--- AUTO MEGA PRESENT - STATE MACHINE
+-- AUTO MEGA PRESENT - STATE MACHINE - FINAL v8
 -- =====================================================
+
 if _G.VAR_MEGA_PRESENT then return end
 _G.VAR_MEGA_PRESENT = true
 
+-- =====================================================
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
 local Network = ReplicatedStorage.Network
@@ -12,16 +14,14 @@ local Network = ReplicatedStorage.Network
 local function inXmasWorld()
     local c = workspace:FindFirstChild("__THINGS")
         and workspace.__THINGS:FindFirstChild("__INSTANCE_CONTAINER")
-
-    return c
-        and c:FindFirstChild("Active")
-        and c.Active:FindFirstChild("XmasWorld")
+    return c and c:FindFirstChild("Active") and c.Active:FindFirstChild("XmasWorld")
 end
 
 -- ================= REMOTES =================
 local SLEIGH_SUBMIT = Network.SantasSleigh_Submit
 local MEGA_SUBMIT   = Network:FindFirstChild("Mega Present: Submit")
 local MEGA_OPEN     = Network:FindFirstChild("Mega Present: Open")
+local CRAFT_REMOTE  = Network.CraftingMachine_Craft
 
 -- ================= CONFIG =================
 local TARGET_MEGA_POINTS   = 10000
@@ -31,31 +31,48 @@ local MIN_KEEP_HUGE        = 38
 local WAIT_RECHECK     = 180
 local WAIT_AFTER_OPEN = 20
 
+-- ================= RULE TABLES =================
 local EXCLUDED_HUGE = {
-    ["Huge Festive Bear"] = true,
     ["Huge Bean Balloon Cat"] = true,
     ["Huge Holly Capybara"] = true,
     ["Huge Hot Cocoa Cow"] = true,
 }
 
--- ================= UTIL ===================
+local ALLOWED_MEGA_PETS = {
+    ["Elf Golem"] = true,
+    ["Candycane Kitsune"] = true,
+    ["Hippomint"] = true,
+    ["Krampus"] = true,
+    ["Gingerbread Angelus"] = true,
+    ["Holiday Owl"] = true,
+    ["Snowflake Dragon"] = true,
+    ["Merry Mule"] = true,
+}
+
+local SPECIAL_KEEP_PET = {
+    ["Elf Golem"] = true,
+    ["Gingerbread Angelus"] = true,
+}
+
+local KEEP_NORMAL_PET = {
+    ["Elf Golem"] = true,
+    ["Candycane Kitsune"] = true,
+    ["Hippomint"] = true,
+    ["Krampus"] = true,
+}
+
+-- ================= UTIL =================
 local function getSave()
     local ok, sd = pcall(PlayerSave.Get)
     if ok then return sd end
 end
 
 local function getMegaPoints(sd)
-    return sd
-        and sd.Christmas2025Part2
-        and sd.Christmas2025Part2.MegaPresentPoints
-        or 0
+    return sd and sd.Christmas2025Part2 and sd.Christmas2025Part2.MegaPresentPoints or 0
 end
 
 local function getSleighPoints(sd)
-    return sd
-        and sd.Christmas2025Part2
-        and sd.Christmas2025Part2.RecentSleighPointsSent
-        or 0
+    return sd and sd.Christmas2025Part2 and sd.Christmas2025Part2.RecentSleighPointsSent or 0
 end
 
 local function countTotalHuge(sd)
@@ -68,49 +85,105 @@ local function countTotalHuge(sd)
     return c
 end
 
+-- ================= INVENTORY HELPERS =================
+local function getItemAmount(sd, name)
+    for _, item in pairs(sd.Inventory.Misc or {}) do
+        if item.id == name then
+            return type(item._am) == "number" and item._am or 1
+        end
+    end
+    return 0
+end
+
+local function findItemUID(sd, name)
+    for uid, item in pairs(sd.Inventory.Misc or {}) do
+        if item.id == name then
+            return uid
+        end
+    end
+end
+
 -- ================= COLLECT HUGE =================
 local function collectValidHuge(sd)
     local normal, golden = {}, {}
-
     for uid, pet in pairs(sd.Inventory.Pet or {}) do
         local id = pet.id
-        if type(id) == "string"
-            and string.find(id, "Huge")
-            and not EXCLUDED_HUGE[id] then
-
+        if type(id) == "string" and string.find(id, "Huge") and not EXCLUDED_HUGE[id] then
             local xp = (pet._uq and pet._uq.xp) or 0
-            if xp >= 0 and xp <= 990000 then
-                local pt = pet.pt
-                local sh = pet.sh == true
+            local pt = pet.pt
+            local sh = pet.sh == true
+            if xp <= 990000 and not sh and pt ~= 2 then
+                table.insert(pt == 1 and golden or normal, { uid = uid })
+            end
+        end
+    end
+    return normal, golden
+end
 
-                if not sh and pt ~= 2 then
-                    local bucket = (pt == 1) and golden or normal
-                    table.insert(bucket, {
-                        uid = uid,
-                        xp  = xp,
-                        id  = id
-                    })
-                end
+-- ================= GINGERBREAD CRAFT =================
+local function craftGingerbread(sd)
+    local lucky = getItemAmount(sd, "Lucky Gingerbread")
+    local toSuper = math.floor(lucky / 10)
+    if toSuper > 0 then
+        CRAFT_REMOTE:InvokeServer("GingerbreadCraftingMachine", 1, toSuper)
+        task.wait(1.5)
+    end
+
+    sd = getSave()
+    local super = getItemAmount(sd, "Super Lucky Gingerbread")
+    local toUltra = math.floor(super / 10)
+    if toUltra > 0 then
+        CRAFT_REMOTE:InvokeServer("GingerbreadCraftingMachine", 2, toUltra)
+        task.wait(1.5)
+    end
+end
+
+-- ================= FIND PET FOR MEGA =================
+local function findPetForMega(sd)
+    local keepVariant = {}
+
+    for _, pet in pairs(sd.Inventory.Pet or {}) do
+        if SPECIAL_KEEP_PET[pet.id] then
+            if pet.sh and pet.pt == 2 then
+                keepVariant[pet.id] = "SR"
+            elseif pet.pt == 2 and keepVariant[pet.id] ~= "SR" then
+                keepVariant[pet.id] = "R"
             end
         end
     end
 
-    table.sort(normal, function(a, b) return a.xp < b.xp end)
-    table.sort(golden, function(a, b) return a.xp < b.xp end)
+    for uid, pet in pairs(sd.Inventory.Pet or {}) do
+        local id = pet.id
+        if ALLOWED_MEGA_PETS[id] and not string.find(id, "Huge") then
+            local isNormal = (pet.pt == nil and pet.sh == nil)
+            local am = pet._am or 1
 
-    return normal, golden
-end
+            if KEEP_NORMAL_PET[id] and isNormal then
+                continue
+            end
 
--- ================= FIND MEGA ITEM =================
-local function findMegaLuckyGingerbread(sd)
-    for uid, item in pairs(sd.Inventory.Misc or {}) do
-        if item.id == "Mega Lucky Gingerbread" then
-            return uid, (item._am or 1)
+            if SPECIAL_KEEP_PET[id] then
+                if keepVariant[id] == "SR" and pet.sh and pet.pt == 2 then
+                    if am > 1 then
+                        return uid, am - 1
+                    end
+                    continue
+                end
+                if keepVariant[id] == "R" and pet.pt == 2 then
+                    if am > 1 then
+                        return uid, am - 1
+                    end
+                    continue
+                end
+                return uid, am
+            end
+
+            return uid, am
         end
     end
 end
 
--- ================= STATE =================
+-- ================= STATE MACHINE =================
 local STATE = "CHECK_MEGA_POINTS"
 
 task.spawn(function()
@@ -126,82 +199,76 @@ task.spawn(function()
             continue
         end
 
-        -- ================= CHECK MEGA FIRST =================
         if STATE == "CHECK_MEGA_POINTS" then
-            if getMegaPoints(sd) >= TARGET_MEGA_POINTS then
-                STATE = "CHECK_SLEIGH_POINTS"
-            else
-                STATE = "SUBMIT_MEGA_ITEM"
+            STATE = getMegaPoints(sd) >= TARGET_MEGA_POINTS and "CHECK_SLEIGH_POINTS" or "SUBMIT_MEGA"
+
+        elseif STATE == "SUBMIT_MEGA" then
+            local mp = getMegaPoints(sd)
+
+            -- Mega Lucky: chỉ nộp 1
+            if mp == 0 then
+                local uid = findItemUID(sd, "Mega Lucky Gingerbread")
+                if uid then
+                    MEGA_SUBMIT:InvokeServer({ [uid] = 1 })
+                    task.wait(2)
+                    STATE = "CHECK_MEGA_POINTS"
+                    continue
+                end
             end
 
-        -- ================= SUBMIT MEGA ITEM =================
-        elseif STATE == "SUBMIT_MEGA_ITEM" then
-            local uid, amount = findMegaLuckyGingerbread(sd)
-            if not uid or amount <= 0 then
-                STATE = "WAIT"
+            craftGingerbread(sd)
+
+            sd = getSave()
+            local uUID = findItemUID(sd, "Ultra Lucky Gingerbread")
+            local uAM  = getItemAmount(sd, "Ultra Lucky Gingerbread")
+            if uUID and uAM > 0 then
+                MEGA_SUBMIT:InvokeServer({ [uUID] = uAM })
+                task.wait(2)
+                STATE = "CHECK_MEGA_POINTS"
                 continue
             end
 
-            local args = { [1] = { [uid] = 1 } }
-            MEGA_SUBMIT:InvokeServer(unpack(args))
-            task.wait(2)
+            local pUID, pAM = findPetForMega(sd)
+            if pUID then
+                MEGA_SUBMIT:InvokeServer({ [pUID] = pAM })
+            else
+                STATE = "WAIT"
+            end
 
+            task.wait(2)
             STATE = "CHECK_MEGA_POINTS"
 
-        -- ================= CHECK SLEIGH =================
         elseif STATE == "CHECK_SLEIGH_POINTS" then
-            if getSleighPoints(sd) >= TARGET_SLEIGH_POINTS then
-                STATE = "OPEN_MEGA"
-            else
-                STATE = "SUBMIT_HUGE"
-            end
+            STATE = getSleighPoints(sd) >= TARGET_SLEIGH_POINTS and "OPEN_MEGA" or "SUBMIT_HUGE"
 
-        -- ================= SUBMIT HUGE =================
         elseif STATE == "SUBMIT_HUGE" then
-            local totalHuge = countTotalHuge(sd)
-            if totalHuge < MIN_KEEP_HUGE then
-                STATE = "WAIT"
-                continue
-            end
+            local total = countTotalHuge(sd)
+            if total >= MIN_KEEP_HUGE then
+                local maxSubmit = total - MIN_KEEP_HUGE
+                local normal, golden = collectValidHuge(sd)
+                local queue = {}
 
-            local maxSubmit = totalHuge - MIN_KEEP_HUGE
-            local normal, golden = collectValidHuge(sd)
-            local queue = {}
+                for _, v in ipairs(normal) do
+                    if #queue < maxSubmit then table.insert(queue, v) end
+                end
+                for _, v in ipairs(golden) do
+                    if #queue < maxSubmit then table.insert(queue, v) end
+                end
 
-            for _, v in ipairs(normal) do
-                if #queue >= maxSubmit then break end
-                table.insert(queue, v)
-            end
-            for _, v in ipairs(golden) do
-                if #queue >= maxSubmit then break end
-                table.insert(queue, v)
-            end
-
-            if #queue == 0 then
-                STATE = "WAIT"
-                continue
-            end
-
-            for _, h in ipairs(queue) do
-                local args = { [1] = { [h.uid] = 1 } }
-                SLEIGH_SUBMIT:InvokeServer(unpack(args))
-                task.wait(2)
-
-                sd = getSave()
-                if getSleighPoints(sd) >= TARGET_SLEIGH_POINTS then
-                    break
+                for _, h in ipairs(queue) do
+                    SLEIGH_SUBMIT:InvokeServer({ [h.uid] = 1 })
+                    task.wait(2)
+                    if getSleighPoints(getSave()) >= TARGET_SLEIGH_POINTS then break end
                 end
             end
 
             STATE = "CHECK_SLEIGH_POINTS"
 
-        -- ================= OPEN =================
         elseif STATE == "OPEN_MEGA" then
             MEGA_OPEN:InvokeServer()
             task.wait(WAIT_AFTER_OPEN)
             STATE = "CHECK_MEGA_POINTS"
 
-        -- ================= WAIT =================
         elseif STATE == "WAIT" then
             task.wait(WAIT_RECHECK)
             STATE = "CHECK_MEGA_POINTS"
