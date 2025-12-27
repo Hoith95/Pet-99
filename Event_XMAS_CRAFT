@@ -7,6 +7,12 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
 local Network = ReplicatedStorage:WaitForChild("Network")
 
+local function inXmasWorld()
+    local c = workspace:FindFirstChild("__THINGS")
+        and workspace.__THINGS:FindFirstChild("__INSTANCE_CONTAINER")
+    return c and c:FindFirstChild("Active") and c.Active:FindFirstChild("XmasWorld")
+end
+
 local RECIPE_INDEX = 1
 local CHECK_INTERVAL_NOT_ENOUGH = 300 -- 5 phút
 local LOOP_WAIT = 5
@@ -105,6 +111,12 @@ end
 
 task.spawn(function()
     while true do
+        -- ⛔ Không ở XmasWorld → treo
+        if not inXmasWorld() then
+            task.wait(5)
+            continue
+        end
+
         task.wait(LOOP_WAIT)
 
         local sd = getSave()
@@ -121,15 +133,15 @@ task.spawn(function()
             end
         end
 
-        -- 2️⃣ Kiểm tra pet
-        local ok, detail = hasEnoughPets(sd)
+        -- 2️⃣ Kiểm tra đủ 5 pet thường mỗi loại
+        local ok = hasEnoughPets(sd)
         if not ok then
-            -- chưa đủ → đợi 5 phút rồi kiểm tra lại
+            -- Chưa đủ → đợi 5 phút rồi kiểm tra lại (nhưng vẫn bị khóa bởi XmasWorld)
             task.wait(CHECK_INTERVAL_NOT_ENOUGH)
             continue
         end
 
-        -- 3️⃣ Đủ 8 con mỗi loại → craft
+        -- 3️⃣ Đủ điều kiện → craft
         craft(RECIPE_INDEX)
     end
 end)
