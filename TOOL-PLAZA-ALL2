@@ -11,8 +11,10 @@ getgenv().Settings = {
 		{Name = "Gargantuan Black Balloon Cat", Data = {Price = "86.86b"}},
 		{Name = "Gargantuan Super Cat", Data = {Price = "50.86b"}},
         {Name = "Titanic Vampire Agony", Data = {Price = "18b"}},
+		{Name = "Titanic Hippomint", Data = {Price = "6b"}},
 		{Name = "Titanic Pink Lucky Block", Data = {Price = "6b"}},
 		{Name = "Titanic Night Terror Dog", Data = {Price = "5.5b"}},
+
 		{Name = "Halloween Lucky Block Gift", Data = {Price = "38m"}},
 		{Name = "Santa Gift", Data = {Price = "668k"}},
 		{Name = "Candycane Gift", Data = {Price = "668k"}},
