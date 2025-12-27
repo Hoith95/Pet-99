@@ -1,0 +1,211 @@
+-- =====================================================
+-- AUTO MEGA PRESENT - STATE MACHINE
+-- =====================================================
+if _G.VAR_MEGA_PRESENT then return end
+_G.VAR_MEGA_PRESENT = true
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
+local Network = ReplicatedStorage.Network
+
+-- ================= XMAS WORLD CHECK =================
+local function inXmasWorld()
+    local c = workspace:FindFirstChild("__THINGS")
+        and workspace.__THINGS:FindFirstChild("__INSTANCE_CONTAINER")
+
+    return c
+        and c:FindFirstChild("Active")
+        and c.Active:FindFirstChild("XmasWorld")
+end
+-- ===================================================
+
+-- ================= REMOTES =================
+local SLEIGH_SUBMIT = Network.SantasSleigh_Submit
+local MEGA_SUBMIT   = Network:FindFirstChild("Mega Present: Submit")
+local MEGA_OPEN     = Network:FindFirstChild("Mega Present: Open")
+-- ===========================================
+
+-- ================= CONFIG =================
+local TARGET_SLEIGH_POINTS = 6000
+local TARGET_MEGA_POINTS   = 10000
+local MIN_KEEP_HUGE        = 38
+
+local WAIT_RECHECK     = 180
+local WAIT_AFTER_OPEN = 20
+
+local EXCLUDED_HUGE = {
+    ["Huge Bean Balloon Cat"] = true,
+    ["Huge Holly Capybara"] = true,
+    ["Huge Hot Cocoa Cow"] = true,
+}
+-- ==========================================
+
+-- ================= UTIL ===================
+local function getSave()
+    local ok, sd = pcall(PlayerSave.Get)
+    if ok then return sd end
+end
+
+local function getSleighPoints(sd)
+    return sd
+        and sd.Christmas2025Part2
+        and sd.Christmas2025Part2.RecentSleighPointsSent
+        or 0
+end
+
+local function getMegaPoints(sd)
+    return sd
+        and sd.Christmas2025Part2
+        and sd.Christmas2025Part2.MegaPresentPoints
+        or 0
+end
+
+local function countTotalHuge(sd)
+    local c = 0
+    for _, pet in pairs(sd.Inventory.Pet or {}) do
+        if type(pet.id) == "string" and string.find(pet.id, "Huge") then
+            c += 1
+        end
+    end
+    return c
+end
+-- ==========================================
+
+-- ================= COLLECT HUGE =================
+local function collectValidHuge(sd)
+    local normal, golden = {}, {}
+
+    for uid, pet in pairs(sd.Inventory.Pet or {}) do
+        local id = pet.id
+        if type(id) == "string"
+            and string.find(id, "Huge")
+            and not EXCLUDED_HUGE[id] then
+
+            local xp = (pet._uq and pet._uq.xp) or 0
+            if xp >= 0 and xp <= 990000 then
+                local pt = pet.pt
+                local sh = pet.sh == true
+
+                if not sh and pt ~= 2 then
+                    local bucket = (pt == 1) and golden or normal
+                    table.insert(bucket, {
+                        uid = uid,
+                        xp  = xp,
+                        id  = id
+                    })
+                end
+            end
+        end
+    end
+
+    table.sort(normal, function(a, b) return a.xp < b.xp end)
+    table.sort(golden, function(a, b) return a.xp < b.xp end)
+
+    return normal, golden
+end
+-- ==========================================
+
+-- ================= FIND MEGA ITEM =================
+local function findMegaLuckyGingerbread(sd)
+    for uid, item in pairs(sd.Inventory.Misc or {}) do
+        if item.id == "Mega Lucky Gingerbread" then
+            return uid, (item._am or 1)
+        end
+    end
+end
+-- ==========================================
+
+-- ================= STATE =================
+local STATE = "CHECK_SLEIGH_POINTS"
+
+task.spawn(function()
+    while true do
+        if not inXmasWorld() then
+            task.wait(5)
+            continue
+        end
+
+        local sd = getSave()
+        if not sd then
+            task.wait(10)
+            continue
+        end
+
+        if STATE == "CHECK_SLEIGH_POINTS" then
+            if getSleighPoints(sd) >= TARGET_SLEIGH_POINTS then
+                STATE = "CHECK_MEGA_POINTS"
+            else
+                STATE = "SUBMIT_HUGE"
+            end
+
+        elseif STATE == "SUBMIT_HUGE" then
+            local totalHuge = countTotalHuge(sd)
+            if totalHuge < MIN_KEEP_HUGE then
+                STATE = "WAIT"
+                continue
+            end
+
+            local maxSubmit = totalHuge - MIN_KEEP_HUGE
+            local normal, golden = collectValidHuge(sd)
+            local queue = {}
+
+            for _, v in ipairs(normal) do
+                if #queue >= maxSubmit then break end
+                table.insert(queue, v)
+            end
+            for _, v in ipairs(golden) do
+                if #queue >= maxSubmit then break end
+                table.insert(queue, v)
+            end
+
+            if #queue == 0 then
+                STATE = "WAIT"
+                continue
+            end
+
+            for _, h in ipairs(queue) do
+                local args = { [1] = { [h.uid] = 1 } }
+                SLEIGH_SUBMIT:InvokeServer(unpack(args))
+                task.wait(2)
+
+                sd = getSave()
+                if getSleighPoints(sd) >= TARGET_SLEIGH_POINTS then
+                    break
+                end
+            end
+
+            STATE = "CHECK_MEGA_POINTS"
+
+        elseif STATE == "CHECK_MEGA_POINTS" then
+            if getMegaPoints(sd) >= TARGET_MEGA_POINTS then
+                STATE = "OPEN_MEGA"
+            else
+                STATE = "SUBMIT_MEGA_ITEM"
+            end
+
+        elseif STATE == "SUBMIT_MEGA_ITEM" then
+            local uid, amount = findMegaLuckyGingerbread(sd)
+            if not uid or amount <= 0 then
+                STATE = "WAIT"
+                continue
+            end
+
+            local args = { [1] = { [uid] = 1 } }
+            MEGA_SUBMIT:InvokeServer(unpack(args))
+            task.wait(2)
+
+            STATE = "CHECK_MEGA_POINTS"
+
+        elseif STATE == "OPEN_MEGA" then
+            MEGA_OPEN:InvokeServer()
+            task.wait(WAIT_AFTER_OPEN)
+            STATE = "CHECK_SLEIGH_POINTS"
+
+        elseif STATE == "WAIT" then
+            task.wait(WAIT_RECHECK)
+            STATE = "CHECK_SLEIGH_POINTS"
+        end
+
+        task.wait(0.2)
+    end
+end)
