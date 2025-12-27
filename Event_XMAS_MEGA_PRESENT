@@ -5,7 +5,7 @@ if _G.VAR_MEGA_PRESENT then return end
 _G.VAR_MEGA_PRESENT = true
 -- =====================================================
 
-task.wait(10)
+task.wait(38)
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
 local Network = ReplicatedStorage.Network
