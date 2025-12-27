@@ -1,5 +1,5 @@
-if _G.AUTO_XMAS_CRAFT then return end
-_G.AUTO_XMAS_CRAFT = true
+if _G.AUTO_XMAS_PET_CRAFT then return end
+_G.AUTO_XMAS_PET_CRAFT = true
 
 task.wait(10)
 
@@ -14,17 +14,16 @@ local function inXmasWorld()
 end
 
 local RECIPE_INDEX = 1
-local CHECK_INTERVAL_NOT_ENOUGH = 300 -- 5 phút
 local LOOP_WAIT = 5
+local WAIT_NOT_ENOUGH = 300 -- 5 phút
 
+local REQUIRED_AMOUNT = 8
 local REQUIRED_PETS = {
     ["Elf Golem"] = true,
     ["Candycane Kitsune"] = true,
     ["Hippomint"] = true,
     ["Krampus"] = true,
 }
-
-local REQUIRED_AMOUNT = 5
 
 local function getSave()
     local ok, sd = pcall(PlayerSave.Get)
@@ -42,9 +41,9 @@ local function countNormalPets(sd)
     for _, pet in pairs(sd.Inventory.Pet or {}) do
         local id = pet.id
         if REQUIRED_PETS[id] then
-            -- pet thường: không shiny, không pt
-            local isNormal = (pet.sh == nil or pet.sh == false)
-                and (pet.pt == nil or pet.pt == 0)
+            local isNormal =
+                (pet.sh == nil or pet.sh == false) and
+                (pet.pt == nil or pet.pt == 0)
 
             if isNormal then
                 count[id] += (pet._am or 1)
@@ -57,12 +56,12 @@ end
 
 local function hasEnoughPets(sd)
     local c = countNormalPets(sd)
-    for name, _ in pairs(REQUIRED_PETS) do
+    for name in pairs(REQUIRED_PETS) do
         if (c[name] or 0) < REQUIRED_AMOUNT then
-            return false, c
+            return false
         end
     end
-    return true, c
+    return true
 end
 
 local function craft(recipeIndex)
@@ -125,7 +124,6 @@ task.spawn(function()
             continue
         end
 
-        -- 1️⃣ Claim toàn bộ craft đã xong
         local queue = getCraftQueue()
         if #queue > 0 then
             for _, id in ipairs(queue) do
@@ -133,15 +131,11 @@ task.spawn(function()
             end
         end
 
-        -- 2️⃣ Kiểm tra đủ 5 pet thường mỗi loại
-        local ok = hasEnoughPets(sd)
-        if not ok then
-            -- Chưa đủ → đợi 5 phút rồi kiểm tra lại (nhưng vẫn bị khóa bởi XmasWorld)
-            task.wait(CHECK_INTERVAL_NOT_ENOUGH)
+        if not hasEnoughPets(sd) then
+            task.wait(WAIT_NOT_ENOUGH)
             continue
         end
 
-        -- 3️⃣ Đủ điều kiện → craft
         craft(RECIPE_INDEX)
     end
 end)
