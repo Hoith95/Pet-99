@@ -25,7 +25,7 @@ local CRAFT_REMOTE  = Network.CraftingMachine_Craft
 
 -- ================= CONFIG =================
 local TARGET_MEGA_POINTS   = 8000
-local TARGET_SLEIGH_POINTS = 6000
+local TARGET_SLEIGH_POINTS = 2000
 local MIN_KEEP_HUGE        = 89
 
 local WAIT_RECHECK     = 180
