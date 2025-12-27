@@ -18,7 +18,7 @@ local REQUIRED_PETS = {
     ["Krampus"] = true,
 }
 
-local REQUIRED_AMOUNT = 8
+local REQUIRED_AMOUNT = 5
 
 local function getSave()
     local ok, sd = pcall(PlayerSave.Get)
