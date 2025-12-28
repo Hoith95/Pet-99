@@ -1,14 +1,47 @@
 -- =====================================================
--- AUTO MEGA PRESENT - STATE MACHINE (FINAL v8)
+-- AUTO MEGA PRESENT - STATE MACHINE (FINAL v8 - SILENT)
+-- =====================================================
 
 if _G.VAR_MEGA_PRESENT then return end
 _G.VAR_MEGA_PRESENT = true
--- =====================================================
 
 task.wait(38)
+
+-- ================= SERVICES =================
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
 local Network = ReplicatedStorage.Network
+
+-- ================= POSITION CONFIG =================
+local TARGET_CFRAME = CFrame.new(-3299, 379.12, -1526)
+local POSITION_RADIUS = 15
+
+local function getHRP()
+    local char = LocalPlayer.Character
+    return char and char:FindFirstChild("HumanoidRootPart")
+end
+
+local function isInSubmitRange()
+    local hrp = getHRP()
+    if not hrp then return false end
+    return (hrp.Position - TARGET_CFRAME.Position).Magnitude <= POSITION_RADIUS
+end
+
+local function teleportToSubmitSpot()
+    local hrp = getHRP()
+    if hrp then
+        hrp.CFrame = TARGET_CFRAME
+    end
+end
+
+local function ensureAtSubmitSpot()
+    while not isInSubmitRange() do
+        teleportToSubmitSpot()
+        task.wait(1)
+    end
+end
 
 -- ================= XMAS WORLD CHECK =================
 local function inXmasWorld()
@@ -81,7 +114,7 @@ local function countTotalHuge(sd)
     return c
 end
 
--- ================= INVENTORY HELPERS =================
+-- ================= INVENTORY =================
 local function getItemAmount(sd, name)
     for _, item in pairs(sd.Inventory.Misc or {}) do
         if item.id == name then
@@ -160,18 +193,13 @@ local function findPetForMega(sd)
 
             if SPECIAL_KEEP_PET[id] then
                 if keepVariant[id] == "SR" and pet.sh and pet.pt == 2 then
-                    if am > 1 then
-                        return uid, am - 1
-                    end
+                    if am > 1 then return uid, am - 1 end
                     continue
                 end
                 if keepVariant[id] == "R" and pet.pt == 2 then
-                    if am > 1 then
-                        return uid, am - 1
-                    end
+                    if am > 1 then return uid, am - 1 end
                     continue
                 end
-                return uid, am
             end
 
             return uid, am
@@ -201,10 +229,10 @@ task.spawn(function()
         elseif STATE == "SUBMIT_MEGA" then
             local mp = getMegaPoints(sd)
 
-            -- Mega Lucky: chỉ nộp 1
             if mp == 0 then
                 local uid = findItemUID(sd, "Mega Lucky Gingerbread")
                 if uid then
+                    ensureAtSubmitSpot()
                     MEGA_SUBMIT:InvokeServer({ [uid] = 1 })
                     task.wait(2)
                     STATE = "CHECK_MEGA_POINTS"
@@ -218,6 +246,7 @@ task.spawn(function()
             local uUID = findItemUID(sd, "Ultra Lucky Gingerbread")
             local uAM  = getItemAmount(sd, "Ultra Lucky Gingerbread")
             if uUID and uAM > 0 then
+                ensureAtSubmitSpot()
                 MEGA_SUBMIT:InvokeServer({ [uUID] = uAM })
                 task.wait(2)
                 STATE = "CHECK_MEGA_POINTS"
@@ -226,6 +255,7 @@ task.spawn(function()
 
             local pUID, pAM = findPetForMega(sd)
             if pUID then
+                ensureAtSubmitSpot()
                 MEGA_SUBMIT:InvokeServer({ [pUID] = pAM })
             else
                 STATE = "WAIT"
@@ -252,6 +282,7 @@ task.spawn(function()
                 end
 
                 for _, h in ipairs(queue) do
+                    ensureAtSubmitSpot()
                     SLEIGH_SUBMIT:InvokeServer({ [h.uid] = 1 })
                     task.wait(2)
                     if getSleighPoints(getSave()) >= TARGET_SLEIGH_POINTS then break end
@@ -261,6 +292,7 @@ task.spawn(function()
             STATE = "CHECK_SLEIGH_POINTS"
 
         elseif STATE == "OPEN_MEGA" then
+            ensureAtSubmitSpot()
             MEGA_OPEN:InvokeServer()
             task.wait(WAIT_AFTER_OPEN)
             STATE = "CHECK_MEGA_POINTS"
@@ -269,7 +301,6 @@ task.spawn(function()
             task.wait(WAIT_RECHECK)
             STATE = "CHECK_MEGA_POINTS"
         end
-
         task.wait(0.2)
     end
 end)
