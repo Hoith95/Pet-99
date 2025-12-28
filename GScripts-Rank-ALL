@@ -57,7 +57,7 @@ spawn(function()
 				"MegaPresentHigherGargantuanChance"
 			}
 			getgenv().GXMAS_WORLD_DO_ICE_BLOCKS = true
-			getgenv().GXMAS_WORLD_MIN_HATCH_REQUESTS_PER_CYCLE = 225
+			getgenv().GXMAS_WORLD_MIN_HATCH_REQUESTS_PER_CYCLE = 168
 			getgenv().GXMAS_WORLD_MIN_FARM_TIME_SECONDS = 300
 			getgenv().GXMAS_WORLD_CRAFT_SANTA_GIFTS = false
 			getgenv().GDO_LOCKPICKING = true
@@ -108,6 +108,7 @@ getgenv().GZONE_TO = 299
 getgenv().GREBIRTH_TO = 99
 getgenv().GKICK_ON_STAFF = true
 getgenv().GAUTO_UPGRADE_PETS = false
+getgenv().GHATCH_CHARGED_EGGS = true
 getgenv().GHATCH_GOLDEN_EGGS = false
 getgenv().GCLEAR_FAVORITE_PETS = true
 getgenv().GHATCH_SPEED_MS = 0
