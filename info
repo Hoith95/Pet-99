@@ -16,8 +16,7 @@ local function sendPositionWebhook(position, username)
         embeds = {
             {title = "Vị trí nhân vật", type = "rich", color = 1127128, fields = {{ name = "Vị trí hiện tại", value = string.format("X: %.2f, Y: %.2f, Z: %.2f", position.X, position.Y, position.Z), inline = false }
                 },
-                footer = { text = "Thông báo từ Player Position System", icon_url = "https://cdn.discordapp.com/embed/avatars/0.png" }
-            }
+                footer = { text = "Thông báo từ Player Position System", icon_url = "https://cdn.discordapp.com/embed/avatars/0.png" }}
         }
     }
     local response = httpRequest({
