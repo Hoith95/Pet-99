@@ -57,7 +57,7 @@ spawn(function()
 				"MegaPresentHigherGargantuanChance"
 			}
 			getgenv().GXMAS_WORLD_DO_ICE_BLOCKS = true
-			getgenv().GXMAS_WORLD_MIN_HATCH_REQUESTS_PER_CYCLE = 168
+			getgenv().GXMAS_WORLD_MIN_HATCH_REQUESTS_PER_CYCLE = 68
 			getgenv().GXMAS_WORLD_MIN_FARM_TIME_SECONDS = 300
 			getgenv().GXMAS_WORLD_CRAFT_SANTA_GIFTS = false
 			getgenv().GDO_LOCKPICKING = true
@@ -99,7 +99,9 @@ spawn(function()
     end
 end)
 
-getgenv().GLOOTBOXES = {"Locked Hype Egg", "Deep Sea Treasure Chest"}
+getgenv().GLOOTBOXES = { "Locked Hype Egg", "Deep Sea Treasure Chest",
+"2024 X-Large Christmas Present", "2024 Large Christmas Present",
+"2024 Medium Christmas Present", "2024 Small Christmas Present"}
 
 getgenv().GPROGRESS_MODE = "Hybrid" -- Hatch
 getgenv().GGFX_MODE = 1
