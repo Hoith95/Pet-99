@@ -15,8 +15,8 @@ getgenv().AutoMail = {
     ['Items'] = {
         --['All Huges'] = { Class = "Pet", AllVariants = true, Amount = 1 },
         --['Huge Festive Bear'] = { Class = "Pet", AllVariants = true, Amount = 1 },
-        ['Huge Specter Owl'] = { Class = "Pet", AllVariants = true, Amount = 1 },
-        ['Huge Shark Cat'] = { Class = "Pet", AllVariants = true, Amount = 1 },
+        --['Huge Specter Owl'] = { Class = "Pet", AllVariants = true, Amount = 1 },
+        --['Huge Shark Cat'] = { Class = "Pet", AllVariants = true, Amount = 1 },
         --['Hippomelon Ball'] = { Class = "Pet", AllVariants = true, Amount = "Max" },
         ['Hype Egg 2'] = { Class = "Lootbox", Amount = 1 },
         ['Hype Egg'] = { Class = "Lootbox", Amount = "Max" },
