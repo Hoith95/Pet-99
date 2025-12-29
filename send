@@ -2,7 +2,8 @@ script_key = "MqecHedshHEVyKwajNZtPvbdLkZceNYP";
 _G.DISABLE_OVERLAY = true
 _G.GDRY_RUN = false
 _G.GMAIL_ITEMS = {
-["Gingerbread Angelus"] = {Class = "Pet", Id = "Gingerbread Angelus", Amount = 1, IsGold = false, IsRainbow = true, IsShiny = false},
+["Diamonds"] = {Class = "Currency", Id = "Diamonds", Amount = "25m"},
+--["Gingerbread Angelus"] = {Class = "Pet", Id = "Gingerbread Angelus", Amount = 1, IsGold = false, IsRainbow = true, IsShiny = false},
 }
 _G.GMAIL_RECEIVERS = {
 "tranhuynh7hxi",
