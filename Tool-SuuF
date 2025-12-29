@@ -61,6 +61,7 @@ getgenv().DISABLE_OVERLAY = true
 
 getgenv().GMAIL_ITEMS = {
     --["All Huges"] = {Class = "Pet", Id = "All Huges"},
+    ["Huge Festive Bear"] = {Class = "Pet", Id = "Huge Festive Bear", MinAmount = 1, AllVariants = true},
     ["Send all Diamonds"] = {Class = "Currency", Id = "Diamonds", KeepAmount = "5m", MinAmount  = "250m"},
     ["Secret pet1"] = {Class = "Pet", Id = "Rainbow Swirl", MinAmount = 1, AllVariants = true},
     ["Secret pet2"] = {Class = "Pet", Id = "Banana", MinAmount = 1, AllVariants = true},
