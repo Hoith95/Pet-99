@@ -13,8 +13,8 @@ getgenv().Settings = {
         {Name = "Titanic Vampire Agony", Data = {Price = "18b"}},
 		{Name = "Titanic Hippomint", Data = {Price = "6.5b"}},
 		{Name = "Titanic Holiday Owl", Data = {Price = "68b"}},
-		{Name = "Golden Titanic Holiday Owl", Data = {Price = "99b"}},
-		{Name = "Titanic Gingerbread Angelus", Data = {Price = "7.9b"}},
+		{Name = "Golden Titanic Holiday Owl", Data = {Price = "86b"}},
+		{Name = "Titanic Gingerbread Angelus", Data = {Price = "6.9b"}},
 		{Name = "Titanic Pink Lucky Block", Data = {Price = "6b"}},
 		{Name = "Titanic Night Terror Dog", Data = {Price = "5.5b"}},
 
