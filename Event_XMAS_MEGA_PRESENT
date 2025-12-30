@@ -202,7 +202,7 @@ local function findPetForMega(sd)
                 end
             end
 
-            return uid, am
+            return uid, 1
         end
     end
 end
@@ -247,8 +247,8 @@ task.spawn(function()
             local uAM  = getItemAmount(sd, "Ultra Lucky Gingerbread")
             if uUID and uAM > 0 then
                 ensureAtSubmitSpot()
-                MEGA_SUBMIT:InvokeServer({ [uUID] = uAM })
-                task.wait(2)
+                MEGA_SUBMIT:InvokeServer({ [uUID] = 1 })
+                task.wait(1)
                 STATE = "CHECK_MEGA_POINTS"
                 continue
             end
