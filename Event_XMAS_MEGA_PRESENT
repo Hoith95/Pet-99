@@ -66,6 +66,7 @@ local WAIT_AFTER_OPEN = 20
 
 -- ================= RULE TABLES =================
 local EXCLUDED_HUGE = {
+    ["Huge Candycane Shake Shark"] = true,
     ["Huge Festive Bear"] = true,
     ["Huge Bean Balloon Cat"] = true,
     ["Huge Holly Capybara"] = true,
