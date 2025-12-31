@@ -18,7 +18,7 @@ getgenv().Settings = {
 		{Name = "Titanic Pink Lucky Block", Data = {Price = "6b"}},
 		{Name = "Titanic Night Terror Dog", Data = {Price = "5.5b"}},
 
-        {Name = "Shiny Titanic Starlight Pony", Data = {Price = "30b"}},
+        {Name = "Shiny Titanic Starlight Pony", Data = {Price = "27b"}},
         {Name = "Rainbow Titanic Starlight Pony", Data = {Price = "25b"}},
         {Name = "Golden Titanic Starlight Pony", Data = {Price = "6.9b"}},
         {Name = "Titanic Starlight Pony", Data = {Price = "6.9b"}},
