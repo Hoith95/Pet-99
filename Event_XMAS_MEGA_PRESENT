@@ -73,6 +73,7 @@ local ALLOWED_MEGA_PETS = {
     ["Elf Golem"] = true,
     ["Candycane Kitsune"] = true,
     ["Hippomint"] = true,
+    ["Krampus"] = true,
 }
 
 local SPECIAL_KEEP_PET = {
