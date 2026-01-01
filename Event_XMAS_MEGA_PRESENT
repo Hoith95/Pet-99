@@ -181,11 +181,11 @@ local function findPetForMega(sd)
         local id = pet.id
         if ALLOWED_MEGA_PETS[id] and not string.find(id, "Huge") then
             local isNormal = (pet.pt == nil and pet.sh == nil)
-            local am = pet._am or 1
-
-            if KEEP_NORMAL_PET[id] and isNormal then
+            if isNormal then
                 continue
             end
+
+            local am = pet._am or 1
 
             if SPECIAL_KEEP_PET[id] then
                 if keepVariant[id] == "SR" and pet.sh and pet.pt == 2 then
