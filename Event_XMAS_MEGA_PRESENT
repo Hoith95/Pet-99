@@ -5,7 +5,7 @@
 if _G.VAR_MEGA_PRESENT then return end
 _G.VAR_MEGA_PRESENT = true
 
-task.wait(168)
+task.wait(9)
 
 -- ================= SERVICES =================
 local Players = game:GetService("Players")
