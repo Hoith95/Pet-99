@@ -1,5 +1,5 @@
 _G.script2Done = true
-_G.Event = true
+_G.Events = true
 
 spawn(function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Del-TopBarApp"))()
