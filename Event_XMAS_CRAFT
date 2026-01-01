@@ -1,7 +1,7 @@
 if _G.AUTO_XMAS_PET_CRAFT then return end
 _G.AUTO_XMAS_PET_CRAFT = true
 
-task.wait(10)
+task.wait(68)
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
