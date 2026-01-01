@@ -66,7 +66,7 @@ spawn(function()
 			getgenv().GXMAS_WORLD_DO_GINGERBREAD_CHEST = true
 			getgenv().GXMAS_WORLD_DO_SNOWMAN_BOSS_CHEST = true
 			--getgenv().GXMAS_WORLD_PET_ORDER_GOOD_TO_BAD = {"Krampus", "Hippomint", "Candycane Kitsune", "Elf Golem"}
-			getgenv().GXMAS_WORLD_FOCUS_EGGS_FOR_AUTO_CRAFT_PETS = false
+			getgenv().GXMAS_WORLD_FOCUS_EGGS_FOR_AUTO_CRAFT_PETS = true
 			getgenv().GXMAS_WORLD_DO_MEGA_PRESENT = false
 			--getgenv().GXMAS_WORLD_OPEN_MEGA_PRESENT_IF_LUCK_REACH = 8000
 			--getgenv().GXMAS_WORLD_PETS_EXCLUDED_FROM_SENDING = {"Elf Golem", "Candycane Kitsune", "Hippomint", "Krampus","Gingerbread Angelus", "Holiday Owl", "Snowflake Dragon", "Merry Mule"}
