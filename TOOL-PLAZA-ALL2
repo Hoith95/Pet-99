@@ -36,12 +36,12 @@ getgenv().Settings = {
 		{Name = "Exclusive Egg 58", Data = {Price = "115m"}},
 
 		{Name = "Halloween Lucky Block Gift", Data = {Price = "38m"}},
-		{Name = "Santa Gift", Data = {Price = "186k"}},
-		{Name = "Candycane Gift", Data = {Price = "186k"}},
+		{Name = "Santa Gift", Data = {Price = "168k"}},
+		{Name = "Candycane Gift", Data = {Price = "168k"}},
 
         {Name = "Huge Specter Owl", Data = {Price = "6.8b"}},
         {Name = "Huge Shark Cat", Data = {Price = "3.9b"}},
-        {Name = "Huge Candycane Shake Shark", Data = {Price = "868m"}},
+        {Name = "Huge Candycane Shake Shark", Data = {Price = "768m"}},
 
         {Name = "Huge Splash Angelus", Data = {Price = "8.6b"}},
         {Name = "Golden Huge Splash Angelus", Data = {Price = "1%"}},
