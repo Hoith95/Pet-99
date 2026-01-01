@@ -1,39 +1,14 @@
 _G.COMBO_EVENT_DONE = true
 
-game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World4Teleport"):InvokeServer()
-
-spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_RECONNECT"))()
-end)
+game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World1Teleport"):InvokeServer()
 
 spawn(function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS"))()
 end)
 
 spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CPU-LOW"))()
-end)
-
-spawn(function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_Time_Trial_End"))()
-end)
-
-spawn(function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_HEO_CHECK"))()
-end)
-
-spawn(function()
-wait(68)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_USER"))()
-end)
-
-spawn(function()
 wait(68)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Daycare-Gift-Free"))()
-end)
-
-spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-Combo-2"))()
 end)
 
 _G.script1Done = true
@@ -57,20 +32,8 @@ do
         script_key = defaultKey                               -- không cờ nào
     end
 end
-getgenv().GDRY_RUN       = false
-getgenv().DISABLE_OVERLAY = true
 
-getgenv().GMAIL_ITEMS = {
-    --["All Huges"] = {Class = "Pet", Id = "All Huges"},
-    ["Send all Diamonds"] = {Class = "Currency", Id = "Diamonds", KeepAmount = "5m", MinAmount  = "250m"},
-    ["Secret pet1"] = {Class = "Pet", Id = "Rainbow Swirl", MinAmount = 1, AllVariants = true},
-    ["Secret pet2"] = {Class = "Pet", Id = "Banana", MinAmount = 1, AllVariants = true},
-    ["Secret pet3"] = {Class = "Pet", Id = "Coin", MinAmount = 1, AllVariants = true},
-    ["Secret pet4"] = {Class = "Pet", Id = "Yellow Lucky Block", MinAmount = 1, AllVariants = true},
-}
-getgenv().GMAX_MAIL_COST = "5m"
-getgenv().GMAIL_RECEIVERS = {
-    "Zephy_Marnell604", "Dravon_Liorrex220", "Taryn_Xelvorn389", "Valric_Solvynn026", "Zarek_Maelith750"
-}
-getgenv().GMAIL_DELAY = 0
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-ALL"))()
+getgenv().GGFX_MODE = 1
+getgenv().GENTER_PLAZA = true
+getgenv().GPROGRESS_MODE = "Castle"
+loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/34915da4ad87a5028e1fd64efbe3543f.lua"))()
