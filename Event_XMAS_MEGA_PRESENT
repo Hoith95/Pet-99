@@ -231,7 +231,7 @@ task.spawn(function()
                 if uid then
                     ensureAtSubmitSpot()
                     MEGA_SUBMIT:InvokeServer({ [uid] = 1 })
-                    task.wait(2)
+                    task.wait(1)
                     STATE = "CHECK_MEGA_POINTS"
                     continue
                 end
@@ -258,7 +258,7 @@ task.spawn(function()
                 STATE = "WAIT"
             end
 
-            task.wait(2)
+            task.wait(1)
             STATE = "CHECK_MEGA_POINTS"
 
         elseif STATE == "CHECK_SLEIGH_POINTS" then
@@ -281,7 +281,7 @@ task.spawn(function()
                 for _, h in ipairs(queue) do
                     ensureAtSubmitSpot()
                     SLEIGH_SUBMIT:InvokeServer({ [h.uid] = 1 })
-                    task.wait(2)
+                    task.wait(1)
                     if getSleighPoints(getSave()) >= TARGET_SLEIGH_POINTS then break end
                 end
             end
