@@ -61,6 +61,7 @@ spawn(function()
 			getgenv().GXMAS_WORLD_MIN_FARM_TIME_SECONDS = 300
 			getgenv().GXMAS_WORLD_CRAFT_SANTA_GIFTS = false
 			getgenv().GDO_LOCKPICKING = true
+			getgenv().GUSE_DIAMOND_LOCKPICK = true
 			getgenv().GDO_ADVENT_CALENDAR = true
 			getgenv().GXMAS_WORLD_GRINCH_SPRAY_THRESHOLD = 10
 			getgenv().GXMAS_WORLD_DO_GINGERBREAD_CHEST = true
