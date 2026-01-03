@@ -3,6 +3,8 @@ wait(68)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Open_Charm"))()
 end)
 
+local prices = {"283m", "286m", "289m"}
+
 getgenv().Settings = {
 ["Items"] = {
         {Name = "MVP Key", Data = {Price = "3m"}},
@@ -43,7 +45,7 @@ getgenv().Settings = {
 
         {Name = "Huge Specter Owl", Data = {Price = "6.8b"}},
         {Name = "Huge Shark Cat", Data = {Price = "3.9b"}},
-        {Name = "Huge Candycane Shake Shark", Data = {Price = "283m"}},
+        {Name = "Huge Candycane Shake Shark", Data = {Price = prices[math.random(#prices)]}},
 
         {Name = "Huge Splash Angelus", Data = {Price = "8.6b"}},
         {Name = "Golden Huge Splash Angelus", Data = {Price = "1%"}},
