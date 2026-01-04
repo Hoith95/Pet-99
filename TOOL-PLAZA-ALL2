@@ -41,7 +41,7 @@ getgenv().Settings = {
 
 		{Name = "Halloween Lucky Block Gift", Data = {Price = "38m"}},
 		{Name = "Santa Gift", Data = {Price = "168k"}},
-		{Name = "Candycane Gift", Data = {Price = "125k"}},
+		{Name = "Candycane Gift", Data = {Price = "99k"}},
 
         {Name = "Huge Specter Owl", Data = {Price = "6.8b"}},
         {Name = "Huge Shark Cat", Data = {Price = "3.9b"}},
