@@ -3,7 +3,7 @@ wait(68)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Open_Charm"))()
 end)
 
-local prices = {"283m", "286m", "289m"}
+local prices = {"268m", "276m", "279m"}
 
 getgenv().Settings = {
 ["Items"] = {
