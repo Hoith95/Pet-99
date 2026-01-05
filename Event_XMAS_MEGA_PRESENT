@@ -1,6 +1,5 @@
 -- =====================================================
--- AUTO MEGA PRESENT - STATE MACHINE
--- FINAL v8 - WAIT POSITION + HUGE LOGIC (SANTA STYLE)
+-- AUTO MEGA PRESENT (FINAL v9)
 -- =====================================================
 
 if _G.VAR_MEGA_PRESENT then return end
@@ -27,7 +26,6 @@ local function isInSubmitRange()
     return hrp and (hrp.Position - TARGET_CFRAME.Position).Magnitude <= POSITION_RADIUS
 end
 
--- WAIT ONLY – NO TELEPORT
 local function waitUntilAtSubmitSpot()
     while not isInSubmitRange() do
         task.wait(1)
@@ -210,10 +208,12 @@ local function collectMegaCandidates(sd)
     return list
 end
 
--- ================= GREEDY BATCH =================
+-- ================= SMART GREEDY + FALLBACK + SOFT OVERFLOW =================
 local function buildMegaSubmitBatch(sd)
     local current = getMegaPoints(sd)
     local maxT = TARGET_MEGA_POINTS + MEGA_POINT_TOLERANCE
+    local space = maxT - current
+    if space <= 0 then return nil end
 
     local cands = collectMegaCandidates(sd)
     if #cands == 0 then return nil end
@@ -222,26 +222,51 @@ local function buildMegaSubmitBatch(sd)
     local gain = 0
 
     for _, c in ipairs(cands) do
-        if current + gain >= maxT then break end
+        if gain >= space then break end
+        if c.points <= (space - gain) then
+            local canUse = math.floor((space - gain) / c.points)
+            local use = math.min(canUse, c.amount)
+            if use > 0 then
+                batch[c.uid] = use
+                gain += use * c.points
+            end
+        end
+    end
 
-        local canUse = math.floor((maxT - (current + gain)) / c.points)
-        local use = math.min(canUse, c.amount)
+    if gain == 0 then
+        for _, c in ipairs(cands) do
+            if gain >= space then break end
+            local pet = sd.Inventory.Pet[c.uid]
+            if pet and getPetVariant(pet) == "Normal" and c.points <= (space - gain) then
+                local canUse = math.floor((space - gain) / c.points)
+                local use = math.min(canUse, c.amount)
+                if use > 0 then
+                    batch[c.uid] = use
+                    gain += use * c.points
+                end
+            end
+        end
+    end
 
-        if use > 0 then
-            batch[c.uid] = use
-            gain += use * c.points
+    if gain == 0 and current < TARGET_MEGA_POINTS then
+        for i = #cands, 1, -1 do
+            local c = cands[i]
+            local pet = sd.Inventory.Pet[c.uid]
+            if pet and getPetVariant(pet) ~= "ShinyRainbow" then
+                batch[c.uid] = 1
+                gain = c.points
+                break
+            end
         end
     end
 
     return gain > 0 and batch or nil
 end
-
 -- ================= HUGE LOGIC (SANTA STYLE) =================
 local function collectValidHuge(sd)
     local normal, golden = {}, {}
     local totalHuge = 0
 
-    -- count ALL huge (including shiny + rainbow)
     for _, pet in pairs(sd.Inventory.Pet or {}) do
         if type(pet.id) == "string"
             and string.find(pet.id, "Huge")
@@ -250,7 +275,6 @@ local function collectValidHuge(sd)
         end
     end
 
-    -- collect ONLY submit-able huge
     for uid, pet in pairs(sd.Inventory.Pet or {}) do
         if type(pet.id) == "string"
             and string.find(pet.id, "Huge")
@@ -295,15 +319,26 @@ local STATE = "CHECK_MEGA_POINTS"
 
 task.spawn(function()
     while true do
-        if not inXmasWorld() then task.wait(5) continue end
+        if not inXmasWorld() then
+            task.wait(5)
+            continue
+        end
+
         local sd = getSave()
-        if not sd then task.wait(10) continue end
+        if not sd then
+            task.wait(10)
+            continue
+        end
 
+        -- ===== CHECK MEGA =====
         if STATE == "CHECK_MEGA_POINTS" then
-            STATE = getMegaPoints(sd) >= TARGET_MEGA_POINTS
-                and "CHECK_SLEIGH_POINTS"
-                or "SUBMIT_MEGA"
+            if getMegaPoints(sd) >= TARGET_MEGA_POINTS then
+                STATE = "CHECK_SLEIGH_POINTS"
+            else
+                STATE = "SUBMIT_MEGA"
+            end
 
+        -- ===== SUBMIT MEGA =====
         elseif STATE == "SUBMIT_MEGA" then
             if getMegaPoints(sd) == 0 then
                 local uid = findItemUID(sd, "Mega Lucky Gingerbread")
@@ -319,14 +354,20 @@ task.spawn(function()
             craftGingerbread(sd)
             sd = getSave()
 
-            local uUID = findItemUID(sd, "Ultra Lucky Gingerbread")
-            local uAM  = getItemAmount(sd, "Ultra Lucky Gingerbread")
-            if uUID and uAM > 0 then
-                waitUntilAtSubmitSpot()
-                MEGA_SUBMIT:InvokeServer({ [uUID] = uAM })
-                task.wait(1)
-                STATE = "CHECK_MEGA_POINTS"
-                continue
+            local megaPts = getMegaPoints(sd)
+
+            -- Ultra Lucky: chỉ dùng khi 1..6000, max 2 mỗi vòng
+            if megaPts >= 1 and megaPts <= 6000 then
+                local uUID = findItemUID(sd, "Ultra Lucky Gingerbread")
+                local uAM  = getItemAmount(sd, "Ultra Lucky Gingerbread")
+                if uUID and uAM > 0 then
+                    local use = math.min(uAM, 2)
+                    waitUntilAtSubmitSpot()
+                    MEGA_SUBMIT:InvokeServer({ [uUID] = use })
+                    task.wait(1)
+                    STATE = "CHECK_MEGA_POINTS"
+                    continue
+                end
             end
 
             local batch = buildMegaSubmitBatch(sd)
@@ -340,11 +381,15 @@ task.spawn(function()
             task.wait(1)
             STATE = "CHECK_MEGA_POINTS"
 
+        -- ===== CHECK SLEIGH =====
         elseif STATE == "CHECK_SLEIGH_POINTS" then
-            STATE = getSleighPoints(sd) >= TARGET_SLEIGH_POINTS
-                and "OPEN_MEGA"
-                or "SUBMIT_HUGE"
+            if getSleighPoints(sd) >= TARGET_SLEIGH_POINTS then
+                STATE = "OPEN_MEGA"
+            else
+                STATE = "SUBMIT_HUGE"
+            end
 
+        -- ===== SUBMIT HUGE =====
         elseif STATE == "SUBMIT_HUGE" then
             for _, h in ipairs(collectValidHuge(sd)) do
                 waitUntilAtSubmitSpot()
@@ -357,12 +402,14 @@ task.spawn(function()
             end
             STATE = "CHECK_SLEIGH_POINTS"
 
+        -- ===== OPEN MEGA =====
         elseif STATE == "OPEN_MEGA" then
             waitUntilAtSubmitSpot()
             MEGA_OPEN:InvokeServer()
             task.wait(WAIT_AFTER_OPEN)
             STATE = "CHECK_MEGA_POINTS"
 
+        -- ===== WAIT =====
         elseif STATE == "WAIT" then
             task.wait(WAIT_RECHECK)
             STATE = "CHECK_MEGA_POINTS"
