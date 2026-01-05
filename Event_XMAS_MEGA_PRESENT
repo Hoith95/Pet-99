@@ -14,7 +14,7 @@ local Network = ReplicatedStorage.Network
 
 -- ================= POSITION CONFIG =================
 local TARGET_CFRAME = CFrame.new(-3299, 379.12, -1526)
-local POSITION_RADIUS = 25
+local POSITION_RADIUS = 38
 
 local function getHRP()
     local char = LocalPlayer.Character
