@@ -184,8 +184,8 @@ local function startGuiUpdater()
         raffleLabel.Text = Formatint(getRaffleSubmittedTickets()) .. " | Secret Santa"
         updateLabelSize(raffleLabel)
 
-	megaPresentLabel.Text = Formatint(getRecentSleighPointsSent()) .. " | " .. Formatint(getMegaPresentPoints()) .. " | Mega Present"
-	updateLabelSize(megaPresentLabel)
+		megaPresentLabel.Text = Formatint(getRecentSleighPointsSent()) .. " | " .. Formatint(getMegaPresentPoints()) .. " | Mega Present"
+		updateLabelSize(megaPresentLabel)
 
         timeTrialLabel.Text = "Time Trial: " .. getRunsLeft() .. "/10"
         updateLabelSize(timeTrialLabel)
