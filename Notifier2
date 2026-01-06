@@ -1,139 +1,160 @@
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-
-print("Kiểm tra trạng thái Script 1...")
-
-while not _G.script2Done do
-    print("Script 1 chưa hoàn thành, đang chờ...")
-    task.wait(1)
+if _G.VAR_GUI_DEFAULT then
+    warn("⛔ GUI Default đã được chạy trước đó!")
+    return
 end
+_G.VAR_GUI_DEFAULT = true
 
-print("Script 1 đã hoàn thành. Bắt đầu chạy Script Notifier...")
+-- Dịch vụ cơ bản
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+local Save = require(ReplicatedStorage.Library.Client.Save)
 
-task.wait(83)
-
-local SaveModule = require(game.ReplicatedStorage.Library.Client.Save)
-
-local Formatint = function(int)
-    local Suffix = {"", "k", "M", "B", "T", "Qd", "Qn", "Sx", "Sp", "Oc", "No", "De", "UDe", "DDe", "TDe", "QdDe", "QnDe", "SxDe", "SpDe", "OcDe", "NoDe", "Vg", "UVg", "DVg", "TVg", "QdVg", "QnVg", "SxVg", "SpVg", "OcVg", "NoVg", "Tg", "UTg", "DTg", "TTg", "QdTg", "QnTg", "SxTg", "SpTg", "OcTg", "NoTg", "QdAg", "QnAg", "SxAg", "SpAg", "OcAg", "NoAg", "e141", "e144", "e147", "e150", "e153", "e156", "e159", "e162", "e165", "e168", "e171", "e174", "e177", "e180", "e183", "e186", "e189", "e192", "e195", "e198", "e201", "e204", "e207", "e210", "e213", "e216", "e219", "e222", "e225", "e228", "e231", "e234", "e237", "e240", "e243", "e246", "e249", "e252", "e255", "e258", "e261", "e264", "e267", "e270", "e273", "e276", "e279", "e282", "e285", "e288", "e291", "e294", "e297", "e300", "e303"}
+-- Hàm format số lớn thành chuỗi dạng 1.23M, 4.56B...
+local function Formatint(int)
+    local Suffix = {"", "k", "M", "B", "T", "Qd", "Qn", "Sx", "Sp", "Oc", "No", "De", "UDe", "DDe"}
     local Index = 1
-    if int < 999 then 
-        return int
+    if int < 999 then
+        return tostring(int)
     end
     while int >= 1000 and Index < #Suffix do
         int = int / 1000
-        Index += 1
+        Index = Index + 1
     end
     return string.format("%.2f%s", int, Suffix[Index])
 end
 
-local function formatTime(seconds)
-    local hours = math.floor(seconds / 3600)
-    local minutes = math.floor((seconds % 3600) / 60)
-    local remainingSeconds = math.floor(seconds % 60)
-    return string.format("%02d:%02d:%02d", hours, minutes, remainingSeconds)
+-- Hàm format thời gian từ giây thành HH:MM:SS
+local function FormatTime(seconds)
+	local hours = math.floor(seconds / 3600)
+	local minutes = math.floor((seconds % 3600) / 60)
+	local remainingSeconds = math.floor(seconds % 60)
+	return string.format("%02d:%02d:%02d", hours, minutes, remainingSeconds)
+end
+
+-- Hàm cập nhật kích thước label theo text
+local function updateLabelSize(label)
+	label.Size = UDim2.new(0, label.TextBounds.X + 20, 0, 38)
 end
 
 -- Lấy số lượng MVP Key từ Inventory.Misc
-local function getCurrencyAmount(itemId)
-    local Inventory = SaveModule.Get().Inventory
-    for _, v in pairs(Inventory.Misc) do 
+local function getMiscAmount(itemId)
+    local Inventory = Save.Get().Inventory
+    for _, v in pairs(Inventory.Misc) do
         if v.id == itemId then
-            return v._am
+            return tonumber(v._am) or 0
         end
     end
     return 0
 end
 
-local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
+-- Lấy Diamonds từ leaderstats
+local function getDiamondsFromLeaderstats()
+	local stats = player:FindFirstChild("leaderstats")
+	if stats then
+		local diamonds = stats:FindFirstChild("💎 Diamonds")
+		if diamonds then
+			return diamonds.Value
+		end
+	end
+	return 0
+end
 
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "NotificationGui"
-screenGui.ResetOnSpawn = false
-screenGui.Parent = playerGui
+-- Hàm khởi tạo GUI
+local function startGuiDefault()
+	-- Xoá GUI cũ nếu đã có
+	local oldGui = playerGui:FindFirstChild("GuiDefault")
+	if oldGui then oldGui:Destroy() end
 
-local backgroundFrame = Instance.new("Frame")
-backgroundFrame.Size = UDim2.new(1, 0, 1, 0)
-backgroundFrame.BackgroundColor3 = Color3.new(0, 0, 0)
-backgroundFrame.BackgroundTransparency = 1
-backgroundFrame.Position = UDim2.new(0, 0, 0, -70)
-backgroundFrame.BorderSizePixel = 0
-backgroundFrame.Parent = screenGui
+	-- Tạo ScreenGui mới
+	local screenGui = Instance.new("ScreenGui")
+	screenGui.Name = "GuiDefault"
+	screenGui.ResetOnSpawn = false
+	screenGui.Parent = playerGui
 
-local diamondLabel = Instance.new("TextLabel", backgroundFrame)
-diamondLabel.Name = "DiamondLabel"
-diamondLabel.Text = "Đang cập nhật Diamonds..."
-diamondLabel.Size = UDim2.new(1, 0, 1/6, 0)
-diamondLabel.Position = UDim2.new(0, 0, 4.2/6, 0)
-diamondLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-diamondLabel.BackgroundTransparency = 0.5
-diamondLabel.TextColor3 = Color3.fromRGB(0, 128, 255)
-diamondLabel.TextScaled = true
-diamondLabel.BorderSizePixel = 0
-diamondLabel.Font = Enum.Font.GothamBold
+	-- Hàm tạo khu vực (region)
+	local function createRegion(position, anchor, alignment)
+		local frame = Instance.new("Frame")
+		frame.BackgroundTransparency = 1
+		frame.Size = UDim2.new(0, 250, 1, 0)
+		frame.Position = position
+		frame.AnchorPoint = anchor
+		frame.Parent = screenGui
 
-local currencyLabel = Instance.new("TextLabel", backgroundFrame)
-currencyLabel.Name = "CurrencyLabel"
-currencyLabel.Text = "Đang cập nhật MVP Keys..."
-currencyLabel.Size = UDim2.new(1, 0, 1/6, 0)
-currencyLabel.Position = UDim2.new(0, 0, 5/6, 0)
-currencyLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-currencyLabel.BackgroundTransparency = 0.5
-currencyLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
-currencyLabel.TextScaled = true
-currencyLabel.BorderSizePixel = 0
-currencyLabel.Font = Enum.Font.GothamBold
+		local layout = Instance.new("UIListLayout")
+		layout.SortOrder = Enum.SortOrder.LayoutOrder
+		layout.Padding = UDim.new(0, 3)
+		layout.HorizontalAlignment = alignment
+		layout.VerticalAlignment = Enum.VerticalAlignment.Top
+		layout.Parent = frame
 
-local timeLabel = Instance.new("TextLabel", backgroundFrame)
-timeLabel.Name = "TimeLabel"
-timeLabel.Text = "TIMES: 00:00:00"
-timeLabel.Size = UDim2.new(1, 0, 1/6, 0)
-timeLabel.Position = UDim2.new(0, 0, 5.8/6, 0)
-timeLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-timeLabel.BackgroundTransparency = 0.5
-timeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-timeLabel.TextScaled = true
-timeLabel.BorderSizePixel = 0
-timeLabel.Font = Enum.Font.GothamBold
+		return frame
+	end
 
-local fpsLabel = Instance.new("TextLabel", screenGui)
-fpsLabel.Name = "FPSLabel"
-fpsLabel.Size = UDim2.new(0, 118, 0, 38)
-fpsLabel.Position = UDim2.new(1, -120, 0, -55)
-fpsLabel.BackgroundColor3 = Color3.fromRGB(0, 128, 0)
-fpsLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-fpsLabel.Font = Enum.Font.GothamBold
-fpsLabel.TextSize = 38
-fpsLabel.Text = "FPS: ..."
-fpsLabel.BackgroundTransparency = 0
-fpsLabel.BorderSizePixel = 0
+	local rightRegion  = createRegion(UDim2.new(1, 0, 0, -55), Vector2.new(1, 0), Enum.HorizontalAlignment.Right)
+	local centerRegion = createRegion(UDim2.new(0.5, 70, 0, -55), Vector2.new(0.5, 0), Enum.HorizontalAlignment.Center)
+	local leftRegion   = createRegion(UDim2.new(0, 0, 0, -55), Vector2.new(0, 0), Enum.HorizontalAlignment.Left)
 
-local startTime = tick()
+	-- Hàm tạo label
+	local function createLabel(name, parent, bgColor)
+		local label = Instance.new("TextLabel")
+		label.Name = name
+		label.Size = UDim2.new(1, 0, 0, 38)
+		label.BackgroundColor3 = bgColor
+		label.TextColor3 = Color3.new(1, 1, 1)
+		label.Font = Enum.Font.GothamBold
+		label.TextSize = 32
+		label.BackgroundTransparency = 0
+		label.BorderSizePixel = 0
+		label.TextXAlignment = Enum.TextXAlignment.Center
+		label.Text = "..."
+		label.AutoLocalize = false
+		label.Parent = parent
+		return label
+	end
 
-task.spawn(function()
-    while true do
-        local diamonds = Players.LocalPlayer.leaderstats["💎 Diamonds"].Value
-        diamondLabel.Text = "GEMS: " .. Formatint(diamonds)
+	-- Tạo các label
+	local fpsLabel    = createLabel("FPSLabel",   rightRegion,   Color3.fromRGB(0, 102, 204))
+	local timeLabel   = createLabel("TimesLabel", centerRegion,  Color3.fromRGB(0, 102, 204))
+	local gemsLabel   = createLabel("GemsLabel",  leftRegion,    Color3.fromRGB(0, 102, 204))
+	local mvpLabel   = createLabel("MvpLabel",  leftRegion,    Color3.fromRGB(34, 139, 34))
 
-        -- Hiển thị MVP Key ở mọi nơi
-        local keyCount = getCurrencyAmount("MVP Key")
-        currencyLabel.Text = "MVP KEYS: " .. Formatint(keyCount)
+	-- FPS đo theo thời gian thực
+	local lastUpdate = tick()
+	local frameCount = 0
 
-        timeLabel.Text = "TIMES: " .. formatTime(tick() - startTime)
-        task.wait(1)
-    end
-end)
+	RunService.RenderStepped:Connect(function()
+		frameCount += 1
+		local now = tick()
+		if now - lastUpdate >= 1 then
+			local fps = frameCount / (now - lastUpdate)
+			fpsLabel.Text = string.format(" %d", fps + 0.5)
+			updateLabelSize(fpsLabel)
+			frameCount = 0
+			lastUpdate = now
+		end
+	end)
 
-local lastUpdate = tick()
-local frameCount = 0
+	-- Bắt đầu đếm thời gian
+	local startTime = os.time()
 
-RunService.RenderStepped:Connect(function()
-    frameCount += 1
-    local now = tick()
-    if now - lastUpdate >= 1 then
-        local fps = frameCount / (now - lastUpdate)
-        fpsLabel.Text = string.format("FPS: %d", fps + 0.5)
-        frameCount = 0
-        lastUpdate = now
-    end
-end)
+	-- Vòng lặp cập nhật GUI
+	while true do
+		pcall(function()
+			gemsLabel.Text = "GEMS | " .. Formatint(getDiamondsFromLeaderstats())
+			updateLabelSize(gemsLabel)
+
+			timeLabel.Text = "TIME | " .. FormatTime(os.time() - startTime)
+			updateLabelSize(timeLabel)
+
+			mvpLabel.Text  = tostring(getMiscAmount("MVP Key")) .. " | MVP KEY"
+			updateLabelSize(mvpLabel)
+
+		end)
+		task.wait(0.1)
+	end
+end
+
+startGuiDefault()
