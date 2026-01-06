@@ -117,7 +117,7 @@ local function startGuiDefault()
 
 	-- Tạo các label
 	local fpsLabel    = createLabel("FPSLabel",   rightRegion,   Color3.fromRGB(0, 102, 204))
-	local timeLabel   = createLabel("TimesLabel", centerRegion,  Color3.fromRGB(0, 102, 204))
+	local timeLabel   = createLabel("TimesLabel", leftRegion,  Color3.fromRGB(0, 102, 204))
 	local gemsLabel   = createLabel("GemsLabel",  leftRegion,    Color3.fromRGB(0, 102, 204))
 	local mvpLabel   = createLabel("MvpLabel",  leftRegion,    Color3.fromRGB(34, 139, 34))
 
