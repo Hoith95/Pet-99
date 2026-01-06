@@ -149,7 +149,7 @@ local function startGuiDefault()
 			timeLabel.Text = "TIME | " .. FormatTime(os.time() - startTime)
 			updateLabelSize(timeLabel)
 
-			mvpLabel.Text  = "MVP KEY | ".. tostring(getMiscAmount("MVP Key"))
+			mvpLabel.Text  = "MVP KEY | " .. tostring(getMiscAmount("MVP Key"))
 			updateLabelSize(mvpLabel)
 
 		end)
