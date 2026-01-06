@@ -64,6 +64,19 @@ local function getTimeTrialPoints()
     return s.Points or 0
 end
 
+local function getCurrencyAmount(currencyId)
+    local sd = getSave()
+    if not sd or not sd.Inventory or not sd.Inventory.Currency then
+        return 0
+    end
+    for _, v in pairs(sd.Inventory.Currency) do
+        if v.id == currencyId then
+            return tonumber(v._am) or 0
+        end
+    end
+    return 0
+end
+
 local function getLootboxAmount(itemId)
     local sd = getSave()
     if not sd or not sd.Inventory or not sd.Inventory.Lootbox then
@@ -141,8 +154,8 @@ local function startGuiUpdater()
     local rankLabel        = createLabel("RankLabel", right)
     local giftLabel        = createLabel("GiftLabel", right)
     local gift2Label       = createLabel("Gift2Label", right)
+    local coinLabel        = createLabel("CoinLabel", right)
     local raffleLabel      = createLabel("RaffleLabel", right)
-    local sleighLabel      = createLabel("SleighLabel", right)
     local megaPresentLabel = createLabel("MegaPresentLabel", right)
 
     -- LEFT / CENTER
@@ -159,20 +172,20 @@ local function startGuiUpdater()
         rankLabel.Text = tostring(sd.Rank or 0) .. " | RANK"
         updateLabelSize(rankLabel)
 
-        sleighLabel.Text = Formatint(getRecentSleighPointsSent()) .. " | Huge Lucky"
-        updateLabelSize(sleighLabel)
-
-        megaPresentLabel.Text = Formatint(getMegaPresentPoints()) .. " | Mega Present"
-        updateLabelSize(megaPresentLabel)
-
-        raffleLabel.Text = Formatint(getRaffleSubmittedTickets()) .. " | Secret Santa"
-        updateLabelSize(raffleLabel)
-
         giftLabel.Text = tostring(getLootboxAmount("Santa Gift")) .. " | Santa Gift"
         updateLabelSize(giftLabel)
 
         gift2Label.Text = tostring(getLootboxAmount("Candycane Gift")) .. " | CandyCane Gift"
         updateLabelSize(gift2Label)
+
+        coinLabel.Text = Formatint(getCurrencyAmount("GingerbreadCoins2")) .. " | Ginger Coins"
+        updateLabelSize(coinLabel)
+
+        raffleLabel.Text = Formatint(getRaffleSubmittedTickets()) .. " | Secret Santa"
+        updateLabelSize(raffleLabel)
+
+	megaPresentLabel.Text = Formatint(getRecentSleighPointsSent()) .. " | " .. Formatint(getMegaPresentPoints()) .. " | Mega Present"
+	updateLabelSize(megaPresentLabel)
 
         timeTrialLabel.Text = "Time Trial: " .. getRunsLeft() .. "/10"
         updateLabelSize(timeTrialLabel)
