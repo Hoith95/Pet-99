@@ -356,12 +356,12 @@ task.spawn(function()
 
             local megaPts = getMegaPoints(sd)
 
-            -- Ultra Lucky: chỉ dùng khi 1..6000, max 2 mỗi vòng
+            -- Ultra Lucky: chỉ dùng khi 1..6000, max 1 mỗi vòng
             if megaPts >= 1 and megaPts <= 6000 then
                 local uUID = findItemUID(sd, "Ultra Lucky Gingerbread")
                 local uAM  = getItemAmount(sd, "Ultra Lucky Gingerbread")
                 if uUID and uAM > 0 then
-                    local use = math.min(uAM, 2)
+                    local use = math.min(uAM, 1)
                     waitUntilAtSubmitSpot()
                     MEGA_SUBMIT:InvokeServer({ [uUID] = use })
                     task.wait(1)
