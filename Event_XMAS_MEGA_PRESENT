@@ -48,7 +48,8 @@ local CRAFT_REMOTE  = Network.CraftingMachine_Craft
 -- ================= CONFIG =================
 local TARGET_MEGA_POINTS   = 9000
 local MEGA_POINT_TOLERANCE = 500
-local TARGET_SLEIGH_POINTS = 0
+local TARGET_SLEIGH_POINTS = 20000  
+
 local MIN_KEEP_HUGE        = 89
 local NORMAL_KEEP_LIMIT    = 40
 
@@ -217,7 +218,6 @@ local function collectMegaCandidates(sd)
 
     return list
 end
-
 -- ================= BUILD BATCH =================
 local function buildMegaSubmitBatch(sd)
     local current = getMegaPoints(sd)
@@ -301,6 +301,25 @@ local function collectValidHuge(sd)
     return result
 end
 
+-- ================= DYNAMIC SLEIGH TARGET =================
+local SLEIGH_PER_HUGE = 2000
+
+local function getDynamicSleighTarget(sd)
+    if TARGET_SLEIGH_POINTS <= 0 then
+        return 0
+    end
+
+    local validHuge = collectValidHuge(sd)
+    local usable = #validHuge
+
+    if usable <= 0 then
+        return 0
+    end
+
+    local dynamicTarget = usable * SLEIGH_PER_HUGE
+    return math.min(dynamicTarget, TARGET_SLEIGH_POINTS)
+end
+
 -- ================= STATE MACHINE =================
 local STATE = "CHECK_MEGA_POINTS"
 
@@ -343,7 +362,6 @@ task.spawn(function()
 
             local megaPts = getMegaPoints(sd)
 
-            -- Ultra Lucky Gingerbread: dùng 1 nếu 1..6000
             if megaPts >= 1 and megaPts <= 6000 then
                 local uUID = findItemUID(sd, "Ultra Lucky Gingerbread")
                 local uAM  = getItemAmount(sd, "Ultra Lucky Gingerbread")
@@ -369,7 +387,8 @@ task.spawn(function()
 
         -- ===== CHECK SLEIGH =====
         elseif STATE == "CHECK_SLEIGH_POINTS" then
-            if getSleighPoints(sd) >= TARGET_SLEIGH_POINTS then
+            local dynamicTarget = getDynamicSleighTarget(sd)
+            if getSleighPoints(sd) >= dynamicTarget then
                 STATE = "OPEN_MEGA"
             else
                 STATE = "SUBMIT_HUGE"
@@ -377,15 +396,21 @@ task.spawn(function()
 
         -- ===== SUBMIT HUGE =====
         elseif STATE == "SUBMIT_HUGE" then
+            local dynamicTarget = getDynamicSleighTarget(sd)
+
             for _, h in ipairs(collectValidHuge(sd)) do
                 waitUntilAtSubmitSpot()
                 SLEIGH_SUBMIT:InvokeServer({ [h.uid] = 1 })
                 task.wait(1)
 
-                if getSleighPoints(getSave()) >= TARGET_SLEIGH_POINTS then
+                local newSD = getSave()
+                if not newSD then break end
+
+                if getSleighPoints(newSD) >= dynamicTarget then
                     break
                 end
             end
+
             STATE = "CHECK_SLEIGH_POINTS"
 
         -- ===== OPEN MEGA =====
