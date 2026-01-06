@@ -14,7 +14,7 @@ local MEGA_OPEN = Network:FindFirstChild("Mega Present: Open")
 -- =============== CONFIG =====================
 local TARGET_MEGA_POINTS   = 9000
 local TARGET_SLEIGH_POINTS = 0
-local WAIT_BEFORE_OPEN     = 60
+local WAIT_BEFORE_OPEN     = 10
 local CHECK_INTERVAL       = 2
 
 -- =============== XMAS CHECK =================
