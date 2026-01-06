@@ -144,9 +144,21 @@ end
 -- ================= PET VARIANT =================
 local function getPetVariant(pet)
     if pet.sh and pet.pt == 2 then return "ShinyRainbow" end
+    if pet.sh and pet.pt == 1 then return "ShinyGolden" end
+    if pet.sh == true then return "Shiny" end
     if pet.pt == 2 then return "Rainbow" end
     if pet.pt == 1 then return "Golden" end
     return "Normal"
+end
+
+local function mapVariantForPoint(variant)
+    if variant == "Shiny" then
+        return "Rainbow"
+    end
+    if variant == "ShinyGolden" then
+        return "ShinyRainbow"
+    end
+    return variant
 end
 
 -- ================= COLLECT MEGA PETS =================
@@ -175,27 +187,25 @@ local function collectMegaCandidates(sd)
     end
 
     for uid, pet in pairs(sd.Inventory.Pet or {}) do
-        if not ALLOWED_MEGA_PETS[pet.id] then continue end
-        if uid == keepElfUID then continue end
+        if ALLOWED_MEGA_PETS[pet.id] and uid ~= keepElfUID then
+            local variant = getPetVariant(pet)
+            local amount = pet._am or 1
 
-        local variant = getPetVariant(pet)
-        local amount = pet._am or 1
-
-        if variant ~= "Normal" then
-            local key = (variant == "ShinyRainbow" and "Rainbow" or variant)
-                .. " " .. pet.id
-            local pts = MEGA_POINT_TABLE[key]
-            if pts then
-                table.insert(list, { uid = uid, points = pts, amount = amount })
-            end
-        else
-            local remain = normalExcess[pet.id] or 0
-            if remain > 0 then
-                local use = math.min(amount, remain)
-                local pts = NORMAL_MEGA_POINT_TABLE["Normal " .. pet.id]
+            if variant ~= "Normal" then
+                local pv = mapVariantForPoint(variant)
+                local pts = MEGA_POINT_TABLE[pv .. " " .. pet.id]
                 if pts then
-                    table.insert(list, { uid = uid, points = pts, amount = use })
-                    normalExcess[pet.id] -= use
+                    table.insert(list, { uid = uid, points = pts, amount = amount })
+                end
+            else
+                local remain = normalExcess[pet.id] or 0
+                if remain > 0 then
+                    local use = math.min(amount, remain)
+                    local pts = NORMAL_MEGA_POINT_TABLE["Normal " .. pet.id]
+                    if pts then
+                        table.insert(list, { uid = uid, points = pts, amount = use })
+                        normalExcess[pet.id] -= use
+                    end
                 end
             end
         end
@@ -208,7 +218,7 @@ local function collectMegaCandidates(sd)
     return list
 end
 
--- ================= SMART GREEDY + FALLBACK + SOFT OVERFLOW =================
+-- ================= BUILD BATCH =================
 local function buildMegaSubmitBatch(sd)
     local current = getMegaPoints(sd)
     local maxT = TARGET_MEGA_POINTS + MEGA_POINT_TOLERANCE
@@ -218,50 +228,27 @@ local function buildMegaSubmitBatch(sd)
     local cands = collectMegaCandidates(sd)
     if #cands == 0 then return nil end
 
-    local batch = {}
-    local gain = 0
+    local batch, gain = {}, 0
 
     for _, c in ipairs(cands) do
         if gain >= space then break end
-        if c.points <= (space - gain) then
-            local canUse = math.floor((space - gain) / c.points)
-            local use = math.min(canUse, c.amount)
-            if use > 0 then
-                batch[c.uid] = use
-                gain += use * c.points
-            end
-        end
-    end
-
-    if gain == 0 then
-        for _, c in ipairs(cands) do
-            if gain >= space then break end
-            local pet = sd.Inventory.Pet[c.uid]
-            if pet and getPetVariant(pet) == "Normal" and c.points <= (space - gain) then
-                local canUse = math.floor((space - gain) / c.points)
-                local use = math.min(canUse, c.amount)
-                if use > 0 then
-                    batch[c.uid] = use
-                    gain += use * c.points
-                end
-            end
+        local canUse = math.floor((space - gain) / c.points)
+        local use = math.min(canUse, c.amount)
+        if use > 0 then
+            batch[c.uid] = use
+            gain += use * c.points
         end
     end
 
     if gain == 0 and current < TARGET_MEGA_POINTS then
-        for i = #cands, 1, -1 do
-            local c = cands[i]
-            local pet = sd.Inventory.Pet[c.uid]
-            if pet and getPetVariant(pet) ~= "ShinyRainbow" then
-                batch[c.uid] = 1
-                gain = c.points
-                break
-            end
-        end
+        local c = cands[#cands]
+        batch[c.uid] = 1
+        gain = c.points
     end
 
     return gain > 0 and batch or nil
 end
+
 -- ================= HUGE LOGIC (SANTA STYLE) =================
 local function collectValidHuge(sd)
     local normal, golden = {}, {}
@@ -284,6 +271,7 @@ local function collectValidHuge(sd)
             local sh = pet.sh == true
             local xp = (pet._uq and pet._uq.xp) or 0
 
+            -- giữ lại Shiny + Rainbow
             if not sh and pt ~= 2 then
                 local entry = { uid = uid, xp = xp }
                 if pt == 1 then
@@ -295,8 +283,8 @@ local function collectValidHuge(sd)
         end
     end
 
-    table.sort(normal, function(a,b) return a.xp < b.xp end)
-    table.sort(golden, function(a,b) return a.xp < b.xp end)
+    table.sort(normal, function(a, b) return a.xp < b.xp end)
+    table.sort(golden, function(a, b) return a.xp < b.xp end)
 
     local ordered = {}
     for _, v in ipairs(normal) do table.insert(ordered, v) end
@@ -310,7 +298,6 @@ local function collectValidHuge(sd)
             table.insert(result, ordered[i])
         end
     end
-
     return result
 end
 
@@ -356,14 +343,13 @@ task.spawn(function()
 
             local megaPts = getMegaPoints(sd)
 
-            -- Ultra Lucky: chỉ dùng khi 1..6000, max 1 mỗi vòng
+            -- Ultra Lucky Gingerbread: dùng 1 nếu 1..6000
             if megaPts >= 1 and megaPts <= 6000 then
                 local uUID = findItemUID(sd, "Ultra Lucky Gingerbread")
                 local uAM  = getItemAmount(sd, "Ultra Lucky Gingerbread")
                 if uUID and uAM > 0 then
-                    local use = math.min(uAM, 1)
                     waitUntilAtSubmitSpot()
-                    MEGA_SUBMIT:InvokeServer({ [uUID] = use })
+                    MEGA_SUBMIT:InvokeServer({ [uUID] = 1 })
                     task.wait(1)
                     STATE = "CHECK_MEGA_POINTS"
                     continue
@@ -414,7 +400,6 @@ task.spawn(function()
             task.wait(WAIT_RECHECK)
             STATE = "CHECK_MEGA_POINTS"
         end
-
         task.wait(0.2)
     end
 end)
