@@ -5,8 +5,6 @@
 if _G.AUTO_MEGA_OPEN then return end
 _G.AUTO_MEGA_OPEN = true
 
-task.wait(10)
-
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
 local Network = ReplicatedStorage.Network
@@ -14,8 +12,8 @@ local Network = ReplicatedStorage.Network
 local MEGA_OPEN = Network:FindFirstChild("Mega Present: Open")
 
 -- =============== CONFIG =====================
-local TARGET_MEGA_POINTS   = 8000
-local TARGET_SLEIGH_POINTS = 4000
+local TARGET_MEGA_POINTS   = 9000
+local TARGET_SLEIGH_POINTS = 0
 local WAIT_BEFORE_OPEN     = 60
 local CHECK_INTERVAL       = 2
 
