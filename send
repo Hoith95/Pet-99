@@ -4,8 +4,8 @@ _G.GDRY_RUN = false
 _G.GMAIL_ITEMS = {
 --["Diamonds"] = {Class = "Currency", Id = "Diamonds", Amount = "25m"},
 --["Gingerbread Angelus"] = {Class = "Pet", Id = "Gingerbread Angelus", Amount = 1, IsGold = false, IsRainbow = true, IsShiny = false},
-["Candycane Gift"] = {Class = "Lootbox", Id= "CandyCane Gift", Amount = 1142},
-["Santa Gift"] = {Class = "Lootbox", Id = "Santa Gift", Amount = 273}
+["Candycane Gift"] = {Class = "Lootbox", Id= "Candycane Gift", Amount = 1142},
+--["Santa Gift"] = {Class = "Lootbox", Id = "Santa Gift", Amount = 273}
 }
 _G.GMAIL_RECEIVERS = {
 "AnDieg02010",
