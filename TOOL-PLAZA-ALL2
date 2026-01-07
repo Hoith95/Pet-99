@@ -22,17 +22,17 @@ getgenv().Settings = {
 		{Name = "Titanic Holiday Owl", Data = {Price = "20.68b"}},
 		{Name = "Golden Titanic Holiday Owl", Data = {Price = "29.86b"}},
 
-		{Name = "Titanic North Pole Unicorn", Data = {Price = "6.5b"}},
+		{Name = "Titanic North Pole Unicorn", Data = {Price = "6b"}},
 		{Name = "Golden Titanic North Pole Unicorn", Data = {Price = "7b"}},
-		{Name = "Rainbow Titanic North Pole Unicorn", Data = {Price = "55b"}},
+		{Name = "Rainbow Titanic North Pole Unicorn", Data = {Price = "50b"}},
 		{Name = "Shiny Titanic North Pole Unicorn", Data = {Price = "68b"}},
 
 		{Name = "Titanic Gingerbread Angelus", Data = {Price = "6.9b"}},
 		{Name = "Titanic Pink Lucky Block", Data = {Price = "6b"}},
 		{Name = "Titanic Night Terror Dog", Data = {Price = "5.5b"}},
 
-        {Name = "Shiny Titanic Starlight Pony", Data = {Price = "27b"}},
-        {Name = "Rainbow Titanic Starlight Pony", Data = {Price = "25b"}},
+        {Name = "Shiny Titanic Starlight Pony", Data = {Price = "25b"}},
+        {Name = "Rainbow Titanic Starlight Pony", Data = {Price = "23b"}},
         {Name = "Golden Titanic Starlight Pony", Data = {Price = "6.3b"}},
         {Name = "Titanic Starlight Pony", Data = {Price = "6b"}},
 
