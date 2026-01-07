@@ -15,17 +15,17 @@ getgenv().Settings = {
         {Name = "Titanic Vampire Agony", Data = {Price = "18b"}},
 
 		{Name = "Titanic Hippomint", Data = {Price = "5.5b"}},
-		{Name = "Golden Titanic Hippomint", Data = {Price = "16.86b"}},
-		{Name = "Rainbow Titanic Hippomint", Data = {Price = "36.86b"}},
-		{Name = "Shiny Titanic Hippomint", Data = {Price = "36.86b"}},
+		{Name = "Golden Titanic Hippomint", Data = {Price = "6.86b"}},
+		{Name = "Rainbow Titanic Hippomint", Data = {Price = "26.86b"}},
+		{Name = "Shiny Titanic Hippomint", Data = {Price = "26.86b"}},
 
 		{Name = "Titanic Holiday Owl", Data = {Price = "23.68b"}},
-		{Name = "Golden Titanic Holiday Owl", Data = {Price = "36.86b"}},
+		{Name = "Golden Titanic Holiday Owl", Data = {Price = "29.86b"}},
 
 		{Name = "Titanic North Pole Unicorn", Data = {Price = "6.5b"}},
-		{Name = "Golden Titanic North Pole Unicorn", Data = {Price = "8b"}},
-		{Name = "Rainbow Titanic North Pole Unicorn", Data = {Price = "83b"}},
-		{Name = "Shiny Titanic North Pole Unicorn", Data = {Price = "86b"}},
+		{Name = "Golden Titanic North Pole Unicorn", Data = {Price = "7b"}},
+		{Name = "Rainbow Titanic North Pole Unicorn", Data = {Price = "68b"}},
+		{Name = "Shiny Titanic North Pole Unicorn", Data = {Price = "83b"}},
 
 		{Name = "Titanic Gingerbread Angelus", Data = {Price = "6.9b"}},
 		{Name = "Titanic Pink Lucky Block", Data = {Price = "6b"}},
