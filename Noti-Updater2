@@ -152,8 +152,8 @@ local function startGuiUpdater()
 
     -- RIGHT
     local rankLabel        = createLabel("RankLabel", right)
-    local giftLabel        = createLabel("GiftLabel", right)
-    local gift2Label       = createLabel("Gift2Label", right)
+    --local giftLabel        = createLabel("GiftLabel", right)
+    --local gift2Label       = createLabel("Gift2Label", right)
     local coinLabel        = createLabel("CoinLabel", right)
     local raffleLabel      = createLabel("RaffleLabel", right)
     local megaPresentLabel = createLabel("MegaPresentLabel", right)
@@ -172,11 +172,11 @@ local function startGuiUpdater()
         rankLabel.Text = tostring(sd.Rank or 0) .. " | RANK"
         updateLabelSize(rankLabel)
 
-        giftLabel.Text = tostring(getLootboxAmount("Santa Gift")) .. " | Santa Gift"
-        updateLabelSize(giftLabel)
+        --giftLabel.Text = tostring(getLootboxAmount("Santa Gift")) .. " | Santa Gift"
+        --updateLabelSize(giftLabel)
 
-        gift2Label.Text = tostring(getLootboxAmount("Candycane Gift")) .. " | CandyCane Gift"
-        updateLabelSize(gift2Label)
+        --gift2Label.Text = tostring(getLootboxAmount("Candycane Gift")) .. " | CandyCane Gift"
+        --updateLabelSize(gift2Label)
 
         coinLabel.Text = Formatint(getCurrencyAmount("GingerbreadCoins2")) .. " | Ginger Coins"
         updateLabelSize(coinLabel)
