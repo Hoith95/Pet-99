@@ -23,7 +23,7 @@ getgenv().Settings = {
 		{Name = "Golden Titanic Holiday Owl", Data = {Price = "36.86b"}},
 
 		{Name = "Titanic North Pole Unicorn", Data = {Price = "6.5b"}},
-		{Name = "Golden Titanic North Pole Unicorn", Data = {Price = "8.3b"}},
+		{Name = "Golden Titanic North Pole Unicorn", Data = {Price = "8b"}},
 		{Name = "Rainbow Titanic North Pole Unicorn", Data = {Price = "83b"}},
 		{Name = "Shiny Titanic North Pole Unicorn", Data = {Price = "86b"}},
 
