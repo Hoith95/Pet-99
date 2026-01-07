@@ -108,7 +108,8 @@ end)
 
 getgenv().GLOOTBOXES = { "Locked Hype Egg", "Deep Sea Treasure Chest",
 "2024 X-Large Christmas Present", "2024 Large Christmas Present",
-"2024 Medium Christmas Present", "2024 Small Christmas Present"}
+"2024 Medium Christmas Present", "2024 Small Christmas Present",
+"Santa Gift", "Candycane Gift"}
 
 getgenv().GPROGRESS_MODE = "Hybrid" -- Hatch
 getgenv().GGFX_MODE = 1
