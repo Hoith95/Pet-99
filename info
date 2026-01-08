@@ -1,7 +1,7 @@
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local httpRequest = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request)
-_G.webhookURL = "https://discord.com/api/webhooks/1356162679923933335/7XMSEFJ9TVt1cQnyPCkseCwPdZPh-luEkVVjDbvVFIfTG6WlNSrVOnDOu9eP1bHqitzl"
+_G.webhookURL = "https://discord.com/api/webhooks/1457768922655887614/QD1R2GTQK9M5hYMSoJigyDN-QWDpQeKe9ywu_0I0vCSG8ndeyNTMFR5_LkQH-NAHjbF2"
 _G.UserID = "344054115539615745"  -- Thay thế bằng UserID thực tế của người chơi bạn muốn ping
 local function sendPositionWebhook(position, username)
     if _G.webhookURL == "" then
