@@ -78,7 +78,7 @@ task.spawn(function()
                 warn("[EggWatch] FAIL | +" .. diff .. " < " .. MIN_INCREASE .. " → Kick")
                 task.wait(1)
                 LocalPlayer:Kick(
-                    "EggsHatched tăng không đủ 10.000 trong 10 phút (Xmas World)"
+                    "EggsHatched tăng không đủ 5.000 trong 15 phút (Xmas World)"
                 )
                 return
             end
