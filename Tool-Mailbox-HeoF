@@ -6,6 +6,6 @@ spawn(function()
 end)
 
 spawn(function()
-wait(30)
+wait(68)
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge"))()
 end)
