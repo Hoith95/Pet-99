@@ -66,8 +66,8 @@ spawn(function()
 			getgenv().GXMAS_WORLD_GRINCH_SPRAY_THRESHOLD = 10
 			getgenv().GXMAS_WORLD_DO_GINGERBREAD_CHEST = true
 			getgenv().GXMAS_WORLD_DO_SNOWMAN_BOSS_CHEST = true
-			getgenv().GXMAS_WORLD_SPECIFIC_EGG_TO_HATCH = "Ornament Egg"
-			--getgenv().GXMAS_WORLD_PET_ORDER_GOOD_TO_BAD = {"Krampus", "Hippomint", "Candycane Kitsune", "Elf Golem"}
+			--getgenv().GXMAS_WORLD_SPECIFIC_EGG_TO_HATCH = "Ornament Egg"
+			getgenv().GXMAS_WORLD_PET_ORDER_GOOD_TO_BAD = {"Candycane Kitsune", "Elf Golem", "Hippomint", "Krampus"}
 			getgenv().GXMAS_WORLD_AUTO_CRAFT = false
 			getgenv().GXMAS_WORLD_FOCUS_EGGS_FOR_AUTO_CRAFT_PETS = false
 			getgenv().GXMAS_WORLD_DO_MEGA_PRESENT = false
