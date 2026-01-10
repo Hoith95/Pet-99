@@ -1,1 +1,163 @@
+repeat task.wait() until game:IsLoaded()
+local LocalPlayer = game:GetService('Players').LocalPlayer
+repeat task.wait() until not LocalPlayer.PlayerGui:FindFirstChild('__INTRO')
 
+local Library = game.ReplicatedStorage.Library
+local Client = Library.Client
+
+local ExistCmds = require(Client.ExistCountCmds)
+local RapCmds = require(Client.RAPCmds)
+local Network = require(Client.Network)
+local SaveMod = require(Client.Save)
+
+-- Định dạng số lượng lớn
+local Formatint = function(int)
+    local Suffix = {"", "k", "M", "B", "T", "Qd", "Qn", "Sx", "Sp", "Oc", "No", "De", "UDe", "DDe", "TDe", "QdDe", "QnDe", "SxDe", "SpDe", "OcDe", "NoDe", "Vg", "UVg", "DVg", "TVg", "QdVg", "QnVg", "SxVg", "SpVg", "OcVg", "NoVg"}
+    local Index = 1
+    
+    if int < 999 then 
+        return int
+    end
+
+    while int >= 1000 and Index < #Suffix do
+        int = int / 1000
+        Index = Index + 1
+    end
+
+    return string.format("%.2f%s", int, Suffix[Index])
+end
+
+local GetAsset = function(Id, pt)
+    local Asset = require(Library.Directory.Pets)[Id]
+    return string.gsub(Asset and (pt == 1 and Asset.goldenThumbnail or Asset.thumbnail) or "14976456685", "rbxassetid://", "")
+end
+
+-- Gửi Webhook
+local function SendWebhook(Class, Id, pt, sh)
+    local Variant =
+        (sh and pt == 2 and "Shiny Rainbow") or
+        (sh and pt == 1 and "Shiny Golden") or
+        (sh and "Shiny") or
+        (pt == 2 and "Rainbow") or
+        (pt == 1 and "Golden") or
+        "Normal"
+
+    local ItemType = (Class == "Pet" and "PET" or "CARD")
+
+    -- Nếu là Normal thì không thêm Variant vào
+    local FullName = (Variant == "Normal")
+        and Id
+        or (Variant .. " " .. Id)
+
+    local Title = string.format(
+        "||%s|| **%s** (%s)",
+        LocalPlayer.Name, FullName, ItemType
+    )
+
+    if Class == "Card" then
+        local Body = game:GetService("HttpService"):JSONEncode({
+            content = string.format("<@%s>", Webhook['ID']),
+            embeds = {
+                {
+                    title = Title,
+                    color = 0xFF00FF,
+                    timestamp = DateTime.now():ToIsoDate(),
+                    footer = { text = "Heo Notifier" }
+                }
+            }
+        })
+
+        pcall(function()
+            request({
+                Url = Webhook['URL'],
+                Method = "POST",
+                Headers = { ["Content-Type"] = "application/json" },
+                Body = Body
+            })
+        end)
+
+        return
+    end
+
+    local Img = string.format("https://biggamesapi.io/image/%s", GetAsset(Id, pt))
+    local Body = game:GetService("HttpService"):JSONEncode({
+        content = string.format("<@%s>", Webhook['ID']),
+        embeds = {
+            {
+                title = Title,
+                color = 0xFF00FF,
+                timestamp = DateTime.now():ToIsoDate(),
+                thumbnail = { url = Img },
+                fields = {
+                    { name = string.format("💎 Rap: ``%s`` \n💫 Exist: ``%s``", Formatint(Rap or 0), Formatint(Exist or 0)), value = "" }
+                },
+                footer = { text = "Heo Notifier" }
+            }
+        }
+    })
+
+    pcall(function()
+        request({
+            Url = Webhook['URL'],
+            Method = "POST",
+            Headers = { ["Content-Type"] = "application/json" },
+            Body = Body
+        })
+    end)
+end
+
+----------------------------------------------------------------------
+-- BẢN CẢI TIẾN: THEO DÕI UID MỚI (THAY CHO CÔNG THỨC COUNT GỐC)
+----------------------------------------------------------------------
+
+-- Lưu UID đã biết
+local KnownUIDs = {}
+
+-- Quét inventory trả về UID + info
+local function ScanUIDs()
+    local Inventory = SaveMod.Get()['Inventory']
+    local Result = {}
+
+    for Class, Items in pairs(Inventory) do
+        if Class == "Pet" or Class == "Card" then
+            for uid, v in pairs(Items) do
+                for _, name in ipairs(Webhook['Id Names']) do
+                    if string.find(v.id, name) then
+                        Result[uid] = {
+                            Class = Class,
+                            Id = v.id,
+                            pt = v.pt,
+                            sh = v.sh
+                        }
+                    end
+                end
+            end
+        end
+    end
+
+    return Result
+end
+
+task.spawn(function()
+    -- B1: Khởi tạo (không báo)
+    local Init = ScanUIDs()
+    for uid in pairs(Init) do
+        KnownUIDs[uid] = true
+    end
+
+    warn("[Notifier] Đã khởi tạo UID ban đầu.")
+
+    -- B2: Theo dõi UID mới
+    while true do
+        local Current = ScanUIDs()
+
+        for uid, info in pairs(Current) do
+            if not KnownUIDs[uid] then
+                KnownUIDs[uid] = true
+                SendWebhook(info.Class, info.Id, info.pt, info.sh)
+            end
+        end
+
+        task.wait(0.5)
+    end
+end)
