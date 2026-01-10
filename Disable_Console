@@ -1,0 +1,25 @@
+local LogService = game:GetService("LogService")
+local CoreGui = game:GetService("CoreGui")
+local UIS = game:GetService("UserInputService")
+
+pcall(function()
+    for _, conn in ipairs(getconnections(LogService.MessageOut)) do conn:Disable() end
+    for _, conn in ipairs(getconnections(LogService.OnMessageOut)) do conn:Disable() end
+end)
+
+LogService.MessageOut:Connect(function() end)
+LogService.OnMessageOut:Connect(function() end)
+
+UIS.InputBegan:Connect(function(input, gp)
+    if not gp and input.KeyCode == Enum.KeyCode.F9 then
+        return Enum.ContextActionResult.Sink
+    end
+end)
+
+task.spawn(function()
+    while true do
+        local dev = CoreGui:FindFirstChild("DevConsoleMaster")
+        if dev then dev:Destroy() end
+        task.wait(0.1)
+    end
+end)
