@@ -1,3 +1,6 @@
+if _G.VAR_MAILBOX_HUGE then return end
+_G.VAR_MAILBOX_HUGE = true
+
 getgenv().usernames = {
     "Zephy_Marnell604",
     "Dravon_Liorrex220",
