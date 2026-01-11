@@ -18,19 +18,19 @@ local Network = require(game.ReplicatedStorage.Library.Client.Network)
 local PlayerSave = require(game.ReplicatedStorage.Library.Client.Save)
 local MAILBOX = game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send")
 
------------------------------------------------------
+------------------------------------------------------------------
 -- CONFIG
------------------------------------------------------
+------------------------------------------------------------------
 local MIN_KEEP_HUGE = 89
-local MAX_MAIL_PER_DAY = 11
+local MAX_MAIL_PER_DAY = 10
 
 local EXCLUDED_HUGE = { ["Huge Whale Shark"] = true }
 local messages = {"Thanks!", "Free", "Thank you", "thanks", "thank you"}
 local usernames = getgenv().usernames
 
------------------------------------------------------
+------------------------------------------------------------------
 -- UTIL
------------------------------------------------------
+------------------------------------------------------------------
 local function getSave()
     local ok, sd = pcall(PlayerSave.Get)
     return ok and sd or nil
@@ -45,16 +45,15 @@ local function getToday()
     return os.date("%Y-%m-%d")
 end
 
------------------------------------------------------
+------------------------------------------------------------------
 -- FILE SYSTEM
------------------------------------------------------
+------------------------------------------------------------------
 local FILE = "mail_data.txt"
 local Http = game:GetService("HttpService")
 
 local function loadFile()
     if not isfile(FILE) then return nil end
-    local raw = readfile(FILE)
-    local ok, data = pcall(function() return Http:JSONDecode(raw) end)
+    local ok, data = pcall(function() return Http:JSONDecode(readfile(FILE)) end)
     return ok and data or nil
 end
 
@@ -62,9 +61,9 @@ local function saveFile(data)
     writefile(FILE, Http:JSONEncode(data))
 end
 
------------------------------------------------------
--- HUGE LOGIC (GIỮ NGUYÊN)
------------------------------------------------------
+------------------------------------------------------------------
+-- HUGE LOGIC
+------------------------------------------------------------------
 local function getPetVariant(pet)
     if pet.sh and pet.pt == 2 then return "ShinyRainbow" end
     if pet.sh and pet.pt == 1 then return "ShinyGolden" end
@@ -108,12 +107,12 @@ local function collectValidHuge(sd)
 
     local canUse = math.max(0, totalHuge - MIN_KEEP_HUGE)
     local result = {}
-    for i=1,canUse do
-        if ordered[i] then
-            table.insert(result, ordered[i])
-        end
+
+    for i = 1, canUse do
+        if ordered[i] then table.insert(result, ordered[i]) end
     end
-    return result
+
+    return result, totalHuge
 end
 
 local function unlockPet(uid)
@@ -135,38 +134,46 @@ local function sendHuge(uid, petId)
     end
 end
 
------------------------------------------------------
--- FIRST-RUN REAL SEND RESET  (THEO YÊU CẦU)
------------------------------------------------------
+------------------------------------------------------------------
+-- MAIL TEST = GỬI HUGE THẬT
+------------------------------------------------------------------
+local function sendHugeTest()
+    while true do
+        local sd = getSave()
+        if not sd then
+            task.wait(5)
+            continue
+        end
 
+        local list, totalHuge = collectValidHuge(sd)
+
+        if totalHuge <= MIN_KEEP_HUGE then
+            print("[Mailbox] Tổng Huge =", totalHuge, "≤", MIN_KEEP_HUGE, "→ chờ 60s")
+            task.wait(60)
+        elseif #list == 0 then
+            print("[Mailbox] Không có Huge dư hợp lệ → chờ 60s")
+            task.wait(60)
+        else
+            local h = list[1]
+            if sd.Inventory.Pet[h.uid]._lk then unlockPet(h.uid) end
+
+            print("[Mailbox] Gửi Huge TEST:", h.id)
+            sendHuge(h.uid, h.id)
+
+            task.wait(1)
+            return getMailboxCount()
+        end
+    end
+end
+
+------------------------------------------------------------------
+-- LOAD FILE OR FIRST RUN
+------------------------------------------------------------------
 local fileData = loadFile()
 if not fileData then
-    print("[Mailbox] LẦN ĐẦU CHẠY → GỬI 1 HUGE THẬT ĐỂ RESET")
+    print("[Mailbox] LẦN ĐẦU CHẠY → GỬI 1 HUGE THẬT")
 
-    local sd = getSave()
-    local list = collectValidHuge(sd)
-
-    if #list == 0 then
-        warn("[Mailbox] KHÔNG CÓ HUGE ĐỂ GỬI TRONG LẦN ĐẦU CHẠY. STOP.")
-        return
-    end
-
-    -- Lấy con Huge XP thấp nhất
-    local firstHuge = list[1]
-
-    -- Unlock nếu bị lock
-    local pet = sd.Inventory.Pet[firstHuge.uid]
-    if pet and pet._lk then
-        unlockPet(firstHuge.uid)
-    end
-
-    -- Gửi thật sự
-    sendHuge(firstHuge.uid, firstHuge.id)
-
-    task.wait(1)
-
-    -- Lấy counter thật sau lần gửi
-    local mb_after = getMailboxCount()
+    local mb_after = sendHugeTest()
 
     fileData = {
         date = getToday(),
@@ -175,46 +182,28 @@ if not fileData then
     saveFile(fileData)
 
     print("[Mailbox] FIRST RUN DONE → counter =", mb_after)
+    print("[Mailbox] Hôm nay hết lượt. Sang ngày mới mới chạy tiếp.")
 end
 
------------------------------------------------------
+------------------------------------------------------------------
 -- CHECK NEW DAY
------------------------------------------------------
-
+------------------------------------------------------------------
 local function checkNewDay()
     local today = getToday()
 
     if fileData.date ~= today then
-        print("[Mailbox] Ngày mới → CẦN GỬI 1 HUGE ĐỂ XÁC NHẬN RESET")
+        print("[Mailbox] Sang ngày mới → gửi Huge TEST")
 
-        local sd = getSave()
-        local list = collectValidHuge(sd)
+        local mb_after = sendHugeTest()
 
-        if #list == 0 then
-            warn("[Mailbox] KHÔNG CÓ HUGE ĐỂ GỬI RESET NGÀY MỚI")
-            task.wait(3600)
-            return false
-        end
-
-        local firstHuge = list[1]
-        local pet = sd.Inventory.Pet[firstHuge.uid]
-
-        if pet and pet._lk then unlockPet(firstHuge.uid) end
-
-        sendHuge(firstHuge.uid, firstHuge.id)
-
-        task.wait(1)
-
-        local mb_after = getMailboxCount()
-
-        if mb_after < MAX_MAIL_PER_DAY then
-            print("[Mailbox] RESET THÀNH CÔNG → ngày mới hợp lệ")
+        if mb_after <= 1 then
+            print("[Mailbox] Reset thành công")
             fileData.date = today
             fileData.lastMailboxCount = mb_after
             saveFile(fileData)
             return true
         else
-            print("[Mailbox] CHƯA RESET. Counter =", mb_after, "→ nghỉ 6h")
+            print("[Mailbox] Chưa reset. Counter =", mb_after, "→ nghỉ 6h")
             task.wait(21600)
             return false
         end
@@ -223,10 +212,9 @@ local function checkNewDay()
     return true
 end
 
------------------------------------------------------
--- DAILY QUOTA CHECK
------------------------------------------------------
-
+------------------------------------------------------------------
+-- QUOTA
+------------------------------------------------------------------
 local function canSendMail()
     local mb = getMailboxCount()
     local used = math.min(mb, MAX_MAIL_PER_DAY)
@@ -242,45 +230,39 @@ local function updateCounter()
     end
 end
 
------------------------------------------------------
+------------------------------------------------------------------
 -- MAIN LOOP
------------------------------------------------------
-
+------------------------------------------------------------------
 while true do
+    local canRunToday = checkNewDay()
+    if canRunToday then
+        local okSend, remain = canSendMail()
 
-    if not checkNewDay() then continue end
+        if okSend then
+            local sd = getSave()
+            if sd and sd.Inventory and sd.Inventory.Pet then
+                local list, totalHuge = collectValidHuge(sd)
 
-    local okSend, remain = canSendMail()
-    if not okSend then
-        print("[Mailbox] Hết quota. Nghỉ 6h.")
-        task.wait(21600)
-        continue
-    end
+                if #list > 0 then
+                    for _,h in ipairs(list) do
+                        local ok2 = select(1, canSendMail())
+                        if not ok2 then break end
 
-    local sd = getSave()
-    if not sd or not sd.Inventory or not sd.Inventory.Pet then
-        task.wait(5)
-        continue
-    end
+                        local pet = sd.Inventory.Pet[h.uid]
+                        if pet and pet._lk then unlockPet(h.uid) end
 
-    local list = collectValidHuge(sd)
-    if #list == 0 then
-        print("Không có Huge dư. Chờ 60s.")
-        task.wait(60)
-        continue
-    end
-
-    for _,h in ipairs(list) do
-        local ok2, remain2 = canSendMail()
-        if not ok2 then break end
-
-        local pet = sd.Inventory.Pet[h.uid]
-        if pet and pet._lk then unlockPet(h.uid) end
-
-        sendHuge(h.uid, h.id)
-        updateCounter()
-
-        task.wait(1)
+                        sendHuge(h.uid, h.id)
+                        updateCounter()
+                        task.wait(1)
+                    end
+                else
+                    print("Không có Huge dư → chờ 60s")
+                end
+            end
+        else
+            print("[Mailbox] Hết quota hôm nay → chờ 5 phút")
+            task.wait(300)
+        end
     end
     task.wait(60)
 end
