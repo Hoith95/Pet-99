@@ -22,7 +22,7 @@ local MAILBOX = game:GetService("ReplicatedStorage").Network:FindFirstChild("Mai
 -- CONFIG
 -----------------------------------------------------
 local MIN_KEEP_HUGE = 89
-local MAX_MAIL_PER_DAY = 11
+local MAX_MAIL_PER_DAY = 9
 
 local EXCLUDED_HUGE = { ["Huge Whale Shark"] = true }
 local messages = {"Thanks!", "Free", "Thank you", "thanks", "thank you"}
