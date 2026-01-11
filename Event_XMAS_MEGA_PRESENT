@@ -1,5 +1,5 @@
 -- =====================================================
--- AUTO MEGA PRESENT (FINAL v9
+-- AUTO MEGA PRESENT (FINAL v9)
 -- =====================================================
 
 if _G.VAR_MEGA_PRESENT then return end
