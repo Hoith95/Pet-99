@@ -410,11 +410,11 @@ local function claimReward()
                 warn("❌ Lỗi khi đổi hộp " .. chestType .. ": " .. tostring(err))
             end
 
-            task.wait(5)
+            task.wait(3)
             if not isAtExactRewardPosition() then
                 warn("⚠️ Sai vị trí sau khi đổi hộp " .. chestType .. " → teleport lại.")
                 teleportToRewardLocation()
-                task.wait(9)
+                task.wait(3)
                 if not isAtExactRewardPosition() then
                     warn("⛔ Vẫn sai vị trí, bỏ qua kiểm tra lần này.")
                 else
@@ -429,7 +429,7 @@ local function claimReward()
         retry += 1
         warn("🚶‍♂️ Teleport tới vị trí đổi quà (lần " .. retry .. ")...")
         teleportToRewardLocation()
-        task.wait(9)
+        task.wait(3)
         if isAtExactRewardPosition() then
             warn("✅ Vị trí chính xác → bắt đầu đổi quà.")
             break
@@ -447,7 +447,7 @@ local function claimReward()
     claimMultiple(chest2, 2)
     claimMultiple(chest1, 1)
 
-    task.wait(9)
+    task.wait(3)
     teleportToLocation()
 end
 
