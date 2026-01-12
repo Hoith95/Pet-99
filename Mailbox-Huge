@@ -66,8 +66,7 @@ local function collectValidHuge(sd)
             local xp = (pet._uq and pet._uq.xp) or 0
 
             if variant ~= "Rainbow" and variant ~= "Shiny"
-                and variant ~= "ShinyGolden" and variant ~= "ShinyRainbow" then
-
+                   and variant ~= "ShinyGolden" and variant ~= "ShinyRainbow" then
                 if variant == "Golden" then
                     table.insert(golden, {uid=uid, id=pet.id, xp=xp})
                 else
@@ -121,9 +120,25 @@ local function sendHuge(uid, id)
 end
 
 -------------------------------------------------------
--- TÍNH SỐ MAIL ĐÃ GỬI THEO RESET
+-- RESET 24 GIỜ
 -------------------------------------------------------
-local function getTodaySentCount(sd)
+local function check24hReset(sd)
+    local now = os.time()
+    local resetTime = math.floor(sd.MailboxResetTime)
+
+    if (now - resetTime) >= 86400 then   -- 24 giờ = 86400s
+        print("[Mailbox] ĐÃ QUA 24 GIỜ → RESET NGÀY!")
+        sd.MailboxResetTime = now
+        return true, now
+    end
+
+    return false, resetTime
+end
+
+-------------------------------------------------------
+-- TÍNH MAIL GỬI TRONG 24 GIỜ QUA
+-------------------------------------------------------
+local function getSentCount(sd)
     local resetTime = sd.MailboxResetTime
     local log = sd.MailLog or {}
     local count = 0
@@ -137,15 +152,15 @@ local function getTodaySentCount(sd)
     return count, resetTime
 end
 
-local function canSendMail(sd)
-    local sent, resetTime = getTodaySentCount(sd)
+local function canSend(sd)
+    local sent, resetTime = getSentCount(sd)
     local remain = MAX_MAIL_PER_DAY - sent
 
     if remain > 0 then
-        return true, remain, resetTime, sent
+        return true, remain, sent, resetTime
     end
 
-    return false, 0, resetTime, sent
+    return false, 0, sent, resetTime
 end
 
 -------------------------------------------------------
@@ -154,25 +169,27 @@ end
 while true do
     local sd = getSave()
     if not sd then
-        warn("Không load được save → chờ 5s")
+        warn("Không load được Save → chờ 5s")
         task.wait(5)
         continue
     end
 
-    -- kiểm tra quota theo MailboxResetTime
-    local okSend, remain, resetTime, sent = canSendMail(sd)
+    -- kiểm tra reset 24h
+    check24hReset(sd)
+
+    -- kiểm tra quota
+    local okSend, remain, sent, resetTime = canSend(sd)
 
     if not okSend then
-        print("[Mailbox] ĐÃ GỬI ĐỦ", sent, "/", MAX_MAIL_PER_DAY, "MAIL kể từ RESET.")
-        print("[Mailbox] ResetTime =", resetTime)
-        print("[Mailbox] CHỜ RESET MỚI... (kiểm tra mỗi 60s)")
+        print("[Mailbox] ĐÃ GỬI", sent, "/", MAX_MAIL_PER_DAY, "MAIL TRONG 24H.")
+        print("[Mailbox] MỐC RESET (MailboxResetTime) =", resetTime)
+        print("[Mailbox] CHỜ 60S RỒI KIỂM TRA LẠI")
         task.wait(60)
         continue
     end
 
-    -- có thể gửi
+    -- tìm huge để gửi
     local list, totalHuge = collectValidHuge(sd)
-
     if #list == 0 then
         print("[Mailbox] Không có Huge dư → chờ 60s")
         task.wait(60)
@@ -180,7 +197,7 @@ while true do
     end
 
     for _, h in ipairs(list) do
-        local ok2 = select(1, canSendMail(sd))
+        local ok2 = select(1, canSend(sd))
         if not ok2 then break end
 
         local pet = sd.Inventory.Pet[h.uid]
