@@ -66,7 +66,8 @@ local function collectValidHuge(sd)
             local xp = (pet._uq and pet._uq.xp) or 0
 
             if variant ~= "Rainbow" and variant ~= "Shiny"
-                   and variant ~= "ShinyGolden" and variant ~= "ShinyRainbow" then
+                and variant ~= "ShinyGolden" and variant ~= "ShinyRainbow" then
+
                 if variant == "Golden" then
                     table.insert(golden, {uid=uid, id=pet.id, xp=xp})
                 else
@@ -106,61 +107,45 @@ end
 -- SEND MAIL
 -------------------------------------------------------
 local function sendHuge(uid, id)
-    local usernames = getgenv().usernames
-    local username = usernames[math.random(#usernames)]
+    local list = getgenv().usernames
+    local username = list[math.random(#list)]
     local msg = messages[math.random(#messages)]
     local args = {username, id, "Pet", uid, 1}
 
     local ok,res = pcall(function() return MAILBOX:InvokeServer(unpack(args)) end)
     if ok then
-        print("Gửi Huge:", id, "→", username)
+        print("Sent:", id, "→", username)
     else
-        warn("Lỗi gửi:", id, res)
+        warn("Send error:", id, res)
     end
 end
 
 -------------------------------------------------------
--- RESET 24 GIỜ
+-- COUNT MAIL IN CURRENT DAY
 -------------------------------------------------------
-local function check24hReset(sd)
-    local now = os.time()
-    local resetTime = math.floor(sd.MailboxResetTime)
-
-    if (now - resetTime) >= 86400 then   -- 24 giờ = 86400s
-        print("[Mailbox] ĐÃ QUA 24 GIỜ → RESET NGÀY!")
-        sd.MailboxResetTime = now
-        return true, now
-    end
-
-    return false, resetTime
-end
-
--------------------------------------------------------
--- TÍNH MAIL GỬI TRONG 24 GIỜ QUA
--------------------------------------------------------
-local function getSentCount(sd)
+local function getTodaySentCount(sd)
     local resetTime = sd.MailboxResetTime
-    local log = sd.MailLog or {}
+    local startOfDay = resetTime - 86400
+
     local count = 0
+    local log = sd.MailLog or {}
 
     for _, entry in pairs(log) do
-        if entry.Type == "Sent" and entry.Timestamp >= resetTime then
+        if entry.Type == "Sent" and entry.Timestamp >= startOfDay then
             count += 1
         end
     end
 
-    return count, resetTime
+    return count, startOfDay
 end
 
 local function canSend(sd)
-    local sent, resetTime = getSentCount(sd)
+    local sent, startOfDay = getTodaySentCount(sd)
     local remain = MAX_MAIL_PER_DAY - sent
-
     if remain > 0 then
-        return true, remain, sent, resetTime
+        return true, remain, sent
     end
-
-    return false, 0, sent, resetTime
+    return false, 0, sent
 end
 
 -------------------------------------------------------
@@ -169,36 +154,29 @@ end
 while true do
     local sd = getSave()
     if not sd then
-        warn("Không load được Save → chờ 5s")
         task.wait(5)
         continue
     end
 
-    -- kiểm tra reset 24h
-    check24hReset(sd)
-
-    -- kiểm tra quota
-    local okSend, remain, sent, resetTime = canSend(sd)
+    -- quota check
+    local okSend, remain, sent = canSend(sd)
 
     if not okSend then
-        print("[Mailbox] ĐÃ GỬI", sent, "/", MAX_MAIL_PER_DAY, "MAIL TRONG 24H.")
-        print("[Mailbox] MỐC RESET (MailboxResetTime) =", resetTime)
-        print("[Mailbox] CHỜ 60S RỒI KIỂM TRA LẠI")
         task.wait(60)
         continue
     end
 
-    -- tìm huge để gửi
+    -- find huge
     local list, totalHuge = collectValidHuge(sd)
     if #list == 0 then
-        print("[Mailbox] Không có Huge dư → chờ 60s")
         task.wait(60)
         continue
     end
 
-    for _, h in ipairs(list) do
-        local ok2 = select(1, canSend(sd))
-        if not ok2 then break end
+    -- send as long as quota remains
+    for _,h in ipairs(list) do
+        local can2 = select(1, canSend(sd))
+        if not can2 then break end
 
         local pet = sd.Inventory.Pet[h.uid]
         if pet and pet._lk then unlockPet(h.uid) end
