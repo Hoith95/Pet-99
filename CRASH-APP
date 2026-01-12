@@ -1,4 +1,4 @@
-task.wait(68)
+task.wait(38)
 local t = {}
 for i = 1, 1e9 do
     t[i] = i
