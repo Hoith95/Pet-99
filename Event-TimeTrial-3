@@ -549,6 +549,7 @@ task.spawn(function()
 
 		warn("⏳ Theo dõi reset DailyRuns...")
 		while getRunsUsed() >= 10 do task.wait(60) end
+		_G.ClaimReward_End == true
 
 		warn("🔁 DailyRuns reset → tiếp tục farm.")
 		if monitor12minThread then pcall(task.cancel, monitor12minThread) monitor12minThread = nil end
