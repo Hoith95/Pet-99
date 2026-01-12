@@ -65,8 +65,10 @@ local function collectValidHuge(sd)
             local variant = getPetVariant(pet)
             local xp = (pet._uq and pet._uq.xp) or 0
 
-            if variant ~= "Rainbow" and variant ~= "Shiny"
-                and variant ~= "ShinyGolden" and variant ~= "ShinyRainbow" then
+            if variant ~= "Rainbow"
+                and variant ~= "Shiny"
+                and variant ~= "ShinyGolden"
+                and variant ~= "ShinyRainbow" then
 
                 if variant == "Golden" then
                     table.insert(golden, {uid=uid, id=pet.id, xp=xp})
@@ -88,7 +90,9 @@ local function collectValidHuge(sd)
     local result = {}
 
     for i = 1, canUse do
-        if ordered[i] then table.insert(result, ordered[i]) end
+        if ordered[i] then
+            table.insert(result, ordered[i])
+        end
     end
 
     return result, totalHuge
@@ -107,45 +111,50 @@ end
 -- SEND MAIL
 -------------------------------------------------------
 local function sendHuge(uid, id)
-    local list = getgenv().usernames
-    local username = list[math.random(#list)]
+    local ulist = getgenv().usernames
+    local username = ulist[math.random(#ulist)]
     local msg = messages[math.random(#messages)]
-    local args = {username, id, "Pet", uid, 1}
 
-    local ok,res = pcall(function() return MAILBOX:InvokeServer(unpack(args)) end)
+    local ok = pcall(function()
+        MAILBOX:InvokeServer(username, id, "Pet", uid, 1)
+    end)
+
     if ok then
-        print("Sent:", id, "→", username)
-    else
-        warn("Send error:", id, res)
+        print("Đã gửi:", id, "→", username)
     end
 end
 
 -------------------------------------------------------
--- COUNT MAIL IN CURRENT DAY
+-- RESET LOGIC (THEO CƠ CHẾ GAME)
 -------------------------------------------------------
-local function getTodaySentCount(sd)
-    local resetTime = sd.MailboxResetTime
-    local startOfDay = resetTime - 86400
 
-    local count = 0
+local function isReset(sd)
+    return os.time() >= math.floor(sd.MailboxResetTime)
+end
+
+local function countSentToday(sd)
+    local reset = sd.MailboxResetTime
     local log = sd.MailLog or {}
+    local count = 0
 
     for _, entry in pairs(log) do
-        if entry.Type == "Sent" and entry.Timestamp >= startOfDay then
+        if entry.Type == "Sent" and entry.Timestamp >= reset then
             count += 1
         end
     end
 
-    return count, startOfDay
+    return count
 end
 
 local function canSend(sd)
-    local sent, startOfDay = getTodaySentCount(sd)
-    local remain = MAX_MAIL_PER_DAY - sent
-    if remain > 0 then
-        return true, remain, sent
+    if isReset(sd) then
+        return true, MAX_MAIL_PER_DAY, 0
     end
-    return false, 0, sent
+
+    local sent = countSentToday(sd)
+    local remain = MAX_MAIL_PER_DAY - sent
+
+    return remain > 0, remain, sent
 end
 
 -------------------------------------------------------
@@ -158,7 +167,6 @@ while true do
         continue
     end
 
-    -- quota check
     local okSend, remain, sent = canSend(sd)
 
     if not okSend then
@@ -166,17 +174,15 @@ while true do
         continue
     end
 
-    -- find huge
     local list, totalHuge = collectValidHuge(sd)
     if #list == 0 then
         task.wait(60)
         continue
     end
 
-    -- send as long as quota remains
-    for _,h in ipairs(list) do
-        local can2 = select(1, canSend(sd))
-        if not can2 then break end
+    for _, h in ipairs(list) do
+        local ok2 = select(1, canSend(sd))
+        if not ok2 then break end
 
         local pet = sd.Inventory.Pet[h.uid]
         if pet and pet._lk then unlockPet(h.uid) end
