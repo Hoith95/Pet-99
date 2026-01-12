@@ -383,7 +383,6 @@ local function claimReward()
     local totalChests = chest3 + chest2 + chest1
     if totalChests == 0 then
         warn("⚠️ Không có phần thưởng nào đủ điểm để đổi.")
-		_G.ClaimReward_End = true
         return
     end
 
