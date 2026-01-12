@@ -52,7 +52,8 @@ end
 -------------------------------------------------------
 local function collectValidHuge(sd)
     local totalHuge = 0
-    local normal, golden = {}, {}
+    local normal = {}
+    local golden = {}
 
     for uid, pet in pairs(sd.Inventory.Pet or {}) do
         if pet.id and pet.id:find("Huge") and not EXCLUDED_HUGE[pet.id] then
@@ -66,9 +67,9 @@ local function collectValidHuge(sd)
             local xp = (pet._uq and pet._uq.xp) or 0
 
             if variant ~= "Rainbow"
-                and variant ~= "Shiny"
-                and variant ~= "ShinyGolden"
-                and variant ~= "ShinyRainbow" then
+            and variant ~= "Shiny"
+            and variant ~= "ShinyGolden"
+            and variant ~= "ShinyRainbow" then
 
                 if variant == "Golden" then
                     table.insert(golden, {uid=uid, id=pet.id, xp=xp})
@@ -94,7 +95,6 @@ local function collectValidHuge(sd)
             table.insert(result, ordered[i])
         end
     end
-
     return result, totalHuge
 end
 
@@ -114,46 +114,25 @@ local function sendHuge(uid, id)
     local ulist = getgenv().usernames
     local username = ulist[math.random(#ulist)]
     local msg = messages[math.random(#messages)]
-
-    local ok = pcall(function()
+    return pcall(function()
         MAILBOX:InvokeServer(username, id, "Pet", uid, 1)
     end)
-
-    if ok then
-        print("Đã gửi:", id, "→", username)
-    end
 end
 
 -------------------------------------------------------
--- RESET LOGIC (THEO CƠ CHẾ GAME)
+-- RESET LOGIC (FIXED)
 -------------------------------------------------------
-
-local function isReset(sd)
-    return os.time() >= math.floor(sd.MailboxResetTime)
-end
-
-local function countSentToday(sd)
-    local reset = sd.MailboxResetTime
-    local log = sd.MailLog or {}
-    local count = 0
-
-    for _, entry in pairs(log) do
-        if entry.Type == "Sent" and entry.Timestamp >= reset then
-            count += 1
-        end
-    end
-
-    return count
-end
-
 local function canSend(sd)
-    if isReset(sd) then
+    local now = os.time()
+    local reset = math.floor(sd.MailboxResetTime)
+    local sent = sd.MailboxSendsSinceReset or 0
+
+    -- Nếu đã qua reset nhưng game chưa reset counter -> ép về 0
+    if now >= reset then
         return true, MAX_MAIL_PER_DAY, 0
     end
 
-    local sent = countSentToday(sd)
     local remain = MAX_MAIL_PER_DAY - sent
-
     return remain > 0, remain, sent
 end
 
@@ -161,6 +140,7 @@ end
 -- MAIN LOOP
 -------------------------------------------------------
 while true do
+
     local sd = getSave()
     if not sd then
         task.wait(5)
@@ -168,27 +148,38 @@ while true do
     end
 
     local okSend, remain, sent = canSend(sd)
-
     if not okSend then
         task.wait(60)
         continue
     end
 
-    local list, totalHuge = collectValidHuge(sd)
+    local list = collectValidHuge(sd)
     if #list == 0 then
         task.wait(60)
         continue
     end
 
     for _, h in ipairs(list) do
-        local ok2 = select(1, canSend(sd))
-        if not ok2 then break end
+        sd = getSave()
+        okSend, remain, sent = canSend(sd)
+        if not okSend then break end
 
         local pet = sd.Inventory.Pet[h.uid]
         if pet and pet._lk then unlockPet(h.uid) end
 
-        sendHuge(h.uid, h.id)
+        local ok = sendHuge(h.uid, h.id)
         task.wait(1)
+
+        if ok then
+            local before = sent
+            local tries = 0
+            repeat
+                task.wait(1)
+                sd = getSave()
+                sent = sd and (sd.MailboxSendsSinceReset or sent) or sent
+                tries += 1
+            until sent > before or tries >= 5
+        end
     end
 
     task.wait(60)
