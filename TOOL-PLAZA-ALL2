@@ -47,17 +47,6 @@ getgenv().Settings = {
 		{Name = "Exclusive Egg 58", Data = {Price = "115m"}},
 
 		{Name = "Halloween Lucky Block Gift", Data = {Price = "38m"}},
-		--{Name = "Santa Gift", Data = {Price = "168k"}},
-		--{Name = "Candycane Gift", Data = {Price = "99k"}},
-
-        {Name = "Huge Specter Owl", Data = {Price = "6.8b"}},
-        {Name = "Huge Shark Cat", Data = {Price = "3.9b"}},
-        --{Name = "Huge Candycane Shake Shark", Data = {Price = prices[math.random(#prices)]}},
-
-        {Name = "Huge Splash Angelus", Data = {Price = "8.6b"}},
-        {Name = "Golden Huge Splash Angelus", Data = {Price = "1%"}},
-        {Name = "Rainbow Huge Splash Angelus", Data = {Price = "1%"}},
-
         {Name = "Time Trial Gift", Data = {Price = "199k"}},
         {Name = "Tropical Gift", Data = {Price = "50k"}},
         {Name = "Basketball Gift", Data = {Price = "1%"}},
@@ -77,6 +66,9 @@ getgenv().Settings = {
         {Name = "Void Key", Data = {Price = "5%"}},
         {Name = "Fantasy Key", Data = {Price = "5%"}},
         {Name = "Fantasy Spinny Wheel Ticket", Data = {Price = "5%"}},
+
+        {Name = "Huge Festive Seal", Data = {Price = "12m"}},
+        {Name = "Huge Hot Cocoa Cow", Data = {Price = "11m"}},
 
         {Name = "All Huges", Data = {Price = "1%", Min_sell = "14m", Max_sell = "15m", sold_by_convention = true}},
         {Name = "Golden All Huges", Data = {Price = "1%", Min_sell = "19m", Max_sell = "25m", sold_by_convention = true}},
