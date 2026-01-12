@@ -83,7 +83,7 @@ local function teleportToRewardLocation()
 	warn("🚶‍♂️ Đang teleport đến vị trí đổi quà...")
 	local hrp = getHumanoidRootPart()
 	if hrp then
-		hrp.CFrame = CFrame.new(-14221, 17.39, 2210)
+		hrp.CFrame = CFrame.new(-14200, 16.24, 2195)
 	end
 end
 
@@ -394,7 +394,7 @@ local function claimReward()
     local function isAtExactRewardPosition()
         local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
         if not hrp then return false end
-        local target = Vector3.new(-14221, 17.39, 2210)
+        local target = Vector3.new(-14200, 16.24, 2195)
         return (hrp.Position - target).Magnitude <= 2
     end
 
