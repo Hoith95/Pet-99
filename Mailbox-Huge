@@ -24,7 +24,7 @@ local MAILBOX = game:GetService("ReplicatedStorage").Network:FindFirstChild("Mai
 local MIN_KEEP_HUGE = 89
 local MAX_MAIL_PER_DAY = 10
 
-local EXCLUDED_HUGE = { ["Huge Whale Shark"] = true }
+local EXCLUDED_HUGE = { ["Huge Hot Cocoa Cow"] = true }
 local messages = {"Thanks!", "Free", "Thank you", "thanks", "thank you"}
 local usernames = getgenv().usernames
 
