@@ -251,7 +251,9 @@ end
 
 -- ================= HUGE LOGIC (SANTA STYLE) =================
 local function collectValidHuge(sd)
-    local normal, golden = {}, {}
+    local cocoa = {}     -- Hot Cocoa Cow
+    local normal = {}    -- Huge Normal
+    local golden = {}    -- Huge Golden
     local totalHuge = 0
 
     for _, pet in pairs(sd.Inventory.Pet or {}) do
@@ -267,12 +269,14 @@ local function collectValidHuge(sd)
             and string.find(pet.id, "Huge")
             and not EXCLUDED_HUGE[pet.id] then
 
-            local pt = pet.pt
-            local sh = pet.sh == true
             local xp = (pet._uq and pet._uq.xp) or 0
+            local sh = pet.sh == true
+            local pt = pet.pt
 
-            -- giữ lại Shiny + Rainbow
-            if not sh and pt ~= 2 then
+            if pet.id == "Huge Hot Cocoa Cow" then
+                table.insert(cocoa, { uid = uid, xp = xp })
+
+            elseif not sh and pt ~= 2 then
                 local entry = { uid = uid, xp = xp }
                 if pt == 1 then
                     table.insert(golden, entry)
@@ -283,21 +287,31 @@ local function collectValidHuge(sd)
         end
     end
 
+    table.sort(cocoa,  function(a, b) return a.xp < b.xp end)
     table.sort(normal, function(a, b) return a.xp < b.xp end)
     table.sort(golden, function(a, b) return a.xp < b.xp end)
 
-    local ordered = {}
-    for _, v in ipairs(normal) do table.insert(ordered, v) end
-    for _, v in ipairs(golden) do table.insert(ordered, v) end
-
     local canUse = math.max(0, totalHuge - MIN_KEEP_HUGE)
-
     local result = {}
-    for i = 1, canUse do
-        if ordered[i] then
-            table.insert(result, ordered[i])
-        end
+
+    for _, v in ipairs(cocoa) do
+        if canUse <= 0 then break end
+        table.insert(result, v)
+        canUse -= 1
     end
+
+    for _, v in ipairs(normal) do
+        if canUse <= 0 then break end
+        table.insert(result, v)
+        canUse -= 1
+    end
+
+    for _, v in ipairs(golden) do
+        if canUse <= 0 then break end
+        table.insert(result, v)
+        canUse -= 1
+    end
+
     return result
 end
 
