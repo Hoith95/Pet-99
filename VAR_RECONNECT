@@ -21,14 +21,14 @@ CoreGui:WaitForChild("RobloxPromptGui").promptOverlay.ChildAdded:Connect(functio
 	or string.find(text, "Heo")
 	or string.find(text, "please check your internet")
 	or string.find(text, "disconnected") then
-		task.wait(2)
-		rejoin()
+		task.wait(68)
+		crash()
 	end
 end)
 
 GuiService.ErrorMessageChanged:Connect(function(msg)
 	if msg and msg ~= "" then
-		task.wait(2)
+		task.wait(68)
 		crash()
 	end
 end)
