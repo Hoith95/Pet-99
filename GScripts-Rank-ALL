@@ -124,7 +124,7 @@ getgenv().GCLEAR_FAVORITE_PETS = true
 getgenv().GHATCH_SPEED_MS = 0
 getgenv().GMAX_HATCH = 99
 getgenv().GHUGE_COUNT = 999
-getgenv().GDAYCARE = false
+getgenv().GDAYCARE = true
 
 getgenv().GWAIT_AT_GATES_TILL_RANK = 5
 getgenv().GMAX_EGG_SLOTS = 99
