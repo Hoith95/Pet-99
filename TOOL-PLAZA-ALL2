@@ -16,7 +16,7 @@ getgenv().Settings = {
 
 		{Name = "Titanic Hippomint", Data = {Price = "5.3b"}},
 		{Name = "Golden Titanic Hippomint", Data = {Price = "6.2b"}},
-		{Name = "Rainbow Titanic Hippomint", Data = {Price = "23.86b"}},
+		{Name = "Rainbow Titanic Hippomint", Data = {Price = "21.86b"}},
 		{Name = "Shiny Titanic Hippomint", Data = {Price = "21.86b"}},
 
 		{Name = "Titanic Holiday Owl", Data = {Price = "13.68b"}},
