@@ -130,6 +130,7 @@ getgenv().GHATCH_SPEED_MS = 0
 getgenv().GMAX_HATCH = 99
 getgenv().GHUGE_COUNT = 999
 getgenv().GDAYCARE = true
+getgenv().GDAYCARE_NAME_PARTS_TO_EXCLUDE = {"Palace Pooka"}
 
 getgenv().GWAIT_AT_GATES_TILL_RANK = 5
 getgenv().GMAX_EGG_SLOTS = 99
