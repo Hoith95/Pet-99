@@ -67,7 +67,7 @@ getgenv().Settings = {
         {Name = "Fantasy Key", Data = {Price = "5%"}},
         {Name = "Fantasy Spinny Wheel Ticket", Data = {Price = "5%"}},
 
-		{Name = "Huge Starry Eye Bunny", Data = {Price = "15.5m"}},
+		{Name = "Huge Starry Eye Bunny", Data = {Price = "14.5m"}},
 		{Name = "Huge Pajamas Shark", Data = {Price = "19m"}},
 		{Name = "Huge Candycane Unicorn", Data = {Price = "19m"}},
 		{Name = "Huge Candycane Kitsune", Data = {Price = "18m"}},
