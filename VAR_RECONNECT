@@ -17,7 +17,7 @@ CoreGui:WaitForChild("RobloxPromptGui").promptOverlay.ChildAdded:Connect(functio
 	if not msg or not msg.Text then return end
 	local text = string.lower(msg.Text)
 	if string.find(text, "lost connection")
-	or string.find(text, "messenger")
+	or string.find(text, "messenge")
 	or string.find(text, "kick")
 	or string.find(text, "Heo")
 	or string.find(text, "please check your internet")
