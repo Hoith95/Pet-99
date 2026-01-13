@@ -7,7 +7,7 @@ end)
 
 spawn(function()
 wait(21368)
-game.Players.LocalPlayer:Kick("Heo")
+game.Players.LocalPlayer:Kick("Heo Reset 6h")
 end)
 
 spawn(function()
