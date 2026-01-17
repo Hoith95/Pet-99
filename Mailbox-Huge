@@ -11,7 +11,7 @@ local EXCLUDED_HUGE = { ["Huge Hot Cocoa Cow"] = true }
 getgenv().usernames = {
     "Zephy_Marnell604",
     "Dravon_Liorrex220",
-    "Taryn_Xelvorn389",
+    "Thien_Hoa9x",
     "Valric_Solvynn026",
     "Zarek_Maelith750",
     "nguyenhuyengh3x",
