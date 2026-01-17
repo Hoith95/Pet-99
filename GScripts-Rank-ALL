@@ -6,8 +6,8 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/D
 end)
 
 spawn(function()
-wait(28368)
---game.Players.LocalPlayer:Kick("Heo Reset 6h")
+wait(21368)
+game.Players.LocalPlayer:Kick("Heo Reset 6h")
 end)
 
 spawn(function()
