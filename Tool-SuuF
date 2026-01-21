@@ -52,8 +52,8 @@ do
         script_key="PBgqFQESzNhuTfgQatfaWcLbqQSoMvXK";       -- Line 2
         --script_key="SkVCVhQgwfwSwZCxBpLGrhvDdeeGAdNY";       -- Line 2 - phụ
     elseif _G.Line3 then
-        script_key="MqecHedshHEVyKwajNZtPvbdLkZceNYP";       -- Line 3
-        --script_key="XppKPCzbSqmRSFIWTvBhqHVvmeMsbrtC";       -- Line 3 - phụ
+        --script_key="MqecHedshHEVyKwajNZtPvbdLkZceNYP";       -- Line 3
+        script_key="sgIAohEswBixwcEvsNhZpmluovStrTOp";       -- Line 3 - phụ
     elseif _G.Line4 then
         script_key="fpAiAhNtXhwOUUeKHzlHcvYOQHhsWSHN";       -- Line 4
         --script_key="VHGZVTQhcQrKWQmIPxytOoJDZQtnwfwW";       -- Line 4
