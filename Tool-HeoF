@@ -43,24 +43,6 @@ end)
 _G.script1Done = true
 _G.Event = true
 
-do
-    local defaultKey = "hHJqncRPZjHqdvDxwJcwwDmpwstZQtrA"     -- fallback
-    if _G.Line1 then
-        --script_key="rWeZsrmnSdBMGeqCGmINcIlrlrcyhXcY";       -- Line 1
-        script_key="YGSqGOBHfrvKBfujvMiYoCvEWYLvnnTT";       -- Line 1 - phụ
-    elseif _G.Line2 then
-        --script_key="PBgqFQESzNhuTfgQatfaWcLbqQSoMvXK";       -- Line 2
-        script_key="sGyxpckwdPwtdyVMQPhCaIwoIpehFxEe";       -- Line 2 - phụ
-    elseif _G.Line3 then
-        --script_key="MqecHedshHEVyKwajNZtPvbdLkZceNYP";       -- Line 3
-        script_key="sgIAohEswBixwcEvsNhZpmluovStrTOp";       -- Line 3 - phụ
-    elseif _G.Line4 then
-        script_key="fpAiAhNtXhwOUUeKHzlHcvYOQHhsWSHN";       -- Line 4
-        --script_key="VHGZVTQhcQrKWQmIPxytOoJDZQtnwfwW";       -- Line 4
-    else
-        script_key = defaultKey                               -- không cờ nào
-    end
-end
 getgenv().GDRY_RUN       = false
 getgenv().DISABLE_OVERLAY = true
 
