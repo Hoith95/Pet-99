@@ -42,7 +42,7 @@ getgenv().Settings = {
         {Name = "Golden Titanic Pineapple Dog", Data = {Price = "5.3b"}},
         {Name = "Titanic Pineapple Dog", Data = {Price = "1%"}},
 
-        {Name = "Titanic Narwhal", Data = {Price = "8b"}},
+        {Name = "Titanic Narwhal", Data = {Price = "6b"}},
         {Name = "Titanic Pixel Dominus Astra", Data = {Price = "1%"}},
 
 		{Name = "Exclusive Egg 57", Data = {Price = "115m"}},
