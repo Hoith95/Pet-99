@@ -6,7 +6,12 @@ _G.VAR_MAILBOX_HUGE = true
 -------------------------------------------------------
 local MIN_KEEP_HUGE = 84
 local MAX_MAIL_PER_DAY = 10
-local EXCLUDED_HUGE = { ["Huge Hot Cocoa Cow"] = true }
+local EXCLUDED_HUGE = {
+    ["Huge Hot Cocoa Cow"] = true,
+    ["Huge Gingerbread Lion"] = true,
+    ["Huge Holiday Owl"] = true,
+    ["Huge Festive Seal"] = true
+}
 
 getgenv().usernames = {
     "Zephy_Marnell604",
