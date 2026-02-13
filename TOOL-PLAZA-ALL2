@@ -15,7 +15,7 @@ getgenv().Settings = {
 		{Name = "Gargantuan Super Cat", Data = {Price = "50.86b"}},
         {Name = "Titanic Vampire Agony", Data = {Price = "18b"}},
 
-		{Name = "Titanic Hippomint", Data = {Price = "1%"}},
+		{Name = "Titanic Hippomint", Data = {Price = prices[math.random(#prices)]}},
 		{Name = "Golden Titanic Hippomint", Data = {Price = "5.8b"}},
 		{Name = "Rainbow Titanic Hippomint", Data = {Price = "16.86b"}},
 		{Name = "Shiny Titanic Hippomint", Data = {Price = "15.86b"}},
@@ -25,7 +25,7 @@ getgenv().Settings = {
 		{Name = "Golden Titanic Holiday Owl", Data = {Price = "15.86b"}},
 		{Name = "Rainbow Titanic Holiday Owl", Data = {Price = "86.86b"}},
 
-		{Name = "Titanic North Pole Unicorn", Data = {Price = "1%"}},
+		{Name = "Titanic North Pole Unicorn", Data = {Price = prices[math.random(#prices)]}},
 		{Name = "Golden Titanic North Pole Unicorn", Data = {Price = "6b"}},
 		{Name = "Rainbow Titanic North Pole Unicorn", Data = {Price = "19b"}},
 		{Name = "Shiny Titanic North Pole Unicorn", Data = {Price = "68b"}},
@@ -37,7 +37,7 @@ getgenv().Settings = {
         {Name = "Shiny Titanic Starlight Pony", Data = {Price = "23b"}},
         {Name = "Rainbow Titanic Starlight Pony", Data = {Price = "20b"}},
         {Name = "Golden Titanic Starlight Pony", Data = {Price = "6b"}},
-        {Name = "Titanic Starlight Pony", Data = {Price = "1%"}},
+        {Name = "Titanic Starlight Pony", Data = {Price = prices[math.random(#prices)]}},
 
         {Name = "Rainbow Titanic Pineapple Dog", Data = {Price = "1%"}},
         {Name = "Golden Titanic Pineapple Dog", Data = {Price = "5.3b"}},
