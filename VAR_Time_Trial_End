@@ -14,21 +14,21 @@ if used >= 10 then
     _G.Time_Trial_End = true
     warn("✅ Đã đủ 10 lượt — _G.Time_Trial_End = true")
 
-    task.delay(60, function()
+    task.delay(120, function()
 
         if _G.Time_Trial_Var ~= true then
-            warn("⛔ Sau 60s vẫn chưa đổi ENCHANTS — kick")
+            warn("⛔ Sau 120s vẫn chưa đổi ENCHANTS — kick")
 
             local player = Players.LocalPlayer
             if player then
                 player:Kick(
                     "⛔ Time Trial đã kết thúc.\n" ..
-                    "Sau 60 giây vẫn chưa đổi ENCHANTS.\n" ..
+                    "Sau 120 giây vẫn chưa đổi ENCHANTS.\n" ..
                     "Vui lòng đổi ENCHANTS trước khi chạy tiếp."
                 )
             end
         else
-            warn("✅ ENCHANTS đã được đổi trong 60s — cho phép tiếp tục.")
+            warn("✅ ENCHANTS đã được đổi trong 120s — cho phép tiếp tục.")
         end
 
     end)
