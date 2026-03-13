@@ -48,9 +48,7 @@ getgenv().Settings = {
         {Name = "Titanic Narwhal", Data = {Price = "6b"}},
         {Name = "Titanic Pixel Dominus Astra", Data = {Price = "1%"}},
 
-		{Name = "Exclusive Egg 57", Data = {Price = "115m"}},
-		{Name = "Exclusive Egg 58", Data = {Price = "115m"}},
-
+        {Name = "2026 New Years Gift", Data = {Price = "1%"}},
 		{Name = "Halloween Lucky Block Gift", Data = {Price = "38m"}},
         {Name = "Time Trial Gift", Data = {Price = "199k"}},
         {Name = "Tropical Gift", Data = {Price = "50k"}},
@@ -64,6 +62,16 @@ getgenv().Settings = {
         --{Name = "Charm Stone", Data = {Price = "1%"}},
         --{Name = "Royalty TN1", Data = {Price = "1%"}},
         --{Name = "Overload TN1", Data = {Price = "1%"}},
+
+        {Name = "Exclusive Egg 56", Data = {Price = "+3%"}},
+        {Name = "Exclusive Egg 57", Data = {Price = "3%"}},
+        {Name = "Exclusive Egg 58", Data = {Price = "3%"}},
+        {Name = "Exclusive Egg 59", Data = {Price = "3%"}},
+
+        {Name = "Mega Loot Chest", Data = {Price = "+5%"}},
+        {Name = "Mega Potion Chest", Data = {Price = "5%"}},
+        {Name = "Mega Enchant Chest", Data = {Price = "1%"}},
+        {Name = "Huge Sea Dragon Card", Data = {Price = "5%"}},
 
         {Name = "Crystal Key", Data = {Price = "+1%"}},
         {Name = "Tech Key", Data = {Price = "28k"}},
