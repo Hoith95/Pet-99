@@ -10,7 +10,7 @@ local EXCLUDED_HUGE = {
     ["Huge Hot Cocoa Cow"] = true,
     --["Huge Gingerbread Lion"] = true,
     --["Huge Holiday Owl"] = true,
-    ["Huge Festive Seal"] = true
+    --["Huge Festive Seal"] = true
 }
 
 getgenv().usernames = {
