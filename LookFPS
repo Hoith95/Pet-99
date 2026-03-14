@@ -30,7 +30,7 @@ local function inXmasWorld()
 			elseif inXmasWorld() then
 				set(4)
 			else
-				set(3)
+				set(2)
 			end
 
 		elseif place == 95635359880599 or place == 119454325063278 or place == 8737899170 or place == 16498369169 or place == 17503543197 or place == 15502339080 then
