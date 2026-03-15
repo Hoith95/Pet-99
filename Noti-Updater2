@@ -120,6 +120,7 @@ local function startGuiUpdater()
     local gui = Instance.new("ScreenGui")
     gui.Name = "GuiUpdater"
     gui.ResetOnSpawn = false
+	gui.DisplayOrder = 999999
     gui.Parent = playerGui
 
     local function createRegion(pos, anchor, align)
@@ -194,8 +195,14 @@ local function startGuiUpdater()
 		--megaPresentLabel.Text = Formatint(getRecentSleighPointsSent()) .. " | " .. Formatint(getMegaPresentPoints()) .. " | Mega Present"
 		--updateLabelSize(megaPresentLabel)
 
-        timeTrialLabel.Text = "Time Trial: " .. getRunsLeft() .. "/10"
-        updateLabelSize(timeTrialLabel)
+		local runsLeft = getRunsLeft()
+		timeTrialLabel.Text = "Time Trial: " .. runsLeft .. "/10"
+		if runsLeft == 0 then
+		    timeTrialLabel.BackgroundColor3 = Color3.fromRGB(0,170,0) -- xanh
+		else
+		    timeTrialLabel.BackgroundColor3 = Color3.fromRGB(255,200,0) -- vàng
+		end
+		updateLabelSize(timeTrialLabel)
 
         pointsLabel.Text = "Điểm: " .. getTimeTrialPoints()
         updateLabelSize(pointsLabel)
