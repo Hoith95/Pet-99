@@ -44,7 +44,7 @@ task.spawn(function()
 			if tt then
 				set(7)
 			elseif inLuckyEvent() then
-				set(7)
+				set(6)
 			elseif inXmasWorld() then
 				set(4)
 			else
