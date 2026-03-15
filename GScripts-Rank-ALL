@@ -68,7 +68,8 @@ spawn(function()
 			getgenv().GHATCH_LOBBY = true
 			getgenv().GUSE_LEPRECHAUN_KEYS = false
 			getgenv().GMAX_RAID_LEVEL = 15000
-			getgenv().GMIN_MULTIPLIER = 50
+			getgenv().GMIN_MULTIPLIER = 500
+			getgenv().GRAID_MAX_HATCH_MINUTES = 5
 
 			getgenv().GRESET_UPGRADES = false
 			getgenv().GEVENT_UPGRADES = {
