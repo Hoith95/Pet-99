@@ -188,7 +188,7 @@ local function startGuiUpdater()
         coinLabel.Text = Formatint(getCurrencyAmount("LuckyCoins")) .. " | Lucky Coins"
         updateLabelSize(coinLabel)
 
-        raffleLabel.Text = Formatint(getS2RaidMaxDifficulty()) .. " | Level Raid"
+        raffleLabel.Text = (getS2RaidMaxDifficulty()) .. " | Level Raid"
         updateLabelSize(raffleLabel)
 
 		--megaPresentLabel.Text = Formatint(getRecentSleighPointsSent()) .. " | " .. Formatint(getMegaPresentPoints()) .. " | Mega Present"
