@@ -13,26 +13,27 @@ end
 
 task.spawn(function()
     while true do
-        task.wait(10)
         local used = getDailyRuns()
         if used >= 10 then
             _G.Time_Trial_End = true
             warn("✅ Đã đủ 10 lượt — _G.Time_Trial_End = true")
-            task.delay(60, function()
-                if _G.Time_Trial_Var ~= true then
-                    warn("⛔ Sau 60s vẫn chưa đổi ENCHANTS — kick")
-                    if player then
-                        player:Kick(
-                            "⛔ Time Trial đã kết thúc.\n" ..
-                            "Sau 60 giây vẫn chưa đổi ENCHANTS.\n" ..
-                            "Vui lòng đổi ENCHANTS trước khi chạy tiếp."
-                        )
-                    end
-                else
-                    warn("✅ ENCHANTS đã được đổi trong 60s — cho phép tiếp tục.")
+            local startTime = os.clock()
+            while os.clock() - startTime < 60 do
+                task.wait(1)
+                if _G.Time_Trial_Var == true then
+                    warn("✅ ENCHANTS đã đổi — dừng script.")
+                    return
                 end
-            end)
-            break
+            end
+            warn("⛔ 60s vẫn chưa đổi ENCHANTS — kick")
+            if player then
+                player:Kick(
+                    "⛔ Time Trial đã kết thúc.\n" ..
+                    "Sau 60 giây vẫn chưa đổi ENCHANTS.\n" ..
+                    "Vui lòng đổi ENCHANTS trước khi chạy tiếp."
+                )
+            end
+            return
         end
     end
 end)
