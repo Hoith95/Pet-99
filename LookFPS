@@ -48,7 +48,7 @@ task.spawn(function()
 			elseif inXmasWorld() then
 				set(4)
 			else
-				set(5)
+				set(3)
 			end
 		elseif place == 95635359880599
 		or place == 119454325063278
