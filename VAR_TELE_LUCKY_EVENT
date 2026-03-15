@@ -1,0 +1,26 @@
+if _G.VAR_TELE_LUCKY_EVENT then return end
+_G.VAR_TELE_LUCKY_EVENT = true
+
+wait(60)
+
+local function inLuckyEvent()
+    local inst = workspace:FindFirstChild("__THINGS")
+        and workspace.__THINGS:FindFirstChild("__INSTANCE_CONTAINER")
+        and workspace.__THINGS.__INSTANCE_CONTAINER:FindFirstChild("Active")
+
+    if not inst then return false end
+
+    return inst:FindFirstChild("LuckyEventWorld")
+        or inst:FindFirstChild("LuckyRaid")
+        or inst:FindFirstChild("LuckyEgg")
+end
+
+local player = game.Players.LocalPlayer
+
+if not inLuckyEvent() then
+    player:Kick("Bạn không ở LuckyEvent!")
+    return
+end
+
+print("🎃 Đang ở LuckyEvent Instance — DỪNG SCRIPT.")
+return
