@@ -16,6 +16,13 @@ local function getSave()
     if ok then return sd end
 end
 
+local function getS2RaidMaxDifficulty()
+    local sd = getSave()
+    return sd
+        and sd.Safe_S2RaidMaxDifficulty
+        or 0
+end
+
 local function getRecentSleighPointsSent()
     local sd = getSave()
     return sd
@@ -155,7 +162,7 @@ local function startGuiUpdater()
     local giftLabel        = createLabel("GiftLabel", right)
     --local gift2Label       = createLabel("Gift2Label", right)
     local coinLabel        = createLabel("CoinLabel", right)
-    --local raffleLabel      = createLabel("RaffleLabel", right)
+    local raffleLabel      = createLabel("RaffleLabel", right)
     --local megaPresentLabel = createLabel("MegaPresentLabel", right)
 
     -- LEFT / CENTER
@@ -181,8 +188,8 @@ local function startGuiUpdater()
         coinLabel.Text = Formatint(getCurrencyAmount("LuckyCoins")) .. " | Lucky Coins"
         updateLabelSize(coinLabel)
 
-        --raffleLabel.Text = Formatint(getRaffleSubmittedTickets()) .. " | Secret Santa"
-        --updateLabelSize(raffleLabel)
+        raffleLabel.Text = Formatint(getS2RaidMaxDifficulty()) .. " | Level Raid"
+        updateLabelSize(raffleLabel)
 
 		--megaPresentLabel.Text = Formatint(getRecentSleighPointsSent()) .. " | " .. Formatint(getMegaPresentPoints()) .. " | Mega Present"
 		--updateLabelSize(megaPresentLabel)
