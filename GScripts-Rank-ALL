@@ -52,7 +52,42 @@ spawn(function()
         -- World 4: check _G.Time_Trial_End một lần
         if _G.Time_Trial_End == true then
 			_G.Time_Trial_Var = true
-			getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
+			getgenv().GDO_LUCKY_WORLD_EVENT = true
+			getgenv().GMAKE_HORSESHOE_GIFTS = true
+			getgenv().GLIMIT_HORSESHOE_GIFTS = 999999999
+			getgenv().GDO_BOSSES = {1,2,3}
+			getgenv().GHEROIC_BOSSES  = {3}
+			getgenv().GSKIP_RAID_EGG = false
+			getgenv().GMINUTE_HATCH_RAID_EGG = true
+			getgenv().GDISABLE_MINUTE_HATCH = false
+
+			getgenv().GUSE_BOOSTS = true
+			getgenv().GRAID_TIMEOUT_MINUTES = 60
+			getgenv().GRAID_MAX_BREAKABLE_HEALTH = "10qt"
+			getgenv().GAUTO_RAID = true
+			getgenv().GHATCH_LOBBY = true
+			getgenv().GUSE_LEPRECHAUN_KEYS = false
+			getgenv().GMAX_RAID_LEVEL = 15000
+			getgenv().GMIN_MULTIPLIER = 50
+
+			getgenv().GRESET_UPGRADES = false
+			getgenv().GEVENT_UPGRADES = {
+			   "LuckyRaidDamage",
+			   "LuckyRaidAttackSpeed",
+			   "LuckyRaidPets",
+			   "LuckyRaidEggCost",
+			   "LuckyRaidMoreCurrency",
+			   "LuckyRaidBetterLoot",
+			   "LuckyRaidTitanicChest",
+			   "LuckyRaidHugeChest",
+			   "LuckyRaidXP",
+			   "LuckyRaidPetSpeed",
+			   "LuckyRaidKeyDrops",
+			   "LuckyRaidBossHugeChances",
+			   "LuckyRaidBossTitanicChances",
+			}
+			getgenv().GENCHANTS = {"Criticals","Criticals","Tap Power","Tap Power","Strong Pets","Super Lightning"}
+			--getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
 			spawn(function()
 			loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-3"))()
 			end)
@@ -81,7 +116,7 @@ getgenv().GRANK_TO = 99
 getgenv().GZONE_TO = 299
 getgenv().GREBIRTH_TO = 99
 getgenv().GKICK_ON_STAFF = true
-getgenv().GAUTO_UPGRADE_PETS = false
+getgenv().GAUTO_UPGRADE_PETS = true
 getgenv().GHATCH_CHARGED_EGGS = false
 getgenv().GHATCH_GOLDEN_EGGS = false
 getgenv().GCLEAR_FAVORITE_PETS = true
