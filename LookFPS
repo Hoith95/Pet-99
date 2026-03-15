@@ -5,6 +5,7 @@ end
 _G.LOOKFPS = true
 
 task.wait(68)
+
 ----------------------------------------------------------
 -- ⚙️ AUTO FPS CONTROL (by Heo)
 ----------------------------------------------------------
@@ -12,14 +13,29 @@ task.spawn(function()
 	local set = setfpscap or setfpscap
 	local place = game.PlaceId
 	local t = workspace:WaitForChild("__THINGS")
-	local startTime = os.clock() -- Thời điểm bắt đầu chạy script
+	local startTime = os.clock()
 
-local function inXmasWorld()
+	local function getActive()
 		local c = workspace:FindFirstChild("__THINGS") and workspace.__THINGS:FindFirstChild("__INSTANCE_CONTAINER")
-		return c and c:FindFirstChild("Active") and c.Active:FindFirstChild("XmasWorld")
+		return c and c:FindFirstChild("Active")
+	end
+
+	local function inXmasWorld()
+		local active = getActive()
+		return active and active:FindFirstChild("XmasWorld")
+	end
+
+	local function inLuckyEvent()
+		local active = getActive()
+		return active and (
+			active:FindFirstChild("LuckyEventWorld") or
+			active:FindFirstChild("LuckyRaid") or
+			active:FindFirstChild("LuckyEgg")
+		)
 	end
 
 	while task.wait(0.005) do
+
 		local container = t:FindFirstChild("__INSTANCE_CONTAINER")
 		local active = container and container:FindFirstChild("Active")
 		local tt = active and active:FindFirstChild("TimeTrial")
@@ -27,25 +43,32 @@ local function inXmasWorld()
 		if place == 140403681187145 then
 			if tt then
 				set(7)
+			elseif inLuckyEvent() then
+				set(7)
 			elseif inXmasWorld() then
 				set(4)
 			else
 				set(5)
 			end
-
-		elseif place == 95635359880599 or place == 119454325063278 or place == 8737899170 or place == 16498369169 or place == 17503543197 or place == 15502339080 then
+		elseif place == 95635359880599
+		or place == 119454325063278
+		or place == 8737899170
+		or place == 16498369169
+		or place == 17503543197
+		or place == 15502339080 then
 			set(3)
-
+		elseif inLuckyEvent() then
+			set(7)
 		elseif inXmasWorld() then
 			local elapsed = os.clock() - startTime
 			if elapsed >= 21600 then
-				set(4) -- Sau 6h
+				set(4)
 			elseif elapsed >= 14400 then
-				set(4) -- Sau 4h
+				set(4)
 			elseif elapsed >= 7200 then
-				set(4) -- Sau 2h
+				set(4)
 			else
-				set(4) -- Dưới 2h
+				set(4)
 			end
 		end
 	end
