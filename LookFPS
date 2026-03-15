@@ -4,20 +4,26 @@ if _G.LOOKFPS then
 end
 _G.LOOKFPS = true
 
-task.wait(68)
+-- ⚙️ AUTO FPS CONTROL ---
 
-----------------------------------------------------------
--- ⚙️ AUTO FPS CONTROL (by Heo)
-----------------------------------------------------------
+task.wait(68)
 task.spawn(function()
 	local set = setfpscap or setfpscap
 	local place = game.PlaceId
 	local t = workspace:WaitForChild("__THINGS")
+	local container = t:WaitForChild("__INSTANCE_CONTAINER")
 	local startTime = os.clock()
+	local currentFPS = nil
+
+	local function setFPS(v)
+		if currentFPS ~= v then
+			currentFPS = v
+			set(v)
+		end
+	end
 
 	local function getActive()
-		local c = workspace:FindFirstChild("__THINGS") and workspace.__THINGS:FindFirstChild("__INSTANCE_CONTAINER")
-		return c and c:FindFirstChild("Active")
+		return container:FindFirstChild("Active")
 	end
 
 	local function inXmasWorld()
@@ -28,27 +34,47 @@ task.spawn(function()
 	local function inLuckyEvent()
 		local active = getActive()
 		return active and (
-			active:FindFirstChild("LuckyEventWorld") or
-			active:FindFirstChild("LuckyRaid") or
-			active:FindFirstChild("LuckyEgg")
+			active:FindFirstChild("LuckyEventWorld")
+			or active:FindFirstChild("LuckyRaid")
+			or active:FindFirstChild("LuckyEgg")
 		)
 	end
 
-	while task.wait(0.005) do
+	local function luckyException()
+		return _G.P1
+		or _G.P2
+		or _G.P3
+		or _G.P4
+		or _G.P5
+		or _G.SUU1
+		or _G.SUU2
+		or _G.SUU3
+		or _G.SUU4
+		or _G.SUU5
+		or _G.G2
+		or _G.G3
+		or _G.G4
+		or _G.G9
+		or _G.G10
+		or _G.G11
+	end
 
-		local container = t:FindFirstChild("__INSTANCE_CONTAINER")
-		local active = container and container:FindFirstChild("Active")
+	while task.wait(0.25) do
+		local active = container:FindFirstChild("Active")
 		local tt = active and active:FindFirstChild("TimeTrial")
-
 		if place == 140403681187145 then
 			if tt then
-				set(7)
+				setFPS(7)
 			elseif inLuckyEvent() then
-				set(6)
+				if luckyException() then
+					setFPS(5)
+				else
+					setFPS(7)
+				end
 			elseif inXmasWorld() then
-				set(4)
+				setFPS(4)
 			else
-				set(3)
+				setFPS(3)
 			end
 		elseif place == 95635359880599
 		or place == 119454325063278
@@ -56,19 +82,23 @@ task.spawn(function()
 		or place == 16498369169
 		or place == 17503543197
 		or place == 15502339080 then
-			set(3)
+			setFPS(3)
 		elseif inLuckyEvent() then
-			set(7)
+			if luckyException() then
+				setFPS(5)
+			else
+				setFPS(7)
+			end
 		elseif inXmasWorld() then
 			local elapsed = os.clock() - startTime
 			if elapsed >= 21600 then
-				set(4)
+				setFPS(4)
 			elseif elapsed >= 14400 then
-				set(4)
+				setFPS(4)
 			elseif elapsed >= 7200 then
-				set(4)
+				setFPS(4)
 			else
-				set(4)
+				setFPS(4)
 			end
 		end
 	end
