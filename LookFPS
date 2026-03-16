@@ -67,9 +67,9 @@ task.spawn(function()
 				setFPS(7)
 			elseif inLuckyEvent() then
 				if luckyException() then
-					setFPS(5)
+					setFPS(4)
 				else
-					setFPS(7)
+					setFPS(6)
 				end
 			elseif inXmasWorld() then
 				setFPS(4)
@@ -85,9 +85,9 @@ task.spawn(function()
 			setFPS(3)
 		elseif inLuckyEvent() then
 			if luckyException() then
-				setFPS(5)
+				setFPS(4)
 			else
-				setFPS(7)
+				setFPS(6)
 			end
 		elseif inXmasWorld() then
 			local elapsed = os.clock() - startTime
