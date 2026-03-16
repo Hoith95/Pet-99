@@ -198,14 +198,19 @@ local function startGuiUpdater()
 		local runsLeft = getRunsLeft()
 		timeTrialLabel.Text = "Time Trial: " .. runsLeft .. "/10"
 		if runsLeft == 0 then
-		    timeTrialLabel.BackgroundColor3 = Color3.fromRGB(0,170,0) -- xanh
+		    timeTrialLabel.BackgroundColor3 = Color3.fromRGB(0,170,0)
 		else
-		    timeTrialLabel.BackgroundColor3 = Color3.fromRGB(255,200,0) -- vàng
+		    timeTrialLabel.BackgroundColor3 = Color3.fromRGB(255,200,0)
 		end
 		updateLabelSize(timeTrialLabel)
 
-        pointsLabel.Text = "Điểm: " .. getTimeTrialPoints()
-        updateLabelSize(pointsLabel)
+		pointsLabel.Text = "Điểm: " .. getTimeTrialPoints()
+		if _G.Time_Trial_Var then
+		    pointsLabel.BackgroundColor3 = Color3.fromRGB(0,170,0)
+		else
+		    pointsLabel.BackgroundColor3 = Color3.fromRGB(255,200,0)
+		end
+		updateLabelSize(pointsLabel)
 
         task.wait(0.1)
     end
