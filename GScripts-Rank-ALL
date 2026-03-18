@@ -66,7 +66,7 @@ spawn(function()
 			getgenv().GRAID_MAX_BREAKABLE_HEALTH = "10qt"
 			getgenv().GAUTO_RAID = true
 			getgenv().GHATCH_LOBBY = true
-			getgenv().GUSE_LEPRECHAUN_KEYS = false
+			getgenv().GUSE_LEPRECHAUN_KEYS = true
 			getgenv().GMAX_RAID_LEVEL = 25000
 			getgenv().GMIN_MULTIPLIER = 350
 			getgenv().GRAID_MAX_HATCH_MINUTES = 5
