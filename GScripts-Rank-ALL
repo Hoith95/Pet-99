@@ -57,7 +57,7 @@ spawn(function()
 			getgenv().GLIMIT_HORSESHOE_GIFTS = 999999999
 			getgenv().GDO_BOSSES = {1,2,3}
 			getgenv().GHEROIC_BOSSES  = {3}
-			getgenv().GSKIP_RAID_EGG = true
+			getgenv().GSKIP_RAID_EGG = false
 			getgenv().GMINUTE_HATCH_RAID_EGG = true
 			getgenv().GDISABLE_MINUTE_HATCH = false
 
@@ -67,8 +67,8 @@ spawn(function()
 			getgenv().GAUTO_RAID = true
 			getgenv().GHATCH_LOBBY = true
 			getgenv().GUSE_LEPRECHAUN_KEYS = false
-			getgenv().GMAX_RAID_LEVEL = 15000
-			getgenv().GMIN_MULTIPLIER = 500
+			getgenv().GMAX_RAID_LEVEL = 25000
+			getgenv().GMIN_MULTIPLIER = 350
 			getgenv().GRAID_MAX_HATCH_MINUTES = 5
 
 			getgenv().GRESET_UPGRADES = false
