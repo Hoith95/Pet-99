@@ -56,7 +56,7 @@ spawn(function()
 			getgenv().GMAKE_HORSESHOE_GIFTS = true
 			getgenv().GLIMIT_HORSESHOE_GIFTS = 999999999
 			getgenv().GDO_BOSSES = {1,2,3}
-			getgenv().GHEROIC_BOSSES  = {3}
+			getgenv().GHEROIC_BOSSES  = {1,2,3}
 			getgenv().GSKIP_RAID_EGG = false
 			getgenv().GMINUTE_HATCH_RAID_EGG = true
 			getgenv().GDISABLE_MINUTE_HATCH = false
@@ -106,10 +106,7 @@ spawn(function()
     end
 end)
 
-getgenv().GLOOTBOXES = { "Locked Hype Egg", "Deep Sea Treasure Chest",
-"2024 X-Large Christmas Present", "2024 Large Christmas Present",
-"2024 Medium Christmas Present", "2024 Small Christmas Present",
-"Santa Gift", "Candycane Gift"}
+getgenv().GLOOTBOXES = { "Locked Hype Egg" }
 
 getgenv().GPROGRESS_MODE = "Hybrid" -- Hatch
 getgenv().GGFX_MODE = 1
@@ -118,7 +115,7 @@ getgenv().GZONE_TO = 299
 getgenv().GREBIRTH_TO = 99
 getgenv().GKICK_ON_STAFF = true
 getgenv().GAUTO_UPGRADE_PETS = true
-getgenv().GHATCH_CHARGED_EGGS = false
+getgenv().GHATCH_CHARGED_EGGS = true
 getgenv().GHATCH_GOLDEN_EGGS = false
 getgenv().GCLEAR_FAVORITE_PETS = true
 getgenv().GHATCH_SPEED_MS = 0
