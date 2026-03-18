@@ -63,7 +63,7 @@ spawn(function()
 
 			getgenv().GUSE_BOOSTS = true
 			getgenv().GRAID_TIMEOUT_MINUTES = 60
-			getgenv().GRAID_MAX_BREAKABLE_HEALTH = "10qt"
+			getgenv().GRAID_MAX_BREAKABLE_HEALTH = "999qt"
 			getgenv().GAUTO_RAID = true
 			getgenv().GHATCH_LOBBY = true
 			getgenv().GUSE_LEPRECHAUN_KEYS = true
