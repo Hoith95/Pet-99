@@ -17,7 +17,8 @@ getgenv().AutoMail = {
         --['Huge Candycane Shake Shark'] = { Class = "Pet", AllVariants = true, Amount = 1 },
         --['Huge Specter Owl'] = { Class = "Pet", AllVariants = true, Amount = 1 },
         --['Huge Shark Cat'] = { Class = "Pet", AllVariants = true, Amount = 1 },
-        ['Buff Tiger'] = { Class = "Pet", AllVariants = true, Amount = "Max" },
+        ['Lucki Chest Mimic'] = { Class = "Pet", AllVariants = true, Amount = "Max" },
+        ['Lucki Golem'] = { Class = "Pet", AllVariants = true, Amount = "Max" },
         ['Hype Egg 2'] = { Class = "Lootbox", Amount = 1 },
         ['Hype Egg'] = { Class = "Lootbox", Amount = "Max" },
         ['Huge Machine Egg 4'] = { Class = "Egg", Amount = 1 },
@@ -55,7 +56,7 @@ getgenv().AutoMail = {
     ['Users'] = {"nguyenhuyengh3x", "truongcuong8beu", "nguyenhieu8i6w", "phanquynhku1u", "lehoangvw2k", "dinhhabb1a", "TheRealWillow_cove"},
     ['UserItemPreferences'] = {
         ['TheRealWillow_cove'] = {'MVP Key Lower Half', 'MVP Key Upper Half', 'Buff Tiger'},
-        ['dinhhabb1a'] = {'Insta Plant Capsule', 'Diamond'},
+        ['dinhhabb1a'] = {'Insta Plant Capsule', 'Diamond', 'Lucki Golem', 'Lucki Chest Mimic'},
     }
 }
 
