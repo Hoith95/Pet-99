@@ -97,6 +97,19 @@ local function getLootboxAmount(itemId)
     return 0
 end
 
+local function getMiscAmount(itemId)
+    local sd = getSave()
+    if not sd or not sd.Inventory or not sd.Inventory.Misc then
+        return 0
+    end
+    for _, v in pairs(sd.Inventory.Misc) do
+        if v.id == itemId then
+            return tonumber(v._am) or 0
+        end
+    end
+    return 0
+end
+
 local function Formatint(int)
     local Suffix = {"", "k", "M", "B", "T", "Qd", "Qn", "Sx", "Sp", "Oc", "No", "De"}
     local Index = 1
@@ -183,11 +196,11 @@ local function startGuiUpdater()
         giftLabel.Text = tostring(getLootboxAmount("Horseshoe Gift")) .. " | Horseshoe Gift"
         updateLabelSize(giftLabel)
 
-        --gift2Label.Text = tostring(getLootboxAmount("Candycane Gift")) .. " | CandyCane Gift"
-        --updateLabelSize(gift2Label)
+        gift2Label.Text = tostring(getMiscAmount("Lucky Raid Boss Key")) .. " | Lucky Raid Boss Key"
+        updateLabelSize(gift2Label)
 
-        coinLabel.Text = Formatint(getCurrencyAmount("LuckyCoins")) .. " | Lucky Coins"
-        updateLabelSize(coinLabel)
+        --coinLabel.Text = Formatint(getCurrencyAmount("LuckyCoins")) .. " | Lucky Coins"
+        --updateLabelSize(coinLabel)
 
         raffleLabel.Text = getS2RaidMaxDifficulty() .. " | Level Raid"
         updateLabelSize(raffleLabel)
