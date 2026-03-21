@@ -80,11 +80,11 @@ spawn(function()
 			   --"LuckyRaidMoreCurrency",
 			   "LuckyRaidBetterLoot",
 			   "LuckyRaidTitanicChest",
-			   "LuckyRaidHugeChest",
+			   --"LuckyRaidHugeChest",
 			   "LuckyRaidXP",
 			   "LuckyRaidPetSpeed",
 			   --"LuckyRaidKeyDrops",
-			   "LuckyRaidBossHugeChances",
+			   --"LuckyRaidBossHugeChances",
 			   "LuckyRaidBossTitanicChances",
 			}
 			getgenv().GENCHANTS = {"Criticals","Criticals","Tap Power","Tap Power","Strong Pets","Chest Breaker","Diamonds"}
