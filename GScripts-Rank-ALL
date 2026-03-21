@@ -87,7 +87,7 @@ spawn(function()
 			   --"LuckyRaidBossHugeChances",
 			   "LuckyRaidBossTitanicChances",
 			}
-			getgenv().GENCHANTS = {"Criticals","Walkspeed","Tap Power","Tap Power","Strong Pets","Chest Breaker","Diamonds"}
+			getgenv().GENCHANTS = {"Criticals","Walkspeed","Tap Power","Tap Power","Strong Pets","Chest Breaker","Happy Pets","Diamonds"}
 			--getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
 			spawn(function()
 			loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-3"))()
