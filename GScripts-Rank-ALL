@@ -71,23 +71,23 @@ spawn(function()
 			getgenv().GMIN_MULTIPLIER = 350
 			getgenv().GRAID_MAX_HATCH_MINUTES = 5
 
-			getgenv().GRESET_UPGRADES = false
+			getgenv().GRESET_UPGRADES = true
 			getgenv().GEVENT_UPGRADES = {
 			   "LuckyRaidDamage",
 			   "LuckyRaidAttackSpeed",
 			   "LuckyRaidPets",
-			   "LuckyRaidEggCost",
-			   "LuckyRaidMoreCurrency",
+			   --"LuckyRaidEggCost",
+			   --"LuckyRaidMoreCurrency",
 			   "LuckyRaidBetterLoot",
 			   "LuckyRaidTitanicChest",
 			   "LuckyRaidHugeChest",
 			   "LuckyRaidXP",
 			   "LuckyRaidPetSpeed",
-			   "LuckyRaidKeyDrops",
+			   --"LuckyRaidKeyDrops",
 			   "LuckyRaidBossHugeChances",
 			   "LuckyRaidBossTitanicChances",
 			}
-			getgenv().GENCHANTS = {"Criticals","Criticals","Tap Power","Tap Power","Strong Pets","Diamonds"}
+			getgenv().GENCHANTS = {"Criticals","Criticals","Tap Power","Tap Power","Strong Pets","Chest Breaker","Diamonds"}
 			--getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
 			spawn(function()
 			loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-3"))()
