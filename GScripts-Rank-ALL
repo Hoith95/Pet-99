@@ -71,21 +71,21 @@ spawn(function()
 			getgenv().GMIN_MULTIPLIER = 350
 			getgenv().GRAID_MAX_HATCH_MINUTES = 5
 
-			getgenv().GRESET_UPGRADES = false
+			getgenv().GRESET_UPGRADES = true
 			getgenv().GEVENT_UPGRADES = {
 			   "LuckyRaidDamage",
-			   "LuckyRaidAttackSpeed",
-			   "LuckyRaidPets",
+			   --"LuckyRaidAttackSpeed",
+			   --"LuckyRaidPets",
 			   --"LuckyRaidEggCost",
 			   --"LuckyRaidMoreCurrency",
 			   "LuckyRaidBetterLoot",
-			   "LuckyRaidTitanicChest",
+			   --"LuckyRaidTitanicChest",
 			   --"LuckyRaidHugeChest",
-			   "LuckyRaidXP",
-			   "LuckyRaidPetSpeed",
+			   --"LuckyRaidXP",
+			   --"LuckyRaidPetSpeed",
 			   --"LuckyRaidKeyDrops",
 			   --"LuckyRaidBossHugeChances",
-			   "LuckyRaidBossTitanicChances",
+			   --"LuckyRaidBossTitanicChances",
 			}
 			getgenv().GENCHANTS = {"Criticals","Walkspeed","Tap Power","Tap Power","Strong Pets","Chest Breaker","Happy Pets","Diamonds"}
 			--getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
