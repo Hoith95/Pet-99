@@ -74,7 +74,7 @@ spawn(function()
 			getgenv().GRESET_UPGRADES = false
 			getgenv().GEVENT_UPGRADES = {
 			   "LuckyRaidDamage",
-			   --"LuckyRaidAttackSpeed",
+			   "LuckyRaidAttackSpeed",
 			   --"LuckyRaidPets",
 			   --"LuckyRaidEggCost",
 			   --"LuckyRaidMoreCurrency",
@@ -82,7 +82,7 @@ spawn(function()
 			   --"LuckyRaidTitanicChest",
 			   --"LuckyRaidHugeChest",
 			   --"LuckyRaidXP",
-			   --"LuckyRaidPetSpeed",
+			   "LuckyRaidPetSpeed",
 			   --"LuckyRaidKeyDrops",
 			   --"LuckyRaidBossHugeChances",
 			   --"LuckyRaidBossTitanicChances",
