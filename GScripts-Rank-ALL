@@ -82,7 +82,7 @@ spawn(function()
 			   --"LuckyRaidTitanicChest",
 			   --"LuckyRaidHugeChest",
 			   --"LuckyRaidXP",
-			   "LuckyRaidPetSpeed",
+			   --"LuckyRaidPetSpeed",
 			   --"LuckyRaidKeyDrops",
 			   --"LuckyRaidBossHugeChances",
 			   --"LuckyRaidBossTitanicChances",
