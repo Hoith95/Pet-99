@@ -1,0 +1,14 @@
+if _G.VAR_EVENT_UPDATES then return end
+_G.VAR_EVENT_UPDATES = true
+
+for i = 1, 31 do
+    game:GetService("ReplicatedStorage").Network:FindFirstChild("EventUpgrades: Purchase"):InvokeServer("LuckyRaidPets")
+    task.wait(3)
+end
+
+task.wait(10)
+
+for i = 1, 15 do
+    game:GetService("ReplicatedStorage").Network:FindFirstChild("EventUpgrades: Purchase"):InvokeServer("LuckyRaidAttackSpeed")
+    task.wait(3)
+end
