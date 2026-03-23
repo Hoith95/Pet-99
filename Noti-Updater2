@@ -196,7 +196,7 @@ local function startGuiUpdater()
         giftLabel.Text = tostring(getLootboxAmount("Horseshoe Gift")) .. " | Horseshoe Gift"
         updateLabelSize(giftLabel)
 
-        gift2Label.Text = tostring(getMiscAmount("Lucky Raid Boss Key V2")) .. " | Lucky Boss Key"
+        gift2Label.Text = tostring(getMiscAmount("Lucky Raid Orb V2")) .. " | Lucky Raid Orb"
         updateLabelSize(gift2Label)
 
         --coinLabel.Text = Formatint(getCurrencyAmount("LuckyCoins")) .. " | Lucky Coins"
