@@ -16,16 +16,26 @@ getgenv().Settings = {
 		{Name = "Gargantuan Super Cat", Data = {Price = "50.86b"}},
         {Name = "Titanic Vampire Agony", Data = {Price = "18b"}},
 
-		{Name = "Titanic Horseshoe Capybara", Data = {Price = "3.38b"}},
-		{Name = "Golden Titanic Horseshoe Capybara", Data = {Price = "3.50b"}},
-		{Name = "Rainbow Titanic Horseshoe Capybara", Data = {Price = "10.68b"}},
-		{Name = "Shiny Titanic Horseshoe Capybara", Data = {Price = "15.86b"}},
+		{Name = "Titanic Horseshoe Capybara", Data = {Price = "4b"}},
+		{Name = "Golden Titanic Horseshoe Capybara", Data = {Price = "4.4b"}},
+		{Name = "Rainbow Titanic Horseshoe Capybara", Data = {Price = "11.68b"}},
+		{Name = "Shiny Titanic Horseshoe Capybara", Data = {Price = "11.86b"}},
 
-		{Name = "Titanic Lucki Chest Mimic", Data = {Price = "3.50b"}},
-		{Name = "Golden Titanic Lucki Chest Mimic", Data = {Price = "3.68b"}},
-		{Name = "Rainbow Titanic Lucki Chest Mimic", Data = {Price = "15.86b"}},
+		{Name = "Titanic Irish Wolfhound", Data = {Price = "4.38b"}},
+		{Name = "Golden Titanic Irish Wolfhound", Data = {Price = "4.68b"}},
+		{Name = "Rainbow Titanic Irish Wolfhound", Data = {Price = "13.68b"}},
+
+		{Name = "Titanic Mucki", Data = {Price = "4.2b"}},
+		{Name = "Golden Titanic Mucki", Data = {Price = "4.86b"}},
+		{Name = "Rainbow Titanic Mucki", Data = {Price = "15.68b"}},
+
+		{Name = "Titanic Lucki Chest Mimic", Data = {Price = "4b"}},
+		{Name = "Golden Titanic Lucki Chest Mimic", Data = {Price = "4.5b"}},
+		{Name = "Rainbow Titanic Lucki Chest Mimic", Data = {Price = "13.86b"}},
 
 		{Name = "Titanic Tiedye Corgi", Data = {Price = "5.5b"}},
+		{Name = "Rainbow Titanic Tiedye Corgi", Data = {Price = "15.68b"}},
+		{Name = "Shiny Titanic Tiedye Corgi", Data = {Price = "15.86b"}},
 
 		{Name = "Titanic Hippomint", Data = {Price = "4.83b"}},
 		{Name = "Golden Titanic Hippomint", Data = {Price = "5.5b"}},
