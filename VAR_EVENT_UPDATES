@@ -1,14 +1,63 @@
 if _G.VAR_EVENT_UPDATES then return end
 _G.VAR_EVENT_UPDATES = true
 
-for i = 1, 31 do
-    game:GetService("ReplicatedStorage").Network:FindFirstChild("EventUpgrades: Purchase"):InvokeServer("LuckyRaidPets")
-    task.wait(3)
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
+local Remote = ReplicatedStorage.Network:FindFirstChild("EventUpgrades: Purchase")
+
+local upgrades = {
+    {name = "LuckyRaidBetterLoot", max = 15},
+    {name = "LuckyRaidPets", max = 31},
+    {name = "LuckyRaidDamage", max = 25},
+    {name = "LuckyRaidPetSpeed", max = 7},
+    {name = "LuckyRaidTitanicChest", max = 7},
+    {name = "LuckyRaidBossTitanicChances", max = 5},
+}
+
+local function getLevel(name)
+    local save = PlayerSave.Get()
+    return save and save.EventUpgrades and save.EventUpgrades[name] or 0
 end
 
-task.wait(10)
+local function allMax()
+    for _, up in ipairs(upgrades) do
+        if getLevel(up.name) < up.max then
+            return false
+        end
+    end
+    return true
+end
 
-for i = 1, 15 do
-    game:GetService("ReplicatedStorage").Network:FindFirstChild("EventUpgrades: Purchase"):InvokeServer("LuckyRaidAttackSpeed")
-    task.wait(3)
+while true do
+    if allMax() then
+        print("🎯 Tất cả upgrade đã đạt max → dừng script")
+        break
+    end
+    local anySuccess = false
+    for _, up in ipairs(upgrades) do
+        local current = getLevel(up.name)
+        if current < up.max then
+            local success = false
+            for attempt = 1, 3 do
+                local before = getLevel(up.name)
+                Remote:InvokeServer(up.name)
+                print("⬆️", up.name, "| Lần:", attempt, "| Level:", before)
+                task.wait(3)
+                local after = getLevel(up.name)
+                if after > before then
+                    print("✅ Thành công:", up.name, "→", after)
+                    success = true
+                    anySuccess = true
+                    break
+                end
+            end
+            if not success then
+                warn("⏭️ Bỏ qua (fail 3 lần):", up.name)
+            end
+        end
+    end
+    if not anySuccess then
+        warn("😴 Không upgrade được gì → chờ 1 giờ rồi thử lại")
+        task.wait(60 * 60)
+    end
 end
