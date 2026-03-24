@@ -7,20 +7,29 @@ local function inLuckyEvent()
     local inst = workspace:FindFirstChild("__THINGS")
         and workspace.__THINGS:FindFirstChild("__INSTANCE_CONTAINER")
         and workspace.__THINGS.__INSTANCE_CONTAINER:FindFirstChild("Active")
-
     if not inst then return false end
-
     return inst:FindFirstChild("LuckyEventWorld")
         or inst:FindFirstChild("LuckyRaid")
         or inst:FindFirstChild("LuckyEgg")
 end
 
 local player = game.Players.LocalPlayer
-
-if not inLuckyEvent() then
-    player:Kick("Bạn không ở LuckyEvent!")
+local MAX_CHECK = 3
+local DELAY_BETWEEN_CHECK = 2
+local success = false
+for i = 1, MAX_CHECK do
+    if inLuckyEvent() then
+        success = true
+        print("✅ Check lần " .. i .. ": Đã ở LuckyEvent")
+        break
+    else
+        warn("⚠️ Check lần " .. i .. ": Chưa vào LuckyEvent")
+        task.wait(DELAY_BETWEEN_CHECK)
+    end
+end
+if not success then
+    player:Kick("Bạn không ở LuckyEvent sau 3 lần kiểm tra!")
     return
 end
-
 print("🎃 Đang ở LuckyEvent Instance — DỪNG SCRIPT.")
 return
