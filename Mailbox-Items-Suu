@@ -55,7 +55,7 @@ getgenv().AutoMail = {
     ['Loop Interval'] = 60,
     ['Users'] = {"nguyenhuyengh3x", "truongcuong8beu", "nguyenhieu8i6w", "phanquynhku1u", "lehoangvw2k", "dinhhabb1a"},
     ['UserItemPreferences'] = {
-        ['dinhhabb1a'] = {'Insta Plant Capsule', 'Diamond', 'Lucki Golem', 'Lucki Chest Mimic'},
+        ['dinhhabb1a'] = {'Insta Plant Capsule', 'Diamond'},
     }
 }
 
