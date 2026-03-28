@@ -21,7 +21,7 @@ getgenv().Settings = {
 		{Name = "Rainbow Titanic Horseshoe Capybara", Data = {Price = "11.68b"}},
 		{Name = "Shiny Titanic Horseshoe Capybara", Data = {Price = "11.86b"}},
 
-		{Name = "Titanic Irish Wolfhound", Data = {Price = "4.38b"}},
+		{Name = "Titanic Irish Wolfhound", Data = {Price = "4.25b"}},
 		{Name = "Golden Titanic Irish Wolfhound", Data = {Price = "4.68b"}},
 		{Name = "Rainbow Titanic Irish Wolfhound", Data = {Price = "15.68b"}},
 
