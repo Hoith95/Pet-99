@@ -237,11 +237,12 @@ local function startGuiUpdater()
 		local u1 = getEventUpgrade("LuckyRaidBetterLoot")
 		local u2 = getEventUpgrade("LuckyRaidPets")
 		local u3 = getEventUpgrade("LuckyRaidDamage")
-		local u4 = getEventUpgrade("LuckyRaidPetSpeed")
-		local u5 = getEventUpgrade("LuckyRaidTitanicChest")
-		local u6 = getEventUpgrade("LuckyRaidBossTitanicChances")
+		local u4 = getEventUpgrade("LuckyRaidAttackSpeed")
+		local u5 = getEventUpgrade("LuckyRaidPetSpeed")
+		local u6 = getEventUpgrade("LuckyRaidTitanicChest")
+		local u7 = getEventUpgrade("LuckyRaidBossTitanicChances")
 
-		upgradeLabel.Text = string.format("%d-%d-%d-%d-%d-%d | UPGRADE", u1, u2, u3, u4, u5, u6)
+		upgradeLabel.Text = string.format("%d-%d-%d-%d-%d-%d | UPGRADE", u1, u2, u3, u4, u5, u6, u7)
 		if u1 >= 15 and u3 >= 25 and u2 >= 31 then
 		    upgradeLabel.BackgroundColor3 = Color3.fromRGB(0,170,0)
 		else
