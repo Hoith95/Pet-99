@@ -16,6 +16,14 @@ local function getSave()
     if ok then return sd end
 end
 
+local function getEventUpgrade(name)
+    local sd = getSave()
+    if not sd or not sd.EventUpgrades then
+        return 0
+    end
+    return sd.EventUpgrades[name] or 0
+end
+
 local function getS2RaidMaxDifficulty()
     local sd = getSave()
     return sd
@@ -178,6 +186,7 @@ local function startGuiUpdater()
     local gift2Label       = createLabel("Gift2Label", right)
     --local coinLabel        = createLabel("CoinLabel", right)
     --local megaPresentLabel = createLabel("MegaPresentLabel", right)
+	local upgradeLabel 	   = createLabel("UpgradeLabel", right)
 
     -- LEFT / CENTER
     local timeTrialLabel = createLabel("TimeTrialLabel", left)
@@ -224,6 +233,21 @@ local function startGuiUpdater()
 		    pointsLabel.BackgroundColor3 = Color3.fromRGB(255,200,0)
 		end
 		updateLabelSize(pointsLabel)
+
+		local u1 = getEventUpgrade("LuckyRaidBetterLoot")
+		local u2 = getEventUpgrade("LuckyRaidPets")
+		local u3 = getEventUpgrade("LuckyRaidDamage")
+		local u4 = getEventUpgrade("LuckyRaidPetSpeed")
+		local u5 = getEventUpgrade("LuckyRaidTitanicChest")
+		local u6 = getEventUpgrade("LuckyRaidBossTitanicChances")
+
+		upgradeLabel.Text = string.format("%d-%d-%d-%d-%d-%d | UPGRADE", u1, u2, u3, u4, u5, u6)
+		if u1 >= 15 and u3 >= 25 and u2 >= 31 then
+		    upgradeLabel.BackgroundColor3 = Color3.fromRGB(0,170,0)
+		else
+		    upgradeLabel.BackgroundColor3 = Color3.fromRGB(255,200,0)
+		end
+		updateLabelSize(upgradeLabel)
 
         task.wait(0.1)
     end
