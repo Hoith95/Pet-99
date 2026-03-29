@@ -1,61 +1,117 @@
-if _G.VAR_EVENT_UPDATES then return end
+if _G.VAR_EVENT_UPDATES then
+    warn("⛔ Script đã chạy trước đó!")
+    return
+end
 _G.VAR_EVENT_UPDATES = true
 
+-- SERVICES
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
 local Remote = ReplicatedStorage.Network:FindFirstChild("EventUpgrades: Purchase")
 
-local upgrades = {
+if not Remote then
+    warn("❌ Không tìm thấy Remote EventUpgrades: Purchase")
+    return
+end
+
+-- CONFIG
+local PRIORITY = {
     {name = "LuckyRaidBetterLoot", max = 15},
-    {name = "LuckyRaidPets", max = 31},
     {name = "LuckyRaidDamage", max = 25},
+    {name = "LuckyRaidPets", max = 31},
+}
+
+local ROUND_ROBIN = {
     {name = "LuckyRaidPetSpeed", max = 7},
     {name = "LuckyRaidTitanicChest", max = 7},
     {name = "LuckyRaidBossTitanicChances", max = 5},
 }
 
+-- UTILS
 local function getLevel(name)
     local save = PlayerSave.Get()
-    return save and save.EventUpgrades and save.EventUpgrades[name] or 0
+    if not save or not save.EventUpgrades then
+        return 0
+    end
+    return save.EventUpgrades[name] or 0
+end
+
+local function isMax(up)
+    return getLevel(up.name) >= up.max
+end
+
+local function tryUpgrade(name)
+    for attempt = 1, 3 do
+        local before = getLevel(name)
+
+        Remote:InvokeServer(name)
+        print("⬆️", name, "| Lần:", attempt, "| Level:", before)
+
+        task.wait(3)
+
+        local after = getLevel(name)
+        if after > before then
+            print("✅ Thành công:", name, "→", after)
+            return true
+        end
+    end
+
+    warn("⏭️ Bỏ qua (fail 3 lần):", name)
+    return false
 end
 
 local function allMax()
-    for _, up in ipairs(upgrades) do
-        if getLevel(up.name) < up.max then
-            return false
-        end
+    for _, up in ipairs(PRIORITY) do
+        if not isMax(up) then return false end
+    end
+    for _, up in ipairs(ROUND_ROBIN) do
+        if not isMax(up) then return false end
     end
     return true
 end
 
+-- MAIN LOOP
 while true do
     if allMax() then
         print("🎯 Tất cả upgrade đã đạt max → dừng script")
         break
     end
+
     local anySuccess = false
-    for _, up in ipairs(upgrades) do
-        local current = getLevel(up.name)
-        if current < up.max then
-            local success = false
-            for attempt = 1, 3 do
-                local before = getLevel(up.name)
-                Remote:InvokeServer(up.name)
-                print("⬆️", up.name, "| Lần:", attempt, "| Level:", before)
-                task.wait(3)
-                local after = getLevel(up.name)
-                if after > before then
-                    print("✅ Thành công:", up.name, "→", after)
-                    success = true
-                    anySuccess = true
-                    break
-                end
+
+    -- =========================
+    -- PHASE 1 → 3 (PRIORITY)
+    -- =========================
+    for _, up in ipairs(PRIORITY) do
+        while not isMax(up) do
+            local success = tryUpgrade(up.name)
+
+            if success then
+                anySuccess = true
+            else
+                break -- fail 3 lần → dừng upgrade này
             end
-            if not success then
-                warn("⏭️ Bỏ qua (fail 3 lần):", up.name)
+        end
+
+        -- nếu chưa max → không được sang upgrade tiếp theo
+        if not isMax(up) then
+            break
+        end
+    end
+
+    -- PHASE 4 (ROUND ROBIN)
+    if isMax(PRIORITY[1]) and isMax(PRIORITY[2]) and isMax(PRIORITY[3]) then
+        for _, up in ipairs(ROUND_ROBIN) do
+            if not isMax(up) then
+                local success = tryUpgrade(up.name)
+                if success then
+                    anySuccess = true
+                end
             end
         end
     end
+
+    -- WAIT IF NO PROGRESS
     if not anySuccess then
         warn("😴 Không upgrade được gì → chờ 1 giờ rồi thử lại")
         task.wait(60 * 60)
