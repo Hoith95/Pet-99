@@ -72,7 +72,7 @@ spawn(function()
 			getgenv().GMIN_MULTIPLIER = 350
 			getgenv().GRAID_MAX_HATCH_MINUTES = 5
 
-			getgenv().GRESET_UPGRADES = true
+			getgenv().GRESET_UPGRADES = false
 			getgenv().GEVENT_UPGRADES = {
 			   --"LuckyRaidDamage",
 			   --"LuckyRaidAttackSpeed",
