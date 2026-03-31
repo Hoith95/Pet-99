@@ -22,11 +22,13 @@ local PRIORITY = {
 }
 
 local ROUND_ROBIN = {
+    {name = "LuckyRaidTitanicChest", max = 15},
+    {name = "LuckyRaidBossTitanicChances", max = 10},
+    {name = "LuckyRaidHugeChest", max = 15},
+    {name = "LuckyRaidBossHugeChances", max = 10},
     {name = "LuckyRaidXP", max = 10},
     {name = "LuckyRaidAttackSpeed", max = 15},
     {name = "LuckyRaidPetSpeed", max = 15},
-    {name = "LuckyRaidTitanicChest", max = 15},
-    {name = "LuckyRaidBossTitanicChances", max = 10},
 }
 
 -- UTILS
