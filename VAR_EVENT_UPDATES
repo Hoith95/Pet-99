@@ -22,6 +22,7 @@ local PRIORITY = {
 }
 
 local ROUND_ROBIN = {
+    {name = "LuckyRaidXP", max = 10},
     {name = "LuckyRaidAttackSpeed", max = 15},
     {name = "LuckyRaidPetSpeed", max = 15},
     {name = "LuckyRaidTitanicChest", max = 15},
@@ -80,9 +81,7 @@ while true do
 
     local anySuccess = false
 
-    -- =========================
     -- PHASE 1 → 3 (PRIORITY)
-    -- =========================
     for _, up in ipairs(PRIORITY) do
         while not isMax(up) do
             local success = tryUpgrade(up.name)
