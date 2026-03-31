@@ -46,11 +46,11 @@ spawn(function()
         warn("⛔ _G.Time_Trial_Done chưa true, không chạy script.")
         return
     end
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_TELE_LUCKY_EVENT"))()
+    --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_TELE_LUCKY_EVENT"))()
 end)
 
 spawn(function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_EVENT_UPDATES"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_EVENT_UPDATES"))()
 end)
 
 spawn(function()
