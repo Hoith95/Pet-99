@@ -39,7 +39,7 @@ getgenv().AutoMail = {
         ['Diamond'] = { Class = "Seed", MinAmount = 500, Amount = "Max" },
         --['MVP Key'] = { Class = "Misc", MinAmount = 1, Amount = "Max" },
         --['MVP Key Lower Half'] = { Class = "Misc", MinAmount = 400, Amount = "Max" },
-        --['MVP Key Upper Half'] = { Class = "Misc", MinAmount = 25, Amount = "Max" },
+        ['MVP Key Upper Half'] = { Class = "Misc", MinAmount = 25, Amount = "Max" },
         --['Easter Secret Key'] = { Class = "Misc", MinAmount = 500, Amount = "Max" },
         ['Charm Stone'] = { Class = "Misc", MinAmount = 500, Amount = "Max" },
         ['Royalty'] = { Class = "Charm", MinAmount = 1, Amount = "Max" },
@@ -55,6 +55,7 @@ getgenv().AutoMail = {
     ['Loop Interval'] = 60,
     ['Users'] = {"Zephy_Marnell604", "Dravon_Liorrex220", "Thien_Hoa9x", "Valric_Solvynn026", "Taryn_Xelvorn389", "Thien_Hoa9x", "BVIW5"},
     ['UserItemPreferences'] = {
+        ['killer7149'] = {'MVP Key Lower Half', 'MVP Key Upper Half'},
         ['BVIW5'] = {'Insta Plant Capsule', 'Diamond'},
     }
 }
