@@ -39,7 +39,7 @@ getgenv().AutoMail = {
         ['Diamond'] = { Class = "Seed", MinAmount = 500, Amount = "Max" },
         --['MVP Key'] = { Class = "Misc", MinAmount = 1, Amount = "Max" },
         --['MVP Key Lower Half'] = { Class = "Misc", MinAmount = 400, Amount = "Max" },
-        --['MVP Key Upper Half'] = { Class = "Misc", MinAmount = 25, Amount = "Max" },
+        ['MVP Key Upper Half'] = { Class = "Misc", MinAmount = 25, Amount = "Max" },
         --['Easter Secret Key'] = { Class = "Misc", MinAmount = 500, Amount = "Max" },
         ['Charm Stone'] = { Class = "Misc", MinAmount = 500, Amount = "Max" },
         ['Royalty'] = { Class = "Charm", MinAmount = 1, Amount = "Max" },
@@ -53,8 +53,9 @@ getgenv().AutoMail = {
         ['Fantasy Spinny Wheel Ticket'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
     },
     ['Loop Interval'] = 60,
-    ['Users'] = {"nguyenhuyengh3x", "truongcuong8beu", "nguyenhieu8i6w", "phanquynhku1u", "lehoangvw2k", "dinhhabb1a"},
+    ['Users'] = {"nguyenhuyengh3x", "truongcuong8beu", "nguyenhieu8i6w", "phanquynhku1u", "lehoangvw2k", "dinhhabb1a", "killer7149"},
     ['UserItemPreferences'] = {
+        ['killer7149'] = {'MVP Key Lower Half', 'MVP Key Upper Half'},
         ['dinhhabb1a'] = {'Insta Plant Capsule', 'Diamond'},
     }
 }
