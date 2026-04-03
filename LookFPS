@@ -4,21 +4,47 @@ if _G.LOOKFPS then
 end
 _G.LOOKFPS = true
 
--- ⚙️ AUTO FPS CONTROL ---
+-- ⚙️ CONFIG
+local DEBUG = false
 
+local FPS = {
+	TIME_TRIAL = 7,
+
+	LUCKY_NORMAL = 5,
+	LUCKY_EXCEPTION = 4,
+
+	XMAS = {
+		EARLY = 5,
+		MID = 4,
+		LATE = 3
+	},
+
+	DEFAULT = 3
+}
+
+-- 🚀 INIT
 task.wait(68)
+local startTime = tick()
+
 task.spawn(function()
 	local set = setfpscap or setfpscap
 	local place = game.PlaceId
-	local t = workspace:WaitForChild("__THINGS")
-	local container = t:WaitForChild("__INSTANCE_CONTAINER")
-	local startTime = os.clock()
+	local things = workspace:WaitForChild("__THINGS")
+	local container = things:WaitForChild("__INSTANCE_CONTAINER")
 	local currentFPS = nil
 
-	local function setFPS(v)
+	-- 🔧 UTIL
+	local function log(...)
+		if DEBUG then
+			print("[FPS]", ...)
+		end
+	end
+
+	local function setFPS(v, reason)
 		if currentFPS ~= v then
 			currentFPS = v
 			set(v)
+			log("Set FPS:", v, "| Reason:", reason)
 		end
 	end
 
@@ -26,13 +52,16 @@ task.spawn(function()
 		return container:FindFirstChild("Active")
 	end
 
-	local function inXmasWorld()
-		local active = getActive()
+	-- 🌍 STATE DETECT
+	local function isTimeTrial(active)
+		return active and active:FindFirstChild("TimeTrial")
+	end
+
+	local function isXmas(active)
 		return active and active:FindFirstChild("XmasWorld")
 	end
 
-	local function inLuckyEvent()
-		local active = getActive()
+	local function isLucky(active)
 		return active and (
 			active:FindFirstChild("LuckyEventWorld")
 			or active:FindFirstChild("LuckyRaid")
@@ -40,66 +69,72 @@ task.spawn(function()
 		)
 	end
 
-	local function luckyException()
-		return _G.P1
-		or _G.P2
-		or _G.P3
-		or _G.P4
-		or _G.P5
-		or _G.SUU1
-		or _G.SUU2
-		or _G.SUU3
-		or _G.SUU4
-		or _G.SUU5
-		or _G.G2
-		or _G.G3
-		or _G.G4
-		or _G.G9
-		or _G.G10
-		or _G.G11
+	local function isLuckyException()
+		return _G.P1 or _G.P2 or _G.P3 or _G.P4 or _G.P5
+		or _G.SUU1 or _G.SUU2 or _G.SUU3 or _G.SUU4 or _G.SUU5
+		or _G.G2 or _G.G3 or _G.G4 or _G.G9 or _G.G10 or _G.G11
 	end
 
-	while task.wait(0.25) do
-		local active = container:FindFirstChild("Active")
-		local tt = active and active:FindFirstChild("TimeTrial")
-		if place == 140403681187145 then
-			if tt then
-				setFPS(7)
-			elseif inLuckyEvent() then
-				if luckyException() then
-					setFPS(4)
-				else
-					setFPS(5)
-				end
-			elseif inXmasWorld() then
-				setFPS(4)
+	local function isLowFPSPlace(placeId)
+		return placeId == 95635359880599
+			or placeId == 119454325063278
+			or placeId == 8737899170
+			or placeId == 16498369169
+			or placeId == 17503543197
+			or placeId == 15502339080
+	end
+
+	-- 🧠 CORE LOGIC (PRIORITY)
+	local function resolveFPS()
+		local active = getActive()
+
+		-- Priority 1: Time Trial
+		if isTimeTrial(active) then
+			return FPS.TIME_TRIAL, "TimeTrial"
+		end
+
+		-- Priority 2: Place lock
+		if isLowFPSPlace(place) then
+			return FPS.DEFAULT, "LowFPSPlace"
+		end
+
+		-- Priority 3: Lucky Event
+		if isLucky(active) then
+			if isLuckyException() then
+				return 3, "LuckyException"
 			else
-				setFPS(3)
-			end
-		elseif place == 95635359880599
-		or place == 119454325063278
-		or place == 8737899170
-		or place == 16498369169
-		or place == 17503543197
-		or place == 15502339080 then
-			setFPS(3)
-		elseif inLuckyEvent() then
-			if luckyException() then
-				setFPS(4)
-			else
-				setFPS(5)
-			end
-		elseif inXmasWorld() then
-			local elapsed = os.clock() - startTime
-			if elapsed >= 21600 then
-				setFPS(4)
-			elseif elapsed >= 14400 then
-				setFPS(4)
-			elseif elapsed >= 7200 then
-				setFPS(4)
-			else
-				setFPS(4)
+				return 4, "LuckyNormal"
 			end
 		end
+
+		-- Priority 4: Xmas
+		if isXmas(active) then
+			local elapsed = tick() - startTime
+			if elapsed >= 14400 then
+				return FPS.XMAS.LATE, "XmasLate"
+			elseif elapsed >= 7200 then
+				return FPS.XMAS.MID, "XmasMid"
+			else
+				return FPS.XMAS.EARLY, "XmasEarly"
+			end
+		end
+
+		-- Default (time-based + LuckyException)
+		local elapsed = tick() - startTime
+		if elapsed >= 3600 then
+			if isLuckyException() then
+				return 3, "Default(After1h|Exception)"
+			else
+				return 4, "Default(After1h|Normal)"
+			end
+		else
+			return 2, "Default(Early)"
+		end
+	end
+
+	-- 🔁 LOOP
+	while task.wait(0.25) do
+		local fps, reason = resolveFPS()
+		setFPS(fps, reason)
 	end
 end)
