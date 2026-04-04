@@ -181,12 +181,12 @@ local function startGuiUpdater()
 
     -- RIGHT
     local rankLabel        = createLabel("RankLabel", right)
-    local raffleLabel      = createLabel("RaffleLabel", right)
-    local giftLabel        = createLabel("GiftLabel", right)
-    local gift2Label       = createLabel("Gift2Label", right)
+    --local raffleLabel      = createLabel("RaffleLabel", right)
+    --local giftLabel        = createLabel("GiftLabel", right)
+    --local gift2Label       = createLabel("Gift2Label", right)
     --local coinLabel        = createLabel("CoinLabel", right)
     --local megaPresentLabel = createLabel("MegaPresentLabel", right)
-	local upgradeLabel 	   = createLabel("UpgradeLabel", right)
+	--local upgradeLabel 	   = createLabel("UpgradeLabel", right)
 
     -- LEFT / CENTER
     local timeTrialLabel = createLabel("TimeTrialLabel", left)
@@ -202,17 +202,17 @@ local function startGuiUpdater()
         rankLabel.Text = tostring(sd.Rank or 0) .. " | RANK"
         updateLabelSize(rankLabel)
 
-        giftLabel.Text = tostring(getLootboxAmount("Horseshoe Gift")) .. " | Horseshoe Gift"
-        updateLabelSize(giftLabel)
+        --giftLabel.Text = tostring(getLootboxAmount("Horseshoe Gift")) .. " | Horseshoe Gift"
+        --updateLabelSize(giftLabel)
 
-        gift2Label.Text = tostring(getMiscAmount("Lucky Raid Orb V2")) .. " | Lucky Raid Orb"
-        updateLabelSize(gift2Label)
+        --gift2Label.Text = tostring(getMiscAmount("Lucky Raid Orb V2")) .. " | Lucky Raid Orb"
+        --updateLabelSize(gift2Label)
 
         --coinLabel.Text = Formatint(getCurrencyAmount("LuckyCoins")) .. " | Lucky Coins"
         --updateLabelSize(coinLabel)
 
-        raffleLabel.Text = getS2RaidMaxDifficulty() .. " | Level Raid"
-        updateLabelSize(raffleLabel)
+        --raffleLabel.Text = getS2RaidMaxDifficulty() .. " | Level Raid"
+        --updateLabelSize(raffleLabel)
 
 		--megaPresentLabel.Text = Formatint(getRecentSleighPointsSent()) .. " | " .. Formatint(getMegaPresentPoints()) .. " | Mega Present"
 		--updateLabelSize(megaPresentLabel)
@@ -234,24 +234,24 @@ local function startGuiUpdater()
 		end
 		updateLabelSize(pointsLabel)
 
-		local u1 = getEventUpgrade("LuckyRaidBetterLoot")
-		local u2 = getEventUpgrade("LuckyRaidPets")
-		local u3 = getEventUpgrade("LuckyRaidDamage")
-		local u4 = getEventUpgrade("LuckyRaidAttackSpeed")
-		local u5 = getEventUpgrade("LuckyRaidPetSpeed")
-		local u6 = getEventUpgrade("LuckyRaidTitanicChest")
-		local u7 = getEventUpgrade("LuckyRaidBossTitanicChances")
-		local u8 = getEventUpgrade("LuckyRaidXP")
-		local u9 = getEventUpgrade("LuckyRaidHugeChest")
-		local u10 = getEventUpgrade("LuckyRaidBossHugeChances")
+		--local u1 = getEventUpgrade("LuckyRaidBetterLoot")
+		--local u2 = getEventUpgrade("LuckyRaidPets")
+		--local u3 = getEventUpgrade("LuckyRaidDamage")
+		--local u4 = getEventUpgrade("LuckyRaidAttackSpeed")
+		--local u5 = getEventUpgrade("LuckyRaidPetSpeed")
+		--local u6 = getEventUpgrade("LuckyRaidTitanicChest")
+		--local u7 = getEventUpgrade("LuckyRaidBossTitanicChances")
+		--local u8 = getEventUpgrade("LuckyRaidXP")
+		--local u9 = getEventUpgrade("LuckyRaidHugeChest")
+		--local u10 = getEventUpgrade("LuckyRaidBossHugeChances")
 
-		upgradeLabel.Text = string.format("%d-%d-%d-%d-%d-%d-%d-%d-%d-%d | UPGRATE", u1, u2, u3, u4, u5, u6, u7, u8, u9, u10)
-		if u1 >= 15 and u3 >= 25 and u2 >= 31 then
-		    upgradeLabel.BackgroundColor3 = Color3.fromRGB(0,170,0)
-		else
-		    upgradeLabel.BackgroundColor3 = Color3.fromRGB(255,200,0)
-		end
-		updateLabelSize(upgradeLabel)
+		--upgradeLabel.Text = string.format("%d-%d-%d-%d-%d-%d-%d-%d-%d-%d | UPGRATE", u1, u2, u3, u4, u5, u6, u7, u8, u9, u10)
+		--if u1 >= 15 and u3 >= 25 and u2 >= 31 then
+		    --upgradeLabel.BackgroundColor3 = Color3.fromRGB(0,170,0)
+		--else
+		    --upgradeLabel.BackgroundColor3 = Color3.fromRGB(255,200,0)
+		--end
+		--updateLabelSize(upgradeLabel)
 
         task.wait(0.1)
     end
