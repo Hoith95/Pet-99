@@ -405,14 +405,14 @@ end
 local rawBody = fetchRapData()
 if not rawBody then
     --warn("khong lay duoc du lieu tu API\n")
-    return
+    --return
 end
 
 --warn("da lay du lieu, dang parse JSON...\n")
 local rapData = parseJSON(rawBody)
 if not rapData then
     --warn("khong parse duoc JSON\n")
-    return
+    --return
 end
 
 -- ================== PHẦN 2: HÀM TÌM VALUE THEO NHIỀU THUỘC TÍNH ==================
