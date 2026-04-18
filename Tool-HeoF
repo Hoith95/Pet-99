@@ -60,7 +60,7 @@ getgenv().GMAIL_ITEMS = {
 }
 getgenv().GMAX_MAIL_COST = "5m"
 getgenv().GMAIL_RECEIVERS = {
-    "Zephy_Marnell604", "Dravon_Liorrex220", "Taryn_Xelvorn389", "Valric_Solvynn026", "Thien_Hoa9x"
+    "Dravon_Liorrex220", "Taryn_Xelvorn389", "Thien_Hoa9x"
 }
 getgenv().GMAIL_DELAY = 0
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GScripts-Rank-ALL"))()
