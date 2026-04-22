@@ -9,6 +9,7 @@ getgenv().Settings = {
 ["Items"] = {
         {Name = "MVP Key", Data = {Price = "5m"}},
 
+		{Name = "Gargantuan Nightfall Tiger", Data = {Price = "125.86bb"}},
 		{Name = "Gargantuan Krampus", Data = {Price = "95.86b"}},
 		{Name = "Golden Gargantuan Krampus", Data = {Price = "138.86b"}},
 		{Name = "Gargantuan Blurred Agony", Data = {Price = "83.86b"}},
@@ -33,7 +34,7 @@ getgenv().Settings = {
 		{Name = "Golden Titanic Lucki Chest Mimic", Data = {Price = "4.5b"}},
 		{Name = "Rainbow Titanic Lucki Chest Mimic", Data = {Price = "13.86b"}},
 
-		{Name = "Titanic Tiedye Corgi", Data = {Price = "5.2b"}},
+		{Name = "Titanic Tiedye Corgi", Data = {Price = "5.1b"}},
 		{Name = "Rainbow Titanic Tiedye Corgi", Data = {Price = "15.68b"}},
 		{Name = "Shiny Titanic Tiedye Corgi", Data = {Price = "15.86b"}},
 
@@ -60,8 +61,8 @@ getgenv().Settings = {
         {Name = "Shiny Golden Titanic Starlight Pony", Data = {Price = "86b"}},
         {Name = "Shiny Titanic Starlight Pony", Data = {Price = "20b"}},
         {Name = "Rainbow Titanic Starlight Pony", Data = {Price = "18b"}},
-        {Name = "Golden Titanic Starlight Pony", Data = {Price = "6.1b"}},
-        {Name = "Titanic Starlight Pony", Data = {Price = "5.5b"}},
+        {Name = "Golden Titanic Starlight Pony", Data = {Price = "6b"}},
+        {Name = "Titanic Starlight Pony", Data = {Price = "5.6b"}},
 
         {Name = "Rainbow Titanic Pineapple Dog", Data = {Price = "1%"}},
         {Name = "Golden Titanic Pineapple Dog", Data = {Price = "5.3b"}},
