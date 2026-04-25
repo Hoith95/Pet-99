@@ -112,7 +112,7 @@ getgenv().Settings = {
         {Name = "Shiny Golden Huge Bluebird", Data = {Price = "199m"}},
         {Name = "Shiny Rainbow Huge Bluebird", Data = {Price = "368m"}},
 
-		{Name = "Huge Starry Eye Bunny", Data = {Price = "25m"}},
+		{Name = "Huge Starry Eye Bunny", Data = {Price = "20m"}},
         {Name = "Huge Festive Seal", Data = {Price = "1%"}},
 		{Name = "Huge Holiday Owl", Data = {Price = "1%"}},
 		{Name = "Huge Gingerbread Lion", Data = {Price = "1%"}},
