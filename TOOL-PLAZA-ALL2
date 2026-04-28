@@ -7,7 +7,7 @@ local prices = {"4.7b", "4.8b", "4.9b"}
 
 getgenv().Settings = {
 ["Items"] = {
-        {Name = "MVP Key", Data = {Price = "4.5m"}},
+        {Name = "MVP Key", Data = {Price = "4m"}},
 
 		{Name = "Gargantuan Nightfall Tiger", Data = {Price = "115.86b"}},
 		{Name = "Gargantuan Krampus", Data = {Price = "95.86b"}},
