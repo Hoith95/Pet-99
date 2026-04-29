@@ -7,7 +7,7 @@ local prices = {"4.7b", "4.8b", "4.9b"}
 
 getgenv().Settings = {
 ["Items"] = {
-        {Name = "MVP Key", Data = {Price = "3.83m"}},
+        {Name = "MVP Key", Data = {Price = "3.68m"}},
 
 		{Name = "Gargantuan Nightfall Tiger", Data = {Price = "115.86b"}},
 		{Name = "Gargantuan Krampus", Data = {Price = "95.86b"}},
@@ -112,7 +112,7 @@ getgenv().Settings = {
         {Name = "Shiny Golden Huge Bluebird", Data = {Price = "199m"}},
         {Name = "Shiny Rainbow Huge Bluebird", Data = {Price = "368m"}},
 
-		{Name = "Huge Starry Eye Bunny", Data = {Price = "18m"}},
+		{Name = "Huge Starry Eye Bunny", Data = {Price = "15m"}},
         {Name = "Huge Festive Seal", Data = {Price = "1%"}},
 		{Name = "Huge Holiday Owl", Data = {Price = "1%"}},
 		{Name = "Huge Gingerbread Lion", Data = {Price = "1%"}},
