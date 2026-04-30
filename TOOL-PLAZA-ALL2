@@ -98,12 +98,12 @@ getgenv().Settings = {
         {Name = "Mega Enchant Chest", Data = {Price = "4m"}},
         {Name = "Huge Sea Dragon Card", Data = {Price = "10m"}},
 
-        {Name = "Crystal Key", Data = {Price = "10k"}},
-        {Name = "Tech Key", Data = {Price = "28k"}},
+        {Name = "Crystal Key", Data = {Price = "20k"}},
+        {Name = "Tech Key", Data = {Price = "40k"}},
         {Name = "Secret Key", Data = {Price = "28k"}},
-        {Name = "Void Key", Data = {Price = "35k"}},
-        {Name = "Fantasy Key", Data = {Price = "50k"}},
-        {Name = "Fantasy Spinny Wheel Ticket", Data = {Price = "25k"}},
+        {Name = "Void Key", Data = {Price = "50k"}},
+        {Name = "Fantasy Key", Data = {Price = "69k"}},
+        {Name = "Fantasy Spinny Wheel Ticket", Data = {Price = "69k"}},
 
         {Name = "Huge Bluebird", Data = {Price = "20m"}},
         {Name = "Golden Huge Bluebird", Data = {Price = "28m"}},
