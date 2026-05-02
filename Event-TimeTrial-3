@@ -310,11 +310,11 @@ local function teleportFarmLoop(startPoints, startRuns)
 				end
 			end
 		else
-			warn("⏳ Không có rương, chờ 15s...")
+			warn("⏳ Không có rương, chờ 25s...")
 			local found = false
-			for i = 1, 150 do
+			for i = 1, 250 do
 				if lagFlag or endFlag or _G.STOP_TIME_TRIAL then return end
-				task.wait(0.01)
+				task.wait(0.5)
 				for _, c in ipairs(workspace.__THINGS.Breakables:GetChildren()) do
 					if c:IsA("Model") and tonumber(c.Name) then
 						found = true
@@ -330,7 +330,7 @@ local function teleportFarmLoop(startPoints, startRuns)
 			end
 		end
 
-		task.wait(0.01)
+		task.wait(0.2)
 	end
 end
 
