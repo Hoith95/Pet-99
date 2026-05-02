@@ -60,6 +60,7 @@ spawn(function()
         else
             warn("⛔ _G.Time_Trial_End chưa true — set Block Party.")
 			getgenv().GENCHANTS = {"Criticals","Tap Power","Tap Power","Strong Pets","Walkspeed","Chest Breaker","Criticals"}
+			getgenv().GMIN_EGGS_TO_HATCH = 9999999999
 			spawn(function()
 			wait(68)
         	loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-3"))()
