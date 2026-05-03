@@ -53,7 +53,6 @@ spawn(function()
         if _G.Time_Trial_End == true then
 			_G.Time_Trial_Var = true
 			getgenv().GCOMBINE_MACHINE_OUTPUT = "Titanic Fantasy Present"
-			getgenv().GLOOTBOXES = {"Titanic Fantasy Present"}
 			getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
 			spawn(function()
 			loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-3"))()
@@ -72,7 +71,7 @@ spawn(function()
     end
 end)
 
-getgenv().GLOOTBOXES = { "Locked Hype Egg" }
+getgenv().GLOOTBOXES = {"Titanic Fantasy Present"}
 
 getgenv().GPROGRESS_MODE = "Hybrid" -- Hatch
 getgenv().GGFX_MODE = 1
