@@ -11,7 +11,7 @@ local FPS = {
 	TIME_TRIAL = 7,
 
 	LUCKY_NORMAL = 5,
-	LUCKY_EXCEPTION = 4,
+	LUCKY_EXCEPTION = 3,
 
 	XMAS = {
 		EARLY = 5,
@@ -19,7 +19,7 @@ local FPS = {
 		LATE = 3
 	},
 
-	DEFAULT = 3
+	DEFAULT = 2
 }
 
 -- 🚀 INIT
@@ -101,9 +101,9 @@ task.spawn(function()
 		-- Priority 3: Lucky Event
 		if isLucky(active) then
 			if isLuckyException() then
-				return 3, "LuckyException"
+				return 2, "LuckyException"
 			else
-				return 4, "LuckyNormal"
+				return 3, "LuckyNormal"
 			end
 		end
 
@@ -123,9 +123,9 @@ task.spawn(function()
 		local elapsed = tick() - startTime
 		if elapsed >= 3600 then
 			if isLuckyException() then
-				return 3, "Default(After1h|Exception)"
+				return 2, "Default(After1h|Exception)"
 			else
-				return 4, "Default(After1h|Normal)"
+				return 3, "Default(After1h|Normal)"
 			end
 		else
 			return 2, "Default(Early)"
@@ -133,7 +133,7 @@ task.spawn(function()
 	end
 
 	-- 🔁 LOOP
-	while task.wait(0.25) do
+	while task.wait(0.1) do
 		local fps, reason = resolveFPS()
 		setFPS(fps, reason)
 	end
