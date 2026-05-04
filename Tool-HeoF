@@ -23,7 +23,7 @@ spawn(function()
 end)
 
 spawn(function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_Time_Trial_End"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_Time_Trial_End"))()
 end)
 
 spawn(function()
@@ -32,7 +32,7 @@ end)
 
 spawn(function()
 wait(68)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_USER"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_USER"))()
 end)
 
 spawn(function()
