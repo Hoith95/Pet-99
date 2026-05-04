@@ -52,19 +52,22 @@ spawn(function()
         -- World 4: check _G.Time_Trial_End một lần
         if _G.Time_Trial_End == true then
 			_G.Time_Trial_Var = true
-			getgenv().GCOMBINE_MACHINE_OUTPUT = "Titanic Fantasy Present"
+			getgenv().GDO_TIME_TRIAL = true
+			getgenv().GTIME_TRIAL_MIN_TIME_TO_BOSS3 = 1
+			getgenv().GTIME_TRIAL_CHEST_TO_CLAIM = 3
+			getgenv().GTIME_TRIAL_HATCH_FIRST_SECONDS = 1
+			getgenv().GTIME_TRIAL_ENCHANTS = {"Criticals","Tap Power","Tap Power","Strong Pets","Walkspeed","Chest Breaker","Criticals"}
 			getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
-			spawn(function()
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-3"))()
-			end)
             print("✅ Config: Halloween set (Time_Trial_End)")
         else
             warn("⛔ _G.Time_Trial_End chưa true — set Block Party.")
-			getgenv().GENCHANTS = {"Criticals","Tap Power","Tap Power","Strong Pets","Walkspeed","Chest Breaker","Criticals"}
-			spawn(function()
-			wait(68)
-        	loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial-3"))()
-			end)
+			_G.Time_Trial_Var = true
+			getgenv().GDO_TIME_TRIAL = true
+			getgenv().GTIME_TRIAL_MIN_TIME_TO_BOSS3 = 1
+			getgenv().GTIME_TRIAL_CHEST_TO_CLAIM = 3
+			getgenv().GTIME_TRIAL_HATCH_FIRST_SECONDS = 1
+			getgenv().GTIME_TRIAL_ENCHANTS = {"Criticals","Tap Power","Tap Power","Strong Pets","Walkspeed","Chest Breaker","Criticals"}
+			getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
         end
     else
         warn("⛔ Không phải event được hỗ trợ — không set gì.")
@@ -72,6 +75,7 @@ spawn(function()
 end)
 
 getgenv().GLOOTBOXES = {"Titanic Fantasy Present"}
+getgenv().GCOMBINE_MACHINE_OUTPUT = "Titanic Fantasy Present"
 
 getgenv().GPROGRESS_MODE = "Hybrid" -- Hatch
 getgenv().GGFX_MODE = 1
