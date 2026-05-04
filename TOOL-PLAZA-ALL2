@@ -69,7 +69,7 @@ getgenv().Settings = {
         {Name = "Shiny Golden Titanic Starlight Pony", Data = {Price = "86b"}},
         {Name = "Shiny Titanic Starlight Pony", Data = {Price = "20b"}},
         {Name = "Rainbow Titanic Starlight Pony", Data = {Price = "18b"}},
-        {Name = "Golden Titanic Starlight Pony", Data = {Price = "6b"}},
+        {Name = "Golden Titanic Starlight Pony", Data = {Price = "5.8b"}},
         {Name = "Titanic Starlight Pony", Data = {Price = "5.2b"}},
 
         {Name = "Rainbow Titanic Pineapple Dog", Data = {Price = "1%"}},
@@ -116,9 +116,9 @@ getgenv().Settings = {
         {Name = "Fantasy Key", Data = {Price = "69k"}},
         {Name = "Fantasy Spinny Wheel Ticket", Data = {Price = "69k"}},
 
-		{Name = "Huge Wisp Griffin", Data = {Price = "50m"}},
-        {Name = "Huge Wicked Kirin", Data = {Price = "138m"}},
-		{Name = "Huge Totem Cub", Data = {Price = "79m"}},
+		{Name = "Huge Wisp Griffin", Data = {Price = "45m"}},
+        {Name = "Huge Wicked Kirin", Data = {Price = "110m"}},
+		{Name = "Huge Totem Cub", Data = {Price = "65m"}},
 
         {Name = "Huge Bluebird", Data = {Price = "20m"}},
         {Name = "Golden Huge Bluebird", Data = {Price = "28m"}},
