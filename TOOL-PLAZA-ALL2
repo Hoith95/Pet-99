@@ -17,6 +17,14 @@ getgenv().Settings = {
 		{Name = "Gargantuan Super Cat", Data = {Price = "50.86b"}},
         {Name = "Titanic Vampire Agony", Data = {Price = "18b"}},
 
+		{Name = "Titanic Scroll Dragon", Data = {Price = "11b"}},
+
+		{Name = "Titanic Werewolf", Data = {Price = "7b"}},
+		{Name = "Golden Titanic Werewolf", Data = {Price = "11b"}},
+
+		{Name = "Titanic Ruinous Angelus", Data = {Price = "6b"}},
+		{Name = "Golden Titanic Werewolf", Data = {Price = "7b"}},
+
 		{Name = "Titanic Horseshoe Capybara", Data = {Price = "4b"}},
 		{Name = "Golden Titanic Horseshoe Capybara", Data = {Price = "4.4b"}},
 		{Name = "Rainbow Titanic Horseshoe Capybara", Data = {Price = "11.68b"}},
@@ -74,6 +82,7 @@ getgenv().Settings = {
         {Name = "2026 New Years Gift", Data = {Price = "1%"}},
 		{Name = "Halloween Lucky Block Gift", Data = {Price = "38m"}},
         {Name = "Time Trial Gift", Data = {Price = "199k"}},
+        {Name = "Time Trial Gift 2", Data = {Price = "2m"}},
         {Name = "Tropical Gift", Data = {Price = "50k"}},
         {Name = "Basketball Gift", Data = {Price = "1%"}},
         {Name = "Spider Gift", Data = {Price = "1%"}},
@@ -81,6 +90,7 @@ getgenv().Settings = {
         {Name = "Huge Machine Egg 5", Data = {Price = "868m"}},
         {Name = "Hype Egg", Data = {Price = "12m"}},
         {Name = "Hype Egg 2", Data = {Price = "18m"}},
+        {Name = "Hype Egg 3", Data = {Price = "20m"}},
         --{Name = "Mini Pinata", Data = {Price = "45k"}},
         --{Name = "Charm Stone", Data = {Price = "1%"}},
         --{Name = "Royalty TN1", Data = {Price = "1%"}},
@@ -92,6 +102,7 @@ getgenv().Settings = {
         {Name = "Exclusive Egg 57", Data = {Price = "186m"}},
         {Name = "Exclusive Egg 58", Data = {Price = "186m"}},
         {Name = "Exclusive Egg 59", Data = {Price = "186m"}},
+        {Name = "Exclusive Egg 60", Data = {Price = "146m"}},
 
         {Name = "Mega Loot Chest", Data = {Price = "20m"}},
         {Name = "Mega Potion Chest", Data = {Price = "10m"}},
