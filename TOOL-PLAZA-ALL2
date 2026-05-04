@@ -9,6 +9,8 @@ getgenv().Settings = {
 ["Items"] = {
         {Name = "MVP Key", Data = {Price = "2.39m"}},
         {Name = "Exclusive Egg 60", Data = {Price = "146m"}},
+        {Name = "Huge Machine Egg 5", Data = {Price = "868m"}},
+        {Name = "Hype Egg", Data = {Price = "12m"}},
         {Name = "Hype Egg 2", Data = {Price = "18m"}},
         {Name = "Hype Egg 3", Data = {Price = "20m"}},
         {Name = "Time Trial Gift", Data = {Price = "199k"}},
@@ -90,8 +92,6 @@ getgenv().Settings = {
         {Name = "Basketball Gift", Data = {Price = "1%"}},
         {Name = "Spider Gift", Data = {Price = "1%"}},
 
-        {Name = "Huge Machine Egg 5", Data = {Price = "868m"}},
-        {Name = "Hype Egg", Data = {Price = "12m"}},
         --{Name = "Mini Pinata", Data = {Price = "45k"}},
         --{Name = "Charm Stone", Data = {Price = "1%"}},
         --{Name = "Royalty TN1", Data = {Price = "1%"}},
