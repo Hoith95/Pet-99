@@ -7,7 +7,7 @@ local prices = {"4.7b", "4.8b", "4.9b"}
 
 getgenv().Settings = {
 ["Items"] = {
-        {Name = "MVP Key", Data = {Price = "2.39m"}},
+        {Name = "MVP Key", Data = {Price = "2m"}},
         {Name = "Exclusive Egg 60", Data = {Price = "146m"}},
         {Name = "Huge Machine Egg 5", Data = {Price = "868m"}},
         {Name = "Hype Egg", Data = {Price = "12m"}},
@@ -25,12 +25,16 @@ getgenv().Settings = {
         {Name = "Titanic Vampire Agony", Data = {Price = "18b"}},
 
 		{Name = "Titanic Scroll Dragon", Data = {Price = "11b"}},
+		{Name = "Golden Titanic Scroll Dragon", Data = {Price = "18.86b"}},
 
-		{Name = "Titanic Werewolf", Data = {Price = "7b"}},
-		{Name = "Golden Titanic Werewolf", Data = {Price = "11b"}},
+		{Name = "Titanic Werewolf", Data = {Price = "6.5b"}},
+		{Name = "Golden Titanic Werewolf", Data = {Price = "10b"}},
+		{Name = "Rainbow Titanic Werewolf", Data = {Price = "18.68b"}},
 
-		{Name = "Titanic Ruinous Angelus", Data = {Price = "6b"}},
-		{Name = "Golden Titanic Werewolf", Data = {Price = "7b"}},
+		{Name = "Titanic Ruinous Angelus", Data = {Price = "5.2b"}},
+		{Name = "Golden Titanic Ruinous Angelus", Data = {Price = "6.3b"}},
+		{Name = "Rainbow Titanic Ruinous Angelus", Data = {Price = "15.68b"}},
+		{Name = "Shiny Titanic Ruinous Angelus", Data = {Price = "18.86b"}},
 
 		{Name = "Titanic Horseshoe Capybara", Data = {Price = "4b"}},
 		{Name = "Golden Titanic Horseshoe Capybara", Data = {Price = "4.4b"}},
