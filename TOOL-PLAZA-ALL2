@@ -29,11 +29,11 @@ getgenv().Settings = {
 
 		{Name = "Titanic Werewolf", Data = {Price = "6.5b"}},
 		{Name = "Golden Titanic Werewolf", Data = {Price = "10b"}},
-		{Name = "Rainbow Titanic Werewolf", Data = {Price = "18.68b"}},
+		{Name = "Rainbow Titanic Werewolf", Data = {Price = "23.68b"}},
 
 		{Name = "Titanic Ruinous Angelus", Data = {Price = "5b"}},
-		{Name = "Golden Titanic Ruinous Angelus", Data = {Price = "6.3b"}},
-		{Name = "Rainbow Titanic Ruinous Angelus", Data = {Price = "15.68b"}},
+		{Name = "Golden Titanic Ruinous Angelus", Data = {Price = "6b"}},
+		{Name = "Rainbow Titanic Ruinous Angelus", Data = {Price = "16.68b"}},
 		{Name = "Shiny Titanic Ruinous Angelus", Data = {Price = "18.86b"}},
 
 		{Name = "Titanic Horseshoe Capybara", Data = {Price = "4b"}},
@@ -120,9 +120,7 @@ getgenv().Settings = {
         {Name = "Fantasy Key", Data = {Price = "69k"}},
         {Name = "Fantasy Spinny Wheel Ticket", Data = {Price = "69k"}},
 
-		{Name = "Huge Wisp Griffin", Data = {Price = "45m"}},
         {Name = "Huge Wicked Kirin", Data = {Price = "110m"}},
-		{Name = "Huge Totem Cub", Data = {Price = "65m"}},
 
         {Name = "Huge Bluebird", Data = {Price = "20m"}},
         {Name = "Golden Huge Bluebird", Data = {Price = "28m"}},
