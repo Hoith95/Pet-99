@@ -23,7 +23,7 @@ local FPS = {
 }
 
 -- ⏱️ CONSTANT
-local THREE_HOURS = 10800
+local THREE_HOURS = 3689
 
 -- 🚀 INIT
 task.wait(68)
