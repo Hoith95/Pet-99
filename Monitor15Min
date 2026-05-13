@@ -1,6 +1,6 @@
 -- Tránh chạy nhiều lần
-if _G.MONITOR_15MIN_RUNNINGS then return end
-_G.MONITOR_15MIN_RUNNINGS = true
+if _G.MONITOR_15MIN_RUNNING then return end
+_G.MONITOR_15MIN_RUNNING = true
 
 local Players          = game:GetService("Players")
 local ReplicatedStorage= game:GetService("ReplicatedStorage")
