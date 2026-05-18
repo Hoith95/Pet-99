@@ -9,6 +9,7 @@ getgenv().Settings = {
 ["Items"] = {
         {Name = "MVP Key", Data = {Price = "1.68m"}},
         {Name = "Exclusive Egg 60", Data = {Price = "146m"}},
+        {Name = "Exclusive Egg 61", Data = {Price = "129m"}},
         {Name = "Huge Machine Egg 5", Data = {Price = "868m"}},
         {Name = "Hype Egg", Data = {Price = "12m"}},
         {Name = "Hype Egg 2", Data = {Price = "18m"}},
@@ -107,7 +108,6 @@ getgenv().Settings = {
         {Name = "Exclusive Egg 57", Data = {Price = "186m"}},
         {Name = "Exclusive Egg 58", Data = {Price = "186m"}},
         {Name = "Exclusive Egg 59", Data = {Price = "186m"}},
-        {Name = "Exclusive Egg 60", Data = {Price = "168m"}},
 
         {Name = "Mega Loot Chest", Data = {Price = "20m"}},
         {Name = "Mega Potion Chest", Data = {Price = "10m"}},
@@ -119,7 +119,7 @@ getgenv().Settings = {
         {Name = "Secret Key", Data = {Price = "28k"}},
         {Name = "Void Key", Data = {Price = "50k"}},
         {Name = "Fantasy Key", Data = {Price = "69k"}},
-        {Name = "Fantasy Spinny Wheel Ticket", Data = {Price = "69k"}},
+        {Name = "Fantasy Spinny Wheel Ticket", Data = {Price = "25k"}},
 
         {Name = "Huge Bluebird", Data = {Price = "20m"}},
         {Name = "Golden Huge Bluebird", Data = {Price = "28m"}},
