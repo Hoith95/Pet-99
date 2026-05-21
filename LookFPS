@@ -10,7 +10,7 @@ local DEBUG = false
 local FPS = {
 	TIME_TRIAL = 7,
 
-	LUCKY_EXCEPTION = 2,
+	LUCKY_EXCEPTION = 3,
 
 	XMAS = {
 		EARLY = 5,
@@ -18,8 +18,8 @@ local FPS = {
 		LATE = 3
 	},
 
-	DEFAULT_EARLY = 2,
-	DEFAULT_LATE = 3
+	DEFAULT_EARLY = 3,
+	DEFAULT_LATE = 4
 }
 
 -- ⏱️ CONSTANT
