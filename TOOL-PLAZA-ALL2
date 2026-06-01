@@ -17,6 +17,7 @@ getgenv().Settings = {
         {Name = "Hype Egg 3", Data = {Price = "20m"}},
         {Name = "Time Trial Gift", Data = {Price = "199k"}},
         {Name = "Time Trial Gift 2", Data = {Price = "1m"}},
+        {Name = "Mini Pinata", Data = {Price = "55k"}},
 
 		{Name = "Gargantuan Nightfall Tiger", Data = {Price = "115.86b"}},
 		{Name = "Gargantuan Krampus", Data = {Price = "95.86b"}},
@@ -98,7 +99,6 @@ getgenv().Settings = {
         {Name = "Basketball Gift", Data = {Price = "1%"}},
         {Name = "Spider Gift", Data = {Price = "1%"}},
 
-        --{Name = "Mini Pinata", Data = {Price = "45k"}},
         --{Name = "Charm Stone", Data = {Price = "1%"}},
         --{Name = "Royalty TN1", Data = {Price = "1%"}},
         --{Name = "Overload TN1", Data = {Price = "1%"}},
