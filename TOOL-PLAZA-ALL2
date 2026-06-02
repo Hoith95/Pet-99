@@ -115,7 +115,7 @@ getgenv().Settings = {
         {Name = "Huge Sea Dragon Card", Data = {Price = "10m"}},
 
         {Name = "Mini Pinata", Data = {Price = "50k"}},
-        {Name = "All Huges", Data = {Price = "1%", Min_sell = "19m", Max_sell = "26m", sold_by_convention = true}},
+        {Name = "All Huges", Data = {Price = "1%", Min_sell = "18m", Max_sell = "20m", sold_by_convention = true}},
 
         {Name = "Crystal Key", Data = {Price = "20k"}},
         {Name = "Tech Key", Data = {Price = "40k"}},
