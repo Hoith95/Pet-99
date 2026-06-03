@@ -28,6 +28,7 @@ getgenv().Settings = {
 
 		{Name = "Titanic Scroll Dragon", Data = {Price = "8.68b"}},
 		{Name = "Golden Titanic Scroll Dragon", Data = {Price = "12.86b"}},
+		{Name = "Rainbow Titanic Scroll Dragon", Data = {Price = "68.86b"}},
 
 		{Name = "Titanic Werewolf", Data = {Price = "4.8b"}},
 		{Name = "Golden Titanic Werewolf", Data = {Price = "5.3b"}},
