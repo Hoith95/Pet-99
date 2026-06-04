@@ -65,6 +65,7 @@ local function startGuiDefault()
     local screenGui = Instance.new("ScreenGui")
     screenGui.Name = "GuiDefault"
     screenGui.ResetOnSpawn = false
+    gui.DisplayOrder = 999999
     screenGui.Parent = playerGui
 
     -- ===== REGION CREATOR =====
