@@ -58,9 +58,11 @@ getgenv().AutoMail = {
         ['Fantasy Spinny Wheel Ticket'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
     },
     ['Loop Interval'] = 60,
-    ['Users'] = {"Taryn_Xelvorn389", "Itsplumejolt", "ninaFalconBear", "MrsnateFrostFire", "ItstaraSkater2024", "HazelSpecter2024", "NexusRileyPulse50", "TheRealTinajolt2018", "TheRealWillow_cove"},
+    ['Users'] = {"Taryn_Xelvorn389", "Itsplumejolt", "ninaFalconBear", "MrsnateFrostFire", "ItstaraSkater2024", "HazelSpecter2024", "NexusRileyPulse50",
+                "TheRealTinajolt2018", "TheRealWillow_cove", "AndrewC0met74", "DynamoPrism2018", "ItsSarahjolt"},
     ['UserItemPreferences'] = {
-        ['TheRealWillow_cove'] = {'MVP Key Lower Half', 'MVP Key Upper Half', 'Insta Plant Capsule', 'Diamond'},
+        ['TheRealWillow_cove'] = {'MVP Key Lower Half', 'MVP Key Upper Half'},
+        ['TheRealWillow_cove', 'AndrewC0met74', 'DynamoPrism2018', 'ItsSarahjolt'] = {Insta Plant Capsule', 'Diamond'},
     }
 }
 
