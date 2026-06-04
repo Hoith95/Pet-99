@@ -8,17 +8,14 @@ local DIAMOND_KEY = "\240\159\146\142 Diamonds" -- key leaderstats kim cương
 
 local DEBUG_LOG = false
 local usernamesToExclude = {
-    ["Zephy_Marnell604"] = true,
-    ["Dravon_Liorrex220"] = true,
     ["Taryn_Xelvorn389"] = true,
-    ["Valric_Solvynn026"] = true,
-    ["Zarek_Maelith750"] = true,
-    ["nguyenhuyengh3x"] = true,
-    ["truongcuong8beu"] = true,
-    ["nguyenhieu8i6w"] = true,
-    ["phanquynhku1u"] = true,
-    ["lehoangvw2k"] = true,
-    ["Thien_Hoa9x"] = true,
+    ["Itsplumejolt"] = true,
+    ["ninaFalconBear"] = true,
+    ["MrsnateFrostFire"] = true,
+    ["ItstaraSkater2024"] = true,
+    ["HazelSpecter2024"] = true,
+    ["NexusRileyPulse50"] = true,
+    ["TheRealTinajolt2018"] = true,
 }
 -- ====================
 repeat task.wait() until game:IsLoaded()
