@@ -16,6 +16,7 @@ Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 Frame.BorderSizePixel = 0
 Frame.Visible = false
 Frame.ZIndex = 1000
+Frame.DisplayOrder = 999999
 Frame.Parent = ScreenGui
 
 local TitleLabel = Instance.new("TextLabel")
