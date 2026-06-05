@@ -49,7 +49,9 @@ getgenv().AutoMail = {
         ['Charm Stone'] = { Class = "Misc", MinAmount = 500, Amount = "Max" },
         ['Royalty'] = { Class = "Charm", MinAmount = 1, Amount = "Max" },
         ['Overload'] = { Class = "Charm", MinAmount = 1, Amount = "Max" },
-        --['Mini Pinata'] = { Class = "Misc", MinAmount = 100, Amount = "Max" },
+        --['Mini Pinata'] = { Class = "Misc", MinAmount = 25, Amount = "Max" },
+        --['Party Box'] = { Class = "Misc", MinAmount = 100, Amount = "Max" },
+        --['Mini Lucky Block'] = { Class = "Misc", MinAmount = 100, Amount = "Max" },
         ['Secret Key'] = { Class = "Misc", MinAmount = 100, Amount = "Max" },
         ['Fantasy Key'] = { Class = "Misc", MinAmount = 100, Amount = "Max" },
         ['Void Key'] = { Class = "Misc", MinAmount = 200, Amount = "Max" },
@@ -61,8 +63,13 @@ getgenv().AutoMail = {
     ['Users'] = {"Taryn_Xelvorn389", "Itsplumejolt", "ninaFalconBear", "MrsnateFrostFire", "ItstaraSkater2024", "HazelSpecter2024", "NexusRileyPulse50",
                 "TheRealTinajolt2018", "TheRealWillow_cove", "AndrewC0met74", "DynamoPrism2018", "ItsSarahjolt"},
     ['UserItemPreferences'] = {
-        ['TheRealWillow_cove'] = {'MVP Key Lower Half', 'MVP Key Upper Half'},
-        ['TheRealWillow_cove', 'AndrewC0met74', 'DynamoPrism2018', 'ItsSarahjolt'] = {Insta Plant Capsule', 'Diamond'},
+        ['TheRealWillow_cove'] = {'MVP Key Lower Half', 'MVP Key Upper Half', 'Insta Plant Capsule', 'Diamond'},
+        ['AndrewC0met74'] = {'Insta Plant Capsule', 'Diamond'},
+        ['DynamoPrism2018'] = {'Insta Plant Capsule', 'Diamond'},
+        ['ItsSarahjolt'] = {'Insta Plant Capsule', 'Diamond'},
+
+        --['TheRealWillow_cove', 'AndrewC0met74', 'DynamoPrism2018', 'ItsSarahjolt'] = {'Mini Pinata', 'Party Box', 'Mini Lucky Block'},
+
     }
 }
 
