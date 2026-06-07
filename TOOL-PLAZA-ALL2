@@ -23,7 +23,7 @@ getgenv().Settings = {
         {Name = "Huge Machine Egg 5", Data = {Price = "868m"}},
         {Name = "Hype Egg", Data = {Price = "12m"}},
         {Name = "Hype Egg 2", Data = {Price = "15m"}},
-        {Name = "Hype Egg 3", Data = {Price = "20m"}},
+        {Name = "Hype Egg 3", Data = {Price = "25m"}},
         {Name = "Time Trial Gift", Data = {Price = "199k"}},
         {Name = "Time Trial Gift 2", Data = {Price = "868k"}},
 
