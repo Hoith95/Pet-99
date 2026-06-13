@@ -84,7 +84,7 @@ getgenv().GMAIL_ITEMS = {
 ["Secret 6"] = {Class = "Pet", Id = "Heart", MinAmount = 1},
 ["Secret 7"] = {Class = "Pet", Id = "Lucky Clover", MinAmount = 1},
 ["Secret 8"] = {Class = "Pet", Id = "Mystery", MinAmount = 1},
---["Coins"] = {Class = "Enchant",Id = "Coins",Tier = 7, KeepAmount = 1, MinAmount = 15, Amount = 9999999999},
+["Coins"] = {Class = "Enchant",Id = "Coins",Tier = 7, KeepAmount = 1, MinAmount = 100, Amount = 9999999999},
 }
 getgenv().GMAX_MAIL_COST = "2m"
 
