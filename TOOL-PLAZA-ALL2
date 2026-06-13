@@ -742,7 +742,7 @@ end
             {name = "Enchant", category = "Enchant"},
             {name = "Lootbox", category = "Lootbox"},
             {name = "Seed", category = "Seed"},
-            {name = "Ultimate", category = "Ultimate"}
+            {name = "Ultimate", category = "Ultimate"},
             {name = "XPPotion", category = "XPPotion"},
             {name = "Tower", category = "Tower"},
 
