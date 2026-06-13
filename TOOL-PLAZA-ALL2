@@ -123,7 +123,9 @@ getgenv().Settings = {
 
         {Name = "Mega Loot Chest", Data = {Price = "20m"}},
         {Name = "Mega Potion Chest", Data = {Price = "10m"}},
-        {Name = "Mega Enchant Chest", Data = {Price = "4m"}},
+        {Name = "Mega Enchant Chest", Data = {Price = "3m"}},
+        {Name = "Mega Charm Chest", Data = {Price = "85m"}},
+        {Name = "Mega Ultimate Chest", Data = {Price = "20m"}},
         {Name = "Huge Sea Dragon Card", Data = {Price = "10m"}},
 
         --{Name = "Mini Pinata", Data = {Price = "50k"}},
