@@ -17,7 +17,7 @@ getgenv().Settings = {
         {Name = "Mystery", Data = {Price = "38b"}},
 
         {Name = "MVP Key", Data = {Price = "789k"}},
-		{Name = "Mastery", Category = "XPPotion", Data = {Price = "950k"}}
+		{Name = "Mastery", Category = "XPPotion", Data = {Price = "950k"}},
         {Name = "MVP Key Upper Half", Data = {Price = "750k"}},
         {Name = "Exclusive Egg 60", Data = {Price = "168m"}},
         {Name = "Exclusive Egg 61", Data = {Price = "129m"}},
