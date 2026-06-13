@@ -743,10 +743,13 @@ end
             {name = "Lootbox", category = "Lootbox"},
             {name = "Seed", category = "Seed"},
             {name = "Ultimate", category = "Ultimate"}
+            {name = "XPPotion", category = "XPPotion"},
+            {name = "Tower", category = "Tower"},
+
         }
  			if category_find == "Potion" or category_find == "Enchant" or category_find == "XPPotion" or category_find == "Tower" then
-				local inventorySubTables = {
-					name = category_find , category = category_find
+				inventorySubTables = {
+					{name = category_find, category = category_find}
 				}	
 			end       
         for _, subTable in ipairs(inventorySubTables) do
