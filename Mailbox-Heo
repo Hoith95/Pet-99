@@ -55,6 +55,8 @@ getgenv().AutoMail = {
         --['Mini Pinata'] = { Class = "Misc", MinAmount = 25, Amount = "Max" },
         --['Party Box'] = { Class = "Misc", MinAmount = 100, Amount = "Max" },
         --['Mini Lucky Block'] = { Class = "Misc", MinAmount = 100, Amount = "Max" },
+        ['Bucket O' Magic'] = { Class = "Misc", MinAmount = 10, Amount = "Max" },
+        ['Magic Shard'] = { Class = "Misc", MinAmount = 10, Amount = "Max" },
         ['Secret Key'] = { Class = "Misc", MinAmount = 100, Amount = "Max" },
         ['Fantasy Key'] = { Class = "Misc", MinAmount = 100, Amount = "Max" },
         ['Void Key'] = { Class = "Misc", MinAmount = 200, Amount = "Max" },
