@@ -55,26 +55,16 @@ spawn(function()
 			getgenv().GDO_BACKROOMS = true
 			getgenv().GBACKROOMS_OPEN_CHESTS = true
 			getgenv().GBACKROOMS_MIN_MULTIPLIER = 75
-			getgenv().GDO_TIME_TRIAL = true
-			getgenv().GTIME_TRIAL_MIN_TIME_TO_BOSS3 = 1
-			getgenv().GTIME_TRIAL_CHEST_TO_CLAIM = 3
-			getgenv().GTIME_TRIAL_HATCH_FIRST_SECONDS = 1
 			getgenv().GTIME_TRIAL_ENCHANTS = {"Criticals","Tap Power","Tap Power","Strong Pets","Walkspeed","Chest Breaker","Criticals"}
-			--getgenv().GHATCH_ENCHANTS = {"Huge Hunter","Lucky Eggs","Lucky Eggs","Lucky Eggs","Lucky Eggs","Lucky Eggs","Lucky Eggs"}
-			getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
+			getgenv().GENCHANTS = {"Huge Hunter","Lucky Eggs","Lucky Eggs","Lucky Eggs","Lucky Eggs","Lucky Eggs","Lucky Eggs"}
             print("✅ Config: Halloween set (Time_Trial_End)")
         else
             warn("⛔ _G.Time_Trial_End chưa true — set Block Party.")
-			_G.Time_Trial_Var = true
-			getgenv().GDO_BACKROOMS = true
-			getgenv().GBACKROOMS_OPEN_CHESTS = true
-			getgenv().GBACKROOMS_MIN_MULTIPLIER = 75
 			getgenv().GDO_TIME_TRIAL = true
 			getgenv().GTIME_TRIAL_MIN_TIME_TO_BOSS3 = 1
 			getgenv().GTIME_TRIAL_CHEST_TO_CLAIM = 3
 			getgenv().GTIME_TRIAL_HATCH_FIRST_SECONDS = 1
 			getgenv().GTIME_TRIAL_ENCHANTS = {"Criticals","Tap Power","Tap Power","Strong Pets","Walkspeed","Chest Breaker","Criticals"}
-			--getgenv().GHATCH_ENCHANTS = {"Huge Hunter","Lucky Eggs","Lucky Eggs","Lucky Eggs","Lucky Eggs","Lucky Eggs","Lucky Eggs"}
 			getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
         end
     else
