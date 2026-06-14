@@ -208,7 +208,7 @@ local function startGuiUpdater()
         --gift2Label.Text = tostring(getMiscAmount("Lucky Raid Orb V2")) .. " | Lucky Raid Orb"
         --updateLabelSize(gift2Label)
 
-        coinLabel.Text = Formatint(getCurrencyAmount("DaydreamCoins")) .. " | Backroom Coins"
+        coinLabel.Text = Formatint(getCurrencyAmount("DaydreamCoins")) .. " | Back Coins"
         updateLabelSize(coinLabel)
 
         --raffleLabel.Text = getS2RaidMaxDifficulty() .. " | Level Raid"
