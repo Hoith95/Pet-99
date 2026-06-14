@@ -19,6 +19,7 @@ CoreGui:WaitForChild("RobloxPromptGui").promptOverlay.ChildAdded:Connect(functio
 	if string.find(text, "lost connection")
 	or string.find(text, "message")
 	or string.find(text, "kết thúc")
+	or string.find(text, "error")
 	or string.find(text, "kick")
 	or string.find(text, "heo")
 	or string.find(text, "egg")
