@@ -18,8 +18,8 @@ local FPS = {
 		LATE = 3
 	},
 
-	DEFAULT_EARLY = 2,
-	DEFAULT_LATE = 3
+	DEFAULT_EARLY = 4,
+	DEFAULT_LATE = 5
 }
 
 -- ⏱️ CONSTANT
