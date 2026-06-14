@@ -55,7 +55,6 @@ spawn(function()
 			getgenv().GDO_BACKROOMS = true
 			getgenv().GBACKROOMS_OPEN_CHESTS = true
 			getgenv().GBACKROOMS_MIN_MULTIPLIER = 75
-			getgenv().GTIME_TRIAL_ENCHANTS = {"Criticals","Tap Power","Tap Power","Strong Pets","Walkspeed","Chest Breaker","Criticals"}
 			getgenv().GENCHANTS = {"Huge Hunter","Lucky Eggs","Lucky Eggs","Lucky Eggs","Lucky Eggs","Lucky Eggs","Lucky Eggs"}
             print("✅ Config: Halloween set (Time_Trial_End)")
         else
