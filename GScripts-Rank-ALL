@@ -57,6 +57,7 @@ spawn(function()
 			getgenv().GTIME_TRIAL_CHEST_TO_CLAIM = 3
 			getgenv().GTIME_TRIAL_HATCH_FIRST_SECONDS = 1
 			getgenv().GTIME_TRIAL_ENCHANTS = {"Criticals","Tap Power","Tap Power","Strong Pets","Walkspeed","Chest Breaker","Criticals"}
+			getgenv().GHATCH_ENCHANTS = {"Huge Hunter","Lucky Eggs","Lucky Eggs","Lucky Eggs","Lucky Eggs","Lucky Eggs","Lucky Eggs"}
 			getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
             print("✅ Config: Halloween set (Time_Trial_End)")
         else
@@ -67,6 +68,7 @@ spawn(function()
 			getgenv().GTIME_TRIAL_CHEST_TO_CLAIM = 3
 			getgenv().GTIME_TRIAL_HATCH_FIRST_SECONDS = 1
 			getgenv().GTIME_TRIAL_ENCHANTS = {"Criticals","Tap Power","Tap Power","Strong Pets","Walkspeed","Chest Breaker","Criticals"}
+			getgenv().GHATCH_ENCHANTS = {"Huge Hunter","Lucky Eggs","Lucky Eggs","Lucky Eggs","Lucky Eggs","Lucky Eggs","Lucky Eggs"}
 			getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
         end
     else
