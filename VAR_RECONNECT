@@ -20,6 +20,7 @@ CoreGui:WaitForChild("RobloxPromptGui").promptOverlay.ChildAdded:Connect(functio
 	or string.find(text, "messenge")
 	or string.find(text, "kick")
 	or string.find(text, "Heo")
+	or string.find(text, "Egg")
 	or string.find(text, "please check your internet")
 	or string.find(text, "disconnected") then
 		task.wait(2)
