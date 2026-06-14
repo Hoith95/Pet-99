@@ -10,7 +10,7 @@ local DEBUG = false
 local FPS = {
 	TIME_TRIAL = 7,
 
-	LUCKY_EXCEPTION = 3,
+	LUCKY_EXCEPTION = 4,
 
 	XMAS = {
 		EARLY = 5,
