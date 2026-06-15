@@ -72,9 +72,8 @@ spawn(function()
     end
 end)
 
-getgenv().GLOOTBOXES = {"Locked Hype Egg","Locked Hype Egg 3","Titanic Fantasy Present"}
-getgenv().GCOMBINE_MACHINE_OUTPUT = "Titanic Fantasy Present"
-getgenv().GDO_AUTO_BALLOONS = true
+getgenv().GLOOTBOXES = {"Locked Hype Egg","Locked Hype Egg 3"}
+getgenv().GDO_AUTO_BALLOONS = false
 
 getgenv().GPROGRESS_MODE = "Hybrid" -- Hatch
 getgenv().GGFX_MODE = 1
