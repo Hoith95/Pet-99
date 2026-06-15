@@ -10,7 +10,7 @@ local DEBUG = false
 local FPS = {
 	TIME_TRIAL = 7,
 
-	LUCKY_EXCEPTION = 4,
+	LUCKY_EXCEPTION = 3,
 
 	XMAS = {
 		EARLY = 5,
@@ -19,14 +19,14 @@ local FPS = {
 	},
 
 	DEFAULT_EARLY = 4,
-	DEFAULT_LATE = 4
+	DEFAULT_LATE = 3
 }
 
 -- ⏱️ CONSTANT
-local THREE_HOURS = 3689
+local THREE_HOURS = 1689
 
 -- 🚀 INIT
-task.wait(268)
+task.wait(138)
 local startTime = tick()
 
 task.spawn(function()
