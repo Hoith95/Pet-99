@@ -72,20 +72,6 @@ spawn(function()
     end
 end)
 
-getgenv().GMAIL_RECEIVERS = {"Taryn_Xelvorn389", "Itsplumejolt", "ninaFalconBear", "MrsnateFrostFire", "ItstaraSkater2024", "HazelSpecter2024", "NexusRileyPulse50", "TheRealTinajolt2018"}
-getgenv().GMAIL_ITEMS = {
-["Secret 1"] = {Class = "Pet", Id = "Rainbow Swirl", MinAmount = 1},
-["Secret 2"] = {Class = "Pet", Id = "Banana", MinAmount = 1},
-["Secret 3"] = {Class = "Pet", Id = "Coin", MinAmount = 1},
-["Secret 4"] = {Class = "Pet", Id = "Yellow Lucky Block", MinAmount = 1},
-["Secret 5"] = {Class = "Pet", Id = "Crown", MinAmount = 1},
-["Secret 6"] = {Class = "Pet", Id = "Heart", MinAmount = 1},
-["Secret 7"] = {Class = "Pet", Id = "Lucky Clover", MinAmount = 1},
-["Secret 8"] = {Class = "Pet", Id = "Mystery", MinAmount = 1},
-["Coins"] = {Class = "Enchant",Id = "Coins",Tier = 7, KeepAmount = 1, MinAmount = 100, Amount = 9999999999},
-}
-getgenv().GMAX_MAIL_COST = "2m"
-
 getgenv().GLOOTBOXES = {"Locked Hype Egg","Locked Hype Egg 3","Titanic Fantasy Present"}
 getgenv().GCOMBINE_MACHINE_OUTPUT = "Titanic Fantasy Present"
 getgenv().GDO_AUTO_BALLOONS = true
