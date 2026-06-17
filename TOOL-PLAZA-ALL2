@@ -17,7 +17,7 @@ getgenv().Settings = {
         {Name = "Mystery", Data = {Price = "38b"}},
 
         {Name = "MVP Key", Data = {Price = "789k"}},
-		{Name = "Mastery", Category = "XPPotion", Data = {Price = "950k"}},
+		{Name = "Mastery", Category = "XPPotion", Data = {Price = "850k"}},
         {Name = "MVP Key Upper Half", Data = {Price = "750k"}},
         {Name = "Exclusive Egg 60", Data = {Price = "168m"}},
         {Name = "Exclusive Egg 61", Data = {Price = "168m"}},
@@ -37,9 +37,9 @@ getgenv().Settings = {
 		{Name = "Gargantuan Super Cat", Data = {Price = "50.86b"}},
         {Name = "Titanic Vampire Agony", Data = {Price = "18b"}},
 
-		{Name = "Titanic Scroll Dragon", Data = {Price = "6.6b"}},
+		{Name = "Titanic Scroll Dragon", Data = {Price = "5.5b"}},
 		{Name = "Golden Titanic Scroll Dragon", Data = {Price = "12.86b"}},
-		{Name = "Rainbow Titanic Scroll Dragon", Data = {Price = "26.86b"}},
+		{Name = "Rainbow Titanic Scroll Dragon", Data = {Price = "16.86b"}},
 
 		{Name = "Titanic Werewolf", Data = {Price = "4.7b"}},
 		{Name = "Golden Titanic Werewolf", Data = {Price = "5.1b"}},
