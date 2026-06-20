@@ -26,7 +26,7 @@ local FPS = {
 local THREE_HOURS = 999
 
 -- 🚀 INIT
-task.wait(238)
+task.wait(368)
 local startTime = tick()
 
 task.spawn(function()
