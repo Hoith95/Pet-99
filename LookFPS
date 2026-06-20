@@ -18,7 +18,7 @@ local FPS = {
 		LATE = 3
 	},
 
-	DEFAULT_EARLY = 15,
+	DEFAULT_EARLY = 3,
 	DEFAULT_LATE = 3
 }
 
