@@ -21,6 +21,7 @@ getgenv().Settings = {
         {Name = "MVP Key Upper Half", Data = {Price = "750k"}},
         {Name = "Exclusive Egg 60", Data = {Price = "168m"}},
         {Name = "Exclusive Egg 61", Data = {Price = "168m"}},
+        {Name = "Exclusive Egg 62", Data = {Price = "148m"}},
         {Name = "Huge Machine Egg 5", Data = {Price = "868m"}},
         {Name = "Huge Machine Egg 6", Data = {Price = "1.1b"}},
         {Name = "Hype Egg", Data = {Price = "12m"}},
