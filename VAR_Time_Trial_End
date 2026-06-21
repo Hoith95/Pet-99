@@ -14,7 +14,7 @@ if used >= 10 then
     _G.Time_Trial_End = true
     warn("✅ Đã đủ 10 lượt — _G.Time_Trial_End = true")
 
-    task.delay(10, function()
+    task.delay(60, function()
 
         if _G.Time_Trial_Var ~= true then
             warn("⛔ Sau 60s vẫn chưa đổi ENCHANTS — kick")
