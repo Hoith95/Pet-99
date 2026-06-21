@@ -57,7 +57,7 @@ spawn(function()
 			getgenv().GBACKROOMS_OPEN_CHESTS_ONLY_DEEP_ROOMS = false
 			getgenv().GBACKROOMS_KICK_AFTER_CHESTS = false
 			getgenv().GBACKROOMS_DO_BOSS_ROOM = false
-			getgenv().GALLOW_HOPPING = false
+			getgenv().GALLOW_HOPPING = true
 			getgenv().GBACKROOMS_MIN_MULTIPLIER = 50
 			getgenv().GBACKROOMS_COINS_TO_FARM_BEFORE_HATCHING = "68m"
 			getgenv().GEVENT_UPGRADES = {
