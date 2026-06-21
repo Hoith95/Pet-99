@@ -61,7 +61,7 @@ spawn(function()
 			getgenv().GBACKROOMS_DO_BOSS_ROOM = true
 			getgenv().GALLOW_HOPPING = true
 			getgenv().GBACKROOMS_MIN_MULTIPLIER = 75
-			getgenv().GBACKROOMS_COINS_TO_FARM_BEFORE_HATCHING = "68m"
+			getgenv().GBACKROOMS_COINS_TO_FARM_BEFORE_HATCHING = "38m"
 			getgenv().GEVENT_UPGRADES = {
 			    { Id = "BackroomsBossDamage",    MaxTier = 25 },
 			    { Id = "BackroomsTokenFind", MaxTier = 20 },
