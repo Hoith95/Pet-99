@@ -1,3 +1,8 @@
+if _G.VAR_UTRAFPS then
+    return
+end
+_G.VAR_UTRAFPS = true
+
 local FPS = 60 -- thay nếu muốn
 
 local Players = game:GetService("Players")
