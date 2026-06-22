@@ -10,16 +10,16 @@ spawn(function()
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge"))()
 end)
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mastery"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mastery"))()
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-RESET"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-RESET"))()
 
 spawn(function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Combine-Key"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Combine-Key"))()
 end)
 
 spawn(function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_Time_Trial_End"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_Time_Trial_End"))()
 end)
 
 spawn(function()
@@ -29,32 +29,6 @@ spawn(function()
     else
         warn("⛔ Không đúng PlaceId, bỏ qua script.")
     end
-end)
-
-spawn(function()
-    local targetPlaceId = 140403681187145
-    if game.PlaceId ~= targetPlaceId then
-        game:GetService("ReplicatedStorage"):WaitForChild("Network"):WaitForChild("World4Teleport"):InvokeServer()
-    else
-        warn("⛔ Không đúng PlaceId, bỏ qua script.")
-    end
-end)
-
-spawn(function()
-    local targetPlaceId = 140403681187145
-    if game.PlaceId ~= targetPlaceId then
-        warn("⛔ Không đúng PlaceId, bỏ qua script.")
-        return
-    end
-    if _G.Time_Trial_Done ~= true then
-        warn("⛔ _G.Time_Trial_Done chưa true, không chạy script.")
-        return
-    end
-    --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_TELE_LUCKY_EVENT"))()
-end)
-
-spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_EVENT_UPDATES"))()
 end)
 
 spawn(function()
