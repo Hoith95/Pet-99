@@ -18,7 +18,7 @@ local FPS = {
 		LATE = 3
 	},
 
-	DEFAULT_EARLY = 5,
+	DEFAULT_EARLY = 3,
 	DEFAULT_LATE = 3
 }
 
@@ -26,7 +26,7 @@ local FPS = {
 local THREE_HOURS = 999
 
 -- 🚀 INIT
-task.wait(368)
+task.wait(68)
 local startTime = tick()
 
 task.spawn(function()
