@@ -1,0 +1,393 @@
+if _G.PS99_SUPER_LIGHT then
+    return
+end
+_G.PS99_SUPER_LIGHT = true
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local SoundService = game:GetService("SoundService")
+local Lighting = game:GetService("Lighting")
+local StarterGui = game:GetService("StarterGui")
+local GuiService = game:GetService("GuiService")
+local CoreGui = game:GetService("CoreGui")
+local Workspace = game:GetService("Workspace")
+
+local LocalPlayer = Players.LocalPlayer
+local Terrain = Workspace:FindFirstChildWhichIsA("Terrain") or Workspace:FindFirstChild("Terrain")
+
+local CFG = {
+    FPSCap = 60,
+
+    DisableParticles = true,
+    DisableGuiEffects = true,
+    DisablePostEffects = true,
+    DisableShadows = true,
+    DisableSounds = true,
+    DisableAnimations = true,
+
+    HideHeavyFolders = true,
+    HideOtherPets = true,
+}
+
+local function safe(fn)
+    return pcall(fn)
+end
+
+local function getThings()
+    return Workspace:FindFirstChild("__THINGS")
+end
+
+local function setGraphicsLow()
+    safe(function()
+        local ugs = UserSettings():GetService("UserGameSettings")
+        ugs.GraphicsQualityLevel = 1
+        ugs.SavedQualityLevel = Enum.SavedQualitySetting.QualityLevel1
+    end)
+end
+
+local function disableLighting()
+    safe(function()
+        Lighting.GlobalShadows = false
+        Lighting.Brightness = 0
+        Lighting.FogEnd = 1e9
+        Lighting.FogStart = 0
+        Lighting.EnvironmentDiffuseScale = 0
+        Lighting.EnvironmentSpecularScale = 0
+        Lighting.ShadowSoftness = 0
+    end)
+
+    if CFG.DisablePostEffects then
+        for _, v in ipairs(Lighting:GetChildren()) do
+            if v:IsA("Atmosphere")
+            or v:IsA("BloomEffect")
+            or v:IsA("BlurEffect")
+            or v:IsA("DepthOfFieldEffect")
+            or v:IsA("SunRaysEffect")
+            or v:IsA("ColorCorrectionEffect") then
+                safe(function()
+                    v.Enabled = false
+                end)
+            end
+        end
+    end
+end
+
+local function disableTerrain()
+    local terrain = Workspace:FindFirstChildWhichIsA("Terrain") or Workspace:FindFirstChild("Terrain")
+    if not terrain then
+        return
+    end
+
+    safe(function()
+        terrain.WaterWaveSize = 0
+        terrain.WaterWaveSpeed = 0
+        terrain.WaterReflectance = 0
+        terrain.WaterTransparency = 1
+    end)
+end
+
+local IGNORE_COLLISION_FOLDERS = {
+	Map = false,
+	Map4 = true,
+	ALWAYS_RENDERING_4 = false,
+	Border4 = false,
+	FlyBorder = false,
+}
+
+local function isMapPart(part)
+
+	local things = Workspace:FindFirstChild("__THINGS")
+	local generated =
+		things
+		and things:FindFirstChild("__INSTANCE_CONTAINER")
+		and things.__INSTANCE_CONTAINER:FindFirstChild("Active")
+		and things.__INSTANCE_CONTAINER.Active:FindFirstChild("Backrooms")
+		and things.__INSTANCE_CONTAINER.Active.Backrooms:FindFirstChild("GeneratedBackrooms")
+
+	if generated and part:IsDescendantOf(generated) then
+		return true
+	end
+
+	local cur = part
+
+	while cur do
+		if IGNORE_COLLISION_FOLDERS[cur.Name] then
+			return true
+		end
+		cur = cur.Parent
+	end
+
+	return false
+end
+
+local function optimizePart(part)
+	safe(function()
+
+		part.LocalTransparencyModifier = 1
+
+		-- giữ collision cho map/sàn
+		if not isMapPart(part) then
+			part.CanCollide = false
+			part.CanTouch = false
+			part.CanQuery = false
+		end
+
+		if CFG.DisableShadows then
+			part.CastShadow = false
+		end
+
+	end)
+end
+
+local function cleanInstance(inst)
+	if not inst then
+		return
+	end
+
+	-- Particle
+	if inst:IsA("ParticleEmitter") then
+		safe(function()
+			inst.Enabled = false
+			inst.Rate = 0
+		end)
+		return
+	end
+
+	-- Beam
+	if inst:IsA("Beam") then
+		safe(function()
+			inst.Enabled = false
+		end)
+		return
+	end
+
+	-- Trail
+	if inst:IsA("Trail") then
+		safe(function()
+			inst.Enabled = false
+		end)
+		return
+	end
+
+	-- Smoke / Fire / Sparkles
+	if inst:IsA("Smoke")
+	or inst:IsA("Fire")
+	or inst:IsA("Sparkles") then
+		safe(function()
+			inst.Enabled = false
+		end)
+		return
+	end
+
+	-- Highlight
+	if inst:IsA("Highlight") then
+		safe(function()
+			inst.Enabled = false
+		end)
+		return
+	end
+
+	-- Texture / Decal
+	if inst:IsA("Texture")
+	or inst:IsA("Decal") then
+		safe(function()
+			inst.Transparency = 1
+		end)
+		return
+	end
+
+	-- Billboard / Surface
+	if inst:IsA("BillboardGui")
+	or inst:IsA("SurfaceGui") then
+		safe(function()
+			inst.Enabled = false
+		end)
+		return
+	end
+
+	-- Sound
+	if inst:IsA("Sound") and CFG.DisableSounds then
+		safe(function()
+			inst.Volume = 0
+			inst.Playing = false
+			inst:Stop()
+		end)
+		return
+	end
+
+	-- MeshPart
+	if inst:IsA("MeshPart") then
+		safe(function()
+			inst.LocalTransparencyModifier = 1
+			inst.CastShadow = false
+		end)
+		return
+	end
+
+	-- BasePart
+	if inst:IsA("BasePart") then
+		optimizePart(inst)
+		return
+	end
+end
+
+local function disableCharacterAnimations()
+    if not CFG.DisableAnimations then
+        return
+    end
+
+    local char = LocalPlayer.Character
+    if not char then
+        return
+    end
+
+    safe(function()
+        local animate = char:FindFirstChild("Animate")
+        if animate then
+            animate.Disabled = true
+        end
+
+        local hum = char:FindFirstChildOfClass("Humanoid")
+        if hum then
+            local animator = hum:FindFirstChildOfClass("Animator")
+            if animator then
+                for _, track in ipairs(animator:GetPlayingAnimationTracks()) do
+                    track:Stop(0)
+                end
+            end
+        end
+    end)
+end
+
+local function hideFolder(folder)
+    if not folder then
+        return
+    end
+
+    for _, d in ipairs(folder:GetDescendants()) do
+        cleanInstance(d)
+    end
+end
+
+local function hideHeavyFolders()
+    if not CFG.HideHeavyFolders then
+        return
+    end
+
+    local things = getThings()
+    if not things then
+        return
+    end
+
+    for _, name in ipairs({
+        "VFX",
+        "AnimatedBreakables",
+        "RenderedEggs",
+        "MagicOrbs",
+        "Orbs",
+        "Lootbags",
+    }) do
+        hideFolder(things:FindFirstChild(name))
+    end
+end
+
+local function hideOtherPets()
+    if not CFG.HideOtherPets then
+        return
+    end
+
+    local things = getThings()
+    if not things then
+        return
+    end
+
+    local pets = things:FindFirstChild("Pets")
+    if not pets then
+        return
+    end
+
+    for _, pet in ipairs(pets:GetChildren()) do
+        local mine = false
+
+        safe(function()
+            local owner = pet:GetAttribute("Owner")
+            local ownerUserId = pet:GetAttribute("OwnerUserId")
+            mine = (owner == LocalPlayer.Name) or (ownerUserId == LocalPlayer.UserId)
+        end)
+
+        if not mine then
+            for _, d in ipairs(pet:GetDescendants()) do
+                cleanInstance(d)
+            end
+        end
+    end
+end
+
+local function applyCore()
+    setGraphicsLow()
+    disableLighting()
+    disableTerrain()
+    disableCharacterAnimations()
+
+    safe(function()
+        SoundService.Volume = 0
+    end)
+
+    safe(function()
+        StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.All, false)
+    end)
+
+    safe(function()
+        GuiService.TouchControlsEnabled = false
+    end)
+
+    hideHeavyFolders()
+    hideOtherPets()
+end
+
+-- One-time pass: nhẹ và ổn định hơn so với quét lặp
+for _, inst in ipairs(Workspace:GetDescendants()) do
+    cleanInstance(inst)
+end
+
+applyCore()
+
+Workspace.DescendantAdded:Connect(function(inst)
+
+	if inst:IsA("ParticleEmitter") then
+		inst.Enabled = false
+		inst.Rate = 0
+		return
+	end
+
+	if inst:IsA("Beam") then
+		inst.Enabled = false
+		return
+	end
+
+	if inst:IsA("Trail") then
+		inst.Enabled = false
+		return
+	end
+
+	if inst:IsA("Texture")
+	or inst:IsA("Decal") then
+		inst.Transparency = 1
+		return
+	end
+
+	task.defer(cleanInstance, inst)
+
+end)
+
+LocalPlayer.CharacterAdded:Connect(function()
+    task.wait(0.5)
+    disableCharacterAnimations()
+    hideOtherPets()
+end)
+
+safe(function()
+    setfpscap(CFG.FPSCap)
+end)
+
+warn("[PS99 SUPER LIGHT] loaded")
