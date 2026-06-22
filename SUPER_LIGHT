@@ -30,8 +30,27 @@ local CFG = {
 }
 
 local function safe(fn)
-    return pcall(fn)
+	return pcall(fn)
 end
+
+Lighting.DescendantAdded:Connect(function(v)
+
+	safe(function()
+
+		if v:IsA("Atmosphere")
+		or v:IsA("BloomEffect")
+		or v:IsA("BlurEffect")
+		or v:IsA("ColorCorrectionEffect")
+		or v:IsA("DepthOfFieldEffect")
+		or v:IsA("SunRaysEffect") then
+
+			v.Enabled = false
+
+		end
+
+	end)
+
+end)
 
 local function getThings()
     return Workspace:FindFirstChild("__THINGS")
@@ -71,6 +90,43 @@ local function disableLighting()
         end
     end
 end
+
+local function forceLighting()
+
+	safe(function()
+		Lighting.GlobalShadows = false
+		Lighting.Brightness = 1
+		Lighting.ClockTime = 12
+		Lighting.EnvironmentDiffuseScale = 0
+		Lighting.EnvironmentSpecularScale = 0
+		Lighting.ShadowSoftness = 0
+		Lighting.Ambient = Color3.new(1,1,1)
+		Lighting.OutdoorAmbient = Color3.new(1,1,1)
+	end)
+
+	for _, v in ipairs(Lighting:GetDescendants()) do
+
+		if v:IsA("Atmosphere")
+		or v:IsA("BloomEffect")
+		or v:IsA("BlurEffect")
+		or v:IsA("ColorCorrectionEffect")
+		or v:IsA("DepthOfFieldEffect")
+		or v:IsA("SunRaysEffect") then
+
+			safe(function()
+				v.Enabled = false
+			end)
+
+		end
+	end
+end
+
+task.spawn(function()
+	while true do
+		forceLighting()
+		task.wait(2)
+	end
+end)
 
 local function disableTerrain()
     local terrain = Workspace:FindFirstChildWhichIsA("Terrain") or Workspace:FindFirstChild("Terrain")
@@ -187,11 +243,41 @@ local function cleanInstance(inst)
 		return
 	end
 
+	-- Lights
+	if inst:IsA("PointLight")
+	or inst:IsA("SpotLight")
+	or inst:IsA("SurfaceLight") then
+
+		safe(function()
+			inst.Enabled = false
+			inst.Brightness = 0
+			inst.Range = 0
+		end)
+
+		return
+	end
+
 	-- Texture / Decal
 	if inst:IsA("Texture")
 	or inst:IsA("Decal") then
 		safe(function()
 			inst.Transparency = 1
+		end)
+		return
+	end
+
+	if inst:IsA("SpecialMesh") then
+		safe(function()
+			inst.TextureId = ""
+			inst.Scale = Vector3.new(0.01,0.01,0.01)
+		end)
+		return
+	end
+
+	if inst:IsA("FileMesh") then
+		safe(function()
+			inst.TextureId = ""
+			inst.Scale = Vector3.new(0.01,0.01,0.01)
 		end)
 		return
 	end
@@ -286,9 +372,16 @@ local function hideHeavyFolders()
         "MagicOrbs",
         "Orbs",
         "Lootbags",
+        "Breakables",
     }) do
         hideFolder(things:FindFirstChild(name))
     end
+
+    hideFolder(things:FindFirstChild("Pets"))
+    hideFolder(things:FindFirstChild("Instances"))
+    hideFolder(things:FindFirstChild("Coins"))
+    hideFolder(things:FindFirstChild("Eggs"))
+    hideFolder(things:FindFirstChild("CustomEggs"))
 end
 
 local function hideOtherPets()
@@ -352,7 +445,17 @@ end
 
 applyCore()
 
+-- Object mới spawn thì chỉ xử lý đúng object đó
 Workspace.DescendantAdded:Connect(function(inst)
+	if inst:IsA("PointLight")
+	or inst:IsA("SpotLight")
+	or inst:IsA("SurfaceLight") then
+
+		inst.Enabled = false
+		inst.Brightness = 0
+		inst.Range = 0
+		return
+	end
 
 	if inst:IsA("ParticleEmitter") then
 		inst.Enabled = false
@@ -373,6 +476,18 @@ Workspace.DescendantAdded:Connect(function(inst)
 	if inst:IsA("Texture")
 	or inst:IsA("Decal") then
 		inst.Transparency = 1
+		return
+	end
+
+	local parent = inst.Parent
+
+	if parent and (
+		parent.Name == "Orbs"
+		or parent.Name == "Lootbags"
+		or parent.Name == "Breakables"
+	) then
+
+		task.defer(cleanInstance, inst)
 		return
 	end
 
