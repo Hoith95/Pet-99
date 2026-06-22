@@ -438,14 +438,12 @@ local function applyCore()
     hideOtherPets()
 end
 
--- One-time pass: nhẹ và ổn định hơn so với quét lặp
 for _, inst in ipairs(Workspace:GetDescendants()) do
     cleanInstance(inst)
 end
 
 applyCore()
 
--- Object mới spawn thì chỉ xử lý đúng object đó
 Workspace.DescendantAdded:Connect(function(inst)
 	if inst:IsA("PointLight")
 	or inst:IsA("SpotLight")
