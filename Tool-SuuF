@@ -31,7 +31,7 @@ getgenv().GBACKROOMS_KICK_AFTER_CHESTS = false
 getgenv().GBACKROOMS_DO_BOSS_ROOM = false
 getgenv().GALLOW_HOPPING = true
 getgenv().GBACKROOMS_MIN_MULTIPLIER = 100
-getgenv().GBACKROOMS_COINS_TO_FARM_BEFORE_HATCHING = "138m"
+getgenv().GBACKROOMS_COINS_TO_FARM_BEFORE_HATCHING = "3b"
 getgenv().GBACKROOMS_TOKEN_CHEST_FARM = true
 getgenv().GEVENT_UPGRADES = {
     { Id = "BackroomsBossDamage",    MaxTier = 5 }, --max is 25
