@@ -172,6 +172,7 @@ local function isMapPart(part)
 		and things:FindFirstChild("__INSTANCE_CONTAINER")
 		and things.__INSTANCE_CONTAINER:FindFirstChild("Active")
 		and things.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial")
+		and things.__INSTANCE_CONTAINER.Active.TimeTrial:FindFirstChild("Ground")
 
 	if ttGround and part:IsDescendantOf(ttGround) then
 		return true
@@ -198,7 +199,7 @@ local function optimizePart(part)
 		if not isMapPart(part) then
 			part.CanCollide = false
 			part.CanTouch = false
-			part.CanQuery = false
+			part.CanQuery = true
 		end
 
 		if CFG.DisableShadows then
@@ -385,12 +386,16 @@ local function hideHeavyFolders()
         "MagicOrbs",
         "Orbs",
         "Lootbags",
+        "Breakables",
     }) do
         hideFolder(things:FindFirstChild(name))
     end
 
+    hideFolder(things:FindFirstChild("Pets"))
     hideFolder(things:FindFirstChild("Instances"))
     hideFolder(things:FindFirstChild("Coins"))
+    hideFolder(things:FindFirstChild("Eggs"))
+    hideFolder(things:FindFirstChild("CustomEggs"))
 end
 
 local function hideOtherPets()
@@ -447,12 +452,14 @@ local function applyCore()
     hideOtherPets()
 end
 
+-- One-time pass: nhẹ và ổn định hơn so với quét lặp
 for _, inst in ipairs(Workspace:GetDescendants()) do
     cleanInstance(inst)
 end
 
 applyCore()
 
+-- Object mới spawn thì chỉ xử lý đúng object đó
 Workspace.DescendantAdded:Connect(function(inst)
 	if inst:IsA("PointLight")
 	or inst:IsA("SpotLight")
@@ -491,6 +498,7 @@ Workspace.DescendantAdded:Connect(function(inst)
 	if parent and (
 		parent.Name == "Orbs"
 		or parent.Name == "Lootbags"
+		or parent.Name == "Breakables"
 	) then
 
 		task.defer(cleanInstance, inst)
