@@ -385,16 +385,12 @@ local function hideHeavyFolders()
         "MagicOrbs",
         "Orbs",
         "Lootbags",
-        "Breakables",
     }) do
         hideFolder(things:FindFirstChild(name))
     end
 
-    hideFolder(things:FindFirstChild("Pets"))
     hideFolder(things:FindFirstChild("Instances"))
     hideFolder(things:FindFirstChild("Coins"))
-    hideFolder(things:FindFirstChild("Eggs"))
-    hideFolder(things:FindFirstChild("CustomEggs"))
 end
 
 local function hideOtherPets()
@@ -495,7 +491,6 @@ Workspace.DescendantAdded:Connect(function(inst)
 	if parent and (
 		parent.Name == "Orbs"
 		or parent.Name == "Lootbags"
-		or parent.Name == "Breakables"
 	) then
 
 		task.defer(cleanInstance, inst)
