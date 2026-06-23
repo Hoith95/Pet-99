@@ -172,7 +172,6 @@ local function isMapPart(part)
 		and things:FindFirstChild("__INSTANCE_CONTAINER")
 		and things.__INSTANCE_CONTAINER:FindFirstChild("Active")
 		and things.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial")
-		and things.__INSTANCE_CONTAINER.Active.TimeTrial:FindFirstChild("Ground")
 
 	if ttGround and part:IsDescendantOf(ttGround) then
 		return true
