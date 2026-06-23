@@ -190,22 +190,26 @@ local function isMapPart(part)
 end
 
 local function optimizePart(part)
-	safe(function()
+    safe(function()
 
-		part.LocalTransparencyModifier = 1
+        if part:IsDescendantOf(
+            workspace.__THINGS.Instances.Backrooms.Teleports
+        ) then
+            return
+        end
 
-		-- giữ collision cho map/sàn
-		if not isMapPart(part) then
-			part.CanCollide = false
-			part.CanTouch = false
-			part.CanQuery = true
-		end
+        part.LocalTransparencyModifier = 1
 
-		if CFG.DisableShadows then
-			part.CastShadow = false
-		end
+        if not isMapPart(part) then
+            part.CanCollide = false
+            part.CanTouch = false
+            part.CanQuery = true
+        end
 
-	end)
+        if CFG.DisableShadows then
+            part.CastShadow = false
+        end
+    end)
 end
 
 local function cleanInstance(inst)
