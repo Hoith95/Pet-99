@@ -153,28 +153,33 @@ local IGNORE_COLLISION_FOLDERS = {
 local function isMapPart(part)
 
 	local things = Workspace:FindFirstChild("__THINGS")
-	local active = things
+
+	-- Backrooms
+	local generated =
+		things
 		and things:FindFirstChild("__INSTANCE_CONTAINER")
 		and things.__INSTANCE_CONTAINER:FindFirstChild("Active")
+		and things.__INSTANCE_CONTAINER.Active:FindFirstChild("Backrooms")
+		and things.__INSTANCE_CONTAINER.Active.Backrooms:FindFirstChild("GeneratedBackrooms")
 
-	if active then
+	if generated and part:IsDescendantOf(generated) then
+		return true
+	end
 
-		local generated = active:FindFirstChild("Backrooms")
-			and active.Backrooms:FindFirstChild("GeneratedBackrooms")
+	-- Time Trial Ground
+	local ttGround =
+		things
+		and things:FindFirstChild("__INSTANCE_CONTAINER")
+		and things.__INSTANCE_CONTAINER:FindFirstChild("Active")
+		and things.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial")
+		and things.__INSTANCE_CONTAINER.Active.TimeTrial:FindFirstChild("Ground")
 
-		if generated and part:IsDescendantOf(generated) then
-			return true
-		end
-
-		local ttGround = active:FindFirstChild("TimeTrial")
-			and active.TimeTrial:FindFirstChild("Ground")
-
-		if ttGround and part:IsDescendantOf(ttGround) then
-			return true
-		end
+	if ttGround and part:IsDescendantOf(ttGround) then
+		return true
 	end
 
 	local cur = part
+
 	while cur do
 		if IGNORE_COLLISION_FOLDERS[cur.Name] then
 			return true
