@@ -24,28 +24,12 @@ wait(68)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Noti-Updater2"))()
 end)
 
-getgenv().GDO_BACKROOMS = true
-getgenv().GBACKROOMS_OPEN_CHESTS = false
-getgenv().GBACKROOMS_OPEN_CHESTS_ONLY_DEEP_ROOMS = false
-getgenv().GBACKROOMS_KICK_AFTER_CHESTS = false
-getgenv().GBACKROOMS_DO_BOSS_ROOM = true
-getgenv().GBACKROOMS_WAIT_FOR_BOSS_RESPAWN = true
-getgenv().GBACKROOMS_KICK_AFTER_BOSS = true
-getgenv().GBACKROOMS_HATCH_DURING_BOSS_RESPAWN = true
-getgenv().GALLOW_HOPPING = true
-getgenv().GBACKROOMS_MIN_MULTIPLIER = 100
-getgenv().GBACKROOMS_COINS_TO_FARM_BEFORE_HATCHING = "3b"
-getgenv().GBACKROOMS_TOKEN_CHEST_FARM = true
-getgenv().GEVENT_UPGRADES = {
-    { Id = "BackroomsBossDamage",    MaxTier = 5 }, --max is 25
-    { Id = "BackroomsTokenFind", MaxTier = 5 }, --max is 20
-    { Id = "BackroomsExtraLootRoll",  MaxTier = 5 }, --max is 20
-    { Id = "BackroomsCoinMultiplier",  MaxTier = 5 }, --max is 20
-    { Id = "BackroomsEggLuck",  MaxTier = 20 }, --max is 20
-    { Id = "BackroomsKeyFind",  MaxTier = 15 }, --max is 15,
-    { Id = "BackroomsDeepBossDamage",  MaxTier = 5 }, --max is 25,
-}
-getgenv().GENCHANTS = {"Huge Hunter","Lucky Eggs","Lucky Eggs","Lucky Eggs","Lucky Eggs","Lucky Eggs","Lucky Eggs"}
+getgenv().GDO_TIME_TRIAL = true
+getgenv().GTIME_TRIAL_MIN_TIME_TO_BOSS3 = 1
+getgenv().GTIME_TRIAL_CHEST_TO_CLAIM = 3
+getgenv().GTIME_TRIAL_HATCH_FIRST_SECONDS = 1
+getgenv().GTIME_TRIAL_ENCHANTS = {"Criticals","Tap Power","Tap Power","Strong Pets","Walkspeed","Chest Breaker","Criticals"}
+getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Huge Hunter","Treasure Hunter","Diamonds"}
 
 getgenv().GLOOTBOXES = {"Locked Hype Egg","Locked Hype Egg 3"}
 getgenv().GDO_AUTO_BALLOONS = false
