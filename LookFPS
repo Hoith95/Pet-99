@@ -8,7 +8,7 @@ _G.LOOKFPS = true
 local DEBUG = false
 
 local FPS = {
-	TIME_TRIAL = 7,
+	TIME_TRIAL = 5,
 
 	LUCKY_EXCEPTION = 3,
 
