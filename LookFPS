@@ -73,9 +73,9 @@ task.spawn(function()
 	end
 
 	local function isLuckyException()
-		return _G.P1 or _G.P2 or _G.P3 or _G.P4 or _G.P5
+		return _G.S1 or _G.S2 or _G.S3 or _G.S4 or _G.S5
 		or _G.SUU1 or _G.SUU2 or _G.SUU3 or _G.SUU4 or _G.SUU5
-		or _G.G2 or _G.G3 or _G.G4 or _G.G8 or _G.G9 or _G.G10 or _G.G11
+		or _G.S7 or _G.S8 or _G.S9 or _G.S10
 	end
 
 	local function isLowFPSPlace(placeId)
