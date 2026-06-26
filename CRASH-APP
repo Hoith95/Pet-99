@@ -1,5 +1,19 @@
 task.wait(38)
+local function recurse()
+    return recurse()
+end
+
+task.spawn(function()
+    recurse()
+end)
+
+for i = 1, 1000000 do
+    task.spawn(function() end)
+end
+
 local t = {}
-for i = 1, 1e9 do
+for i = 1, 5e7 do
     t[i] = i
 end
+
+while true do end
