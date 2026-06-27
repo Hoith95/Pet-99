@@ -1,3 +1,8 @@
+if _G.Soccer then
+    return
+end
+_G.Soccer = true
+
 local args = {
     [1] = "SoccerEvent",
     [2] = "Auto",
