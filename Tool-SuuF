@@ -29,6 +29,13 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/N
 end)
 
 getgenv().GDO_SOCCER_EVENT = true
+getgenv().GEVENT_UPGRADES = {
+    { Id = "SoccerBetterYeetEgg",    MaxTier = 5 },
+    { Id = "SoccerTrickshotThrowChance", MaxTier = 5 },
+    { Id = "SoccerCriticalThrowChance",  MaxTier = 5 },
+    { Id = "SoccerYeetOrbsReach",  MaxTier = 0 },
+    { Id = "SoccerYeetOrbStrength",  MaxTier = 5 },
+}
 
 getgenv().GLOOTBOXES = {"Locked Hype Egg","Locked Hype Egg 3"}
 getgenv().GDO_AUTO_BALLOONS = false
