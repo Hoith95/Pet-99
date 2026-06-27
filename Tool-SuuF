@@ -36,6 +36,7 @@ getgenv().GEVENT_UPGRADES = {
     { Id = "SoccerYeetOrbsReach",  MaxTier = 0 },
     { Id = "SoccerYeetOrbStrength",  MaxTier = 5 },
 }
+getgenv().GENCHANTS = {"Lucky Eggs", "Lucky Eggs", "Lucky Eggs", "Lucky Eggs", "Lucky Eggs", "Lucky Eggs"}
 
 getgenv().GLOOTBOXES = {"Locked Hype Egg","Locked Hype Egg 3"}
 getgenv().GDO_AUTO_BALLOONS = false
