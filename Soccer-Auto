@@ -1,0 +1,7 @@
+local args = {
+    [1] = "SoccerEvent",
+    [2] = "Auto",
+    [3] = true
+}
+
+game:GetService("ReplicatedStorage").Network.Instancing_FireCustomFromClient:FireServer(unpack(args))
