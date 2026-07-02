@@ -13,7 +13,7 @@ local TARGET_POS = Vector3.new(-15045, 16.24, 2201)
 local TELEPORT_THRESHOLD = 2      -- sai số cho phép trước khi teleport lại (units)
 local TELEPORT_INTERVAL = 365     -- (giây) khoảng thời gian giữa các lần kiểm tra vị trí khi đã vào loop
 local CHECK_INTERVAL_WHILE_WAIT = 300 -- (giây) thời gian chờ khi vẫn chưa đạt 10 lượt
-local MAX_DAILY_RUNS = 10
+local MAX_DAILY_RUNS = 0
 -- ========================
 
 -- Kiểm tra PlaceId ngay lập tức
