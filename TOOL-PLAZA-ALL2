@@ -27,9 +27,9 @@ getgenv().Settings = {
         {Name = "Huge Machine Egg 6", Data = {Price = "1.1b"}},
         {Name = "Hype Egg", Data = {Price = "12m"}},
         {Name = "Hype Egg 2", Data = {Price = "15m"}},
-        {Name = "Hype Egg 3", Data = {Price = "25m"}},
-        {Name = "Time Trial Gift", Data = {Price = "199k"}},
-        {Name = "Time Trial Gift 2", Data = {Price = "868k"}},
+        {Name = "Hype Egg 3", Data = {Price = "18m"}},
+        {Name = "Time Trial Gift", Data = {Price = "268k"}},
+        {Name = "Time Trial Gift 2", Data = {Price = "500k"}},
 
 		{Name = "Gargantuan 1x1x1x1", Data = {Price = "99b"}},
 		{Name = "Gargantuan Guest 666", Data = {Price = "110.86b"}},
@@ -143,7 +143,7 @@ getgenv().Settings = {
         --{Name = "Mini Pinata", Data = {Price = "50k"}},
         {Name = "All Huges", Data = {Price = "1%", Min_sell = "19m", Max_sell = "25m", sold_by_convention = true}},
 
-        {Name = "Crystal Key", Data = {Price = "20k"}},
+        {Name = "Crystal Key", Data = {Price = "15k"}},
         --{Name = "Tech Key", Data = {Price = "40k"}},
         {Name = "Secret Key", Data = {Price = "28k"}},
         {Name = "Void Key", Data = {Price = "50k"}},
