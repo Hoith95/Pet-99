@@ -22,6 +22,7 @@ getgenv().Settings = {
         {Name = "Exclusive Egg 60", Data = {Price = "168m"}},
         {Name = "Exclusive Egg 61", Data = {Price = "168m"}},
         {Name = "Exclusive Egg 62", Data = {Price = "168m"}},
+        {Name = "Exclusive Egg 63", Data = {Price = "168m"}},
         {Name = "Huge Machine Egg 5", Data = {Price = "868m"}},
         {Name = "Huge Machine Egg 6", Data = {Price = "1.1b"}},
         {Name = "Hype Egg", Data = {Price = "12m"}},
@@ -131,14 +132,6 @@ getgenv().Settings = {
         --{Name = "Charm Stone", Data = {Price = "1%"}},
         --{Name = "Royalty TN1", Data = {Price = "1%"}},
         --{Name = "Overload TN1", Data = {Price = "1%"}},
-
-        {Name = "Exclusive Egg 53", Data = {Price = "186m"}},
-        {Name = "Exclusive Egg 55", Data = {Price = "186m"}},
-        {Name = "Exclusive Egg 56", Data = {Price = "186m"}},
-        {Name = "Exclusive Egg 57", Data = {Price = "186m"}},
-        {Name = "Exclusive Egg 58", Data = {Price = "186m"}},
-        {Name = "Exclusive Egg 59", Data = {Price = "186m"}},
-        {Name = "Exclusive Egg 60", Data = {Price = "186m"}},
 
         {Name = "Mega Loot Chest", Data = {Price = "20m"}},
         {Name = "Mega Potion Chest", Data = {Price = "10m"}},
