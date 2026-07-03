@@ -30,6 +30,7 @@ getgenv().Settings = {
         {Name = "Time Trial Gift", Data = {Price = "199k"}},
         {Name = "Time Trial Gift 2", Data = {Price = "868k"}},
 
+		{Name = "Gargantuan 1x1x1x1", Data = {Price = "99b"}},
 		{Name = "Gargantuan Guest 666", Data = {Price = "110.86b"}},
 		{Name = "Golden Gargantuan Guest 666", Data = {Price = "150.86b"}},
 
@@ -41,13 +42,18 @@ getgenv().Settings = {
 		{Name = "Gargantuan Super Cat", Data = {Price = "50.86b"}},
         {Name = "Titanic Vampire Agony", Data = {Price = "18b"}},
 
-		{Name = "Titanic Scroll Dragon", Data = {Price = "5.15b"}},
-		{Name = "Golden Titanic Scroll Dragon", Data = {Price = "7.68b"}},
+		{Name = "Titanic Smiley Penguin", Data = {Price = "4.1b"}},
+		{Name = "Titanic Gamemaster Cat", Data = {Price = "4.1b"}},
+		{Name = "Golden Titanic Gamemaster Cat", Data = {Price = "4.5b"}},
+		{Name = "Rainbow Titanic Scroll Dragon", Data = {Price = "15.68b"}},
+
+		{Name = "Titanic Scroll Dragon", Data = {Price = "4.6b"}},
+		{Name = "Golden Titanic Scroll Dragon", Data = {Price = "7.3b"}},
 		{Name = "Rainbow Titanic Scroll Dragon", Data = {Price = "16.86b"}},
 
-		{Name = "Titanic Werewolf", Data = {Price = "4.5b"}},
-		{Name = "Golden Titanic Werewolf", Data = {Price = "5.1b"}},
-		{Name = "Rainbow Titanic Werewolf", Data = {Price = "14.1b"}},
+		{Name = "Titanic Werewolf", Data = {Price = "4.1b"}},
+		{Name = "Golden Titanic Werewolf", Data = {Price = "4.25b"}},
+		{Name = "Rainbow Titanic Werewolf", Data = {Price = "13.2b"}},
 
 		{Name = "Titanic Ruinous Angelus", Data = {Price = "4.85b"}},
 		{Name = "Golden Titanic Ruinous Angelus", Data = {Price = "5.15b"}},
@@ -108,17 +114,19 @@ getgenv().Settings = {
         {Name = "Titanic Narwhal", Data = {Price = "6b"}},
         {Name = "Titanic Pixel Dominus Astra", Data = {Price = "1%"}},
 
-		{Name = "Titanic Propeller Cat", Data = {Price = "5.4b"}},
+		{Name = "Titanic Propeller Cat", Data = {Price = "4.35b"}},
 
-		{Name = "Titanic Partygoer Cat", Data = {Price = "4.3b"}},
+		{Name = "Titanic Partygoer Cat", Data = {Price = "4.15b"}},
 		{Name = "Golden Titanic Partygoer Cat", Data = {Price = "4.6b"}},
 		{Name = "Rainbow Titanic Partygoer Cat", Data = {Price = "15b"}},
 
         {Name = "2026 New Years Gift", Data = {Price = "1%"}},
 		{Name = "Halloween Lucky Block Gift", Data = {Price = "38m"}},
         {Name = "Tropical Gift", Data = {Price = "50k"}},
-        {Name = "Basketball Gift", Data = {Price = "1%"}},
-        {Name = "Spider Gift", Data = {Price = "1%"}},
+        {Name = "Soccer Gift", Data = {Price = "1%"}},
+        {Name = "Santa Gift", Data = {Price = "1%"}},
+        {Name = "Candycane Gift", Data = {Price = "1%"}},
+        {Name = "Horseshoe Gift", Data = {Price = "1%"}},
 
         --{Name = "Charm Stone", Data = {Price = "1%"}},
         --{Name = "Royalty TN1", Data = {Price = "1%"}},
@@ -130,6 +138,7 @@ getgenv().Settings = {
         {Name = "Exclusive Egg 57", Data = {Price = "186m"}},
         {Name = "Exclusive Egg 58", Data = {Price = "186m"}},
         {Name = "Exclusive Egg 59", Data = {Price = "186m"}},
+        {Name = "Exclusive Egg 60", Data = {Price = "186m"}},
 
         {Name = "Mega Loot Chest", Data = {Price = "20m"}},
         {Name = "Mega Potion Chest", Data = {Price = "10m"}},
