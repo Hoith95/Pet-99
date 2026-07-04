@@ -58,7 +58,7 @@ getgenv().Settings = {
 		{Name = "Titanic Gamemaster Cat", Data = {Price = "4.09b"}},
 		{Name = "Golden Titanic Gamemaster Cat", Data = {Price = "4.5b"}},
 
-		{Name = "Titanic Smiley Penguin", Data = {Price = "4.1b"}},
+		{Name = "Titanic Smiley Penguin", Data = {Price = "4.08b"}},
 
 		{Name = "Titanic Tiedye Corgi", Data = {Price = "5b"}},
 		{Name = "Rainbow Titanic Tiedye Corgi", Data = {Price = "15.68b"}},
@@ -97,11 +97,7 @@ getgenv().Settings = {
         {Name = "Titanic Narwhal", Data = {Price = "6b"}},
         {Name = "Titanic Pixel Dominus Astra", Data = {Price = "1%"}},
 
-		{Name = "Titanic Propeller Cat", Data = {Price = "4.35b"}},
-
 		{Name = "Titanic Partygoer Cat", Data = {Price = "4.15b"}},
-		{Name = "Golden Titanic Partygoer Cat", Data = {Price = "4.6b"}},
-		{Name = "Rainbow Titanic Partygoer Cat", Data = {Price = "15b"}},
 
         {Name = "2026 New Years Gift", Data = {Price = "1%"}},
 		{Name = "Halloween Lucky Block Gift", Data = {Price = "38m"}},
