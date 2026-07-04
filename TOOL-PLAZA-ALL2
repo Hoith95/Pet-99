@@ -43,11 +43,6 @@ getgenv().Settings = {
 		{Name = "Gargantuan Super Cat", Data = {Price = "50.86b"}},
         {Name = "Titanic Vampire Agony", Data = {Price = "18b"}},
 
-		{Name = "Titanic Smiley Penguin", Data = {Price = "4.1b"}},
-		{Name = "Titanic Gamemaster Cat", Data = {Price = "4.1b"}},
-		{Name = "Golden Titanic Gamemaster Cat", Data = {Price = "4.5b"}},
-		{Name = "Rainbow Titanic Gamemaster Cat", Data = {Price = "15.68b"}},
-
 		{Name = "Titanic Scroll Dragon", Data = {Price = "4.6b"}},
 		{Name = "Golden Titanic Scroll Dragon", Data = {Price = "7.3b"}},
 		{Name = "Rainbow Titanic Scroll Dragon", Data = {Price = "16.86b"}},
@@ -56,27 +51,14 @@ getgenv().Settings = {
 		{Name = "Golden Titanic Werewolf", Data = {Price = "4.25b"}},
 		{Name = "Rainbow Titanic Werewolf", Data = {Price = "13.2b"}},
 
-		{Name = "Titanic Ruinous Angelus", Data = {Price = "4.85b"}},
-		{Name = "Golden Titanic Ruinous Angelus", Data = {Price = "5.15b"}},
-		{Name = "Rainbow Titanic Ruinous Angelus", Data = {Price = "15b"}},
-		{Name = "Shiny Titanic Ruinous Angelus", Data = {Price = "18.86b"}},
-
-		{Name = "Titanic Horseshoe Capybara", Data = {Price = "4b"}},
-		{Name = "Golden Titanic Horseshoe Capybara", Data = {Price = "4.4b"}},
-		{Name = "Rainbow Titanic Horseshoe Capybara", Data = {Price = "11.68b"}},
-		{Name = "Shiny Titanic Horseshoe Capybara", Data = {Price = "11.86b"}},
-
 		{Name = "Titanic Irish Wolfhound", Data = {Price = "4.7b"}},
 		{Name = "Golden Titanic Irish Wolfhound", Data = {Price = "4.68b"}},
 		{Name = "Rainbow Titanic Irish Wolfhound", Data = {Price = "15.68b"}},
 
-		{Name = "Titanic Mucki", Data = {Price = "4.7b"}},
-		{Name = "Golden Titanic Mucki", Data = {Price = "5.15b"}},
-		{Name = "Rainbow Titanic Mucki", Data = {Price = "15.68b"}},
+		{Name = "Titanic Gamemaster Cat", Data = {Price = "4.1b"}},
+		{Name = "Golden Titanic Gamemaster Cat", Data = {Price = "4.5b"}},
 
-		{Name = "Titanic Lucki Chest Mimic", Data = {Price = "4b"}},
-		{Name = "Golden Titanic Lucki Chest Mimic", Data = {Price = "4.5b"}},
-		{Name = "Rainbow Titanic Lucki Chest Mimic", Data = {Price = "13.86b"}},
+		{Name = "Titanic Smiley Penguin", Data = {Price = "4.1b"}},
 
 		{Name = "Titanic Tiedye Corgi", Data = {Price = "5b"}},
 		{Name = "Rainbow Titanic Tiedye Corgi", Data = {Price = "15.68b"}},
