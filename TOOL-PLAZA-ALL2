@@ -55,7 +55,7 @@ getgenv().Settings = {
 		{Name = "Golden Titanic Irish Wolfhound", Data = {Price = "4.68b"}},
 		{Name = "Rainbow Titanic Irish Wolfhound", Data = {Price = "15.68b"}},
 
-		{Name = "Titanic Gamemaster Cat", Data = {Price = "4.1b"}},
+		{Name = "Titanic Gamemaster Cat", Data = {Price = "4.09b"}},
 		{Name = "Golden Titanic Gamemaster Cat", Data = {Price = "4.5b"}},
 
 		{Name = "Titanic Smiley Penguin", Data = {Price = "4.1b"}},
