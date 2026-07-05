@@ -44,22 +44,22 @@ getgenv().Settings = {
 		{Name = "Gargantuan Super Cat", Data = {Price = "50.86b"}},
         {Name = "Titanic Vampire Agony", Data = {Price = "18b"}},
 
-		{Name = "Titanic Scroll Dragon", Data = {Price = "4.6b"}},
+		{Name = "Titanic Scroll Dragon", Data = {Price = "4.5b"}},
 		{Name = "Golden Titanic Scroll Dragon", Data = {Price = "7.3b"}},
 		{Name = "Rainbow Titanic Scroll Dragon", Data = {Price = "16.86b"}},
 
-		{Name = "Titanic Werewolf", Data = {Price = "4.09b"}},
-		{Name = "Golden Titanic Werewolf", Data = {Price = "4.25b"}},
+		{Name = "Titanic Werewolf", Data = {Price = "4b"}},
+		{Name = "Golden Titanic Werewolf", Data = {Price = "4.09b"}},
 		{Name = "Rainbow Titanic Werewolf", Data = {Price = "13.2b"}},
 
 		{Name = "Titanic Irish Wolfhound", Data = {Price = "4.7b"}},
 		{Name = "Golden Titanic Irish Wolfhound", Data = {Price = "4.68b"}},
 		{Name = "Rainbow Titanic Irish Wolfhound", Data = {Price = "15.68b"}},
 
-		{Name = "Titanic Gamemaster Cat", Data = {Price = "4.09b"}},
+		{Name = "Titanic Gamemaster Cat", Data = {Price = "4b"}},
 		{Name = "Golden Titanic Gamemaster Cat", Data = {Price = "4.5b"}},
 
-		{Name = "Titanic Smiley Penguin", Data = {Price = "4.08b"}},
+		{Name = "Titanic Smiley Penguin", Data = {Price = "4b"}},
 
 		{Name = "Titanic Tiedye Corgi", Data = {Price = "5b"}},
 		{Name = "Rainbow Titanic Tiedye Corgi", Data = {Price = "15.68b"}},
@@ -98,7 +98,7 @@ getgenv().Settings = {
         {Name = "Titanic Narwhal", Data = {Price = "6b"}},
         {Name = "Titanic Pixel Dominus Astra", Data = {Price = "1%"}},
 
-		{Name = "Titanic Partygoer Cat", Data = {Price = "4.15b"}},
+		{Name = "Titanic Partygoer Cat", Data = {Price = "4b"}},
 
         {Name = "2026 New Years Gift", Data = {Price = "1%"}},
 		{Name = "Halloween Lucky Block Gift", Data = {Price = "38m"}},
