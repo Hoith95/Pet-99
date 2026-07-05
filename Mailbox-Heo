@@ -42,7 +42,7 @@ getgenv().AutoMail = {
         ['Snowflake Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
         ['Horseshoe Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
         ['Time Trial Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
-        ['Time Trial Gift 2'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
+        ['Time Trial Gift 2'] = { Class = "Lootbox", MinAmount = 18, Amount = "Max" },
         --['Deep Sea Treasure Chest'] = { Class = "Lootbox", MinAmount = 5, Amount = "Max" },
         ['Mega Potion Chest'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
         ['Mega Enchant Chest'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
