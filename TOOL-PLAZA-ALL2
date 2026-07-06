@@ -108,7 +108,7 @@ getgenv().Settings = {
         {Name = "Soccer Gift", Data = {Price = "1%"}},
         {Name = "Santa Gift", Data = {Price = "1%"}},
         {Name = "Candycane Gift", Data = {Price = "1%"}},
-        {Name = "Horseshoe Gift", Data = {Price = "1%"}},
+        {Name = "Horseshoe Gift", Data = {Price = "300k"}},
 
         --{Name = "Charm Stone", Data = {Price = "1%"}},
         --{Name = "Royalty TN1", Data = {Price = "1%"}},
@@ -127,8 +127,8 @@ getgenv().Settings = {
         {Name = "Crystal Key", Data = {Price = "15k"}},
         --{Name = "Tech Key", Data = {Price = "40k"}},
         {Name = "Secret Key", Data = {Price = "28k"}},
-        {Name = "Void Key", Data = {Price = "50k"}},
-        {Name = "Fantasy Key", Data = {Price = "69k"}},
+        {Name = "Void Key", Data = {Price = "45k"}},
+        {Name = "Fantasy Key", Data = {Price = "55k"}},
         {Name = "Fantasy Spinny Wheel Ticket", Data = {Price = "25k"}},
 
         {Name = "Golden All Huges", Data = {Price = "1%", Min_sell = "35m", Max_sell = "75m", sold_by_convention = true}},
