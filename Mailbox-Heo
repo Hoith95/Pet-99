@@ -53,7 +53,7 @@ getgenv().AutoMail = {
         ['Insta Plant Capsule'] = { Class = "Misc", MinAmount = 100, Amount = "Max" },
         ['Diamond'] = { Class = "Seed", MinAmount = 500, Amount = "Max" },
         --['MVP Key'] = { Class = "Misc", MinAmount = 1, Amount = "Max" },
-        ['MVP Key Lower Half'] = { Class = "Misc", MinAmount = 500, Amount = "Max" },
+        --['MVP Key Lower Half'] = { Class = "Misc", MinAmount = 500, Amount = "Max" },
         ['MVP Key Upper Half'] = { Class = "Misc", MinAmount = 25, Amount = "Max" },
         --['Easter Secret Key'] = { Class = "Misc", MinAmount = 500, Amount = "Max" },
         ['Charm Stone'] = { Class = "Misc", MinAmount = 500, Amount = "Max" },
