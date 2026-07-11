@@ -191,7 +191,7 @@ task.spawn(function()
                     or currentEggModel:FindFirstChildWhichIsA("BasePart", true)
 
                 if part then
-                    getRoot().CFrame = part.CFrame + Vector3.new(0, 3, -4)
+                    getRoot().CFrame = part.CFrame + Vector3.new(0, 5, -9)
                     task.wait(0.5)
                 end
             else
@@ -227,7 +227,7 @@ task.spawn(function()
                 -- Chỉ tele lại nếu ở quá xa
                 if dist > 15 then
                     print(string.format("[TapHeroes] Too far %.1f studs -> Tele", dist))
-                    getRoot().CFrame = part.CFrame + Vector3.new(0, 3, -4)
+                    getRoot().CFrame = part.CFrame + Vector3.new(0, 5, -9)
                     task.wait(0.5)
                 end
 
