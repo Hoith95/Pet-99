@@ -154,13 +154,12 @@ local function isMapPart(part)
 
 	local things = Workspace:FindFirstChild("__THINGS")
 
-	-- Backrooms
+	-- TapHeroes
 	local generated =
 		things
 		and things:FindFirstChild("__INSTANCE_CONTAINER")
 		and things.__INSTANCE_CONTAINER:FindFirstChild("Active")
-		and things.__INSTANCE_CONTAINER.Active:FindFirstChild("Backrooms")
-		and things.__INSTANCE_CONTAINER.Active.Backrooms:FindFirstChild("GeneratedBackrooms")
+		and things.__INSTANCE_CONTAINER.Active:FindFirstChild("TapHeroes")
 
 	if generated and part:IsDescendantOf(generated) then
 		return true
@@ -193,7 +192,7 @@ local function optimizePart(part)
     safe(function()
 
         if part:IsDescendantOf(
-            workspace.__THINGS.Instances.Backrooms.Teleports
+            workspace.__THINGS.Instances.TapHeroes.Teleports
         ) then
             return
         end
