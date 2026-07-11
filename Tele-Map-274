@@ -1,111 +1,182 @@
 -- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
 if _G.TELEMAP then
     warn("Script đã được chạy trước đó!")
-    return -- Dừng script nếu đã chạy
+    return
 end
 
--- Đánh dấu script đã được chạy
 _G.TELEMAP = true
 
--- ======= CẤU HÌNH =======
-local TARGET_PLACE_ID = 140403681187145 -- chỉ chạy khi đúng PlaceId này
+--========================
+-- CONFIG
+--========================
+local TARGET_PLACE_ID = 140403681187145
 local TARGET_POS = Vector3.new(-15045, 16.24, 2201)
-local TELEPORT_THRESHOLD = 2      -- sai số cho phép trước khi teleport lại (units)
-local TELEPORT_INTERVAL = 365     -- (giây) khoảng thời gian giữa các lần kiểm tra vị trí khi đã vào loop
-local CHECK_INTERVAL_WHILE_WAIT = 300 -- (giây) thời gian chờ khi vẫn chưa đạt 10 lượt
-local MAX_DAILY_RUNS = 0
--- ========================
 
--- Kiểm tra PlaceId ngay lập tức
+local TELEPORT_THRESHOLD = 2
+local TELEPORT_INTERVAL = 365
+
+local CHECK_INTERVAL = 60 -- kiểm tra DailyRuns mỗi 60 giây
+
+local MAX_DAILY_RUNS = 10
+--========================
+
 if game.PlaceId ~= TARGET_PLACE_ID then
-    warn("⛔ PlaceId không khớp. Script chỉ chạy ở PlaceId: " .. tostring(TARGET_PLACE_ID) .. " (hiện tại: " .. tostring(game.PlaceId) .. ").")
+    warn("Sai PlaceId.")
     return
 end
 
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
-if not player then
-    -- chờ LocalPlayer nếu chưa có
-    repeat task.wait() player = Players.LocalPlayer until player
-end
 
--- Safe require Save (tránh lỗi nếu module không tồn tại)
+repeat task.wait() until player
+
+---------------------------------------------------
+-- SAVE MODULE
+---------------------------------------------------
+
 local Save
+
 do
-    local ok, res = pcall(function()
+    local ok,res = pcall(function()
         return require(game:GetService("ReplicatedStorage").Library.Client.Save)
     end)
+
     if ok then
         Save = res
     else
-        warn("⚠️ Không thể require Save module: " .. tostring(res))
-        Save = nil
+        warn("Không require được Save.")
+        return
     end
 end
 
--- Lấy số lượt đã dùng một cách an toàn
+---------------------------------------------------
+-- GET RUNS
+---------------------------------------------------
+
 local function getRunsUsed()
-    if not Save then return 0 end
-    local ok, data = pcall(function() return Save.Get() end)
+
+    local ok,data = pcall(function()
+        return Save.Get()
+    end)
+
     if not ok then
-        warn("⚠️ Lỗi khi gọi Save.Get(): " .. tostring(data))
         return 0
     end
-    if data and data.TimeTrialStats then
+
+    if data
+    and data.TimeTrialStats then
         return data.TimeTrialStats.DailyRuns or 0
     end
+
     return 0
 end
 
--- Tránh start loop nhiều lần
-local loopStarted = false
+---------------------------------------------------
+-- TELEPORT LOOP
+---------------------------------------------------
 
-local function startSmartTeleportLoop()
-    if loopStarted then
-        warn("🔁 Smart teleport loop đã chạy, bỏ qua lần start tiếp theo.")
+local teleportEnabled = false
+local teleportThread = nil
+
+local function teleportLoop()
+
+    if teleportThread then
         return
     end
-    loopStarted = true
 
-    warn("✅ Đã hoàn tất Time Trial (" .. tostring(MAX_DAILY_RUNS) .. "/" .. tostring(MAX_DAILY_RUNS) .. ") → Bắt đầu giám sát vị trí và teleport khi lệch.")
+    teleportThread = task.spawn(function()
 
-    task.spawn(function()
-        while true do
+        while teleportEnabled do
+
             local character = player.Character or player.CharacterAdded:Wait()
-            local hrp = character:FindFirstChild("HumanoidRootPart") or character:WaitForChild("HumanoidRootPart", 5)
+
+            local hrp = character:FindFirstChild("HumanoidRootPart")
+                or character:WaitForChild("HumanoidRootPart",5)
+
             if hrp then
-                local currentPos = hrp.Position
-                if (currentPos - TARGET_POS).Magnitude > TELEPORT_THRESHOLD then
-                    warn("↩️ Vị trí lệch (" .. math.floor((currentPos - TARGET_POS).Magnitude * 100)/100 .. " units) — teleport về vị trí cố định.")
-                    local ok, err = pcall(function()
+
+                local dist = (hrp.Position - TARGET_POS).Magnitude
+
+                if dist > TELEPORT_THRESHOLD then
+
+                    warn(("↩️ Teleport (%.2f studs)"):format(dist))
+
+                    pcall(function()
                         hrp.CFrame = CFrame.new(TARGET_POS)
                     end)
-                    if not ok then
-                        warn("⚠️ Đã xảy ra lỗi khi teleport: " .. tostring(err))
-                    end
+
                 end
-            else
-                warn("⚠️ Không tìm thấy HumanoidRootPart, sẽ thử lại sau.")
+
             end
+
             task.wait(TELEPORT_INTERVAL)
+
         end
+
+        teleportThread = nil
+
     end)
+
 end
 
-local function monitorUntilMaxRuns()
-    while true do
-        local runsUsed = getRunsUsed()
-        local runsLeft = math.max(0, MAX_DAILY_RUNS - runsUsed)
+local function enableTeleport()
 
-        if runsUsed >= MAX_DAILY_RUNS then
-            startSmartTeleportLoop()
-            break
-        else
-            warn("⏳ Còn lại " .. tostring(runsLeft) .. " lượt Time Trial → kiểm tra lại sau " .. tostring(CHECK_INTERVAL_WHILE_WAIT/60) .. " phút.")
-            task.wait(CHECK_INTERVAL_WHILE_WAIT)
-        end
+    if teleportEnabled then
+        return
     end
+
+    teleportEnabled = true
+
+    warn("✅ Hết lượt Time Trial -> Bật Teleport.")
+
+    teleportLoop()
+
 end
 
--- Bắt đầu
-monitorUntilMaxRuns()
+local function disableTeleport()
+
+    if not teleportEnabled then
+        return
+    end
+
+    teleportEnabled = false
+
+    warn("🟢 Time Trial đã reset -> Tắt Teleport.")
+
+end
+
+---------------------------------------------------
+-- MONITOR
+---------------------------------------------------
+
+task.spawn(function()
+
+    local lastState=nil
+
+    while true do
+
+        local used=getRunsUsed()
+
+        if used>=MAX_DAILY_RUNS then
+
+            if lastState~=true then
+                enableTeleport()
+                lastState=true
+            end
+
+        else
+
+            if lastState~=false then
+                disableTeleport()
+                lastState=false
+            end
+
+            warn(("⏳ DailyRuns: %d/%d"):format(used,MAX_DAILY_RUNS))
+
+        end
+
+        task.wait(CHECK_INTERVAL)
+
+    end
+
+end)
