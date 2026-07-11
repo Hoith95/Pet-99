@@ -170,7 +170,7 @@ task.spawn(function()
     local currentEggModel
 
     local TELEPORT_DISTANCE = 40
-    local EGG_OFFSET = 25 -- đứng trước egg 4 studs
+    local EGG_OFFSET = 30 -- đứng trước egg 4 studs
 
     local function teleportToEgg(part)
         local targetPos = part.Position - part.CFrame.LookVector * EGG_OFFSET
