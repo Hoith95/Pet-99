@@ -24,10 +24,10 @@ local function getEventUpgrade(name)
     return sd.EventUpgrades[name] or 0
 end
 
-local function getS2RaidMaxDifficulty()
+local function getTapHeroesLevels()
     local sd = getSave()
     return sd
-        and sd.Safe_S2RaidMaxDifficulty
+        and sd.TapHeroesLevelsBeaten2026
         or 0
 end
 
@@ -181,7 +181,7 @@ local function startGuiUpdater()
 
     -- RIGHT
     local rankLabel        = createLabel("RankLabel", right)
-    --local raffleLabel      = createLabel("RaffleLabel", right)
+    local raffleLabel      = createLabel("RaffleLabel", right)
     --local giftLabel        = createLabel("GiftLabel", right)
     --local gift2Label       = createLabel("Gift2Label", right)
     local coinLabel        = createLabel("CoinLabel", right)
@@ -211,8 +211,8 @@ local function startGuiUpdater()
         coinLabel.Text = Formatint(getCurrencyAmount("MarbleCoins")) .. " | Marble Coins"
         updateLabelSize(coinLabel)
 
-        --raffleLabel.Text = getS2RaidMaxDifficulty() .. " | Level Raid"
-        --updateLabelSize(raffleLabel)
+        raffleLabel.Text = getTapHeroesLevels() .. " | Level Heroes"
+        updateLabelSize(raffleLabel)
 
 		--megaPresentLabel.Text = Formatint(getRecentSleighPointsSent()) .. " | " .. Formatint(getMegaPresentPoints()) .. " | Mega Present"
 		--updateLabelSize(megaPresentLabel)
