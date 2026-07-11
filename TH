@@ -1,0 +1,265 @@
+if _G.VAR_HT then return end
+_G.VAR_HT = true
+
+-- SERVICES
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local player = Players.LocalPlayer
+
+local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
+local PlayerSave = require(Client.Save)
+
+local function getSave()
+    return PlayerSave.Get()
+end
+
+local function getRoot()
+    local char = player.Character or player.CharacterAdded:Wait()
+    return char:WaitForChild("HumanoidRootPart")
+end
+
+local function getCurrencyAmount(currencyId)
+    local sd = getSave()
+
+    if not sd or not sd.Inventory or not sd.Inventory.Currency then
+        return 0
+    end
+
+    for _, v in pairs(sd.Inventory.Currency) do
+        if v.id == currencyId then
+            return tonumber(v._am) or 0
+        end
+    end
+
+    return 0
+end
+
+-- TELEPORT TO EVENT
+
+local HatchReady = false
+
+getRoot().CFrame = CFrame.new(-15849, 40.27, -195)
+
+repeat
+    task.wait(0.2)
+until workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TapHeroes")
+
+print("[TapHeroes] Instance Loaded")
+
+task.wait(9)
+
+getRoot().CFrame = CFrame.new(60040, 951, 60005)
+
+task.wait(0.5)
+
+ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
+    "TapHeroes",
+    "ZN_Auto",
+    true
+)
+
+ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
+    "TapHeroes",
+    "ZN_AutoRebirth",
+    true
+)
+
+HatchReady = true
+
+print("[TapHeroes] Auto Enabled")
+
+-- AUTO UPGRADE
+
+task.spawn(function()
+    repeat
+        task.wait(5)
+    until HatchReady
+
+    local purchase = ReplicatedStorage.Network:WaitForChild("EventUpgrades: Purchase")
+
+    local upgrades = {
+        "TapHeroesClickDamage",
+        "TapHeroesPetDamage",
+        "TapHeroesCoinBonus",
+        "TapHeroesEggUpgrade",
+    }
+
+    while true do
+
+        for _, upgrade in ipairs(upgrades) do
+            pcall(function()
+                purchase:InvokeServer(upgrade)
+            end)
+
+            task.wait(0.1)
+        end
+
+        task.wait(0.5)
+    end
+
+end)
+
+-- MARBLE COINS MONITOR
+
+task.spawn(function()
+    repeat
+        task.wait(5)
+    until HatchReady
+
+    local lastCoins = getCurrencyAmount("MarbleCoins")
+    local lastChange = tick()
+
+    while true do
+
+        task.wait(1)
+
+        local coins = getCurrencyAmount("MarbleCoins")
+
+        if coins ~= lastCoins then
+
+            --print(string.format("[TapHeroes] MarbleCoins %s -> %s",lastCoins,coins))
+
+            lastCoins = coins
+            lastChange = tick()
+
+        elseif tick() - lastChange >= 68 then
+
+            local sd = getSave()
+
+            local beaten = sd.TapHeroesLevelsBeaten2026 or 0
+            local currentLevel = beaten + 1
+            local targetLevel = math.max(currentLevel - 5, 1)
+
+            --warn(string.format("[TapHeroes] No MarbleCoins 60s | Warp %d -> %d",currentLevel,targetLevel))
+
+            ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
+                "TapHeroes",
+                "ZN_Warp",
+                targetLevel
+            )
+
+            lastCoins = getCurrencyAmount("MarbleCoins")
+            lastChange = tick()
+
+            task.wait(3)
+
+        end
+
+    end
+
+end)
+
+-- AUTO HATCH
+
+task.spawn(function()
+    repeat
+        task.wait(5)
+    until HatchReady
+
+    local customEggs = workspace.__THINGS:WaitForChild("CustomEggs")
+    local hatchRemote = ReplicatedStorage.Network:WaitForChild("CustomEggs_Hatch")
+
+    local currentEggName
+    local currentEggModel
+
+    local function updateEgg()
+
+        local foundName
+        local foundModel
+
+        for _, egg in ipairs(customEggs:GetChildren()) do
+            if not egg.Name:find(" ") and #egg.Name >= 15 then
+                foundName = egg.Name
+                foundModel = egg
+                break
+            end
+        end
+
+        if foundName ~= currentEggName then
+
+            currentEggName = foundName
+            currentEggModel = foundModel
+
+            if currentEggName then
+
+                print("[TapHeroes] New Egg:", currentEggName)
+
+                local part =
+                    currentEggModel.PrimaryPart
+                    or currentEggModel:FindFirstChildWhichIsA("BasePart", true)
+
+                if part then
+                    getRoot().CFrame = part.CFrame + Vector3.new(0, 5, 0)
+                    task.wait(0.25)
+                end
+            else
+                warn("[TapHeroes] Encoded Egg Not Found")
+            end
+        end
+    end
+
+    updateEgg()
+
+    customEggs.ChildAdded:Connect(function()
+        task.wait(0.1)
+        updateEgg()
+    end)
+
+    customEggs.ChildRemoved:Connect(function()
+        task.wait(0.1)
+        updateEgg()
+    end)
+
+    while true do
+
+        if currentEggName and currentEggModel and currentEggModel.Parent then
+
+            local part =
+                currentEggModel.PrimaryPart
+                or currentEggModel:FindFirstChildWhichIsA("BasePart", true)
+
+            if part then
+
+                local dist = (getRoot().Position - part.Position).Magnitude
+
+                -- Chỉ tele lại nếu ở quá xa
+                if dist > 15 then
+                    print(string.format("[TapHeroes] Too far %.1f studs -> Tele", dist))
+                    getRoot().CFrame = part.CFrame + Vector3.new(0, 5, 0)
+                    task.wait(0.2)
+                end
+
+            end
+
+            local args = {
+                [1] = currentEggName,
+                [2] = 89
+            }
+
+            local ok, result = pcall(function()
+                return hatchRemote:InvokeServer(unpack(args))
+            end)
+
+            if ok then
+                if result ~= nil then
+                    --print("[TapHeroes] Hatch:", result)
+                end
+            else
+                --warn("[TapHeroes] Hatch Error:", result)
+            end
+
+        else
+
+            currentEggName = nil
+            currentEggModel = nil
+            updateEgg()
+
+        end
+
+        task.wait(0.1)
+
+    end
+
+end)
