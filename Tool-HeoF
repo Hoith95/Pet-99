@@ -15,6 +15,10 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/D
 end)
 
 spawn(function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_HEO_CHECK"))()
+end)
+
+spawn(function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_RECONNECT"))()
 end)
 
