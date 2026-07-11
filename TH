@@ -191,7 +191,7 @@ task.spawn(function()
                     or currentEggModel:FindFirstChildWhichIsA("BasePart", true)
 
                 if part then
-                    getRoot().CFrame = part.CFrame + Vector3.new(0, 5, -9)
+                    getRoot().CFrame = part.CFrame + Vector3.new(0, 5, -19)
                     task.wait(0.5)
                 end
             else
@@ -224,10 +224,9 @@ task.spawn(function()
 
                 local dist = (getRoot().Position - part.Position).Magnitude
 
-                -- Chỉ tele lại nếu ở quá xa
-                if dist > 15 then
+                if dist > 25 then
                     print(string.format("[TapHeroes] Too far %.1f studs -> Tele", dist))
-                    getRoot().CFrame = part.CFrame + Vector3.new(0, 5, -9)
+                    getRoot().CFrame = part.CFrame + Vector3.new(0, 5, -19)
                     task.wait(0.5)
                 end
 
@@ -259,6 +258,36 @@ task.spawn(function()
         end
 
         task.wait(0.1)
+
+    end
+
+end)
+
+-- AUTO TAPPER
+
+task.spawn(function()
+    repeat
+        task.wait(5)
+    until HatchReady
+
+    local remote = ReplicatedStorage.Network:WaitForChild("AutoTapper_Toggle")
+
+    while true do
+
+        local sd = getSave()
+
+        if sd and not sd.AutoTapper then
+
+            print("[TapHeroes] Enable AutoTapper")
+
+            pcall(function()
+                remote:InvokeServer()
+            end)
+
+            task.wait(2)
+        else
+            task.wait(10)
+        end
 
     end
 
