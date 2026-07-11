@@ -153,7 +153,12 @@ end)
 
 -- AUTO HATCH
 
+--========================================================
+-- AUTO HATCH
+--========================================================
+
 task.spawn(function()
+
     repeat
         task.wait(5)
     until HatchReady
@@ -163,6 +168,15 @@ task.spawn(function()
 
     local currentEggName
     local currentEggModel
+
+    local TELEPORT_DISTANCE = 40
+    local EGG_OFFSET = 25 -- đứng trước egg 4 studs
+
+    local function teleportToEgg(part)
+        local targetPos = part.Position - part.CFrame.LookVector * EGG_OFFSET
+        getRoot().CFrame = CFrame.lookAt(targetPos, part.Position)
+        _G.LastTeleport = tick()
+    end
 
     local function updateEgg()
 
@@ -184,18 +198,19 @@ task.spawn(function()
 
             if currentEggName then
 
-                print("[TapHeroes] New Egg:", currentEggName)
+                --print("[TapHeroes] New Egg:", currentEggName)
 
                 local part =
                     currentEggModel.PrimaryPart
                     or currentEggModel:FindFirstChildWhichIsA("BasePart", true)
 
                 if part then
-                    getRoot().CFrame = part.CFrame + Vector3.new(0, 5, -25)
-                    task.wait(0.5)
+                    teleportToEgg(part)
+                    task.wait(0.3)
                 end
+
             else
-                warn("[TapHeroes] Encoded Egg Not Found")
+                --warn("[TapHeroes] Encoded Egg Not Found")
             end
         end
     end
@@ -214,7 +229,9 @@ task.spawn(function()
 
     while true do
 
-        if currentEggName and currentEggModel and currentEggModel.Parent then
+        if currentEggName
+        and currentEggModel
+        and currentEggModel.Parent then
 
             local part =
                 currentEggModel.PrimaryPart
@@ -222,12 +239,12 @@ task.spawn(function()
 
             if part then
 
-                local dist = (getRoot().Position - part.Position).Magnitude
+                local delta = getRoot().Position - part.Position
 
-                if dist > 35 then
-                    print(string.format("[TapHeroes] Too far %.1f studs -> Tele", dist))
-                    getRoot().CFrame = part.CFrame + Vector3.new(0, 5, -25)
-                    task.wait(0.5)
+                if delta:Dot(delta) > (TELEPORT_DISTANCE * TELEPORT_DISTANCE) then
+                    print("[TapHeroes] Too Far -> Teleport Egg")
+                    teleportToEgg(part)
+                    task.wait(0.3)
                 end
 
             end
@@ -253,6 +270,7 @@ task.spawn(function()
 
             currentEggName = nil
             currentEggModel = nil
+
             updateEgg()
 
         end
@@ -278,7 +296,7 @@ task.spawn(function()
 
         if sd and not sd.AutoTapper then
 
-            print("[TapHeroes] Enable AutoTapper")
+            --print("[TapHeroes] Enable AutoTapper")
 
             pcall(function()
                 remote:InvokeServer()
