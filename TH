@@ -5,12 +5,9 @@ _G.VAR_HT = true
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
 local player = Players.LocalPlayer
-
 local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
 local PlayerSave = require(Client.Save)
-
 local function getSave()
     return PlayerSave.Get()
 end
@@ -22,36 +19,27 @@ end
 
 local function getCurrencyAmount(currencyId)
     local sd = getSave()
-
     if not sd or not sd.Inventory or not sd.Inventory.Currency then
         return 0
     end
-
     for _, v in pairs(sd.Inventory.Currency) do
         if v.id == currencyId then
             return tonumber(v._am) or 0
         end
     end
-
     return 0
 end
 
 -- TELEPORT TO EVENT
 
 local HatchReady = false
-
 getRoot().CFrame = CFrame.new(-15849, 40.27, -195)
-
 repeat
     task.wait(0.2)
 until workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TapHeroes")
-
 print("[TapHeroes] Instance Loaded")
-
 task.wait(9)
-
 getRoot().CFrame = CFrame.new(60040, 951, 60005)
-
 task.wait(0.5)
 
 ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
@@ -76,9 +64,7 @@ task.spawn(function()
     repeat
         task.wait(5)
     until HatchReady
-
     local purchase = ReplicatedStorage.Network:WaitForChild("EventUpgrades: Purchase")
-
     local upgrades = {
         "TapHeroesClickDamage",
         "TapHeroesPetDamage",
@@ -87,18 +73,14 @@ task.spawn(function()
     }
 
     while true do
-
         for _, upgrade in ipairs(upgrades) do
             pcall(function()
                 purchase:InvokeServer(upgrade)
             end)
-
             task.wait(0.1)
         end
-
         task.wait(0.5)
     end
-
 end)
 
 -- MARBLE COINS MONITOR
@@ -107,70 +89,64 @@ task.spawn(function()
     repeat
         task.wait(5)
     until HatchReady
-
     local lastCoins = getCurrencyAmount("MarbleCoins")
     local lastChange = tick()
 
     while true do
-
         task.wait(1)
-
         local coins = getCurrencyAmount("MarbleCoins")
-
         if coins ~= lastCoins then
-
             --print(string.format("[TapHeroes] MarbleCoins %s -> %s",lastCoins,coins))
-
             lastCoins = coins
             lastChange = tick()
 
         elseif tick() - lastChange >= 68 then
 
             local sd = getSave()
-
             local beaten = sd.TapHeroesLevelsBeaten2026 or 0
-            local currentLevel = beaten + 1
-            local targetLevel = math.max(currentLevel - 5, 1)
-
-            --warn(string.format("[TapHeroes] No MarbleCoins 60s | Warp %d -> %d",currentLevel,targetLevel))
-
+            local rebirth = math.floor(beaten / 120)
+            local currentLevel = beaten % 120
+            if currentLevel == 0 then
+                currentLevel = 120
+                if beaten > 0 then
+                    rebirth = rebirth - 1
+                end
+            end
+            local backLevel
+            if currentLevel <= 50 then
+                backLevel = 5
+            elseif currentLevel <= 80 then
+                backLevel = 15
+            else
+                backLevel = 25
+            end
+            local targetLevel = math.max(currentLevel - backLevel, 1)
+            --warn(string.format("[TapHeroes] No MarbleCoins 60s | Rebirth %d | Lv %d -> Warp Lv %d",rebirth,currentLevel,targetLevel))
             ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
                 "TapHeroes",
                 "ZN_Warp",
                 targetLevel
             )
-
             lastCoins = getCurrencyAmount("MarbleCoins")
             lastChange = tick()
-
             task.wait(3)
-
         end
-
     end
-
 end)
 
 -- AUTO HATCH
 
---========================================================
--- AUTO HATCH
---========================================================
-
 task.spawn(function()
-
     repeat
         task.wait(5)
     until HatchReady
 
     local customEggs = workspace.__THINGS:WaitForChild("CustomEggs")
     local hatchRemote = ReplicatedStorage.Network:WaitForChild("CustomEggs_Hatch")
-
     local currentEggName
     local currentEggModel
-
     local TELEPORT_DISTANCE = 40
-    local EGG_OFFSET = 30 -- đứng trước egg 4 studs
+    local EGG_OFFSET = 30 -- đứng trước egg 30 studs
 
     local function teleportToEgg(part)
         local targetPos = part.Position - part.CFrame.LookVector * EGG_OFFSET
@@ -179,10 +155,8 @@ task.spawn(function()
     end
 
     local function updateEgg()
-
         local foundName
         local foundModel
-
         for _, egg in ipairs(customEggs:GetChildren()) do
             if not egg.Name:find(" ") and #egg.Name >= 15 then
                 foundName = egg.Name
@@ -190,25 +164,18 @@ task.spawn(function()
                 break
             end
         end
-
         if foundName ~= currentEggName then
-
             currentEggName = foundName
             currentEggModel = foundModel
-
             if currentEggName then
-
                 --print("[TapHeroes] New Egg:", currentEggName)
-
                 local part =
                     currentEggModel.PrimaryPart
                     or currentEggModel:FindFirstChildWhichIsA("BasePart", true)
-
                 if part then
                     teleportToEgg(part)
                     task.wait(0.3)
                 end
-
             else
                 --warn("[TapHeroes] Encoded Egg Not Found")
             end
@@ -228,36 +195,27 @@ task.spawn(function()
     end)
 
     while true do
-
         if currentEggName
         and currentEggModel
         and currentEggModel.Parent then
-
             local part =
                 currentEggModel.PrimaryPart
                 or currentEggModel:FindFirstChildWhichIsA("BasePart", true)
-
             if part then
-
                 local delta = getRoot().Position - part.Position
-
                 if delta:Dot(delta) > (TELEPORT_DISTANCE * TELEPORT_DISTANCE) then
                     print("[TapHeroes] Too Far -> Teleport Egg")
                     teleportToEgg(part)
                     task.wait(0.3)
                 end
-
             end
-
             local args = {
                 [1] = currentEggName,
                 [2] = 89
             }
-
             local ok, result = pcall(function()
                 return hatchRemote:InvokeServer(unpack(args))
             end)
-
             if ok then
                 if result ~= nil then
                     --print("[TapHeroes] Hatch:", result)
@@ -265,20 +223,13 @@ task.spawn(function()
             else
                 --warn("[TapHeroes] Hatch Error:", result)
             end
-
         else
-
             currentEggName = nil
             currentEggModel = nil
-
             updateEgg()
-
         end
-
         task.wait(0.1)
-
     end
-
 end)
 
 -- AUTO TAPPER
@@ -287,26 +238,17 @@ task.spawn(function()
     repeat
         task.wait(5)
     until HatchReady
-
     local remote = ReplicatedStorage.Network:WaitForChild("AutoTapper_Toggle")
-
     while true do
-
         local sd = getSave()
-
         if sd and not sd.AutoTapper then
-
             --print("[TapHeroes] Enable AutoTapper")
-
             pcall(function()
                 remote:InvokeServer()
             end)
-
             task.wait(2)
         else
             task.wait(10)
         end
-
     end
-
 end)
