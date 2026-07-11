@@ -112,6 +112,7 @@ task.spawn(function()
                     rebirth = rebirth - 1
                 end
             end
+
             local backLevel
             if currentLevel <= 50 then
                 backLevel = 5
@@ -120,6 +121,7 @@ task.spawn(function()
             else
                 backLevel = 25
             end
+
             local targetLevel = math.max(currentLevel - backLevel, 1)
             --warn(string.format("[TapHeroes] No MarbleCoins 60s | Rebirth %d | Lv %d -> Warp Lv %d",rebirth,currentLevel,targetLevel))
             ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
@@ -164,6 +166,7 @@ task.spawn(function()
                 break
             end
         end
+
         if foundName ~= currentEggName then
             currentEggName = foundName
             currentEggModel = foundModel
@@ -209,6 +212,7 @@ task.spawn(function()
                     task.wait(0.3)
                 end
             end
+
             local args = {
                 [1] = currentEggName,
                 [2] = 89
