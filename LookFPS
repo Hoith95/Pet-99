@@ -9,6 +9,7 @@ local DEBUG = false
 
 local FPS = {
 	TIME_TRIAL = 5,
+	TAP_HEROES = 5,
 
 	LUCKY_EXCEPTION = 3,
 
@@ -60,6 +61,11 @@ task.spawn(function()
 		return active and active:FindFirstChild("TimeTrial")
 	end
 
+	-- 🌍 STATE DETECT
+	local function isTapHeroes(active)
+		return active and active:FindFirstChild("TapHeroes")
+	end
+
 	local function isXmas(active)
 		return active and active:FindFirstChild("XmasWorld")
 	end
@@ -100,6 +106,11 @@ task.spawn(function()
 	local function resolveFPS()
 		local active = getActive()
 		local elapsed = tick() - startTime
+
+		-- 🥇 Priority 0: Tap Heroes
+		if isTapHeroes(active) then
+			return FPS.TAP_HEROES, "TapHeroes"
+		end
 
 		-- 🥇 Priority 1: Time Trial
 		if isTimeTrial(active) then
@@ -149,6 +160,7 @@ task.spawn(function()
 
 		local isActiveEvent = active and (
 			active:FindFirstChild("TimeTrial")
+			or active:FindFirstChild("TapHeroes")
 			or active:FindFirstChild("LuckyEventWorld")
 			or active:FindFirstChild("LuckyRaid")
 			or active:FindFirstChild("LuckyEgg")
