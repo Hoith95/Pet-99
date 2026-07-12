@@ -36,7 +36,7 @@ getgenv().Settings = {
         {Name = "Time Trial Gift 2", Data = {Price = "500k"}},
         {Name = "Marble Gift", Data = {Price = "599k"}},
 
-		{Name = "Gargantuan Samurai Kitsune", Data = {Price = "115b"}},
+		{Name = "Gargantuan Samurai Kitsune", Data = {Price = "110b"}},
 		{Name = "Gargantuan 1x1x1x1", Data = {Price = "95b"}},
 		{Name = "Gargantuan Guest 666", Data = {Price = "100.86b"}},
 		{Name = "Golden Gargantuan Guest 666", Data = {Price = "150.86b"}},
