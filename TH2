@@ -1,6 +1,8 @@
 if _G.VAR_HT2 then return end
 _G.VAR_HT2 = true
 
+task.wait(38)
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
 local PlayerSave = require(Client.Save)
