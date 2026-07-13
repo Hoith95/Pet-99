@@ -39,6 +39,14 @@ local function getTapHeroes()
         or 0
 end
 
+local function getTapHeroes2()
+    local sd = getSave()
+    return sd
+        and sd.TapHeroes
+        and sd.TapHeroes.Rebirths
+        or 0
+end
+
 local function getMegaPresentPoints()
     local sd = getSave()
     return sd
@@ -211,8 +219,8 @@ local function startGuiUpdater()
         coinLabel.Text = Formatint(getCurrencyAmount("MarbleCoins")) .. " | Marble Coins"
         updateLabelSize(coinLabel)
 
-        --raffleLabel.Text = getTapHeroesLevels() .. " | Level Heroes"
-        --updateLabelSize(raffleLabel)
+        raffleLabel.Text = getTapHeroes2() .. " | Rebirths"
+        updateLabelSize(raffleLabel)
 
 		megaPresentLabel.Text = Formatint(getTapHeroesLevels()) .. " | " .. Formatint(getTapHeroes()) .. " | Level Heroes"
 		updateLabelSize(megaPresentLabel)
