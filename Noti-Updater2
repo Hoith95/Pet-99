@@ -31,11 +31,11 @@ local function getTapHeroesLevels()
         or 0
 end
 
-local function getRecentSleighPointsSent()
+local function getTapHeroes()
     local sd = getSave()
     return sd
-        and sd.Christmas2025Part2
-        and sd.Christmas2025Part2.RecentSleighPointsSent
+        and sd.TapHeroes
+        and sd.TapHeroes.CurrentZone
         or 0
 end
 
@@ -185,7 +185,7 @@ local function startGuiUpdater()
     --local giftLabel        = createLabel("GiftLabel", right)
     --local gift2Label       = createLabel("Gift2Label", right)
     local coinLabel        = createLabel("CoinLabel", right)
-    --local megaPresentLabel = createLabel("MegaPresentLabel", right)
+    local megaPresentLabel = createLabel("MegaPresentLabel", right)
 	--local upgradeLabel 	   = createLabel("UpgradeLabel", right)
 
     -- LEFT / CENTER
@@ -211,11 +211,11 @@ local function startGuiUpdater()
         coinLabel.Text = Formatint(getCurrencyAmount("MarbleCoins")) .. " | Marble Coins"
         updateLabelSize(coinLabel)
 
-        raffleLabel.Text = getTapHeroesLevels() .. " | Level Heroes"
-        updateLabelSize(raffleLabel)
+        --raffleLabel.Text = getTapHeroesLevels() .. " | Level Heroes"
+        --updateLabelSize(raffleLabel)
 
-		--megaPresentLabel.Text = Formatint(getRecentSleighPointsSent()) .. " | " .. Formatint(getMegaPresentPoints()) .. " | Mega Present"
-		--updateLabelSize(megaPresentLabel)
+		megaPresentLabel.Text = Formatint(getTapHeroesLevels()) .. " | " .. Formatint(getTapHeroes()) .. " | Level Heroes"
+		updateLabelSize(megaPresentLabel)
 
 		local runsLeft = getRunsLeft()
 		timeTrialLabel.Text = "Time Trial: " .. runsLeft .. "/10"
