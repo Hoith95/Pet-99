@@ -39,6 +39,14 @@ local function getTapHeroes()
         or 0
 end
 
+local function getTapHeroes3()
+    local sd = getSave()
+    return sd
+        and sd.TapHeroes
+        and sd.TapHeroes.MaxZone
+        or 0
+end
+
 local function getTapHeroes2()
     local sd = getSave()
     return sd
