@@ -32,7 +32,7 @@ while true do
     end
 
     if enabled and beaten >= 595 then
-        print("[TapHeroes] Reached 595 -> Disable Auto")
+        --print("[TapHeroes] Reached 595 -> Disable Auto")
         ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
             "TapHeroes",
             "ZN_Auto",
