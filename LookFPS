@@ -8,19 +8,21 @@ _G.LOOKFPS = true
 local DEBUG = false
 
 local FPS = {
-	TIME_TRIAL = 5,
-	TAP_HEROES = 5,
+    TIME_TRIAL = 5,
 
-	LUCKY_EXCEPTION = 3,
+    TAP_HEROES = 5,
+    TAP_HEROES_EXCEPTION = 7,
 
-	XMAS = {
-		EARLY = 5,
-		MID = 4,
-		LATE = 3
-	},
+    LUCKY_EXCEPTION = 3,
 
-	DEFAULT_EARLY = 3,
-	DEFAULT_LATE = 3
+    XMAS = {
+        EARLY = 5,
+        MID = 4,
+        LATE = 3
+    },
+
+    DEFAULT_EARLY = 3,
+    DEFAULT_LATE = 3
 }
 
 -- ⏱️ CONSTANT
@@ -109,7 +111,10 @@ task.spawn(function()
 
 		-- 🥇 Priority 0: Tap Heroes
 		if isTapHeroes(active) then
-			return FPS.TAP_HEROES, "TapHeroes"
+		    if isLuckyException() then
+		        return FPS.TAP_HEROES_EXCEPTION, "TapHeroesException"
+		    end
+		    return FPS.TAP_HEROES, "TapHeroes"
 		end
 
 		-- 🥇 Priority 1: Time Trial
