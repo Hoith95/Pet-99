@@ -11,7 +11,7 @@ local FPS = {
     TIME_TRIAL = 5,
 
     TAP_HEROES = 5,
-    TAP_HEROES_EXCEPTION = 7,
+    TAP_HEROES_EXCEPTION = 5,
 
     LUCKY_EXCEPTION = 3,
 
