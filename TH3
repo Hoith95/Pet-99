@@ -1,0 +1,50 @@
+if _G.VAR_HT3 then return end
+_G.VAR_HT3 = true
+
+task.wait(38)
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
+local PlayerSave = require(Client.Save)
+local function getSave()
+    return PlayerSave.Get()
+end
+
+local enabled = false
+
+while true do
+    local sd = getSave()
+    local beaten = sd.TapHeroesLevelsBeaten2026 or 0
+    if not enabled and beaten >= 238 then
+        enabled = true
+        --print("[TapHeroes] Reached 238 -> Enable Auto")
+        ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
+            "TapHeroes",
+            "ZN_Auto",
+            true
+        )
+
+        ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
+            "TapHeroes",
+            "ZN_AutoRebirth",
+            true
+        )
+    end
+
+    if enabled and beaten >= 595 then
+        print("[TapHeroes] Reached 595 -> Disable Auto")
+        ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
+            "TapHeroes",
+            "ZN_Auto",
+            false
+        )
+
+        ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
+            "TapHeroes",
+            "ZN_AutoRebirth",
+            false
+        )
+        break
+    end
+    task.wait(1)
+end
