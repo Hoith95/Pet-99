@@ -230,7 +230,7 @@ local function startGuiUpdater()
         raffleLabel.Text = getTapHeroes2() .. " | Rebirths"
         updateLabelSize(raffleLabel)
 
-		megaPresentLabel.Text = Formatint(getTapHeroesLevels()) .. " | " .. Formatint(getTapHeroes()) .. " | Level Heroes"
+		megaPresentLabel.Text = Formatint(getTapHeroes()) .. " | " .. Formatint(getTapHeroes3()) .. " | " .. Formatint(getTapHeroesLevels()) .. " | Level Heroes"
 		updateLabelSize(megaPresentLabel)
 
 		local runsLeft = getRunsLeft()
