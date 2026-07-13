@@ -6,6 +6,7 @@ task.wait(38)
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
 local PlayerSave = require(Client.Save)
+
 local function getSave()
     return PlayerSave.Get()
 end
@@ -14,29 +15,36 @@ local enabled = false
 
 while true do
     local sd = getSave()
-    local beaten = sd.TapHeroesLevelsBeaten2026 or 0
-    if not enabled and beaten >= 238 then
-        enabled = true
-        --print("[TapHeroes] Reached 238 -> Enable Auto")
-        ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
-            "TapHeroes",
-            "ZN_Auto",
-            true
-        )
 
-        ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
-            "TapHeroes",
-            "ZN_AutoRebirth",
-            true
-        )
+    local rebirths = 0
+    if sd.TapHeroes then
+        rebirths = sd.TapHeroes.Rebirths or 0
     end
 
-    if enabled and beaten >= 595 then
-        --print("[TapHeroes] Reached 595 -> Disable Auto")
+    if rebirths < 10 then
+        if not enabled then
+            enabled = true
+
+            ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
+                "TapHeroes",
+                "ZN_Auto",
+                true
+            )
+
+            ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
+                "TapHeroes",
+                "ZN_AutoRebirth",
+                true
+            )
+
+            print("[TapHeroes] Rebirths:", rebirths, "-> Auto=true | AutoRebirth=true")
+        end
+
+    else
         ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
             "TapHeroes",
             "ZN_Auto",
-            false
+            true
         )
 
         ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
@@ -44,7 +52,11 @@ while true do
             "ZN_AutoRebirth",
             false
         )
+
+        print("[TapHeroes] Rebirths:", rebirths, "-> Auto=true | AutoRebirth=false")
+
         break
     end
+
     task.wait(1)
 end
