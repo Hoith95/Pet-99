@@ -1,11 +1,11 @@
 -- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
-if _G.MAILBOX then
+if _G.MAILBOXS1 then
     warn("Script đã được chạy trước đó!")
     return -- Dừng script nếu đã chạy
 end
 
 -- Đánh dấu script đã được chạy
-_G.MAILBOX = true
+_G.MAILBOXS1 = true
 _G.MAILBOX_STOP = false  -- Biến để dừng script an toàn
 
 print("Auto MailBox sẽ bắt đầu gửi thư trong 60 giây nữa.")
@@ -19,44 +19,68 @@ getgenv().AutoMail = {
         --['Huge Shark Cat'] = { Class = "Pet", AllVariants = true, Amount = 1 },
         --['Lucki Chest Mimic'] = { Class = "Pet", AllVariants = true, Amount = "Max" },
         --['Lucki Golem'] = { Class = "Pet", AllVariants = true, Amount = "Max" },
+        ['Hype Egg 3'] = { Class = "Lootbox", Amount = 1 },
         ['Hype Egg 2'] = { Class = "Lootbox", Amount = 1 },
         ['Hype Egg'] = { Class = "Lootbox", Amount = "Max" },
         ['Huge Machine Egg 4'] = { Class = "Egg", Amount = 1 },
         ['Huge Machine Egg 5'] = { Class = "Egg", Amount = 1 },
+        ['Huge Machine Egg 6'] = { Class = "Egg", Amount = 1 },
         ['Exclusive Egg 56'] = { Class = "Egg", Amount = 1 },
         ['Exclusive Egg 57'] = { Class = "Egg", Amount = 1 },
         ['Exclusive Egg 58'] = { Class = "Egg", Amount = 1 },
         ['Exclusive Egg 59'] = { Class = "Egg", Amount = 1 },
-        --['Santa Gift'] = { Class = "Lootbox", MinAmount = 300, Amount = "Max" },
-        --['Candycane Gift'] = { Class = "Lootbox", MinAmount = 500, Amount = "Max" },
-        ['Time Trial Gift'] = { Class = "Lootbox", MinAmount = 50, Amount = "Max" },
+        ['Exclusive Egg 60'] = { Class = "Egg", Amount = 1 },
+        ['Exclusive Egg 61'] = { Class = "Egg", Amount = 1 },
+        ['Exclusive Egg 62'] = { Class = "Egg", Amount = 1 },
+        ['Exclusive Egg 63'] = { Class = "Egg", Amount = 1 },
+        ['Exclusive Egg 64'] = { Class = "Egg", Amount = 1 },
+        ['Exclusive Egg 65'] = { Class = "Egg", Amount = 1 },
+        ['Exclusive Egg 66'] = { Class = "Egg", Amount = 1 },
+        ['Exclusive Egg 67'] = { Class = "Egg", Amount = 1 },
+        ['Exclusive Egg 68'] = { Class = "Egg", Amount = 1 },
+        ['Marble Gift'] = { Class = "Lootbox", MinAmount = 50, Amount = "Max" },
+        ['Snowflake Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
+        ['Horseshoe Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
+        ['Time Trial Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
+        ['Time Trial Gift 2'] = { Class = "Lootbox", MinAmount = 18, Amount = "Max" },
         --['Deep Sea Treasure Chest'] = { Class = "Lootbox", MinAmount = 5, Amount = "Max" },
         ['Mega Potion Chest'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
         ['Mega Enchant Chest'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
         ['Mega Loot Chest'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
+        ['Mega Charm Chest'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
+        ['Mega Ultimate Chest'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
         ['Huge Sea Dragon Card'] = { Class = "Card", MinAmount = 1, Amount = "Max" },
-        --['Insta Plant Capsule'] = { Class = "Misc", MinAmount = 100, Amount = "Max" },
-        --['Diamond'] = { Class = "Seed", MinAmount = 500, Amount = "Max" },
+        ['Insta Plant Capsule'] = { Class = "Misc", MinAmount = 100, Amount = "Max" },
+        ['Diamond'] = { Class = "Seed", MinAmount = 500, Amount = "Max" },
         --['MVP Key'] = { Class = "Misc", MinAmount = 1, Amount = "Max" },
-        --['MVP Key Lower Half'] = { Class = "Misc", MinAmount = 400, Amount = "Max" },
-        ['MVP Key Upper Half'] = { Class = "Misc", MinAmount = 25, Amount = "Max" },
+        --['MVP Key Lower Half'] = { Class = "Misc", MinAmount = 500, Amount = "Max" },
+        ['MVP Key Upper Half'] = { Class = "Misc", MinAmount = 1, Amount = "Max" },
         --['Easter Secret Key'] = { Class = "Misc", MinAmount = 500, Amount = "Max" },
         ['Charm Stone'] = { Class = "Misc", MinAmount = 500, Amount = "Max" },
         ['Royalty'] = { Class = "Charm", MinAmount = 1, Amount = "Max" },
         ['Overload'] = { Class = "Charm", MinAmount = 1, Amount = "Max" },
-        --['Mini Pinata'] = { Class = "Misc", MinAmount = 100, Amount = "Max" },
-        ['Secret Key'] = { Class = "Misc", MinAmount = 100, Amount = "Max" },
-        ['Fantasy Key'] = { Class = "Misc", MinAmount = 100, Amount = "Max" },
-        ['Void Key'] = { Class = "Misc", MinAmount = 200, Amount = "Max" },
-        ['Tech Key'] = { Class = "Misc", MinAmount = 400, Amount = "Max" },
-        ['Crystal Key'] = { Class = "Misc", MinAmount = 600, Amount = "Max" },
-        ['Fantasy Spinny Wheel Ticket'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
+        --['Mini Pinata'] = { Class = "Misc", MinAmount = 25, Amount = "Max" },
+        --['Party Box'] = { Class = "Misc", MinAmount = 100, Amount = "Max" },
+        --['Mini Lucky Block'] = { Class = "Misc", MinAmount = 100, Amount = "Max" },
+        ["Bucket O' Magic"] = { Class = "Misc", MinAmount = 10, Amount = "Max" },
+        ['Magic Shard'] = { Class = "Misc", MinAmount = 10, Amount = "Max" },
+        --['Secret Key'] = { Class = "Misc", MinAmount = 100, Amount = "Max" },
+        --['Fantasy Key'] = { Class = "Misc", MinAmount = 100, Amount = "Max" },
+        --['Void Key'] = { Class = "Misc", MinAmount = 200, Amount = "Max" },
+        --['Tech Key'] = { Class = "Misc", MinAmount = 400, Amount = "Max" },
+        --['Crystal Key'] = { Class = "Misc", MinAmount = 600, Amount = "Max" },
+        --['Fantasy Spinny Wheel Ticket'] = { Class = "Misc", MinAmount = 50, Amount = "Max" },
     },
     ['Loop Interval'] = 60,
-    ['Users'] = {"nguyenhuyengh3x", "truongcuong8beu", "nguyenhieu8i6w", "phanquynhku1u", "lehoangvw2k", "dinhhabb1a", "BVIW5", "killer7149"},
+    ['Users'] = {"Itsplumejolt", "ninaFalconBear", "MrsnateFrostFire", "ItstaraSkater2024", "HazelSpecter2024", "NexusRileyPulse50", "TheRealTinajolt2018"},
     ['UserItemPreferences'] = {
-        ['killer7149'] = {'MVP Key Lower Half', 'MVP Key Upper Half'},
-        ['BVIW5'] = {'Insta Plant Capsule', 'Diamond'},
+        ['TheRealWillow_cove'] = {'MVP Key Lower Half', 'MVP Key Upper Half', 'Insta Plant Capsule', 'Diamond', 'Magic Shard', "Bucket O' Magic"},
+        ['ItsSarahjolt'] = {'Insta Plant Capsule', 'Diamond'},
+        ['AndrewC0met74'] = {'Insta Plant Capsule', 'Diamond'},
+        ['DynamoPrism2018'] = {'Insta Plant Capsule', 'Diamond'},
+
+        --['TheRealWillow_cove', 'AndrewC0met74', 'DynamoPrism2018', 'ItsSarahjolt'] = {'Mini Pinata', 'Party Box', 'Mini Lucky Block'},
+
     }
 }
 
