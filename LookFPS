@@ -82,7 +82,7 @@ task.spawn(function()
 
 	local function isLuckyException()
 		return _G.S1 or _G.S2 or _G.S3 or _G.S4 or _G.S5
-		or _G.SUU1 or _G.SUU2 or _G.SUU3 or _G.SUU4 or _G.SUU5
+		or _G.P1 or _G.SUU6 or _G.SUU7 or _G.SUU8
 		or _G.S7 or _G.S8 or _G.S9 or _G.S10
 	end
 
