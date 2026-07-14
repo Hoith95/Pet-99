@@ -1,15 +1,11 @@
--- Kiểm tra biến toàn cục để xác định script đã chạy hay chưa
-if _G.MAILBOXS then
-    warn("Script đã được chạy trước đó!")
-    return -- Dừng script nếu đã chạy
+if _G.VAR_AUTO_MAIL then
+    return
 end
+_G.VAR_AUTO_MAIL = true
 
--- Đánh dấu script đã được chạy
-_G.MAILBOXS = true
-_G.MAILBOX_STOP = false  -- Biến để dừng script an toàn
+_G.MAILBOX_STOP = false
 
-print("Auto MailBox sẽ bắt đầu gửi thư trong 60 giây nữa.")
-task.wait(60)  -- Đảm bảo chờ đúng 60 giây trước khi thực thi
+task.wait(60)
 
 getgenv().AutoMail = {
     ['Items'] = {
