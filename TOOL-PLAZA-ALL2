@@ -49,7 +49,7 @@ getgenv().Settings = {
 		{Name = "Gargantuan Super Cat", Data = {Price = "50.86b"}},
         {Name = "Titanic Vampire Agony", Data = {Price = "18b"}},
 
-		{Name = "Titanic Crusader Dragon", Data = {Price = "6.8b"}},
+		{Name = "Titanic Crusader Dragon", Data = {Price = "6b"}},
 		{Name = "Titanic Scroll Dragon", Data = {Price = "4.5b"}},
 		{Name = "Golden Titanic Scroll Dragon", Data = {Price = "6.68b"}},
 		{Name = "Rainbow Titanic Scroll Dragon", Data = {Price = "16.86b"}},
