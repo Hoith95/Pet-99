@@ -4,7 +4,7 @@ _G.script1Done = true
 spawn(function()
 wait(15)
 _G.MAILBOX_STOP = true
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Items-Suu"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Heo"))()
 end)
 
 spawn(function()
