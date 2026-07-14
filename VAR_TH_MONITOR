@@ -1,0 +1,158 @@
+if _G.HT_MONITOR then
+    return
+end
+_G.HT_MONITOR = true
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
+local PlayerSave = require(Client.Save)
+
+local TIMEOUT = 30 * 60 -- 30 phút
+
+local function getSave()
+    return PlayerSave.Get()
+end
+
+local function getCurrencyAmount(currencyId)
+    local sd = getSave()
+
+    if not sd or not sd.Inventory or not sd.Inventory.Currency then
+        return 0
+    end
+
+    for _, v in pairs(sd.Inventory.Currency) do
+        if v.id == currencyId then
+            return tonumber(v._am) or 0
+        end
+    end
+
+    return 0
+end
+
+--------------------------------------------------------
+-- INIT
+--------------------------------------------------------
+
+local sd = getSave()
+
+local lastZone = (sd.TapHeroes and sd.TapHeroes.CurrentZone) or 0
+local lastRebirth = (sd.TapHeroes and sd.TapHeroes.Rebirths) or 0
+local lastCoins = getCurrencyAmount("MarbleCoins")
+local lastEggs = sd.EggsHatched or 0
+
+local zoneTick = tick()
+local rebirthTick = tick()
+local coinTick = tick()
+local eggTick = tick()
+
+--------------------------------------------------------
+-- MONITOR
+--------------------------------------------------------
+
+while true do
+    task.wait(1)
+
+    sd = getSave()
+
+    ----------------------------------------------------
+    -- CurrentZone
+    ----------------------------------------------------
+
+    local zone = (sd.TapHeroes and sd.TapHeroes.CurrentZone) or 0
+
+    if zone ~= lastZone then
+        lastZone = zone
+        zoneTick = tick()
+        --print("[Monitor] Zone:", zone)
+    end
+
+    ----------------------------------------------------
+    -- Rebirth
+    ----------------------------------------------------
+
+    local rebirth = (sd.TapHeroes and sd.TapHeroes.Rebirths) or 0
+
+    if rebirth ~= lastRebirth then
+        lastRebirth = rebirth
+        rebirthTick = tick()
+        --print("[Monitor] Rebirth:", rebirth)
+    end
+
+    ----------------------------------------------------
+    -- MarbleCoins
+    ----------------------------------------------------
+
+    local coins = getCurrencyAmount("MarbleCoins")
+
+    if coins ~= lastCoins then
+        lastCoins = coins
+        coinTick = tick()
+        --print("[Monitor] Coins:", coins)
+    end
+
+    ----------------------------------------------------
+    -- EggsHatched
+    ----------------------------------------------------
+
+    local eggs = sd.EggsHatched or 0
+
+    if eggs ~= lastEggs then
+        lastEggs = eggs
+        eggTick = tick()
+        --print("[Monitor] Eggs:", eggs)
+    end
+
+    ----------------------------------------------------
+    -- CHECK
+    ----------------------------------------------------
+
+    local now = tick()
+
+    -- Zone (chỉ kiểm tra khi chưa tới 120)
+    if zone < 120 and (now - zoneTick >= TIMEOUT) then
+        Players.LocalPlayer:Kick(
+            string.format(
+                "TapHeroes Monitor\nCurrentZone stuck %d minutes.\nZone: %d",
+                TIMEOUT / 60,
+                zone
+            )
+        )
+        break
+    end
+
+    -- Rebirth (chỉ kiểm tra khi chưa đủ 10)
+    if rebirth < 10 and (now - rebirthTick >= TIMEOUT) then
+        Players.LocalPlayer:Kick(
+            string.format(
+                "TapHeroes Monitor\nRebirth stuck %d minutes.\nRebirth: %d",
+                TIMEOUT / 60,
+                rebirth
+            )
+        )
+        break
+    end
+
+    -- MarbleCoins
+    if now - coinTick >= TIMEOUT then
+        Players.LocalPlayer:Kick(
+            string.format(
+                "TapHeroes Monitor\nMarbleCoins stuck %d minutes.",
+                TIMEOUT / 60
+            )
+        )
+        break
+    end
+
+    -- EggsHatched
+    if now - eggTick >= TIMEOUT then
+        Players.LocalPlayer:Kick(
+            string.format(
+                "TapHeroes Monitor\nEggsHatched stuck %d minutes.",
+                TIMEOUT / 60
+            )
+        )
+        break
+    end
+end
