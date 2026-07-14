@@ -19,6 +19,10 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/T
 end)
 
 spawn(function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_TH_MONITOR"))()
+end)
+
+spawn(function()
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Tele-Map-274"))()
 end)
 
