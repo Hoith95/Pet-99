@@ -7,6 +7,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local player = Players.LocalPlayer
 local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
+local EggCmds = require(Client.EggCmds)
 local PlayerSave = require(Client.Save)
 local function getSave()
     return PlayerSave.Get()
@@ -218,7 +219,7 @@ task.spawn(function()
 
             local args = {
                 [1] = currentEggName,
-                [2] = 89
+                [2] = EggCmds.GetMaxHatch()
             }
             local ok, result = pcall(function()
                 return hatchRemote:InvokeServer(unpack(args))
