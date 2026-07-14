@@ -9,7 +9,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
 local PlayerSave = require(Client.Save)
 
-local TIMEOUT = 30 * 60 -- 30 phút
+local TIMEOUT = 30 * 60
 
 local function getSave()
     return PlayerSave.Get()
@@ -31,9 +31,9 @@ local function getCurrencyAmount(currencyId)
     return 0
 end
 
---------------------------------------------------------
+----------------------------------------------------
 -- INIT
---------------------------------------------------------
+----------------------------------------------------
 
 local sd = getSave()
 
@@ -47,112 +47,99 @@ local rebirthTick = tick()
 local coinTick = tick()
 local eggTick = tick()
 
---------------------------------------------------------
--- MONITOR
---------------------------------------------------------
+----------------------------------------------------
+-- LOOP
+----------------------------------------------------
 
 while true do
+
     task.wait(1)
 
     sd = getSave()
 
-    ----------------------------------------------------
-    -- CurrentZone
-    ----------------------------------------------------
-
     local zone = (sd.TapHeroes and sd.TapHeroes.CurrentZone) or 0
+    local rebirth = (sd.TapHeroes and sd.TapHeroes.Rebirths) or 0
+    local coins = getCurrencyAmount("MarbleCoins")
+    local eggs = sd.EggsHatched or 0
+
+    ------------------------------------------------
+    -- UPDATE
+    ------------------------------------------------
 
     if zone ~= lastZone then
         lastZone = zone
         zoneTick = tick()
-        --print("[Monitor] Zone:", zone)
     end
-
-    ----------------------------------------------------
-    -- Rebirth
-    ----------------------------------------------------
-
-    local rebirth = (sd.TapHeroes and sd.TapHeroes.Rebirths) or 0
 
     if rebirth ~= lastRebirth then
         lastRebirth = rebirth
         rebirthTick = tick()
-        --print("[Monitor] Rebirth:", rebirth)
     end
-
-    ----------------------------------------------------
-    -- MarbleCoins
-    ----------------------------------------------------
-
-    local coins = getCurrencyAmount("MarbleCoins")
 
     if coins ~= lastCoins then
         lastCoins = coins
         coinTick = tick()
-        --print("[Monitor] Coins:", coins)
     end
-
-    ----------------------------------------------------
-    -- EggsHatched
-    ----------------------------------------------------
-
-    local eggs = sd.EggsHatched or 0
 
     if eggs ~= lastEggs then
         lastEggs = eggs
         eggTick = tick()
-        --print("[Monitor] Eggs:", eggs)
     end
 
-    ----------------------------------------------------
-    -- CHECK
-    ----------------------------------------------------
+    ------------------------------------------------
+    -- STAGE 1
+    ------------------------------------------------
 
-    local now = tick()
+    if zone < 120 or rebirth < 10 then
 
-    -- Zone (chỉ kiểm tra khi chưa tới 120)
-    if zone < 120 and (now - zoneTick >= TIMEOUT) then
-        Players.LocalPlayer:Kick(
-            string.format(
-                "TapHeroes Monitor\nCurrentZone stuck %d minutes.\nZone: %d",
-                TIMEOUT / 60,
-                zone
+        if tick() - zoneTick >= TIMEOUT then
+            Players.LocalPlayer:Kick(
+                string.format(
+                    "TapHeroes Monitor\nCurrentZone stuck %d minutes.\nZone: %d",
+                    TIMEOUT / 60,
+                    zone
+                )
             )
-        )
-        break
+            break
+        end
+
+        if tick() - rebirthTick >= TIMEOUT then
+            Players.LocalPlayer:Kick(
+                string.format(
+                    "TapHeroes Monitor\nRebirth stuck %d minutes.\nRebirth: %d",
+                    TIMEOUT / 60,
+                    rebirth
+                )
+            )
+            break
+        end
+
+    ------------------------------------------------
+    -- STAGE 2
+    ------------------------------------------------
+
+    else
+
+        if tick() - coinTick >= TIMEOUT then
+            Players.LocalPlayer:Kick(
+                string.format(
+                    "TapHeroes Monitor\nMarbleCoins stuck %d minutes.",
+                    TIMEOUT / 60
+                )
+            )
+            break
+        end
+
+        if tick() - eggTick >= TIMEOUT then
+            Players.LocalPlayer:Kick(
+                string.format(
+                    "TapHeroes Monitor\nEggsHatched stuck %d minutes.",
+                    TIMEOUT / 60
+                )
+            )
+            break
+        end
+
     end
 
-    -- Rebirth (chỉ kiểm tra khi chưa đủ 10)
-    if rebirth < 10 and (now - rebirthTick >= TIMEOUT) then
-        Players.LocalPlayer:Kick(
-            string.format(
-                "TapHeroes Monitor\nRebirth stuck %d minutes.\nRebirth: %d",
-                TIMEOUT / 60,
-                rebirth
-            )
-        )
-        break
-    end
-
-    -- MarbleCoins
-    if now - coinTick >= TIMEOUT then
-        Players.LocalPlayer:Kick(
-            string.format(
-                "TapHeroes Monitor\nMarbleCoins stuck %d minutes.",
-                TIMEOUT / 60
-            )
-        )
-        break
-    end
-
-    -- EggsHatched
-    if now - eggTick >= TIMEOUT then
-        Players.LocalPlayer:Kick(
-            string.format(
-                "TapHeroes Monitor\nEggsHatched stuck %d minutes.",
-                TIMEOUT / 60
-            )
-        )
-        break
-    end
 end
