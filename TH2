@@ -1,4 +1,6 @@
-if _G.VAR_HT2 then return end
+if _G.VAR_HT2 then
+    return
+end
 _G.VAR_HT2 = true
 
 task.wait(38)
@@ -11,38 +13,94 @@ local function getSave()
     return PlayerSave.Get()
 end
 
+local Remote = ReplicatedStorage.Network.Instancing_FireCustomFromClient
+
 while true do
     local sd = getSave()
-    local beaten = sd.TapHeroesLevelsBeaten2026 or 0
-    if beaten >= 238 then
-        --warn("[TapHeroes] Reached 238 -> Disable Auto & Warp 100")
-        ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
-            "TapHeroes",
-            "ZN_Auto",
-            false
-        )
+    local tap = sd.TapHeroes or {}
+    local rebirth = tap.Rebirths or 0
 
-        ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
-            "TapHeroes",
-            "ZN_AutoRebirth",
-            false
-        )
+    -- Đã đủ 10 Rebirth -> Kết thúc
 
-        task.wait(0.5)
-        ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
-            "TapHeroes",
-            "ZN_Warp",
-            100
-        )
-        --warn("[TapHeroes] Farming Lv100 for 30 minutes...")
-        task.wait(30 * 60)
-        ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
-            "TapHeroes",
-            "ZN_Warp",
-            120
-        )
-        --warn("[TapHeroes] Warp to Lv120")
+    if rebirth >= 10 then
+        --print("[TapHeroes] Reached Rebirth 10")
         break
     end
-    task.wait(1)
+
+    -- Chờ tới Zone >= 100
+
+    repeat
+        task.wait(1)
+        sd = getSave()
+        tap = sd.TapHeroes or {}
+        rebirth = tap.Rebirths or 0
+        if rebirth >= 10 then
+            return
+        end
+
+    until (tap.CurrentZone or 0) >= 100
+
+    -- Tắt Auto
+
+    Remote:FireServer(
+        "TapHeroes",
+        "ZN_Auto",
+        false
+    )
+
+    Remote:FireServer(
+        "TapHeroes",
+        "ZN_AutoRebirth",
+        false
+    )
+
+    task.wait(0.5)
+
+    -- Warp 100
+
+    Remote:FireServer(
+        "TapHeroes",
+        "ZN_Warp",
+        100
+    )
+
+    --print("[TapHeroes] Warp Lv100 - Farm 20 minutes")
+
+    -- Farm 20 phút
+
+    task.wait(20 * 60)
+
+    -- Bật Auto
+
+    Remote:FireServer(
+        "TapHeroes",
+        "ZN_Auto",
+        true
+    )
+
+    Remote:FireServer(
+        "TapHeroes",
+        "ZN_AutoRebirth",
+        true
+    )
+
+    --print("[TapHeroes] Resume Auto")
+
+    -- Chờ Rebirth tăng
+
+    local targetRebirth = rebirth + 1
+
+    repeat
+        task.wait(1)
+
+        sd = getSave()
+        tap = sd.TapHeroes or {}
+        rebirth = tap.Rebirths or 0
+
+        -- Nếu đã đủ 10 thì kết thúc luôn
+        if rebirth >= 10 then
+            return
+        end
+    until rebirth >= targetRebirth
+    --print("[TapHeroes] Rebirth ->", rebirth)
 end
