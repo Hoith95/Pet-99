@@ -34,7 +34,7 @@ getgenv().Settings = {
         {Name = "Hype Egg 3", Data = {Price = "18m"}},
         {Name = "Time Trial Gift", Data = {Price = "268k"}},
         {Name = "Time Trial Gift 2", Data = {Price = "500k"}},
-        {Name = "Marble Gift", Data = {Price = "49k"}},
+        {Name = "Marble Gift", Data = {Price = "39k"}},
 
 		{Name = "Gargantuan Samurai Kitsune", Data = {Price = "105b"}},
 		{Name = "Gargantuan 1x1x1x1", Data = {Price = "95b"}},
@@ -74,7 +74,7 @@ getgenv().Settings = {
 
 		{Name = "Titanic Smiley Penguin", Data = {Price = "4.01b"}},
 
-		{Name = "Titanic Tiedye Corgi", Data = {Price = "5b"}},
+		{Name = "Titanic Tiedye Corgi", Data = {Price = "4.6b"}},
 		{Name = "Rainbow Titanic Tiedye Corgi", Data = {Price = "15.68b"}},
 		{Name = "Shiny Titanic Tiedye Corgi", Data = {Price = "15.86b"}},
 
