@@ -1,0 +1,79 @@
+if _G.OPEN_LOOTBOX then
+	return
+end
+_G.OPEN_LOOTBOX = true
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
+local Network = ReplicatedStorage.Network
+local LocalPlayer = Players.LocalPlayer
+
+-- CONFIG
+
+local ITEM_NAME = "Marble Gift"
+local OPEN_AMOUNT = 8
+local RADIUS = 15
+local DELAY = 0.01
+
+------------------------------
+
+local function getSave()
+	local ok, sd = pcall(PlayerSave.Get)
+	if ok then
+		return sd
+	end
+end
+
+local function getLootbox(itemName)
+	local sd = getSave()
+	if not sd or not sd.Inventory or not sd.Inventory.Lootbox then
+		return nil, 0
+	end
+
+	for uid, v in pairs(sd.Inventory.Lootbox) do
+		if v.id == itemName then
+			return uid, tonumber(v._am) or 0
+		end
+	end
+	return nil, 0
+end
+
+while _G.AUTO_OPEN_LOOTBOX do
+	task.wait(DELAY)
+	local uid, amount = getLootbox(ITEM_NAME)
+	if not uid or amount < OPEN_AMOUNT then
+		continue
+	end
+
+	local character = LocalPlayer.Character
+	if not character then
+		continue
+	end
+
+	local hrp = character:FindFirstChild("HumanoidRootPart")
+	if not hrp then
+		continue
+	end
+
+	local p = hrp.Position
+
+	local args = {
+		[1] = uid,
+		[2] = OPEN_AMOUNT,
+		[3] = {
+			[1] = Vector3.new(p.X + RADIUS, p.Y, p.Z),
+			[2] = Vector3.new(p.X + RADIUS * 0.7071, p.Y, p.Z + RADIUS * 0.7071),
+			[3] = Vector3.new(p.X, p.Y, p.Z + RADIUS),
+			[4] = Vector3.new(p.X - RADIUS * 0.7071, p.Y, p.Z + RADIUS * 0.7071),
+			[5] = Vector3.new(p.X - RADIUS, p.Y, p.Z),
+			[6] = Vector3.new(p.X - RADIUS * 0.7071, p.Y, p.Z - RADIUS * 0.7071),
+			[7] = Vector3.new(p.X, p.Y, p.Z - RADIUS),
+			[8] = Vector3.new(p.X + RADIUS * 0.7071, p.Y, p.Z - RADIUS * 0.7071),
+		}
+	}
+
+	pcall(function()
+		Network.KX_Release:InvokeServer(unpack(args))
+	end)
+end
