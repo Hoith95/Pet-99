@@ -5,6 +5,11 @@ wait(68)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Open_Charm"))()
 end)
 
+spawn(function()
+wait(68)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/OPEN_LOOTBOX"))()
+end)
+
 local prices = {"4.7b", "4.8b", "4.9b"}
 
 getgenv().Settings = {
@@ -34,7 +39,12 @@ getgenv().Settings = {
         {Name = "Hype Egg 3", Data = {Price = "18m"}},
         {Name = "Time Trial Gift", Data = {Price = "268k"}},
         {Name = "Time Trial Gift 2", Data = {Price = "500k"}},
-        {Name = "Marble Gift", Data = {Price = "39k"}},
+        --{Name = "Marble Gift", Data = {Price = "39k"}},
+
+        {Name = "Tap Damage Booster", Category = "Consumable", Data = {Price = "10%"}},
+        {Name = "Pristine Marble Clover", Category = "Consumable", Data = {Price = "10%"}},
+        {Name = "Polished Marble Clover", Category = "Consumable", Data = {Price = "3%"}},
+        {Name = "Cracked Marble Clover", Category = "Consumable", Data = {Price = "1%"}},
 
 		{Name = "Gargantuan Samurai Kitsune", Data = {Price = "105b"}},
 		{Name = "Gargantuan 1x1x1x1", Data = {Price = "95b"}},
