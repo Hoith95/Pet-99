@@ -39,7 +39,7 @@ local function getLootbox(itemName)
 	return nil, 0
 end
 
-while _G.AUTO_OPEN_LOOTBOX do
+while _G.OPEN_LOOTBOX do
 	task.wait(DELAY)
 	local uid, amount = getLootbox(ITEM_NAME)
 	if not uid or amount < OPEN_AMOUNT then
