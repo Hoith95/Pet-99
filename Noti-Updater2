@@ -51,7 +51,7 @@ local function getTapHeroes2()
     local sd = getSave()
     return sd
         and sd.TapHeroes
-        and sd.TapHeroes.Rebirths
+        and sd.TapHeroes.P2Rebirths
         or 0
 end
 
