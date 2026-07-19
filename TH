@@ -51,7 +51,7 @@ until getEggsHatched() > lastEggs
 local HatchReady = false
 getRoot().CFrame = CFrame.new(-15849, 40.27, -195)
 repeat
-    task.wait(0.2)
+    task.wait(3)
 until workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TapHeroes")
 print("[TapHeroes] Instance Loaded")
 task.wait(15)
