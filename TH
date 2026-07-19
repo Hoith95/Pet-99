@@ -31,6 +31,21 @@ local function getCurrencyAmount(currencyId)
     return 0
 end
 
+-- WAIT UNTIL EGGS HATCHED INCREASES
+
+local function getEggsHatched()
+    local sd = getSave()
+    if not sd then
+        return 0
+    end
+    return sd.EggsHatched or 0
+end
+
+local lastEggs = getEggsHatched()
+repeat
+    task.wait(1)
+until getEggsHatched() > lastEggs
+
 -- TELEPORT TO EVENT
 
 local HatchReady = false
@@ -43,20 +58,36 @@ task.wait(9)
 getRoot().CFrame = CFrame.new(60040, 951, 60005)
 task.wait(0.5)
 
-local beaten = (getSave().TapHeroesLevelsBeaten2026 or 0)
-local enableAuto = beaten < 238
+local function setAuto(latchState, queueState)
+    ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
+        "TapHeroes",
+        "DW_Latch",
+        latchState
+    )
 
-ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
-    "TapHeroes",
-    "ZN_Auto",
-    enableAuto
-)
+    ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
+        "TapHeroes",
+        "UF_Queue",
+        queueState
+    )
+end
 
-ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
-    "TapHeroes",
-    "ZN_AutoRebirth",
-    enableAuto
-)
+local function updateAuto()
+    local rebirths = 0
+    local sd = getSave()
+
+    if sd and sd.TapHeroes then
+        rebirths = sd.TapHeroes.P2Rebirths or 0
+    end
+
+    if rebirths >= 10 then
+        setAuto(true, false)
+    else
+        setAuto(true, true)
+    end
+end
+
+updateAuto()
 
 HatchReady = true
 
@@ -74,6 +105,8 @@ task.spawn(function()
         "TapHeroesPetDamage",
         "TapHeroesCoinBonus",
         "TapHeroesEggUpgrade",
+        "TapHeroesPermLuck",
+        "TapHeroesPermPetDamage",
     }
 
     while true do
@@ -106,36 +139,45 @@ task.spawn(function()
 
         elseif tick() - lastChange >= 68 then
 
-            local sd = getSave()
-            local beaten = sd.TapHeroesLevelsBeaten2026 or 0
-            local rebirth = math.floor(beaten / 120)
-            local currentLevel = beaten % 120
-            if currentLevel == 0 then
-                currentLevel = 120
-                if beaten > 0 then
-                    rebirth = rebirth - 1
-                end
-            end
+    local sd = getSave()
+    local currentLevel = sd.TapHeroes and sd.TapHeroes.MaxZone or 0
 
-            local backLevel
-            if currentLevel <= 50 then
-                backLevel = 5
-            elseif currentLevel <= 80 then
-                backLevel = 15
-            else
-                backLevel = 25
-            end
+    local backLevel
 
-            local targetLevel = math.max(currentLevel - backLevel, 1)
-            --warn(string.format("[TapHeroes] No MarbleCoins 60s | Rebirth %d | Lv %d -> Warp Lv %d",rebirth,currentLevel,targetLevel))
-            ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
-                "TapHeroes",
-                "ZN_Warp",
-                targetLevel
-            )
-            lastCoins = getCurrencyAmount("MarbleCoins")
-            lastChange = tick()
-            task.wait(3)
+    if currentLevel <= 50 then
+        backLevel = 5
+    elseif currentLevel <= 80 then
+        backLevel = 15
+    else
+        backLevel = 25
+    end
+
+    local targetLevel = math.max(currentLevel - backLevel, 1)
+
+    print(string.format(
+        "[TapHeroes] Stuck -> Disable Auto -> Warp %d -> Farm 20m",
+        targetLevel
+    ))
+
+    setAuto(false, false)
+
+    task.wait(2)
+
+    ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
+        "TapHeroes",
+        "ZN_Warp",
+        targetLevel
+    )
+
+    lastCoins = getCurrencyAmount("MarbleCoins")
+    lastChange = tick()
+
+    task.wait(20 * 60)
+
+    updateAuto()
+
+    lastCoins = getCurrencyAmount("MarbleCoins")
+    lastChange = tick()
         end
     end
 end)
