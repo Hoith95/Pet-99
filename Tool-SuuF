@@ -32,6 +32,10 @@ wait(68)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Noti-Updater2"))()
 end)
 
+spawn(function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TH"))()
+end)
+
 getgenv().GDO_TIME_TRIAL = false
 getgenv().GTIME_TRIAL_MIN_TIME_TO_BOSS3 = 1
 getgenv().GTIME_TRIAL_CHEST_TO_CLAIM = 3
