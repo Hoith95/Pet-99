@@ -80,7 +80,7 @@ local function updateAuto()
         rebirths = sd.TapHeroes.P2Rebirths or 0
     end
 
-    if rebirths >= 10 then
+    if rebirths >= 1 then
         setAuto(true, false)
     else
         setAuto(true, true)
