@@ -1,8 +1,6 @@
 if _G.VAR_HT3 then return end
 _G.VAR_HT3 = true
 
-task.wait(38)
-
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
 local PlayerSave = require(Client.Save)
@@ -18,22 +16,22 @@ while true do
 
     local rebirths = 0
     if sd.TapHeroes then
-        rebirths = sd.TapHeroes.Rebirths or 0
+        rebirths = sd.TapHeroes.P2Rebirths or 0
     end
 
-    if rebirths < 10 then
+    if rebirths < 5 then
         if not enabled then
             enabled = true
 
             ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
                 "TapHeroes",
-                "ZN_Auto",
+                "DW_Latch",
                 true
             )
 
             ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
                 "TapHeroes",
-                "ZN_AutoRebirth",
+                "UF_Queue",
                 true
             )
 
@@ -43,13 +41,13 @@ while true do
     else
         ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
             "TapHeroes",
-            "ZN_Auto",
+            "DW_Latch",
             true
         )
 
         ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
             "TapHeroes",
-            "ZN_AutoRebirth",
+            "UF_Queue",
             false
         )
 
