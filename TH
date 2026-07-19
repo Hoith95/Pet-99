@@ -54,7 +54,7 @@ repeat
     task.wait(0.2)
 until workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TapHeroes")
 print("[TapHeroes] Instance Loaded")
-task.wait(9)
+task.wait(15)
 getRoot().CFrame = CFrame.new(60040, 951, 60005)
 task.wait(0.5)
 
