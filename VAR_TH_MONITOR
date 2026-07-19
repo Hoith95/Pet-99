@@ -38,7 +38,7 @@ end
 
 local sd = getSave()
 local lastZone = (sd.TapHeroes and sd.TapHeroes.CurrentZone) or 0
-local lastRebirth = (sd.TapHeroes and sd.TapHeroes.Rebirths) or 0
+local lastRebirth = (sd.TapHeroes and sd.TapHeroes.P2Rebirths) or 0
 local lastCoins = getCurrencyAmount("MarbleCoins")
 local lastEggs = sd.EggsHatched or 0
 
@@ -55,7 +55,7 @@ while true do
     task.wait(1)
     sd = getSave()
     local zone = (sd.TapHeroes and sd.TapHeroes.CurrentZone) or 0
-    local rebirth = (sd.TapHeroes and sd.TapHeroes.Rebirths) or 0
+    local rebirth = (sd.TapHeroes and sd.TapHeroes.P2Rebirths) or 0
     local coins = getCurrencyAmount("MarbleCoins")
     local eggs = sd.EggsHatched or 0
 
@@ -87,8 +87,8 @@ while true do
 
     -- STAGE 1
 
-    if zone < 120 or rebirth < 10 then
-        if zone < 120 and (tick() - zoneTick >= ZONE_TIMEOUT) then
+    if zone < 180 or rebirth < 5 then
+        if zone < 180 and (tick() - zoneTick >= ZONE_TIMEOUT) then
             Players.LocalPlayer:Kick(string.format(
                 "[TapHeroes Monitor]\nCurrentZone không thay đổi %d phút\nCurrentZone = %d",
                 ZONE_TIMEOUT / 60,
@@ -97,7 +97,7 @@ while true do
             break
         end
 
-        if rebirth < 10 and (tick() - rebirthTick >= REBIRTH_TIMEOUT) then
+        if rebirth < 5 and (tick() - rebirthTick >= REBIRTH_TIMEOUT) then
             Players.LocalPlayer:Kick(string.format(
                 "[TapHeroes Monitor]\nRebirth không thay đổi %d giờ\nRebirth = %d",
                 REBIRTH_TIMEOUT / 3600,
