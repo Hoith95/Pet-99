@@ -28,22 +28,16 @@ end
 
 -- Hàm kiểm tra presence của player khác và kick nếu có
 local function checkAndKickIfOther()
-    local hasOther = false
     for _, p in ipairs(Players:GetPlayers()) do
         if p ~= localPlayer then
-            hasOther = true
-            break
+            pcall(function()
+                localPlayer:Kick("Có Heo Khác: " .. p.Name)
+            end)
+            return
         end
     end
 
-    if hasOther then
-        -- pcall để an toàn, tránh lỗi gây crash script
-        pcall(function()
-            localPlayer:Kick("Có Heo Khác")
-        end)
-    else
-        print("Chỉ có mình bạn trong server. Dừng script.")
-    end
+    print("Chỉ có mình bạn trong server. Dừng script.")
 end
 
 -- Nếu đã hoàn thành Time Trial thì kiểm tra ngay
