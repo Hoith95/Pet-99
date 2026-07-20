@@ -31,6 +31,21 @@ local function getCurrencyAmount(currencyId)
     return 0
 end
 
+-- WAIT UNTIL EGGS HATCHED INCREASES
+
+local function getEggsHatched()
+    local sd = getSave()
+    if not sd then
+        return 0
+    end
+    return sd.EggsHatched or 0
+end
+
+local lastEggs = getEggsHatched()
+repeat
+    task.wait(1)
+until getEggsHatched() > lastEggs
+
 -- TELEPORT TO EVENT
 
 local HatchReady = false
