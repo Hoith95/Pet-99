@@ -143,17 +143,14 @@ task.spawn(function()
     local sd = getSave()
     local currentLevel = sd.TapHeroes and sd.TapHeroes.MaxZone or 0
 
-    local backLevel
-
-    if currentLevel <= 50 then
-        backLevel = 5
-    elseif currentLevel <= 80 then
-        backLevel = 15
+    local targetLevel
+    if currentLevel <= 20 then
+        targetLevel = 1
+    elseif currentLevel % 20 == 0 then
+        targetLevel = currentLevel - 20
     else
-        backLevel = 25
+        targetLevel = math.floor(currentLevel / 20) * 20
     end
-
-    local targetLevel = math.max(currentLevel - backLevel, 1)
 
     print(string.format(
         "[TapHeroes] Stuck -> Disable Auto -> Warp %d -> Farm 20m",
@@ -176,6 +173,12 @@ task.spawn(function()
     task.wait(20 * 60)
 
     updateAuto()
+
+    ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
+        "TapHeroes",
+        "ZN_Warp",
+        currentLevel
+    )
 
     lastCoins = getCurrencyAmount("MarbleCoins")
     lastChange = tick()
