@@ -138,7 +138,7 @@ task.spawn(function()
             lastCoins = coins
             lastChange = tick()
 
-        elseif tick() - lastChange >= 68 then
+        elseif tick() - lastChange >= 168 then
 
     local sd = getSave()
     local currentLevel = sd.TapHeroes and sd.TapHeroes.MaxZone or 0
