@@ -31,21 +31,6 @@ local function getCurrencyAmount(currencyId)
     return 0
 end
 
--- WAIT UNTIL EGGS HATCHED INCREASES
-
-local function getEggsHatched()
-    local sd = getSave()
-    if not sd then
-        return 0
-    end
-    return sd.EggsHatched or 0
-end
-
-local lastEggs = getEggsHatched()
-repeat
-    task.wait(1)
-until getEggsHatched() > lastEggs
-
 -- TELEPORT TO EVENT
 
 local HatchReady = false
@@ -56,7 +41,18 @@ repeat
 until workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TapHeroes")
 print("[TapHeroes] Instance Loaded")
 task.wait(20)
-getRoot().CFrame = CFrame.new(60040, 951, 60005)
+
+local root = getRoot()
+local oldPos = root.Position
+
+root.CFrame = CFrame.new(60040, 951, 60005)
+
+task.wait(33)
+
+if (getRoot().Position - oldPos).Magnitude < 25 then
+    getRoot().CFrame = CFrame.new(60040, 951, 60005)
+end
+
 task.wait(0.5)
 
 local function setAuto(latchState, queueState)
