@@ -49,7 +49,7 @@ until getEggsHatched() > lastEggs
 -- TELEPORT TO EVENT
 
 local HatchReady = false
-task.wait(5)
+task.wait(68)
 getRoot().CFrame = CFrame.new(-15849, 40.27, -195)
 repeat
     task.wait(5)
