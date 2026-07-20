@@ -47,7 +47,7 @@ local oldPos = root.Position
 
 root.CFrame = CFrame.new(60041, 950, 60005)
 
-task.wait(33)
+task.wait(5)
 
 if (getRoot().Position - oldPos).Magnitude < 25 then
     getRoot().CFrame = CFrame.new(60041, 950, 60005)
