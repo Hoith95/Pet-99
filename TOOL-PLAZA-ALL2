@@ -2,7 +2,7 @@ wait(38)
 
 spawn(function()
 wait(68)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Open_Charm"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Open_Charm"))()
 end)
 
 spawn(function()
