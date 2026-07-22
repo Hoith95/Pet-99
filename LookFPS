@@ -53,7 +53,7 @@ local FPS = _G.FPS_CONFIG
 local THREE_HOURS = 999
 
 -- 🚀 INIT
-task.wait(368)
+task.wait(268)
 local startTime = tick()
 
 task.spawn(function()
