@@ -87,8 +87,8 @@ while true do
 
     -- STAGE 1
 
-    if zone < 160 or rebirth < 5 then
-        if zone < 160 and (tick() - zoneTick >= ZONE_TIMEOUT) then
+    if zone < 180 or rebirth < 5 then
+        if zone < 180 and (tick() - zoneTick >= ZONE_TIMEOUT) then
             Players.LocalPlayer:Kick(string.format(
                 "[TapHeroes Monitor]\nCurrentZone không thay đổi %d phút\nCurrentZone = %d",
                 ZONE_TIMEOUT / 60,
