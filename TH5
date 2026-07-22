@@ -1,0 +1,68 @@
+if _G.VAR_HT5 then return end
+_G.VAR_HT5 = true
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
+local PlayerSave = require(Client.Save)
+
+local function getSave()
+    return PlayerSave.Get()
+end
+
+local enabled = false
+
+while true do
+    local sd = getSave()
+
+    local rebirths = 0
+    if sd.TapHeroes then
+        rebirths = sd.TapHeroes.P2Rebirths or 0
+    end
+
+    if rebirths < 5 then
+        if not enabled then
+            enabled = true
+
+            ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
+                "TapHeroes",
+                "DW_Latch",
+                true
+            )
+
+            ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
+                "TapHeroes",
+                "UF_Queue",
+                true
+            )
+
+            print("[TapHeroes] Rebirths:", rebirths, "-> Auto=true | AutoRebirth=true")
+        end
+
+    else
+        ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
+            "TapHeroes",
+            "DW_Latch",
+            true
+        )
+
+        ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
+            "TapHeroes",
+            "UF_Queue",
+            false
+        )
+        task.wait(0.5)
+
+        -- Warp 160
+
+        ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
+            "TapHeroes",
+            "ZN_Warp",
+            160
+        )
+        print("[TapHeroes] Rebirths:", rebirths, "-> Auto=true | AutoRebirth=false")
+
+        break
+    end
+
+    task.wait(1)
+end
