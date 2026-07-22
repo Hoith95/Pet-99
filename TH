@@ -105,33 +105,6 @@ HatchReady = true
 
 print("[TapHeroes] Auto Enabled")
 
--- AUTO UPGRADE
-
-task.spawn(function()
-    repeat
-        task.wait(5)
-    until HatchReady
-    local purchase = ReplicatedStorage.Network:WaitForChild("EventUpgrades: Purchase")
-    local upgrades = {
-        "TapHeroesClickDamage",
-        "TapHeroesPetDamage",
-        "TapHeroesCoinBonus",
-        "TapHeroesEggUpgrade",
-        "TapHeroesPermLuck",
-        "TapHeroesPermPetDamage",
-    }
-
-    while true do
-        for _, upgrade in ipairs(upgrades) do
-            pcall(function()
-                purchase:InvokeServer(upgrade)
-            end)
-            task.wait(0.1)
-        end
-        task.wait(0.5)
-    end
-end)
-
 -- MARBLE COINS MONITOR
 
 task.spawn(function()
