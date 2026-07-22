@@ -46,7 +46,6 @@ getgenv().GENCHANTS = {"Criticals","Tap Power","Tap Power","Strong Pets","Walksp
 
 getgenv().GLOOTBOXES = {"Locked Hype Egg","Locked Hype Egg 3"}
 getgenv().GDO_AUTO_BALLOONS = false
-getgenv().GALLOW_MAIL_RETRIEVE = false
 
 getgenv().GPROGRESS_MODE = "Hybrid" -- Hatch
 getgenv().GGFX_MODE = 1
