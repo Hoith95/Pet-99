@@ -1,0 +1,60 @@
+if _G.AUTO_UPGRADE then
+    return
+end
+_G.AUTO_UPGRADE = true
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local PlayerSave = require(
+    ReplicatedStorage.Library.Client.Save
+)
+
+local purchase = ReplicatedStorage.Network:WaitForChild("EventUpgrades: Purchase")
+local upgrades = {
+    "TapHeroesClickDamage",
+    "TapHeroesPetDamage",
+    "TapHeroesCoinBonus",
+    "TapHeroesEggUpgrade",
+    "TapHeroesPermLuck",
+    "TapHeroesPermPetDamage",
+}
+
+local function getSave()
+    local ok, data = pcall(PlayerSave.Get)
+    return ok and data or nil
+end
+
+local function shouldRun()
+    local save = getSave()
+    if not save or not save.TapHeroes then
+        return true
+    end
+
+    local tap = save.TapHeroes
+
+    local rebirths = tap.P2Rebirths or 0
+    local maxZone = tap.MaxZone or 0
+
+    -- Đã rebirth >=5 và mở tới zone 180 thì bỏ qua
+    if rebirths >= 5 and maxZone >= 180 then
+        return false
+    end
+
+    return true
+end
+
+task.spawn(function()
+    while true do
+        if shouldRun() then
+            for _, upgrade in ipairs(upgrades) do
+                pcall(function()
+                    purchase:InvokeServer(upgrade)
+                end)
+                task.wait(1)
+            end
+            task.wait(1)
+        else
+            break
+        end
+    end
+    _G.AUTO_UPGRADE = nil
+end)
