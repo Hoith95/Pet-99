@@ -195,7 +195,7 @@ task.spawn(function()
 			or active:FindFirstChild("XmasWorld")
 		)
 
-		local waitTime = isActiveEvent and 0.01 or 0.1
+		local waitTime = isActiveEvent and 0.01 or 0.01
 
 		local fps, reason = resolveFPS()
 		setFPS(fps, reason)
