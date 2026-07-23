@@ -10,8 +10,8 @@ local DEBUG = false
 _G.FPS_CONFIG = _G.FPS_CONFIG or {
     TIME_TRIAL = 5,
 
-    TAP_HEROES = 4,
-    TAP_HEROES_EXCEPTION = 4,
+    TAP_HEROES = 3,
+    TAP_HEROES_EXCEPTION = 3,
 
     LUCKY_EXCEPTION = 3,
 
