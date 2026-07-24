@@ -7,7 +7,7 @@ _G.LOOKFPS = true
 -- ⚙️ CONFIG
 local DEBUG = false
 
-local FPS = {
+_G.FPS_CONFIG = _G.FPS_CONFIG or {
     TIME_TRIAL = 5,
 
     TAP_HEROES = 4,
@@ -25,11 +25,35 @@ local FPS = {
     DEFAULT_LATE = 3
 }
 
+_G.SetFPS = function(path, value)
+    local t = _G.FPS_CONFIG
+
+    local keys = string.split(path, ".")
+    for i = 1, #keys - 1 do
+        t = t[keys[i]]
+        if not t then
+            warn("[FPS] Invalid path:", path)
+            return false
+        end
+    end
+
+    if t[keys[#keys]] == nil then
+        warn("[FPS] Invalid path:", path)
+        return false
+    end
+
+    t[keys[#keys]] = value
+    print(("[FPS] %s -> %s"):format(path, tostring(value)))
+    return true
+end
+
+local FPS = _G.FPS_CONFIG
+
 -- ⏱️ CONSTANT
 local THREE_HOURS = 999
 
 -- 🚀 INIT
-task.wait(368)
+task.wait(268)
 local startTime = tick()
 
 task.spawn(function()
@@ -63,7 +87,7 @@ task.spawn(function()
 		return active and active:FindFirstChild("TimeTrial")
 	end
 
-	-- 🌍 STATE DETECT
+
 	local function isTapHeroes(active)
 		return active and active:FindFirstChild("TapHeroes")
 	end
@@ -82,8 +106,8 @@ task.spawn(function()
 
 	local function isLuckyException()
 		return _G.S1 or _G.S2 or _G.S3 or _G.S4 or _G.S5
-		or _G.P1 or _G.SUU6 or _G.SUU7 or _G.SUU8
-		or _G.S7 or _G.S8 or _G.S9 or _G.S10
+			or _G.P1 or _G.SUU6 or _G.SUU7 or _G.SUU8
+			or _G.S7 or _G.S8 or _G.S9 or _G.S10
 	end
 
 	local function isLowFPSPlace(placeId)
@@ -111,10 +135,10 @@ task.spawn(function()
 
 		-- 🥇 Priority 0: Tap Heroes
 		if isTapHeroes(active) then
-		    if isLuckyException() then
-		        return FPS.TAP_HEROES_EXCEPTION, "TapHeroesException"
-		    end
-		    return FPS.TAP_HEROES, "TapHeroes"
+			if isLuckyException() then
+				return FPS.TAP_HEROES_EXCEPTION, "TapHeroesException"
+			end
+			return FPS.TAP_HEROES, "TapHeroes"
 		end
 
 		-- 🥇 Priority 1: Time Trial
@@ -159,7 +183,7 @@ task.spawn(function()
 		return getDefaultFPS(elapsed)
 	end
 
-	-- 🔁 OPTIMIZED LOOP
+	-- 🔁 LOOP
 	while true do
 		local active = getActive()
 
@@ -172,7 +196,7 @@ task.spawn(function()
 			or active:FindFirstChild("XmasWorld")
 		)
 
-		local waitTime = isActiveEvent and 0.01 or 0.05
+		local waitTime = isActiveEvent and 0.01 or 0.01
 
 		local fps, reason = resolveFPS()
 		setFPS(fps, reason)
