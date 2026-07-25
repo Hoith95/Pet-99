@@ -197,11 +197,11 @@ local function startGuiUpdater()
 
     -- RIGHT
     local rankLabel        = createLabel("RankLabel", right)
-    local raffleLabel      = createLabel("RaffleLabel", right)
+    --local raffleLabel      = createLabel("RaffleLabel", right)
     --local giftLabel        = createLabel("GiftLabel", right)
     --local gift2Label       = createLabel("Gift2Label", right)
-    local coinLabel        = createLabel("CoinLabel", right)
-    local megaPresentLabel = createLabel("MegaPresentLabel", right)
+    --local coinLabel        = createLabel("CoinLabel", right)
+    --local megaPresentLabel = createLabel("MegaPresentLabel", right)
 	--local upgradeLabel 	   = createLabel("UpgradeLabel", right)
 
     -- LEFT / CENTER
@@ -224,14 +224,14 @@ local function startGuiUpdater()
         --gift2Label.Text = tostring(getMiscAmount("Lucky Raid Orb V2")) .. " | Lucky Raid Orb"
         --updateLabelSize(gift2Label)
 
-        coinLabel.Text = Formatint(getCurrencyAmount("MarbleCoins")) .. " | Marble Coins"
-        updateLabelSize(coinLabel)
+        --coinLabel.Text = Formatint(getCurrencyAmount("MarbleCoins")) .. " | Marble Coins"
+        --updateLabelSize(coinLabel)
 
-        raffleLabel.Text = getTapHeroes2() .. " | Rebirths"
-        updateLabelSize(raffleLabel)
+        --raffleLabel.Text = getTapHeroes2() .. " | Rebirths"
+        --updateLabelSize(raffleLabel)
 
-		megaPresentLabel.Text = (getTapHeroes()) .. " | " .. (getTapHeroes3()) .. " | Level Heroes"
-		updateLabelSize(megaPresentLabel)
+		--megaPresentLabel.Text = (getTapHeroes()) .. " | " .. (getTapHeroes3()) .. " | Level Heroes"
+		--updateLabelSize(megaPresentLabel)
 
 		local runsLeft = getRunsLeft()
 		timeTrialLabel.Text = "Time Trial: " .. runsLeft .. "/10"
