@@ -10,8 +10,8 @@ local DEBUG = false
 _G.FPS_CONFIG = _G.FPS_CONFIG or {
     TIME_TRIAL = 5,
 
-    TAP_HEROES = 4,
-    TAP_HEROES_EXCEPTION = 4,
+    GARDEN = 4,
+    GARDEN_EXCEPTION = 4,
 
     LUCKY_EXCEPTION = 3,
 
@@ -87,9 +87,8 @@ task.spawn(function()
 		return active and active:FindFirstChild("TimeTrial")
 	end
 
-
-	local function isTapHeroes(active)
-		return active and active:FindFirstChild("TapHeroes")
+	local function isGarden(active)
+		return active and active:FindFirstChild("Garden")
 	end
 
 	local function isXmas(active)
@@ -133,12 +132,12 @@ task.spawn(function()
 		local active = getActive()
 		local elapsed = tick() - startTime
 
-		-- 🥇 Priority 0: Tap Heroes
-		if isTapHeroes(active) then
+		-- 🥇 Priority 0: Garden
+		if isGarden(active) then
 			if isLuckyException() then
-				return FPS.TAP_HEROES_EXCEPTION, "TapHeroesException"
+				return FPS.GARDEN_EXCEPTION, "GardenException"
 			end
-			return FPS.TAP_HEROES, "TapHeroes"
+			return FPS.GARDEN, "Garden"
 		end
 
 		-- 🥇 Priority 1: Time Trial
@@ -189,7 +188,7 @@ task.spawn(function()
 
 		local isActiveEvent = active and (
 			active:FindFirstChild("TimeTrial")
-			or active:FindFirstChild("TapHeroes")
+			or active:FindFirstChild("Garden")
 			or active:FindFirstChild("LuckyEventWorld")
 			or active:FindFirstChild("LuckyRaid")
 			or active:FindFirstChild("LuckyEgg")
