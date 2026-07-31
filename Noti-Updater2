@@ -200,8 +200,8 @@ local function startGuiUpdater()
     local raffleLabel      = createLabel("RaffleLabel", right)
     --local giftLabel        = createLabel("GiftLabel", right)
     --local gift2Label       = createLabel("Gift2Label", right)
+    local megaPresentLabel = createLabel("MegaPresentLabel", right)
     local coinLabel        = createLabel("CoinLabel", right)
-    --local megaPresentLabel = createLabel("MegaPresentLabel", right)
 	--local upgradeLabel 	   = createLabel("UpgradeLabel", right)
 
     -- LEFT / CENTER
@@ -230,8 +230,8 @@ local function startGuiUpdater()
         raffleLabel.Text = (_G.GardenRebirth or 0) .. " | Rebirth"
         updateLabelSize(raffleLabel)
 
-		--megaPresentLabel.Text = (getTapHeroes()) .. " | " .. (getTapHeroes3()) .. " | Level Heroes"
-		--updateLabelSize(megaPresentLabel)
+		megaPresentLabel.Text = (_G.GardenPlacedPets or 0) .. " | Pets"
+		updateLabelSize(megaPresentLabel)
 
 		local runsLeft = getRunsLeft()
 		_G.Time_Trial_End = (runsLeft == 0)
