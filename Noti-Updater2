@@ -200,9 +200,9 @@ local function startGuiUpdater()
 
     --local giftLabel        = createLabel("GiftLabel", right)
     --local gift2Label       = createLabel("Gift2Label", right)
-    local megaPresentLabel = createLabel("MegaPresentLabel", right)
-    local raffleLabel      = createLabel("RaffleLabel", right)
-	local coinLabel        = createLabel("CoinLabel", right)
+    --local megaPresentLabel = createLabel("MegaPresentLabel", right)
+    --local raffleLabel      = createLabel("RaffleLabel", right)
+	--local coinLabel        = createLabel("CoinLabel", right)
 	--local upgradeLabel 	   = createLabel("UpgradeLabel", right)
 
     -- LEFT / CENTER
@@ -225,14 +225,14 @@ local function startGuiUpdater()
         --gift2Label.Text = tostring(getMiscAmount("Lucky Raid Orb V2")) .. " | Lucky Raid Orb"
         --updateLabelSize(gift2Label)
 
-        coinLabel.Text = Formatint(getCurrencyAmount("Sunflowers")) .. " | Sunflowers"
-        updateLabelSize(coinLabel)
+        --coinLabel.Text = Formatint(getCurrencyAmount("Sunflowers")) .. " | Sunflowers"
+        --updateLabelSize(coinLabel)
 
-        raffleLabel.Text = (_G.GardenRebirth or 0) .. " | Rebirth"
-        updateLabelSize(raffleLabel)
+        --raffleLabel.Text = (_G.GardenRebirth or 0) .. " | Rebirth"
+        --updateLabelSize(raffleLabel)
 
-		megaPresentLabel.Text = (_G.GardenPlacedPets or 0) .. " | Pets"
-		updateLabelSize(megaPresentLabel)
+		--megaPresentLabel.Text = (_G.GardenPlacedPets or 0) .. " | Pets"
+		--updateLabelSize(megaPresentLabel)
 
 		local runsLeft = getRunsLeft()
 		_G.Time_Trial_End = (runsLeft == 0)
