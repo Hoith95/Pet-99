@@ -1,0 +1,22 @@
+if _G.FPSTIMETRIAL then
+    return
+end
+_G.FPSTIMETRIAL = true
+
+task.spawn(function()
+    while true do
+        if _G.Time_Trial_End == true and _G.Time_Trial_FPS3 ~= true then
+            pcall(function()
+                setfpscap(3)
+            end)
+            _G.Time_Trial_FPS3 = true
+        end
+        if _G.Time_Trial_End == false and _G.Time_Trial_FPS3 == true then
+            pcall(function()
+                setfpscap(5)
+            end)
+            _G.Time_Trial_FPS3 = false
+        end
+        task.wait(1)
+    end
+end)
