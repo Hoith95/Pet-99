@@ -1,0 +1,60 @@
+if _G.TIMETRIAL then
+    return
+end
+_G.TIMETRIAL = true
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+local function getHRP()
+    local character = player.Character or player.CharacterAdded:Wait()
+    return character:FindFirstChild("HumanoidRootPart")
+end
+
+local function isInTimeTrial()
+    local active = workspace.__THINGS.__INSTANCE_CONTAINER.Active
+    return active and active:FindFirstChild("TimeTrial") ~= nil
+end
+
+local function teleportTo(part)
+    local hrp = getHRP()
+    if hrp and part then
+        hrp.CFrame = part.CFrame + Vector3.new(0, 3, 0)
+    end
+end
+
+while true do
+    if not isInTimeTrial() then
+        task.wait(3)
+        continue
+    end
+
+    local breakables = workspace.__THINGS.Breakables
+    local found = false
+
+    for _, chest in ipairs(breakables:GetChildren()) do
+        if not isInTimeTrial() then
+            break
+        end
+
+        if chest:IsA("Model") and tonumber(chest.Name) then
+            local part = chest:FindFirstChildWhichIsA("BasePart")
+
+            if part then
+                found = true
+                teleportTo(part)
+                while breakables:FindFirstChild(chest.Name) do
+                    if not isInTimeTrial() then
+                        break
+                    end
+                    task.wait(0.05)
+                end
+            end
+        end
+    end
+    if not found then
+        task.wait(1)
+    else
+        task.wait(0.1)
+    end
+end
