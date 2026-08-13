@@ -1,6 +1,3 @@
--- =====================================================
--- AUTO CHECK EGGS HATCHED
--- =====================================================
 if _G.VAR_EGGS_HATCHED then return end
 _G.VAR_EGGS_HATCHED = true
 
@@ -17,17 +14,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
 
 -- ================= CONFIG =================
-local CHECK_INTERVAL = 900        -- 15 phút
-local MIN_INCREASE  = 5000      -- Tối thiểu phải tăng 5.000
-
--- ================= XMAS WORLD CHECK =================
-local function inXmasWorld()
-    local c = workspace:FindFirstChild("__THINGS")
-        and workspace.__THINGS:FindFirstChild("__INSTANCE_CONTAINER")
-    return c
-        and c:FindFirstChild("Active")
-        and c.Active:FindFirstChild("XmasWorld")
-end
+local CHECK_INTERVAL = 900       -- 15 phút
+local MIN_INCREASE   = 5000      -- Tối thiểu phải tăng 5.000
 
 -- ================= UTIL =================
 local function getEggsHatched()
@@ -42,48 +30,54 @@ end
 
 -- ================= MAIN =================
 task.spawn(function()
-    local lastEggs = nil
-
     while true do
-        repeat task.wait(2) until inXmasWorld()
-
-        lastEggs = getEggsHatched()
+        repeat
+            task.wait(2)
+        until _G.Time_Trial_End == true
+        local lastEggs = getEggsHatched()
         if lastEggs == nil then
-            task.wait(5)
+            task.wait(2)
             continue
         end
-
-        warn("[EggWatch] Xmas World START | EggsHatched =", lastEggs)
-
-        while inXmasWorld() do
-            task.wait(CHECK_INTERVAL)
-
-            if not inXmasWorld() then
-                warn("[EggWatch] Rời Xmas World → reset theo dõi")
+        warn("[EggWatch] START | EggsHatched =", lastEggs)
+        local elapsed = 0
+        local resetCycle = false
+        while elapsed < CHECK_INTERVAL do
+            task.wait(1)
+            if _G.Time_Trial_End ~= true then
+                warn("[EggWatch] Time_Trial_End = false → reset timer")
+                resetCycle = true
                 break
             end
-
-            local currentEggs = getEggsHatched()
-            if currentEggs == nil then
-                warn("[EggWatch] Không đọc được EggsHatched → bỏ qua vòng")
-                continue
-            end
-
-            local diff = currentEggs - lastEggs
-
-            if diff >= MIN_INCREASE then
-                warn("[EggWatch] OK | +" .. diff .. " eggs / 10 phút")
-                lastEggs = currentEggs
-            else
-                warn("[EggWatch] FAIL | +" .. diff .. " < " .. MIN_INCREASE .. " → Kick")
-                task.wait(1)
-                LocalPlayer:Kick(
-                    "EggsHatched tăng không đủ 5.000 trong 15 phút (Xmas World)"
-                )
-                return
-            end
+            elapsed += 1
         end
-
-        lastEggs = nil
+        if resetCycle then
+            continue
+        end
+        if _G.Time_Trial_End ~= true then
+            continue
+        end
+        local currentEggs = getEggsHatched()
+        if currentEggs == nil then
+            warn("[EggWatch] Không đọc được EggsHatched → bỏ qua vòng")
+            continue
+        end
+        local diff = currentEggs - lastEggs
+        if diff >= MIN_INCREASE then
+            warn("[EggWatch] OK | +" .. diff .. " eggs / 15 phút")
+        else
+            warn(
+                "[EggWatch] FAIL | +" ..
+                diff ..
+                " < " ..
+                MIN_INCREASE ..
+                " → Kick"
+            )
+            task.wait(1)
+            LocalPlayer:Kick(
+                "EggsHatched tăng không đủ 5.000 trong 15 phút"
+            )
+            return
+        end
     end
 end)
