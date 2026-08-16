@@ -32,7 +32,7 @@ getgenv().Config = {
     },
     ["ResetUpgrades"] = false,
 
-    ["AutoFarmBossPinata"] = true,
+    ["AutoFarmBossPinata"] = false,
     ["Rank Before"] = true,
     ["AutoOpenGifts"] = false,
     ["AutoUseBoosts"] = true,
