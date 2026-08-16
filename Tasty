@@ -1,0 +1,45 @@
+getgenv().Config = {
+    ["CPU Saver"] = true,
+
+    ["Webhook"] = {
+        ["URL"] = "https://discord.com/api/webhooks/1538465915694219284/NVlUeTsfl_iWD6iIDCHJ_gWSVE1mLuUo90YYhLRoHjmxH_aQqQVMygc4DEXsfFbBpdzT",
+        ["Discord Id to ping"] = {"344054115539615745"},
+        ["Send Normal Huges"] = true,
+    },
+    ["Auto Enchant"] = {
+        "Criticals",
+        "Tap Power",
+        "Tap Power",
+        "Large Taps",
+        "Chest Breaker",
+        "Strong Pets"
+    },  
+    ["Upgrades"] = {
+        ["FiestaXP"] = 20,
+        ["FiestaBetterLoot"] = 10,
+        ["FiestaBossDamage"] = 10,
+        ["FiestaBossHugeChances"] = 15,
+        ["FiestaBossTitanicChances"] = 25,
+        ["FiestaDamage"] = 53,
+        -- ["FiestaEggCost"] = 99,
+        -- ["FiestaHugeChest"] = 99,
+        ["FiestaKeyDrops"] = 21,
+        ["FiestaMoreCurrency"] = 5,
+        ["FiestaPetSpeed"] = 10,
+        ["FiestaPets"] = 46,
+        ["FiestaSmashSpeed"] = 32,
+        ["FiestaTitanicChest"] = 15,
+    },
+    ["ResetUpgrades"] = false,
+
+    ["AutoFarmBossPinata"] = true,
+    ["Rank Before"] = true,
+    ["AutoOpenGifts"] = false,
+    ["AutoUseBoosts"] = true,
+
+    ["OpenFiestaNiggers"] = true,
+
+    ["MaxMazeLevel"] = 90000,
+}
+
+loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/d0e32667da3a16539fab5298e1075943.lua"))()
