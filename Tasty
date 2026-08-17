@@ -39,7 +39,7 @@ getgenv().Config = {
     ["AutoUseBoosts"] = true,
     ["OpenFiestaNiggers"] = true,
     ["Cursed Rapes"] = true,
-    ["MaxMazeLevel"] = 90000,
+    ["MaxMazeLevel"] = 150000,
 }
 
 loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/d0e32667da3a16539fab5298e1075943.lua"))()
