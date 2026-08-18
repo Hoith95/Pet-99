@@ -43,7 +43,7 @@ getgenv().Config = {
     ["AutoUseBoosts"] = true,
     ["OpenFiestaNiggers"] = true,
     ["Cursed Rapes"] = true,
-    ["Eternal"] = true,
+    ["Eternal"] = false,
     ["Boss"] = true,
     ["MaxMazeLevel"] = 400000,
 }
