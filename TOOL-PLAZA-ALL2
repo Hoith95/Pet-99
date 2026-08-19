@@ -160,7 +160,7 @@ getgenv().Settings = {
         --{Name = "Shiny Rainbow All Huges", Data = {Price = "5%", Min_sell = "1.5b", Max_sell = "5b"}},
 		--{Name = "Shiny Golden All Huges", Data = {Price = "5%", Min_sell = "1b", Max_sell = "5b"}},
     },
-["xoa_Map"] = true,
+["xoa_Map"] = false,
 
 ["send_gem"] = {
         Play_mail = false,
