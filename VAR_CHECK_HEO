@@ -1,0 +1,38 @@
+if _G.CHECK_HEO then
+    return
+end
+_G.CHECK_HEO = true
+
+local TARGET_PLACE = 8737899170
+
+repeat task.wait() until game:IsLoaded()
+
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+
+if not localPlayer then
+    return
+end
+
+if game.PlaceId ~= TARGET_PLACE then
+    return
+end
+
+local function checkAndKickPlayer(p)
+    if p and p ~= localPlayer then
+        pcall(function()
+            localPlayer:Kick("Có Heo Khác: " .. p.Name)
+        end)
+    end
+end
+
+for _, p in ipairs(Players:GetPlayers()) do
+    if p ~= localPlayer then
+        checkAndKickPlayer(p)
+        return
+    end
+end
+
+Players.PlayerAdded:Connect(function(p)
+    checkAndKickPlayer(p)
+end)
