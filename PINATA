@@ -1,0 +1,47 @@
+if _G.AUTO_PINA then return end
+_G.AUTO_PINA = true
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local player = Players.LocalPlayer
+local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
+local PlayerSave = require(Client.Save)
+
+local function getSave()
+    return PlayerSave.Get()
+end
+
+local function GetMiniPinata()
+    local save = getSave()
+    if not save then
+        return nil, 0
+    end
+    local misc = save.Inventory and save.Inventory.Misc
+    if not misc then
+        return nil, 0
+    end
+    for uid, item in pairs(misc) do
+        if item.id == "Mini Pinata" then
+            return uid, tonumber(item._am) or 0
+        end
+    end
+    return nil, 0
+end
+
+task.spawn(function()
+    while true do
+        local uid, amount = GetMiniPinata()
+        if uid and amount > 0 then
+            local args = {
+                [1] = uid
+            }
+            pcall(function()
+                game:GetService("ReplicatedStorage").Network.MiniPinata_Consume:InvokeServer(unpack(args))
+            end)
+            task.wait(0.01)
+        else
+            task.wait(1)
+        end
+    end
+end)
