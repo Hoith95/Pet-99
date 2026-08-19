@@ -1,4 +1,30 @@
-getgenv().GGFX_MODE = 3
-getgenv().GENTER_PLAZA = true
-getgenv().GPROGRESS_MODE = "Castle"
-loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/34915da4ad87a5028e1fd64efbe3543f.lua"))()
+local Players = game:GetService("Players")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local VirtualUser = game:GetService("VirtualUser")
+
+local LocalPlayer = Players.LocalPlayer
+
+local function antiAFK()
+    while task.wait(300) do
+        VirtualInputManager:SendKeyEvent(true, "Space", false, game)
+        task.wait(0.2)
+        VirtualInputManager:SendKeyEvent(false, "Space", false, game)
+    end
+end
+
+local function antiAFKN()
+    LocalPlayer.Idled:Connect(function()
+        VirtualUser:Button2Down(
+            Vector2.new(0, 0),
+            workspace.CurrentCamera.CFrame
+        )
+        task.wait(1)
+        VirtualUser:Button2Up(
+            Vector2.new(0, 0),
+            workspace.CurrentCamera.CFrame
+        )
+    end)
+end
+
+task.spawn(antiAFK)
+antiAFKN()
