@@ -4,11 +4,15 @@ _G.script1Done = true
 spawn(function()
 wait(15)
 --_G.MAILBOX_STOP = true
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Heo"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Heo"))()
 end)
 
 spawn(function()
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Huge"))()
+end)
+
+spawn(function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GIFT-GEMS-FAST-2"))()
 end)
 
 spawn(function()
@@ -60,8 +64,4 @@ spawn(function()
     else
         warn("⛔ Không đúng PlaceId, bỏ qua script.")
     end
-end)
-
-spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/GIFT-GEMS-FAST-2"))()
 end)
