@@ -42,11 +42,6 @@ getgenv().Settings = {
         {Name = "Marble Gift", Data = {Price = "1%"}},
         {Name = "Obsidian Gift", Data = {Price = "1%"}},
 
-        {Name = "Tap Damage Booster", Category = "Consumable", Data = {Price = "10%"}},
-        {Name = "Pristine Marble Clover", Category = "Consumable", Data = {Price = "10%"}},
-        {Name = "Polished Marble Clover", Category = "Consumable", Data = {Price = "3%"}},
-        {Name = "Cracked Marble Clover", Category = "Consumable", Data = {Price = "1%"}},
-
 		{Name = "Gargantuan Samurai Kitsune", Data = {Price = "110b"}},
 		{Name = "Gargantuan 1x1x1x1", Data = {Price = "95b"}},
 		{Name = "Gargantuan Guest 666", Data = {Price = "100.86b"}},
