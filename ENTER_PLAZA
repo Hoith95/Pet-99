@@ -1,3 +1,8 @@
+if _G.ENTER_PLAZA then
+    return
+end
+_G.ENTER_PLAZA = true
+
 local Players = game:GetService("Players")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 local VirtualUser = game:GetService("VirtualUser")
