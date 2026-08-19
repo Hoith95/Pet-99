@@ -6,6 +6,7 @@ _G.VAR_MAILBOX_HUGE = true
 -------------------------------------------------------
 local MIN_KEEP_HUGE = 84
 local MAX_MAIL_PER_DAY = 10
+
 local EXCLUDED_HUGE = {
     --["Huge Hot Cocoa Cow"] = true,
     --["Huge Gingerbread Lion"] = true,
@@ -13,77 +14,112 @@ local EXCLUDED_HUGE = {
     --["Huge Festive Seal"] = true
 }
 
-getgenv().usernames = {"ninaFalconBear", "MrsnateFrostFire", "ItstaraSkater2024", "NexusRileyPulse50", "TheRealTinajolt2018"}
+getgenv().usernames = {
+    "ninaFalconBear",
+    "MrsnateFrostFire",
+    "ItstaraSkater2024",
+    "NexusRileyPulse50",
+    "TheRealTinajolt2018"
+}
 
-local messages = {"Thanks!", "Free", "Thank you", "thanks", "thank you"}
+local messages = {
+    "Thanks!",
+    "Free",
+    "Thank you",
+    "thanks",
+    "thank you"
+}
 
--------------------------------------------------------
 -- IMPORT
--------------------------------------------------------
-local Network = require(game.ReplicatedStorage.Library.Client.Network)
-local PlayerSave = require(game.ReplicatedStorage.Library.Client.Save)
-local MAILBOX = game:GetService("ReplicatedStorage").Network:FindFirstChild("Mailbox: Send")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Network = require(
+    ReplicatedStorage.Library.Client.Network
+)
+local PlayerSave = require(
+    ReplicatedStorage.Library.Client.Save
+)
+local EF_Relay = ReplicatedStorage.Network.EF_Relay
 
--------------------------------------------------------
 -- UTIL
--------------------------------------------------------
 local function getSave()
     local ok, sd = pcall(PlayerSave.Get)
     return ok and sd or nil
 end
-
 local function getPetVariant(pet)
-    if pet.sh and pet.pt == 2 then return "ShinyRainbow" end
-    if pet.sh and pet.pt == 1 then return "ShinyGolden" end
-    if pet.sh == true then return "Shiny" end
-    if pet.pt == 2 then return "Rainbow" end
-    if pet.pt == 1 then return "Golden" end
+    if pet.sh and pet.pt == 2 then
+        return "ShinyRainbow"
+    end
+    if pet.sh and pet.pt == 1 then
+        return "ShinyGolden"
+    end
+    if pet.sh == true then
+        return "Shiny"
+    end
+    if pet.pt == 2 then
+        return "Rainbow"
+    end
+    if pet.pt == 1 then
+        return "Golden"
+    end
     return "Normal"
 end
 
--------------------------------------------------------
 -- HUGE FILTER
--------------------------------------------------------
 local function collectValidHuge(sd)
     local totalHuge = 0
     local normal = {}
     local golden = {}
-
     for uid, pet in pairs(sd.Inventory.Pet or {}) do
-        if pet.id and pet.id:find("Huge") and not EXCLUDED_HUGE[pet.id] then
+        if pet.id
+            and pet.id:find("Huge")
+            and not EXCLUDED_HUGE[pet.id] then
             totalHuge += 1
         end
     end
-
     for uid, pet in pairs(sd.Inventory.Pet or {}) do
-        if pet.id and pet.id:find("Huge") and not EXCLUDED_HUGE[pet.id] then
+        if pet.id
+            and pet.id:find("Huge")
+            and not EXCLUDED_HUGE[pet.id] then
             local variant = getPetVariant(pet)
             local xp = (pet._uq and pet._uq.xp) or 0
-
             if variant ~= "Rainbow"
-            and variant ~= "Shiny"
-            and variant ~= "ShinyGolden"
-            and variant ~= "ShinyRainbow" then
-
+                and variant ~= "Shiny"
+                and variant ~= "ShinyGolden"
+                and variant ~= "ShinyRainbow" then
                 if variant == "Golden" then
-                    table.insert(golden, {uid=uid, id=pet.id, xp=xp})
+                    table.insert(golden, {
+                        uid = uid,
+                        id = pet.id,
+                        xp = xp
+                    })
                 else
-                    table.insert(normal, {uid=uid, id=pet.id, xp=xp})
+                    table.insert(normal, {
+                        uid = uid,
+                        id = pet.id,
+                        xp = xp
+                    })
                 end
             end
         end
     end
-
-    table.sort(normal, function(a,b) return a.xp < b.xp end)
-    table.sort(golden, function(a,b) return a.xp < b.xp end)
-
+    table.sort(normal, function(a, b)
+        return a.xp < b.xp
+    end)
+    table.sort(golden, function(a, b)
+        return a.xp < b.xp
+    end)
     local ordered = {}
-    for _,v in ipairs(normal) do table.insert(ordered, v) end
-    for _,v in ipairs(golden) do table.insert(ordered, v) end
-
-    local canUse = math.max(0, totalHuge - MIN_KEEP_HUGE)
+    for _, v in ipairs(normal) do
+        table.insert(ordered, v)
+    end
+    for _, v in ipairs(golden) do
+        table.insert(ordered, v)
+    end
+    local canUse = math.max(
+        0,
+        totalHuge - MIN_KEEP_HUGE
+    )
     local result = {}
-
     for i = 1, canUse do
         if ordered[i] then
             table.insert(result, ordered[i])
@@ -92,89 +128,108 @@ local function collectValidHuge(sd)
     return result, totalHuge
 end
 
--------------------------------------------------------
 -- UNLOCK PET
--------------------------------------------------------
 local function unlockPet(uid)
-    while not Network.Invoke("Locking_SetLocked", uid, false) do
+    while not Network.Invoke(
+        "Locking_SetLocked",
+        uid,
+        false
+    ) do
         task.wait(0.25)
     end
 end
 
--------------------------------------------------------
 -- SEND MAIL
--------------------------------------------------------
 local function sendHuge(uid, id)
     local ulist = getgenv().usernames
-    local username = ulist[math.random(#ulist)]
-    local msg = messages[math.random(#messages)]
-    return pcall(function()
-        MAILBOX:InvokeServer(username, id, "Pet", uid, 1)
+    local username = ulist[
+        math.random(#ulist)
+    ]
+    local msg = messages[
+        math.random(#messages)
+    ]
+    local ok, result = pcall(function()
+        return EF_Relay:InvokeServer(
+            username,
+            msg,
+            "Pet",
+            uid,
+            1
+        )
     end)
+    if not ok then
+        warn(
+            "[AutoHuge] EF_Relay error:",
+            result
+        )
+        return false
+    end
+
+    return result == true
 end
 
--------------------------------------------------------
 -- RESET LOGIC (FIXED)
--------------------------------------------------------
 local function canSend(sd)
     local now = os.time()
-    local reset = math.floor(sd.MailboxResetTime)
+    local reset = math.floor(
+        sd.MailboxResetTime
+    )
     local sent = sd.MailboxSendsSinceReset or 0
-
-    -- Nếu đã qua reset nhưng game chưa reset counter -> ép về 0
     if now >= reset then
         return true, MAX_MAIL_PER_DAY, 0
     end
-
     local remain = MAX_MAIL_PER_DAY - sent
     return remain > 0, remain, sent
 end
 
--------------------------------------------------------
 -- MAIN LOOP
--------------------------------------------------------
 while true do
-
     local sd = getSave()
     if not sd then
         task.wait(5)
         continue
     end
-
     local okSend, remain, sent = canSend(sd)
     if not okSend then
         task.wait(60)
         continue
     end
-
     local list = collectValidHuge(sd)
     if #list == 0 then
         task.wait(60)
         continue
     end
-
     for _, h in ipairs(list) do
         sd = getSave()
+        if not sd then
+            break
+        end
         okSend, remain, sent = canSend(sd)
-        if not okSend then break end
-
+        if not okSend then
+            break
+        end
         local pet = sd.Inventory.Pet[h.uid]
-        if pet and pet._lk then unlockPet(h.uid) end
-
-        local ok = sendHuge(h.uid, h.id)
+        if pet and pet._lk then
+            unlockPet(h.uid)
+        end
+        local ok = sendHuge(
+            h.uid,
+            h.id
+        )
         task.wait(1)
-
         if ok then
             local before = sent
             local tries = 0
             repeat
                 task.wait(1)
                 sd = getSave()
-                sent = sd and (sd.MailboxSendsSinceReset or sent) or sent
+                sent = sd
+                    and (sd.MailboxSendsSinceReset or sent)
+                    or sent
                 tries += 1
-            until sent > before or tries >= 5
+            until sent > before
+                or tries >= 5
         end
     end
-
     task.wait(60)
 end
