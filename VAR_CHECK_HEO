@@ -3,18 +3,12 @@ if _G.CHECK_HEO then
 end
 _G.CHECK_HEO = true
 
-local TARGET_PLACE = 8737899170
-
 repeat task.wait() until game:IsLoaded()
 
 local Players = game:GetService("Players")
 local localPlayer = Players.LocalPlayer
 
 if not localPlayer then
-    return
-end
-
-if game.PlaceId ~= TARGET_PLACE then
     return
 end
 
