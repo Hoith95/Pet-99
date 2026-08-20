@@ -11,6 +11,8 @@ local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
 
+local SHOW_MINI_PINATA = game.PlaceId == 8737899170
+
 local function getSave()
     local ok, sd = pcall(PlayerSave.Get)
     if ok then return sd end
@@ -199,7 +201,8 @@ local function startGuiUpdater()
     local rankLabel        = createLabel("RankLabel", right)
 
     --local giftLabel        = createLabel("GiftLabel", right)
-    --local gift2Label       = createLabel("Gift2Label", right)
+    local gift2Label = createLabel("Gift2Label", right)
+    gift2Label.Visible = SHOW_MINI_PINATA
     --local megaPresentLabel = createLabel("MegaPresentLabel", right)
     --local raffleLabel      = createLabel("RaffleLabel", right)
 	--local coinLabel        = createLabel("CoinLabel", right)
@@ -222,8 +225,10 @@ local function startGuiUpdater()
         --giftLabel.Text = tostring(getLootboxAmount("Horseshoe Gift")) .. " | Horseshoe Gift"
         --updateLabelSize(giftLabel)
 
-        --gift2Label.Text = tostring(getMiscAmount("Lucky Raid Orb V2")) .. " | Lucky Raid Orb"
-        --updateLabelSize(gift2Label)
+        if SHOW_MINI_PINATA then
+            gift2Label.Text = tostring(getMiscAmount("Mini Pinata")) .. " | Mini Pinata"
+            updateLabelSize(gift2Label)
+        end
 
         --coinLabel.Text = Formatint(getCurrencyAmount("Sunflowers")) .. " | Sunflowers"
         --updateLabelSize(coinLabel)
