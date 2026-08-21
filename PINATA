@@ -1,16 +1,6 @@
 if _G.AUTO_PINA then return end
 _G.AUTO_PINA = true
 
-spawn(function()
-wait(68)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Noti-Default"))()
-end)
-
-spawn(function()
-wait(68)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Noti-Updater2"))()
-end)
-
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
