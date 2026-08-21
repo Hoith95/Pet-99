@@ -54,6 +54,7 @@ getgenv().GLOOTBOXES = {"Locked Hype Egg","Locked Hype Egg 3"}
 getgenv().GDO_AUTO_BALLOONS = true
 
 getgenv().GPROGRESS_MODE = "Hybrid" -- Hatch
+getgenv().GGFX_TEST1 = true
 getgenv().GGFX_MODE = 1
 getgenv().GRANK_TO = 99
 getgenv().GZONE_TO = 299
