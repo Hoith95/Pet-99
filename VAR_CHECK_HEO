@@ -4,29 +4,22 @@ end
 _G.CHECK_HEO = true
 
 repeat task.wait() until game:IsLoaded()
-
 local Players = game:GetService("Players")
 local localPlayer = Players.LocalPlayer
-
 if not localPlayer then
     return
 end
-
-local function checkAndKickPlayer(p)
-    if p and p ~= localPlayer then
+local MAX_PLAYERS = 2
+local function checkPlayers()
+    local playerCount = #Players:GetPlayers()
+    if playerCount > MAX_PLAYERS then
         pcall(function()
-            localPlayer:Kick("Có Heo Khác: " .. p.Name)
+            localPlayer:Kick("Server đã có quá 2 user!")
         end)
     end
 end
-
-for _, p in ipairs(Players:GetPlayers()) do
-    if p ~= localPlayer then
-        checkAndKickPlayer(p)
-        return
-    end
-end
-
-Players.PlayerAdded:Connect(function(p)
-    checkAndKickPlayer(p)
+checkPlayers()
+Players.PlayerAdded:Connect(function()
+    task.wait()
+    checkPlayers()
 end)
