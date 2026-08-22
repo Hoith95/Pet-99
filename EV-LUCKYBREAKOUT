@@ -355,7 +355,7 @@ task.spawn(function()
 
     -- ===========- BREAKABLE FARM -===========
 
-    local CHEST_RADIUS = 5
+    local CHEST_RADIUS = 15
 
     local function isLuckyBreakout()
         local active =
