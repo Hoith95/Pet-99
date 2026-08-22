@@ -238,7 +238,7 @@ local function startGuiUpdater()
         coinLabel.Text = Formatint(getCurrencyAmount("BreakoutCoins")) .. " | BreakoutCoins"
         updateLabelSize(coinLabel)
 
-		luckyBreakoutLabel.Text = getLuckyBreakout() .. "/" .. getLuckyBreakouts3() .. " | MaxLevel"
+		luckyBreakoutLabel.Text = getLuckyBreakouts3() .. " | MaxLevel"
 		updateLabelSize(luckyBreakoutLabel)
 
 		rebirthLabel.Text = getLuckyBreakouts2() .. " | Rebirth"
