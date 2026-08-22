@@ -33,27 +33,27 @@ local function getTapHeroesLevels()
         or 0
 end
 
-local function getTapHeroes()
+local function getLuckyBreakout()
     local sd = getSave()
     return sd
-        and sd.TapHeroes
-        and sd.TapHeroes.CurrentZone
+        and sd.LuckyBreakout
+        and sd.LuckyBreakout.TutorialStep
         or 0
 end
 
-local function getTapHeroes3()
+local function getLuckyBreakouts3()
     local sd = getSave()
     return sd
-        and sd.TapHeroes
-        and sd.TapHeroes.MaxZone
+        and sd.LuckyBreakout
+        and sd.LuckyBreakout.MaxLevel
         or 0
 end
 
-local function getTapHeroes2()
+local function getLuckyBreakouts2()
     local sd = getSave()
     return sd
-        and sd.TapHeroes
-        and sd.TapHeroes.P2Rebirths
+        and sd.LuckyBreakout
+        and sd.LuckyBreakout.StarterGranted
         or 0
 end
 
@@ -200,13 +200,15 @@ local function startGuiUpdater()
     -- RIGHT
     local rankLabel        = createLabel("RankLabel", right)
 
-    --local giftLabel        = createLabel("GiftLabel", right)
+    local giftLabel        = createLabel("GiftLabel", right)
     local gift2Label = createLabel("Gift2Label", right)
     gift2Label.Visible = SHOW_MINI_PINATA
     --local megaPresentLabel = createLabel("MegaPresentLabel", right)
     --local raffleLabel      = createLabel("RaffleLabel", right)
-	--local coinLabel        = createLabel("CoinLabel", right)
+	local coinLabel        = createLabel("CoinLabel", right)
 	--local upgradeLabel 	   = createLabel("UpgradeLabel", right)
+	local luckyBreakoutLabel = createLabel("LuckyBreakoutLabel", right)
+	local rebirthLabel       = createLabel("RebirthLabel", right)
 
     -- LEFT / CENTER
     local timeTrialLabel = createLabel("TimeTrialLabel", left)
@@ -222,22 +224,22 @@ local function startGuiUpdater()
         rankLabel.Text = tostring(sd.Rank or 0) .. " | RANK"
         updateLabelSize(rankLabel)
 
-        --giftLabel.Text = tostring(getLootboxAmount("Horseshoe Gift")) .. " | Horseshoe Gift"
-        --updateLabelSize(giftLabel)
+        giftLabel.Text = tostring(getLootboxAmount("Lucky Block Gift")) .. " | Lucky Block Gift"
+        updateLabelSize(giftLabel)
 
         if SHOW_MINI_PINATA then
             gift2Label.Text = tostring(getMiscAmount("Mini Pinata")) .. " | Mini Pinata"
             updateLabelSize(gift2Label)
         end
 
-        --coinLabel.Text = Formatint(getCurrencyAmount("Sunflowers")) .. " | Sunflowers"
-        --updateLabelSize(coinLabel)
+        coinLabel.Text = Formatint(getCurrencyAmount("BreakoutCoins")) .. " | BreakoutCoins"
+        updateLabelSize(coinLabel)
 
-        --raffleLabel.Text = (_G.GardenRebirth or 0) .. " | Rebirth"
-        --updateLabelSize(raffleLabel)
+		luckyBreakoutLabel.Text = getLuckyBreakout() .. "/" .. getLuckyBreakouts3() .. " | MaxLevel"
+		updateLabelSize(luckyBreakoutLabel)
 
-		--megaPresentLabel.Text = (_G.GardenPlacedPets or 0) .. " | Pets"
-		--updateLabelSize(megaPresentLabel)
+		rebirthLabel.Text = getLuckyBreakouts2() .. " | Rebirth"
+		updateLabelSize(rebirthLabel)
 
 		local runsLeft = getRunsLeft()
 		_G.Time_Trial_End = (runsLeft == 0)
