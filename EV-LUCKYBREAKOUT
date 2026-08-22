@@ -73,21 +73,110 @@ task.wait(20)
 
 -- ===========- AUTO SETTINGS -===========
 
-local function setAuto()
-    ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
-        "LuckyBreakout",
-        "LBSetAutoRebirth",
-        true
-    )
+local function getLuckyBreakout()
+    local sd = getSave()
+
+    return sd
+        and sd.InstanceVars
+        and sd.InstanceVars.LuckyBreakout
+        and sd.InstanceVars.LuckyBreakout.Rebirths
+        or 0
+end
+
+local function hasLuckyPeacockRainbow()
+    local sd = getSave()
+
+    if not sd
+        or not sd.Inventory
+        or not sd.Inventory.Pet then
+        return false
+    end
+
+    for _, v in pairs(sd.Inventory.Pet) do
+        if v.id == "Lucky Peacock"
+            and v.pt == 2 then
+            return true
+        end
+    end
+
+    return false
+end
+
+local function setAutoRebirth(state)
+    local args = {
+        [1] = "LuckyBreakout",
+        [2] = "LBSetAutoRebirth",
+        [3] = state
+    }
 
     ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
-        "LuckyBreakout",
-        "LBSetAutoBuySlots",
-        true
+        unpack(args)
     )
 end
 
-setAuto()
+local function setAutoBuySlots(state)
+    local args = {
+        [1] = "LuckyBreakout",
+        [2] = "LBSetAutoBuySlots",
+        [3] = state
+    }
+
+    ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
+        unpack(args)
+    )
+end
+
+setAutoBuySlots(true)
+
+task.spawn(function()
+    local autoRebirthState = nil
+
+    while true do
+        if not HatchReady then
+            task.wait(1)
+            continue
+        end
+
+        local hasPet = hasLuckyPeacockRainbow()
+        local rebirths = tonumber(getLuckyBreakout()) or 0
+
+        if hasPet then
+            if autoRebirthState ~= true then
+                setAutoRebirth(true)
+                autoRebirthState = true
+            end
+
+            task.wait(2)
+            continue
+        end
+
+        if rebirths < 3 then
+            if autoRebirthState ~= true then
+                setAutoRebirth(true)
+                autoRebirthState = true
+            end
+
+            task.wait(1)
+            continue
+        end
+
+        if autoRebirthState ~= false then
+            setAutoRebirth(false)
+            autoRebirthState = false
+        end
+
+        repeat
+            task.wait(1)
+            hasPet = hasLuckyPeacockRainbow()
+        until hasPet
+            or not HatchReady
+
+        if hasPet then
+            setAutoRebirth(true)
+            autoRebirthState = true
+        end
+    end
+end)
 
 HatchReady = true
 
@@ -133,7 +222,8 @@ task.spawn(function()
         ReplicatedStorage.Library.Balancing.CalcEggPrice
     )
 
-    local HatchRemote = ReplicatedStorage.Network:WaitForChild("CustomEggs_Hatch")
+    local HatchRemote =
+        ReplicatedStorage.Network:WaitForChild("CustomEggs_Hatch")
 
     local HatchState = {
         EggName = nil,
