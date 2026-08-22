@@ -126,8 +126,6 @@ local function setAutoBuySlots(state)
     )
 end
 
-setAutoBuySlots(true)
-
 task.spawn(function()
     local autoRebirthState = nil
 
@@ -143,6 +141,7 @@ task.spawn(function()
         if hasPet then
             if autoRebirthState ~= true then
                 setAutoRebirth(true)
+                setAutoBuySlots(true)
                 autoRebirthState = true
             end
 
@@ -153,6 +152,7 @@ task.spawn(function()
         if rebirths < 3 then
             if autoRebirthState ~= true then
                 setAutoRebirth(true)
+                setAutoBuySlots(true)
                 autoRebirthState = true
             end
 
@@ -173,6 +173,7 @@ task.spawn(function()
 
         if hasPet then
             setAutoRebirth(true)
+            setAutoBuySlots(true)
             autoRebirthState = true
         end
     end
