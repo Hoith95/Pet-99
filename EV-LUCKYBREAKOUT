@@ -611,7 +611,7 @@ task.spawn(function()
     end
 end)
 
--- ===========- AUTO REDEEM TITANIC CHEST -===========
+-- ===========- AUTO REDEEM LUCKYBREAKOUT CHESTS -===========
 
 task.spawn(function()
     repeat
@@ -625,34 +625,25 @@ task.spawn(function()
 
     while true do
         if LuckyBreakoutRunning() then
+            local args = {
+                [1] = "LuckyBreakoutTitanicChest"
+            }
+
             pcall(function()
                 DailyRewards:InvokeServer(
-                    "LuckyBreakoutTitanicChest"
+                    unpack(args)
                 )
             end)
-        end
 
-        task.wait(5 * 60)
-    end
-end)
+            task.wait(1)
 
--- ===========- AUTO REDEEM GARGANTUAN CHEST -===========
+            local args = {
+                [1] = "LuckyBreakoutGargantuanChest"
+            }
 
-task.spawn(function()
-    repeat
-        task.wait(5)
-    until HatchReady
-
-    local DailyRewards =
-        ReplicatedStorage.Network:WaitForChild(
-            "DailyRewards_Redeem"
-        )
-
-    while true do
-        if LuckyBreakoutRunning() then
             pcall(function()
                 DailyRewards:InvokeServer(
-                    "LuckyBreakoutGargantuanChest"
+                    unpack(args)
                 )
             end)
         end
