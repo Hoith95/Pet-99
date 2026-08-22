@@ -200,9 +200,9 @@ local function startGuiUpdater()
     -- RIGHT
     local rankLabel        = createLabel("RankLabel", right)
 
-    local giftLabel        = createLabel("GiftLabel", right)
 	local rebirthLabel       = createLabel("RebirthLabel", right)
 	local luckyBreakoutLabel = createLabel("LuckyBreakoutLabel", right)
+    local giftLabel        = createLabel("GiftLabel", right)
     local gift2Label = createLabel("Gift2Label", right)
     gift2Label.Visible = SHOW_MINI_PINATA
     --local megaPresentLabel = createLabel("MegaPresentLabel", right)
