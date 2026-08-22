@@ -1,0 +1,680 @@
+if _G.VAR_LUCKYBREAKOUT then
+    return
+end
+
+_G.VAR_LUCKYBREAKOUT = true
+
+-- ===========- SERVICES -===========
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local player = Players.LocalPlayer
+
+local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
+local EggCmds = require(Client.EggCmds)
+local PlayerSave = require(Client.Save)
+
+local function getSave()
+    return PlayerSave.Get()
+end
+
+local function getRoot()
+    local char = player.Character or player.CharacterAdded:Wait()
+    return char:WaitForChild("HumanoidRootPart")
+end
+
+-- ===========- TIME TRIAL STATE -===========
+
+_G.Time_Trial_End = _G.Time_Trial_End or false
+
+local function LuckyBreakoutRunning()
+    return _G.Time_Trial_End == true
+end
+
+-- ===========- WAIT UNTIL EGGS HATCHED INCREASES -===========
+
+local function getEggsHatched()
+    local sd = getSave()
+    if not sd then
+        return nil
+    end
+    return tonumber(sd.EggsHatched) or 0
+end
+
+local lastEggs
+
+repeat
+    lastEggs = getEggsHatched()
+    task.wait(1)
+until lastEggs ~= nil
+
+repeat
+    task.wait(1)
+    local currentEggs = getEggsHatched()
+    if currentEggs
+        and currentEggs > lastEggs then
+        break
+    end
+until false
+
+-- ===========- TELEPORT TO EVENT -===========
+
+local HatchReady = false
+
+task.wait(68)
+
+getRoot().CFrame = CFrame.new(-15849, 40.27, -195)
+
+repeat
+    task.wait(5)
+until workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("LuckyBreakout")
+
+task.wait(20)
+
+-- ===========- AUTO SETTINGS -===========
+
+local function setAuto()
+    ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
+        "LuckyBreakout",
+        "LBSetAutoRebirth",
+        true
+    )
+
+    ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
+        "LuckyBreakout",
+        "LBSetAutoBuySlots",
+        true
+    )
+end
+
+setAuto()
+
+HatchReady = true
+
+-- ===========- RETURN TO LUCKYBREAKOUT AFTER TIME TRIAL -===========
+
+task.spawn(function()
+    local waitStart = nil
+
+    while true do
+        local inLuckyBreakout =
+            workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("LuckyBreakout")
+
+        if _G.Time_Trial_End
+            and not inLuckyBreakout then
+
+            if not waitStart then
+                waitStart = tick()
+            end
+
+            if tick() - waitStart >= 180 then
+                getRoot().CFrame = CFrame.new(-15849, 40.27, -195)
+                waitStart = nil
+            end
+        else
+            waitStart = nil
+        end
+
+        task.wait(2)
+    end
+end)
+
+-- ===========- AUTO HATCH + BREAKABLE FARM -===========
+
+task.spawn(function()
+    repeat
+        task.wait(5)
+    until HatchReady
+
+    local CustomEggs = workspace.__THINGS:WaitForChild("CustomEggs")
+    local CustomEggsCmds = require(Client.CustomEggsCmds)
+
+    local CalcEggPrice = require(
+        ReplicatedStorage.Library.Balancing.CalcEggPrice
+    )
+
+    local HatchRemote = ReplicatedStorage.Network:WaitForChild("CustomEggs_Hatch")
+
+    local HatchState = {
+        EggName = nil,
+        EggModel = nil,
+        EggPrice = 0,
+        MaxHatch = 0,
+        NeedCurrency = 0
+    }
+
+    -- ===========- BREAKOUT COINS -===========
+
+    local function getBreakoutCoins()
+        local sd = getSave()
+
+        if not sd
+            or not sd.Inventory
+            or not sd.Inventory.Currency then
+            return 0
+        end
+
+        for _, currency in pairs(sd.Inventory.Currency) do
+            if currency.id == "BreakoutCoins" then
+                return tonumber(currency._am) or 0
+            end
+        end
+
+        return 0
+    end
+
+    -- ===========- CAN HATCH -===========
+
+    local function canHatch()
+        if not HatchState.EggName then
+            return false
+        end
+
+        if HatchState.MaxHatch <= 0 then
+            return false
+        end
+
+        if HatchState.NeedCurrency <= 0 then
+            return false
+        end
+
+        return getBreakoutCoins() >= HatchState.NeedCurrency
+    end
+
+    -- ===========- UPDATE EGG -===========
+
+    local function UpdateEgg()
+        local foundName
+        local foundModel
+
+        local root = getRoot()
+        local nearestDistance = math.huge
+
+        for _, egg in ipairs(CustomEggs:GetChildren()) do
+            if not egg.Name:find(" ")
+                and #egg.Name >= 15 then
+
+                local part =
+                    egg.PrimaryPart
+                    or egg:FindFirstChildWhichIsA("BasePart", true)
+
+                if part then
+                    local distance =
+                        (root.Position - part.Position).Magnitude
+
+                    if distance < nearestDistance then
+                        nearestDistance = distance
+                        foundName = egg.Name
+                        foundModel = egg
+                    end
+                end
+            end
+        end
+
+        if foundName == HatchState.EggName then
+            return
+        end
+
+        HatchState.EggName = foundName
+        HatchState.EggModel = foundModel
+        HatchState.EggPrice = 0
+        HatchState.MaxHatch = 0
+        HatchState.NeedCurrency = 0
+
+        if not foundName then
+            return
+        end
+
+        local info = CustomEggsCmds.All()[foundName]
+
+        if not info then
+            return
+        end
+
+        local ok, price = pcall(function()
+            return CalcEggPrice(info._dir)
+        end)
+
+        if not ok then
+            return
+        end
+
+        HatchState.EggPrice = tonumber(price) or 0
+        HatchState.MaxHatch = EggCmds.GetMaxHatch()
+        HatchState.NeedCurrency =
+            HatchState.EggPrice * HatchState.MaxHatch
+    end
+
+    -- ===========- EGG SCANNER -===========
+
+    task.spawn(function()
+        while true do
+            if not LuckyBreakoutRunning() then
+                task.wait(1)
+                continue
+            end
+
+            UpdateEgg()
+            task.wait(2)
+        end
+    end)
+
+    -- ===========- TELEPORT TO EGG -===========
+
+    local EGG_DISTANCE = 40
+    local EGG_OFFSET = 30
+    local EGG_TELEPORT_INTERVAL = 300
+    local lastEggTeleport = -math.huge
+
+    task.spawn(function()
+        while true do
+            if not LuckyBreakoutRunning() then
+                task.wait(1)
+                continue
+            end
+
+            if canHatch() then
+                local model = HatchState.EggModel
+
+                if model and model.Parent then
+                    local part =
+                        model.PrimaryPart
+                        or model:FindFirstChildWhichIsA("BasePart", true)
+
+                    if part then
+                        local root = getRoot()
+
+                        local distance =
+                            (root.Position - part.Position).Magnitude
+
+                        if distance > EGG_DISTANCE
+                            and tick() - lastEggTeleport >= EGG_TELEPORT_INTERVAL then
+
+                            local pos =
+                                part.Position
+                                - part.CFrame.LookVector * EGG_OFFSET
+
+                            root.CFrame =
+                                CFrame.lookAt(
+                                    pos,
+                                    part.Position
+                                )
+
+                            lastEggTeleport = tick()
+
+                            task.wait(0.15)
+
+                            if LuckyBreakoutRunning()
+                                and canHatch()
+                                and model.Parent then
+
+                                local newRoot = getRoot()
+
+                                local newPart =
+                                    model.PrimaryPart
+                                    or model:FindFirstChildWhichIsA(
+                                        "BasePart",
+                                        true
+                                    )
+
+                                if newPart then
+                                    local newPos =
+                                        newPart.Position
+                                        - newPart.CFrame.LookVector
+                                        * EGG_OFFSET
+
+                                    local newDistance =
+                                        (
+                                            newRoot.Position
+                                            - newPart.Position
+                                        ).Magnitude
+
+                                    if newDistance > EGG_DISTANCE then
+                                        newRoot.CFrame =
+                                            CFrame.lookAt(
+                                                newPos,
+                                                newPart.Position
+                                            )
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+
+            task.wait(0.75)
+        end
+    end)
+
+    -- ===========- BREAKABLE FARM -===========
+
+    local CHEST_RADIUS = 15
+
+    local function isLuckyBreakout()
+        local active =
+            workspace.__THINGS.__INSTANCE_CONTAINER.Active
+
+        return active
+            and active:FindFirstChild("LuckyBreakout") ~= nil
+    end
+
+    local function getChestPart(chest)
+        if not chest
+            or not chest:IsA("Model") then
+            return nil
+        end
+
+        return chest:FindFirstChildWhichIsA("BasePart")
+    end
+
+    local function getNearbyChestCount(position)
+        local breakables =
+            workspace.__THINGS:FindFirstChild("Breakables")
+
+        if not breakables then
+            return 0
+        end
+
+        local count = 0
+
+        for _, chest in ipairs(breakables:GetChildren()) do
+            if chest:IsA("Model")
+                and tonumber(chest.Name) then
+
+                local part = getChestPart(chest)
+
+                if part then
+                    local distance =
+                        (part.Position - position).Magnitude
+
+                    if distance <= CHEST_RADIUS then
+                        count += 1
+                    end
+                end
+            end
+        end
+
+        return count
+    end
+
+    local function teleportToBreakable(part)
+        local root = getRoot()
+
+        if root and part then
+            root.CFrame =
+                part.CFrame + Vector3.new(0, 3, 0)
+
+            return true
+        end
+
+        return false
+    end
+
+    task.spawn(function()
+        while true do
+            if not LuckyBreakoutRunning() then
+                task.wait(1)
+                continue
+            end
+
+            if not isLuckyBreakout() then
+                task.wait(3)
+                continue
+            end
+
+            if canHatch()
+                and tick() - lastEggTeleport >= EGG_TELEPORT_INTERVAL then
+
+                task.wait(0.25)
+                continue
+            end
+
+            local breakables =
+                workspace.__THINGS:FindFirstChild("Breakables")
+
+            if not breakables then
+                task.wait(1)
+                continue
+            end
+
+            local root = getRoot()
+            local nearbyCount =
+                getNearbyChestCount(root.Position)
+
+            if nearbyCount > 0 then
+                task.wait(0.15)
+                continue
+            end
+
+            local found = false
+
+            for _, chest in ipairs(breakables:GetChildren()) do
+                if not LuckyBreakoutRunning() then
+                    break
+                end
+
+                if canHatch()
+                    and tick() - lastEggTeleport >= EGG_TELEPORT_INTERVAL then
+                    break
+                end
+
+                if not isLuckyBreakout() then
+                    break
+                end
+
+                if chest:IsA("Model")
+                    and tonumber(chest.Name) then
+
+                    local part = getChestPart(chest)
+
+                    if part then
+                        local currentRoot = getRoot()
+
+                        local distance =
+                            (part.Position - currentRoot.Position).Magnitude
+
+                        if distance > CHEST_RADIUS then
+                            if canHatch()
+                                and tick() - lastEggTeleport >= EGG_TELEPORT_INTERVAL then
+                                break
+                            end
+
+                            if teleportToBreakable(part) then
+                                found = true
+
+                                while
+                                    LuckyBreakoutRunning()
+                                    and isLuckyBreakout()
+                                    and not (
+                                        canHatch()
+                                        and tick() - lastEggTeleport
+                                            >= EGG_TELEPORT_INTERVAL
+                                    )
+                                do
+                                    local currentRoot = getRoot()
+
+                                    local nearby =
+                                        getNearbyChestCount(
+                                            currentRoot.Position
+                                        )
+
+                                    if nearby > 0 then
+                                        task.wait(0.1)
+                                        continue
+                                    end
+
+                                    break
+                                end
+
+                                break
+                            end
+                        end
+                    end
+                end
+            end
+
+            if not found then
+                task.wait(0.5)
+            else
+                task.wait(0.1)
+            end
+        end
+    end)
+
+    -- ===========- HATCH LOOP -===========
+
+    while true do
+        if not LuckyBreakoutRunning() then
+            task.wait(1)
+            continue
+        end
+
+        if canHatch() then
+            local eggName = HatchState.EggName
+            local maxHatch = HatchState.MaxHatch
+
+            pcall(function()
+                HatchRemote:InvokeServer(
+                    eggName,
+                    maxHatch
+                )
+            end)
+
+            task.wait(0.15)
+        else
+            task.wait(0.25)
+        end
+    end
+end)
+
+-- ===========- AUTO TAPPER -===========
+
+task.spawn(function()
+    repeat
+        task.wait(5)
+    until HatchReady
+
+    local remote =
+        ReplicatedStorage.Network:WaitForChild(
+            "AutoTapper_Toggle"
+        )
+
+    while true do
+        if not LuckyBreakoutRunning() then
+            task.wait(1)
+            continue
+        end
+
+        local sd = getSave()
+
+        if sd
+            and not sd.AutoTapper then
+
+            pcall(function()
+                remote:InvokeServer()
+            end)
+
+            task.wait(2)
+        else
+            task.wait(10)
+        end
+    end
+end)
+
+-- ===========- AUTO REDEEM LUCKYBREAKOUT CHESTS -===========
+
+task.spawn(function()
+    repeat
+        task.wait(5)
+    until HatchReady
+
+    local DailyRewards =
+        ReplicatedStorage.Network:WaitForChild(
+            "DailyRewards_Redeem"
+        )
+
+    while true do
+        if LuckyBreakoutRunning() then
+            pcall(function()
+                DailyRewards:InvokeServer(
+                    "LuckyBreakoutTitanicChest"
+                )
+            end)
+
+            pcall(function()
+                DailyRewards:InvokeServer(
+                    "LuckyBreakoutGargantuanChest"
+                )
+            end)
+        end
+
+        task.wait(5 * 60)
+    end
+end)
+
+-- ===========- AUTO UPGRADE -===========
+
+task.spawn(function()
+    repeat
+        task.wait(5)
+    until HatchReady
+
+    local UpgradeRemote =
+        ReplicatedStorage.Network:WaitForChild(
+            "EventUpgrades: Purchase"
+        )
+
+    local UpgradeList = {
+        "LuckyBreakoutEggTier",
+        "LuckyBreakoutGiftDrops",
+        "LuckyBreakoutBuxBonus",
+        "LuckyBreakoutBallPower",
+        "LuckyBreakoutBallSpeed"
+    }
+
+    local function getBreakoutBucks()
+        local sd = getSave()
+
+        if not sd
+            or not sd.Inventory
+            or not sd.Inventory.Currency then
+            return 0
+        end
+
+        for _, currency in pairs(sd.Inventory.Currency) do
+            if currency.id == "BreakoutBucks" then
+                return tonumber(currency._am) or 0
+            end
+        end
+
+        return 0
+    end
+
+    while true do
+        if not LuckyBreakoutRunning() then
+            task.wait(1)
+            continue
+        end
+
+        if getBreakoutBucks() > 550 then
+            for _, upgradeId in ipairs(UpgradeList) do
+                if not LuckyBreakoutRunning() then
+                    break
+                end
+
+                if getBreakoutBucks() <= 550 then
+                    break
+                end
+
+                pcall(function()
+                    UpgradeRemote:InvokeServer(upgradeId)
+                end)
+
+                task.wait(0.2)
+            end
+        end
+
+        task.wait(2)
+    end
+end)
