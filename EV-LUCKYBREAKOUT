@@ -265,6 +265,7 @@ task.spawn(function()
     local EGG_OFFSET = 30
     local EGG_TELEPORT_INTERVAL = 300
     local lastEggTeleport = -math.huge
+    local EggTeleporting = false
 
     task.spawn(function()
         while true do
@@ -273,7 +274,9 @@ task.spawn(function()
                 continue
             end
 
-            if canHatch() then
+            if canHatch()
+                and not EggTeleporting then
+
                 local model = HatchState.EggModel
 
                 if model and model.Parent then
@@ -288,7 +291,10 @@ task.spawn(function()
                             (root.Position - part.Position).Magnitude
 
                         if distance > EGG_DISTANCE
-                            and tick() - lastEggTeleport >= EGG_TELEPORT_INTERVAL then
+                            and tick() - lastEggTeleport
+                                >= EGG_TELEPORT_INTERVAL then
+
+                            EggTeleporting = true
 
                             local pos =
                                 part.Position
@@ -349,7 +355,7 @@ task.spawn(function()
 
     -- ===========- BREAKABLE FARM -===========
 
-    local CHEST_RADIUS = 15
+    local CHEST_RADIUS = 5
 
     local function isLuckyBreakout()
         local active =
@@ -423,8 +429,14 @@ task.spawn(function()
                 continue
             end
 
+            if EggTeleporting then
+                task.wait(0.1)
+                continue
+            end
+
             if canHatch()
-                and tick() - lastEggTeleport >= EGG_TELEPORT_INTERVAL then
+                and tick() - lastEggTeleport
+                    >= EGG_TELEPORT_INTERVAL then
 
                 task.wait(0.25)
                 continue
@@ -439,6 +451,7 @@ task.spawn(function()
             end
 
             local root = getRoot()
+
             local nearbyCount =
                 getNearbyChestCount(root.Position)
 
@@ -454,8 +467,14 @@ task.spawn(function()
                     break
                 end
 
+                if EggTeleporting then
+                    break
+                end
+
                 if canHatch()
-                    and tick() - lastEggTeleport >= EGG_TELEPORT_INTERVAL then
+                    and tick() - lastEggTeleport
+                        >= EGG_TELEPORT_INTERVAL then
+
                     break
                 end
 
@@ -475,8 +494,13 @@ task.spawn(function()
                             (part.Position - currentRoot.Position).Magnitude
 
                         if distance > CHEST_RADIUS then
+                            if EggTeleporting then
+                                break
+                            end
+
                             if canHatch()
-                                and tick() - lastEggTeleport >= EGG_TELEPORT_INTERVAL then
+                                and tick() - lastEggTeleport
+                                    >= EGG_TELEPORT_INTERVAL then
                                 break
                             end
 
@@ -486,6 +510,7 @@ task.spawn(function()
                                 while
                                     LuckyBreakoutRunning()
                                     and isLuckyBreakout()
+                                    and not EggTeleporting
                                     and not (
                                         canHatch()
                                         and tick() - lastEggTeleport
@@ -543,6 +568,10 @@ task.spawn(function()
 
             task.wait(0.15)
         else
+            if EggTeleporting then
+                EggTeleporting = false
+            end
+
             task.wait(0.25)
         end
     end
@@ -582,7 +611,7 @@ task.spawn(function()
     end
 end)
 
--- ===========- AUTO REDEEM LUCKYBREAKOUT CHESTS -===========
+-- ===========- AUTO REDEEM TITANIC CHEST -===========
 
 task.spawn(function()
     repeat
@@ -601,7 +630,26 @@ task.spawn(function()
                     "LuckyBreakoutTitanicChest"
                 )
             end)
+        end
 
+        task.wait(5 * 60)
+    end
+end)
+
+-- ===========- AUTO REDEEM GARGANTUAN CHEST -===========
+
+task.spawn(function()
+    repeat
+        task.wait(5)
+    until HatchReady
+
+    local DailyRewards =
+        ReplicatedStorage.Network:WaitForChild(
+            "DailyRewards_Redeem"
+        )
+
+    while true do
+        if LuckyBreakoutRunning() then
             pcall(function()
                 DailyRewards:InvokeServer(
                     "LuckyBreakoutGargantuanChest"
