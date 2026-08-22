@@ -1,0 +1,944 @@
+-- SERVICES
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local player = Players.LocalPlayer
+local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
+local ConsumeRemote = ReplicatedStorage.Network.Consumables_Consume
+local EggCmds = require(Client.EggCmds)
+local PlayerSave = require(Client.Save)
+local function getSave()
+    return PlayerSave.Get()
+end
+
+local function WaitGarden()
+
+    local things = workspace:WaitForChild("__THINGS")
+    local container = things:WaitForChild("__INSTANCE_CONTAINER")
+    local active = container:WaitForChild("Active")
+    while not active:FindFirstChild("Garden") do
+        active.ChildAdded:Wait()
+    end
+end
+
+_G.Time_Trial_End = _G.Time_Trial_End or false
+
+local function GardenRunning()
+    return _G.Time_Trial_End == true
+end
+
+-- SAVE CACHE
+
+local SaveCache = {
+    Save = nil,
+    Inventory = {},
+    EventUpgrades = {},
+    EggsHatched = 0,
+    Currency = {},
+    CropSeed = {},
+    Consumable = {},
+    Sunflowers = 0,
+    RebirthStage = 0,
+    PlayerXP = 0
+}
+
+task.spawn(function()
+    while true do
+    if not GardenRunning() then
+        task.wait(1.5)
+        continue
+    end
+        local sd = getSave()
+        if sd then
+            SaveCache.Save = sd
+            SaveCache.Inventory = sd.Inventory or {}
+            SaveCache.EventUpgrades = sd.EventUpgrades or {}
+            SaveCache.EggsHatched = sd.EggsHatched or 0
+            SaveCache.Currency = SaveCache.Inventory.Currency or {}
+            SaveCache.CropSeed = SaveCache.Inventory.CropSeed or {}
+            SaveCache.Consumable = SaveCache.Inventory.Consumable or {}
+            SaveCache.RebirthStage = sd.TowerHCCampaignStage or 0
+            SaveCache.PlayerXP = sd.TowerPlayerXP or 0
+            SaveCache.Sunflowers = 0
+            for _, currency in pairs(SaveCache.Currency) do
+                if currency.id == "Sunflowers" then
+                    SaveCache.Sunflowers = currency._am or 0
+                    break
+                end
+            end
+        end
+        task.wait(1)
+    end
+end)
+
+-- SEED DATA
+
+local SeedData = {
+
+    ["Basic"] = {
+        Power = 1,
+        Plants = {
+            ["Coin"] = 1,
+            ["Diamond"] = 2,
+            ["Gift"] = 3,
+        },
+    },
+
+    ["Rare"] = {
+        Power = 2,
+        Plants = {
+            ["Coin"] = 1,
+            ["Diamond"] = 2,
+            ["Gift"] = 3,
+            ["Small Bag"] = 4,
+        },
+    },
+
+    ["Divine"] = {
+        Power = 3,
+        Plants = {
+            ["Coin"] = 1,
+            ["Diamond"] = 2,
+            ["Gift"] = 3,
+            ["Small Bag"] = 4,
+            ["Medium Bag"] = 5,
+            ["Large Bag"] = 6,
+        },
+    },
+
+    ["Exotic"] = {
+        Power = 4,
+        Plants = {
+            ["Coin"] = 1,
+            ["Diamond"] = 2,
+            ["Gift"] = 3,
+            ["Small Bag"] = 4,
+            ["Medium Bag"] = 5,
+        },
+    },
+
+    ["Mythic"] = {
+        Power = 5,
+        Plants = {
+            ["Coin"] = 1,
+            ["Diamond"] = 2,
+            ["Gift"] = 3,
+            ["Small Bag"] = 4,
+            ["Medium Bag"] = 5,
+            ["Large Bag"] = 6,
+        },
+    },
+
+    ["Ultimate"] = {
+        Power = 6,
+        Plants = {
+            ["Coin"] = 1,
+            ["Diamond"] = 2,
+            ["Gift"] = 3,
+            ["Small Bag"] = 4,
+            ["Medium Bag"] = 5,
+            ["Large Bag"] = 6,
+        },
+    },
+
+}
+
+
+local PlotData = {
+
+    [1] = { Price = 0 },
+    [2] = { Price = 250 },
+    [3] = { Price = 1270 },
+    [4] = { Price = 6500 },
+    [5] = { Price = 33100 },
+    [6] = { Price = 169000 },
+    [7] = { Price = 862000 },
+    [8] = { Price = 4390000 },
+    [9] = { Price = 22400000 },
+    [10] = { Price = 114000000 },
+
+}
+
+local PlantPower = {}
+
+for _, seed in pairs(SeedData) do
+    for plantName, power in pairs(seed.Plants) do
+        PlantPower[plantName] = math.max(PlantPower[plantName] or 0, power)
+    end
+end
+
+-- PRECOMPUTE MAX POWER
+
+for _, seed in pairs(SeedData) do
+
+    local maxPower = 0
+
+    for _, power in pairs(seed.Plants) do
+
+        if power > maxPower then
+            maxPower = power
+        end
+
+    end
+
+    seed.MaxPower = maxPower
+
+end
+
+-- SEED INVENTORY
+
+local SeedInventory = {
+    TotalAmount = 0,
+    Seeds = {},
+}
+
+local VariantPower = {
+    Rainbow = 3,
+    Shiny = 2,
+    Gold = 1,
+}
+
+local StrongestSeed
+
+-- UPDATE SEED INVENTORY
+
+local function UpdateSeedInventory()
+    table.clear(SeedInventory.Seeds)
+    SeedInventory.TotalAmount = 0
+    StrongestSeed = nil
+    local seeds = SaveCache.CropSeed
+    if not seeds then
+        return
+    end
+
+    for uid, data in pairs(seeds) do
+        local info = SeedData[data.id]
+        if info then
+            local amount = data._am or 1
+            SeedInventory.TotalAmount += amount
+            SeedInventory.Seeds[#SeedInventory.Seeds + 1] = {
+                UID = uid,
+                Name = data.id,
+                Amount = amount,
+                Power = info.Power,
+                MaxPower = info.MaxPower,
+                Variant = data.vr,
+		VariantPower = VariantPower[data.vr] or 0,
+            }
+        end
+    end
+    table.sort(SeedInventory.Seeds, function(a, b)
+        if a.Power ~= b.Power then
+            return a.Power > b.Power
+        end
+	if a.VariantPower ~= b.VariantPower then
+	   return a.VariantPower > b.VariantPower
+    	end
+        return a.Amount > b.Amount
+    end)
+    StrongestSeed = SeedInventory.Seeds[1]
+end
+
+-- MERCHANT
+
+local MerchantRemote =
+    ReplicatedStorage.Network.Merchant_RequestPurchase
+
+-- WAIT INVENTORY INCREASE
+
+local function WaitInventoryIncrease(before)
+    local timeout = os.clock() + 1
+    repeat
+        UpdateSeedInventory()
+        if SeedInventory.TotalAmount > before then
+            return true
+        end
+        task.wait(0.05)
+    until os.clock() >= timeout
+    return false
+end
+
+-- BUY SLOT
+
+local function BuyMerchantSlot(slot)
+    local fail = 0
+    while fail < 5 do
+        local before = SeedInventory.TotalAmount
+        local ok = pcall(function()
+            MerchantRemote:InvokeServer(
+                "FarmingMerchant",
+                slot
+            )
+        end)
+        task.wait(0.25)
+        UpdateSeedInventory()
+        if SeedInventory.TotalAmount > before then
+            fail = 0
+        else
+            fail += 1
+        end
+    end
+end
+
+-- BUY MERCHANT
+
+local function BuyMerchant()
+    UpdateSeedInventory()
+    for slot = 1, 6 do
+        BuyMerchantSlot(slot)
+    end
+    UpdateSeedInventory()
+end
+
+-- MERCHANT THREAD
+
+local function MerchantThread()
+    BuyMerchant()
+    while true do
+    if not GardenRunning() then
+        task.wait(1.5)
+        continue
+    end
+        task.wait(180)
+        BuyMerchant()
+    end
+end
+
+-- PLOT
+
+local PlotRemote = ReplicatedStorage.Network.Plots_Invoke
+local PlotState = {
+    PlotId = nil,
+    Rebirth = 0,
+    CropCount = 0,
+    UnlockedPlots = 0,
+}
+
+_G.GardenRebirth = 0
+
+local PlantCache = {}
+
+-- UPDATE PLOT
+
+local function UpdatePlot()
+
+    --print("========== UPDATE PLOT ==========")
+    --print("Player.Name =", player.Name)
+
+    PlotState.PlotId = nil
+    PlotState.Rebirth = 0
+    _G.GardenRebirth = 0
+    local plots = workspace.__THINGS.Plots
+    for _, plot in ipairs(plots:GetChildren()) do
+        --print("--------------------------------")
+        --print("Checking Plot:", plot.Name)
+        local interactable = plot:FindFirstChild("Interactable")
+        --print("Interactable:", interactable ~= nil)
+        if interactable then
+            local billboard = interactable:FindFirstChild("PlayerImageBillboard")
+            --print("Billboard:", billboard ~= nil)
+            if billboard then
+                local frame = billboard.BillboardGui.Frame
+                local ownerLabel = frame:FindFirstChild("Name")
+                local owner = ownerLabel and ownerLabel.Text or nil
+                local progressLabel = frame:FindFirstChild("Progress")
+                local progress = progressLabel and progressLabel.Text or nil
+                if owner == player.Name then
+                    PlotState.PlotId = tonumber(plot.Name)
+                    PlotState.Rebirth = tonumber(((progress or ""):match("%d+"))) or 0
+                    _G.GardenRebirth = PlotState.Rebirth
+                    --print("PlotId =", PlotState.PlotId)
+                    --print("Rebirth =", PlotState.Rebirth)
+                    return true
+                end
+            end
+        end
+    end
+    warn("UpdatePlot: No matching plot found!")
+    return false
+end
+
+-- UPDATE UNLOCKED PLOTS
+
+local function UpdateUnlockedPlots()
+    PlotState.UnlockedPlots = 0
+    if not PlotState.PlotId then
+        return false
+    end
+
+    local plot = workspace.__THINGS.Plots:FindFirstChild(tostring(PlotState.PlotId))
+    if not plot then
+        return false
+    end
+
+    local crops = plot:FindFirstChild("PvC_Crops")
+    if not crops then
+        return false
+    end
+
+    PlotState.UnlockedPlots = math.min(#crops:GetChildren(), 10)
+    return true
+
+end
+
+local function NormalizePlantName(name)
+    if not name or name == "" then
+        return ""
+    end
+
+    local prefixes = {
+        "Gold",
+        "Golden",
+        "Rainbow",
+        "Shiny",
+    }
+
+    local changed = true
+    while changed do
+        changed = false
+        for _, prefix in ipairs(prefixes) do
+            local newName = name:gsub("^" .. prefix .. "%s+", "")
+            if newName ~= name then
+                name = newName
+                changed = true
+            end
+        end
+    end
+    return name
+end
+
+local ParseRate
+ParseRate = function(text)
+    if type(text) ~= "string" then
+        return 0
+    end
+    text = text:gsub("%s+", "")
+    if not text:find("/s", 1, true) then
+        return 0
+    end
+    local num, suffix = text:match("^([%d%.]+)([kKmMbB]?)%/s$")
+    if not num then
+        return 0
+    end
+    local value = tonumber(num)
+    if not value then
+        return 0
+    end
+    suffix = suffix:lower()
+    if suffix == "k" then
+        value = value * 1000
+    elseif suffix == "m" then
+        value = value * 1000000
+    elseif suffix == "b" then
+        value = value * 1000000000
+    end
+    return value
+end
+
+-- UPDATE PLANT CACHE
+
+local function UpdatePlantCache()
+    table.clear(PlantCache)
+    PlotState.CropCount = 0
+    if not PlotState.PlotId then
+        return
+    end
+
+    local plot = workspace.__THINGS.Plots:FindFirstChild(
+        tostring(PlotState.PlotId)
+    )
+
+    if not plot then
+        return
+    end
+
+    local crops = plot:FindFirstChild("PvC_Crops")
+    if not crops then
+        return
+    end
+
+    for slot = 1, PlotState.UnlockedPlots do
+        local crop = crops:FindFirstChild(tostring(slot))
+        if crop then
+            local timer = crop:FindFirstChild("PvC_GrowTimer")
+            if timer then
+                local frame = timer.Frame
+                local displayNameLabel = frame:FindFirstChild("DisplayName")
+                local plantName = displayNameLabel and displayNameLabel.Text or ""
+                local lookupName = NormalizePlantName(plantName)
+                local rateLabel = frame:FindFirstChild("Rate")
+                local rateText = rateLabel and rateLabel.Text or ""
+                local rate = ParseRate(rateText)
+                local power = PlantPower[lookupName] or 0
+                PlantCache[slot] = {
+                    Plot = slot,                    
+                    Name = plantName,
+                    Power = power,
+                    Rate = rate,
+                }
+                PlotState.CropCount += 1
+            end
+        end
+    end
+end
+
+
+local function DebugPlants()
+
+    --print("========== GARDEN DEBUG ==========")
+    --print("Unlocked:", PlotState.UnlockedPlots)
+
+    for slot = 1, 10 do
+        if slot > PlotState.UnlockedPlots then
+            --print(string.format("[%02d] LOCKED", slot))
+        else
+
+            local plant = PlantCache[slot]
+            if not plant then
+                --print(string.format("[%02d] EMPTY", slot))
+            else
+                --print(string.format("[%02d] Name=%s | Rate=%s | Power=%d",slot,tostring(plant.Name),tostring(plant.Rate),tonumber(plant.Power) or 0))
+            end
+        end
+    end
+    --print("==================================")
+end
+
+-- ACQUIRE PLOT
+
+local function AcquirePlot(slot)
+    if not PlotState.PlotId then
+        return false
+    end
+    if slot < 1 or slot > 10 then
+        return false
+    end
+    return pcall(function()
+        PlotRemote:InvokeServer(
+            PlotState.PlotId,
+            "BD_Acquire",
+            slot
+        )
+    end)
+end
+
+-- INSERT SEED
+
+local function InsertSeed(slot, uid)
+    if not PlotState.PlotId then
+        return false
+    end
+    if not uid then
+        return false
+    end
+    return pcall(function()
+        PlotRemote:InvokeServer(
+            PlotState.PlotId,
+            "SD_Insert",
+            tostring(slot),
+            uid
+        )
+    end)
+end
+
+-- PURGE
+
+local function PurgePlant(slot)
+    if not PlotState.PlotId then
+        return false
+    end
+    return pcall(function()
+        PlotRemote:InvokeServer(
+            PlotState.PlotId,
+            "SD_Purge",
+            tostring(slot)
+        )
+    end)
+end
+
+-- COLLECT
+
+local function CollectPlant(slot)
+    if not PlotState.PlotId then
+        return false
+    end
+    return pcall(function()
+
+        PlotRemote:InvokeServer(
+            PlotState.PlotId,
+            "SD_Collect",
+            tostring(slot)
+        )
+    end)
+end
+
+-- GET CROP
+
+local function GetCrop(slot)
+    if not PlotState.PlotId then
+        return nil
+    end
+    local plot = workspace.__THINGS.Plots:FindFirstChild(
+        tostring(PlotState.PlotId)
+    )
+    if not plot then
+        return nil
+    end
+    local crops = plot:FindFirstChild("PvC_Crops")
+    if not crops then
+        return nil
+    end
+    return crops:FindFirstChild(tostring(slot))
+end
+
+-- HAS CROP
+
+local function HasCrop(slot)
+    return GetCrop(slot) ~= nil
+
+end
+-- WAIT
+
+local function WaitCropAppear(slot)
+    local timeout = os.clock() + 5
+    repeat
+        if HasCrop(slot) then
+            return true
+        end
+        task.wait(0.1)
+    until os.clock() >= timeout
+    return false
+end
+
+local function WaitCropDisappear(slot)
+    local timeout = os.clock() + 5
+    repeat
+        if not HasCrop(slot) then
+            return true
+        end
+        task.wait(0.1)
+    until os.clock() >= timeout
+    return false
+end
+
+local function WaitPlantIdentified(slot)
+    local timeout = os.clock() + 5
+    repeat
+        UpdatePlantCache()
+        local plant = PlantCache[slot]
+        if plant and plant.Rate > 0 then
+            return true
+        end
+        task.wait(0.1)
+    until os.clock() >= timeout
+    return false
+end
+
+-- INITIALIZE
+
+local function InitializePlot()
+    if not StrongestSeed then
+        return false
+    end
+    if PlotState.CropCount > 0 then
+        return false
+    end
+    if not InsertSeed(1, StrongestSeed.UID) then
+        return false
+    end
+    if not WaitCropAppear(1) then
+        return false
+    end
+    if not WaitPlantIdentified(1) then
+        return false
+    end
+    return true
+end
+-- AUTO ACQUIRE
+
+local function AutoAcquirePlots()
+    if not StrongestSeed then
+        return
+    end
+    if PlotState.UnlockedPlots >= 10 then
+        return
+    end
+    local nextSlot = PlotState.UnlockedPlots + 1
+    local info = PlotData[nextSlot]
+    if not info or SaveCache.Sunflowers < info.Price then
+        return
+    end
+    if not AcquirePlot(nextSlot) then
+        return
+    end
+    task.wait(0.75)
+    UpdateUnlockedPlots()
+    UpdateSeedInventory()
+    if StrongestSeed and InsertSeed(nextSlot, StrongestSeed.UID) then
+        WaitCropAppear(nextSlot)
+        WaitPlantIdentified(nextSlot)
+        UpdatePlantCache()
+    end
+
+end
+
+-- REPLACE
+
+local function ReplacePlant(slot)
+    if not StrongestSeed then
+        return false
+    end
+    if not PurgePlant(slot) then
+        return false
+    end
+    if not WaitCropDisappear(slot) then
+        return false
+    end
+    UpdateSeedInventory()
+    if not StrongestSeed then
+        return false
+    end
+    if not InsertSeed(slot, StrongestSeed.UID) then
+        return false
+    end
+    if not WaitCropAppear(slot) then
+        return false
+    end
+    if not WaitPlantIdentified(slot) then
+        return false
+    end
+    return true
+end
+
+-- AUTO COLLECT
+
+local LastCollect = 0
+local function AutoCollect()
+    if os.clock() - LastCollect < 60 then
+        return
+    end
+    LastCollect = os.clock()
+    for slot = 1, PlotState.UnlockedPlots do
+        CollectPlant(slot)
+        task.wait(0.05)
+    end
+end
+
+-- AUTO REPLACE
+
+local function AutoReplacePlants()
+    if not StrongestSeed then
+        return
+    end
+    local seed = SeedData[StrongestSeed.Name]
+    if not seed then
+        return
+    end
+    while true do
+    if not GardenRunning() then
+        task.wait(1.5)
+        continue
+    end
+        UpdatePlantCache()
+        local weakestSlot
+        local weakestPower = math.huge
+        for slot = 1, PlotState.UnlockedPlots do
+            local plant = PlantCache[slot]
+            if not plant then
+                if InsertSeed(slot, StrongestSeed.UID) then
+                    WaitCropAppear(slot)
+                    WaitPlantIdentified(slot)
+                    UpdatePlantCache()
+                else
+                end
+                return
+            end
+            if plant.Power < weakestPower then
+                weakestPower = plant.Power
+                weakestSlot = slot
+            end
+        end
+        if not weakestSlot then
+            break
+        end
+        if weakestPower >= seed.MaxPower then
+            break
+        end
+        if not ReplacePlant(weakestSlot) then
+            break
+        end
+        UpdatePlantCache()
+    end
+end
+
+local CONSUMABLES = {
+    ["Growth Cocktail"] = true,
+    ["Fertilizer"] = true,
+    ["Rain"] = true,
+    ["Sunlight"] = true,
+}
+
+local function UseConsumables()
+    for uid, item in pairs(SaveCache.Consumable) do
+        if CONSUMABLES[item.id] then
+            local tier = tonumber(item.tn) or 1
+            local amount = tonumber(item._am) or 1
+            if amount > 0 then
+                if tier <= 2
+                or (tier == 3 and (_G.GardenRebirth or 0) >= 6) then
+                    local ok = pcall(function()
+                        ConsumeRemote:InvokeServer(uid, 1)
+                    end)
+                    if ok then
+                        task.wait(0.75)
+			return
+                    end
+                end
+            end
+        end
+    end
+end
+
+-- MAIN THREAD
+
+local function MainThread()
+    while true do
+    if not GardenRunning() then
+        task.wait(1.5)
+        continue
+    end
+        UpdateSeedInventory()
+        if UpdatePlot() then
+            if not UpdateUnlockedPlots() then
+                if StrongestSeed and InsertSeed(1, StrongestSeed.UID) then
+                    WaitCropAppear(1)
+                    UpdateUnlockedPlots()
+                end
+            end
+            UpdatePlantCache()
+            AutoAcquirePlots()
+            AutoCollect()
+            UseConsumables()
+            AutoReplacePlants()
+            UpdatePlantCache()
+        end
+        task.wait(1)
+    end
+end
+
+WaitGarden()
+
+task.spawn(MerchantThread)
+task.spawn(MainThread)
+
+-- CLIENT OPTIMIZE
+
+task.spawn(function()
+    repeat
+        task.wait()
+    until PlotState.PlotId
+    and workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("Garden")
+
+    local function DestroyObject(obj)
+        if obj and obj.Parent then
+            pcall(function()
+                obj:Destroy()
+            end)
+        end
+    end
+
+    -- CLEAN WORKSPACE
+
+    local function KeepWorkspaceObject(obj)
+        return obj == workspace.CurrentCamera
+            or obj == workspace.Terrain
+            or obj.Name == "BUILD"
+            or obj.Name == "__DEBRIS"
+            or obj.Name == "__THINGS"
+            or obj.Name == player.Name
+            or obj.Name == "1"
+    end
+
+    for _, obj in ipairs(workspace:GetChildren()) do
+        if not KeepWorkspaceObject(obj) then
+            DestroyObject(obj)
+        end
+    end
+
+    workspace.ChildAdded:Connect(function(obj)
+        if not KeepWorkspaceObject(obj) then
+            task.defer(function()
+                DestroyObject(obj)
+            end)
+        end
+    end)
+
+    -- REMOVE TOWERS
+
+    local towers = workspace.__THINGS:FindFirstChild("TowerDefenseTowers")
+    if towers then
+        for _, obj in ipairs(towers:GetChildren()) do
+            DestroyObject(obj)
+        end
+
+        towers.ChildAdded:Connect(function(obj)
+            task.defer(function()
+                DestroyObject(obj)
+            end)
+        end)
+    end
+
+    -- REMOVE OTHER PLOTS
+
+    local plots = workspace.__THINGS:WaitForChild("Plots")
+    for _, plot in ipairs(plots:GetChildren()) do
+        if tonumber(plot.Name) ~= PlotState.PlotId then
+            DestroyObject(plot)
+        end
+    end
+
+    plots.ChildAdded:Connect(function(plot)
+        task.defer(function()
+            if tonumber(plot.Name) ~= PlotState.PlotId then
+                DestroyObject(plot)
+            end
+        end)
+    end)
+
+    -- CLEAN MY BUILD
+
+    local myPlot = plots:FindFirstChild(tostring(PlotState.PlotId))
+    if myPlot then
+        local build = myPlot:FindFirstChild("BUILD")
+        if build then
+            local function Clean(obj)
+                if obj.Name ~= "fantasyassetsisland" then
+                    DestroyObject(obj)
+                end
+            end
+            for _, obj in ipairs(build:GetChildren()) do
+                Clean(obj)
+            end
+            build.ChildAdded:Connect(function(obj)
+                task.defer(function()
+                    Clean(obj)
+                end)
+            end)
+        end
+    end
+
+    -- CLEAN DEBRIS
+
+    local debris = workspace:FindFirstChild("__DEBRIS")
+    if debris then
+        for _, obj in ipairs(debris:GetChildren()) do
+            DestroyObject(obj)
+        end
+        debris.ChildAdded:Connect(function(obj)
+            task.defer(function()
+                DestroyObject(obj)
+            end)
+        end)
+    end
+    print("[CLIENT] Optimize Loaded")
+end)
