@@ -99,6 +99,20 @@ setAuto()
 
 HatchReady = true
 
+-- ===========- EXIT LUCKYBREAKOUT WHEN TIME TRIAL START -===========
+
+task.spawn(function()
+    while true do
+        if not _G.Time_Trial_End
+            and workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("LuckyBreakout") then
+
+            getRoot().CFrame = CFrame.new(9195,505,9810)
+        end
+
+        task.wait(2)
+    end
+end)
+
 -- ===========- RETURN TO LUCKYBREAKOUT AFTER TIME TRIAL -===========
 
 task.spawn(function()
