@@ -656,24 +656,6 @@ task.spawn(function()
         return tonumber(getEventUpgrades()[name]) or 0
     end
 
-    local function getBreakoutBucks()
-        local sd = getSave()
-
-        if not sd
-            or not sd.Inventory
-            or not sd.Inventory.Currency then
-            return 0
-        end
-
-        for _, currency in pairs(sd.Inventory.Currency) do
-            if currency.id == "BreakoutBucks" then
-                return tonumber(currency._am) or 0
-            end
-        end
-
-        return 0
-    end
-
     local function purchaseUpgrade(name)
         pcall(function()
             UpgradeRemote:InvokeServer(name)
@@ -688,7 +670,7 @@ task.spawn(function()
             continue
         end
 
-        -- ===========- STAGE 1: BOARD SLOTS -===========
+        -- ===========- BOARD SLOTS → 20 -===========
 
         local boardSlots =
             getUpgradeLevel("LuckyBreakoutBoardSlots")
@@ -698,36 +680,121 @@ task.spawn(function()
             continue
         end
 
-        -- ===========- STAGE 2: EGG TIER -===========
+        -- ===========- BALL POWER / SPEED → 3 -===========
+
+        local ballPower =
+            getUpgradeLevel("LuckyBreakoutBallPower")
+
+        local ballSpeed =
+            getUpgradeLevel("LuckyBreakoutBallSpeed")
+
+        if ballPower < 3 then
+            purchaseUpgrade("LuckyBreakoutBallPower")
+            continue
+        end
+
+        if ballSpeed < 3 then
+            purchaseUpgrade("LuckyBreakoutBallSpeed")
+            continue
+        end
+
+        -- ===========- BOARD SLOTS → 30 -===========
+
+        boardSlots =
+            getUpgradeLevel("LuckyBreakoutBoardSlots")
+
+        if boardSlots < 30 then
+            purchaseUpgrade("LuckyBreakoutBoardSlots")
+            continue
+        end
+
+        -- ===========- GIFT DROPS → 3 -===========
+
+        local giftDrops =
+            getUpgradeLevel("LuckyBreakoutGiftDrops")
+
+        if giftDrops < 3 then
+            purchaseUpgrade("LuckyBreakoutGiftDrops")
+            continue
+        end
+
+        -- ===========- BALL POWER / SPEED → 4 -===========
+
+        ballPower =
+            getUpgradeLevel("LuckyBreakoutBallPower")
+
+        ballSpeed =
+            getUpgradeLevel("LuckyBreakoutBallSpeed")
+
+        if ballPower < 4 then
+            purchaseUpgrade("LuckyBreakoutBallPower")
+            continue
+        end
+
+        if ballSpeed < 4 then
+            purchaseUpgrade("LuckyBreakoutBallSpeed")
+            continue
+        end
+
+        -- ===========- BOARD SLOTS → 40 -===========
+
+        boardSlots =
+            getUpgradeLevel("LuckyBreakoutBoardSlots")
+
+        if boardSlots < 40 then
+            purchaseUpgrade("LuckyBreakoutBoardSlots")
+            continue
+        end
+
+        -- ===========- ALL MAIN UPGRADES → 5 -===========
+
+        giftDrops =
+            getUpgradeLevel("LuckyBreakoutGiftDrops")
+
+        ballPower =
+            getUpgradeLevel("LuckyBreakoutBallPower")
+
+        ballSpeed =
+            getUpgradeLevel("LuckyBreakoutBallSpeed")
+
+        if giftDrops < 5 then
+            purchaseUpgrade("LuckyBreakoutGiftDrops")
+            continue
+        end
+
+        if ballPower < 5 then
+            purchaseUpgrade("LuckyBreakoutBallPower")
+            continue
+        end
+
+        if ballSpeed < 5 then
+            purchaseUpgrade("LuckyBreakoutBallSpeed")
+            continue
+        end
+
+        -- ===========- EGG TIER → 4 -===========
 
         local eggTier =
             getUpgradeLevel("LuckyBreakoutEggTier")
 
         if eggTier < 4 then
-            if getBreakoutBucks() >= 550 then
-                purchaseUpgrade("LuckyBreakoutEggTier")
-            else
-                task.wait(1)
-            end
-
+            purchaseUpgrade("LuckyBreakoutEggTier")
             continue
         end
 
-        -- ===========- STAGE 3: OTHER UPGRADES -===========
+        -- ===========- EVERYTHING → MAX -===========
 
-        local OtherUpgrades = {
-            "LuckyBreakoutGiftDrops",
-            "LuckyBreakoutBuxBonus",
+        local MaxUpgrades = {
+            "LuckyBreakoutBoardSlots",
             "LuckyBreakoutBallPower",
-            "LuckyBreakoutBallSpeed"
+            "LuckyBreakoutBallSpeed",
+            "LuckyBreakoutGiftDrops",
+            "LuckyBreakoutEggTier",
+            "LuckyBreakoutBuxBonus"
         }
 
-        for _, upgradeId in ipairs(OtherUpgrades) do
+        for _, upgradeId in ipairs(MaxUpgrades) do
             if not LuckyBreakoutRunning() then
-                break
-            end
-
-            if getBreakoutBucks() < 550 then
                 break
             end
 
