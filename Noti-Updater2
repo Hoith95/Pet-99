@@ -205,6 +205,7 @@ local function startGuiUpdater()
 
 	local rebirthLabel       = createLabel("RebirthLabel", right)
 	local luckyBreakoutLabel = createLabel("LuckyBreakoutLabel", right)
+	local coin2Label        = createLabel("Coin2Label", right)
     local giftLabel        = createLabel("GiftLabel", right)
     local gift2Label = createLabel("Gift2Label", right)
     gift2Label.Visible = SHOW_MINI_PINATA
@@ -237,6 +238,9 @@ local function startGuiUpdater()
 
         coinLabel.Text = Formatint(getCurrencyAmount("BreakoutCoins")) .. " | BreakoutCoins"
         updateLabelSize(coinLabel)
+
+        coin2Label.Text = Formatint(getCurrencyAmount("BreakoutBucks")) .. " | BreakoutBucks"
+        updateLabelSize(coin2Label)
 
 		luckyBreakoutLabel.Text = getLuckyBreakouts3() .. " | MaxLevel"
 		updateLabelSize(luckyBreakoutLabel)
