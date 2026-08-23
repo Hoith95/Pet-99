@@ -702,6 +702,7 @@ task.spawn(function()
 
         local OtherUpgrades = {
             "LuckyBreakoutGiftDrops",
+            "LuckyBreakoutBoardSlots",
             "LuckyBreakoutBuxBonus",
             "LuckyBreakoutBallPower",
             "LuckyBreakoutBallSpeed"
