@@ -25,8 +25,6 @@ end
 
 -- ===========- TIME TRIAL STATE -===========
 
-_G.Time_Trial_End = _G.Time_Trial_End or false
-
 local function LuckyBreakoutRunning()
     return _G.Time_Trial_End == true
 end
@@ -210,9 +208,27 @@ task.spawn(function()
         return 0
     end
 
+    -- ===========- EGG TIER CHECK -===========
+
+    local function canUseEgg()
+        local sd = getSave()
+
+        if not sd or not sd.EventUpgrades then
+            return false
+        end
+
+        return tonumber(
+            sd.EventUpgrades.LuckyBreakoutEggTier
+        ) == 4
+    end
+
     -- ===========- CAN HATCH -===========
 
     local function canHatch()
+        if not canUseEgg() then
+            return false
+        end
+
         if not HatchState.EggName then
             return false
         end
@@ -320,7 +336,10 @@ task.spawn(function()
                 continue
             end
 
-            if canHatch() and not EggTeleporting then
+            if canUseEgg()
+                and canHatch()
+                and not EggTeleporting then
+
                 local model = HatchState.EggModel
 
                 if model and model.Parent then
@@ -350,6 +369,7 @@ task.spawn(function()
                             task.wait(0.15)
 
                             if LuckyBreakoutRunning()
+                                and canUseEgg()
                                 and canHatch()
                                 and model.Parent then
 
@@ -464,7 +484,8 @@ task.spawn(function()
                 continue
             end
 
-            if canHatch()
+            if canUseEgg()
+                and canHatch()
                 and tick() - lastEggTeleport >= EGG_TELEPORT_INTERVAL then
 
                 task.wait(0.25)
@@ -499,8 +520,10 @@ task.spawn(function()
                     break
                 end
 
-                if canHatch()
+                if canUseEgg()
+                    and canHatch()
                     and tick() - lastEggTeleport >= EGG_TELEPORT_INTERVAL then
+
                     break
                 end
 
@@ -521,8 +544,10 @@ task.spawn(function()
                                 break
                             end
 
-                            if canHatch()
+                            if canUseEgg()
+                                and canHatch()
                                 and tick() - lastEggTeleport >= EGG_TELEPORT_INTERVAL then
+
                                 break
                             end
 
@@ -534,7 +559,8 @@ task.spawn(function()
                                     and isLuckyBreakout()
                                     and not EggTeleporting
                                     and not (
-                                        canHatch()
+                                        canUseEgg()
+                                        and canHatch()
                                         and tick() - lastEggTeleport >= EGG_TELEPORT_INTERVAL
                                     )
                                 do
@@ -573,7 +599,7 @@ task.spawn(function()
             continue
         end
 
-        if canHatch() then
+        if canUseEgg() and canHatch() then
             local eggName = HatchState.EggName
             local maxHatch = HatchState.MaxHatch
 
@@ -669,11 +695,9 @@ task.spawn(function()
 
     local function getEventUpgrades()
         local sd = getSave()
-
         if not sd then
             return {}
         end
-
         return sd.EventUpgrades or {}
     end
 
@@ -822,10 +846,8 @@ task.spawn(function()
             if not LuckyBreakoutRunning() then
                 break
             end
-
             purchaseUpgrade(upgradeId)
         end
-
         task.wait(1)
     end
 end)
