@@ -61,6 +61,10 @@ until false
 
 local HatchReady = false
 
+repeat
+    task.wait(2)
+until _G.Time_Trial_End == true
+
 task.wait(68)
 
 getRoot().CFrame = CFrame.new(-15849, 40.27, -195)
