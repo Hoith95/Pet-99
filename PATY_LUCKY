@@ -1,0 +1,63 @@
+if _G.AUTO_PATY_LUCKY then return end
+_G.AUTO_PATY_LUCKY = true
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
+local PlayerSave = require(Client.Save)
+
+local PartyBoxConsume = ReplicatedStorage.Network.PartyBox_Consume
+local MiniLuckyBlockConsume = ReplicatedStorage.Network.MiniLuckyBlock_Consume
+
+local function getSave()
+    return PlayerSave.Get()
+end
+
+local function GetItem(itemId)
+    local save = getSave()
+    if not save then
+        return nil, 0
+    end
+
+    local misc = save.Inventory and save.Inventory.Misc
+    if not misc then
+        return nil, 0
+    end
+
+    for uid, item in pairs(misc) do
+        if item.id == itemId then
+            local amount = tonumber(item._am) or 0
+            if amount > 0 then
+                return uid, amount
+            end
+        end
+    end
+
+    return nil, 0
+end
+
+task.spawn(function()
+    while true do
+        -- ===========- PARTY BOX -===========
+        local uid, amount = GetItem("Party Box")
+
+        if uid and amount > 0 then
+            pcall(function()
+                PartyBoxConsume:InvokeServer(uid)
+            end)
+            task.wait(0.01)
+        else
+            -- ===========- MINI LUCKY BLOCK -===========
+            uid, amount = GetItem("Mini Lucky Block")
+
+            if uid and amount > 0 then
+                pcall(function()
+                    MiniLuckyBlockConsume:InvokeServer(uid)
+                end)
+                task.wait(0.01)
+            else
+                task.wait(1)
+            end
+        end
+    end
+end)
