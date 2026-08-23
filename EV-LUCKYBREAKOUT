@@ -33,8 +33,6 @@ end
 
 -- ===========- WAIT UNTIL EGGS HATCHED INCREASES -===========
 
-print("[LuckyBreakout] START")
-
 local function getEggsHatched()
     local sd = getSave()
 
@@ -47,92 +45,53 @@ end
 
 local lastEggs
 
-print("[LuckyBreakout] Waiting for Save...")
-
 repeat
     lastEggs = getEggsHatched()
-    task.wait(0.1)
+    task.wait(1)
 until lastEggs ~= nil
 
-print("[LuckyBreakout] Save OK")
-print("[LuckyBreakout] EggsHatched =", lastEggs)
-print("[LuckyBreakout] Waiting for EggsHatched increase...")
-
 repeat
-    task.wait(0.1)
+    task.wait(1)
 
     local currentEggs = getEggsHatched()
 
-    if currentEggs ~= nil and currentEggs ~= lastEggs then
-        print(
-            "[LuckyBreakout] EggsHatched:",
-            lastEggs,
-            "->",
-            currentEggs
-        )
-
-        if currentEggs > lastEggs then
-            print("[LuckyBreakout] Egg hatch detected")
-            break
-        end
+    if currentEggs
+        and currentEggs > lastEggs then
+        break
     end
 until false
-
-print("[LuckyBreakout] Egg check passed")
 
 -- ===========- TELEPORT TO EVENT -===========
 
 local HatchReady = false
 
-print("[LuckyBreakout] Waiting for Time Trial...")
-
 repeat
     task.wait(2)
-until _G.Time_Trial_End == false
-
-print("[LuckyBreakout] Time Trial ended")
-
-print("[LuckyBreakout] Waiting 68 seconds...")
+until _G.Time_Trial_End == true
 
 task.wait(68)
 
-print("[LuckyBreakout] Teleporting to LuckyBreakout")
-
 getRoot().CFrame = CFrame.new(-15849, 40.27, -195)
-
-print("[LuckyBreakout] Waiting for LuckyBreakout instance...")
 
 repeat
     task.wait(5)
-until workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild(
-    "LuckyBreakout"
-)
-
-print("[LuckyBreakout] LuckyBreakout instance loaded")
-
-print("[LuckyBreakout] Waiting 20 seconds...")
+until workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("LuckyBreakout")
 
 task.wait(20)
-
-print("[LuckyBreakout] Event initialization complete")
 
 -- ===========- AUTO SETTINGS -===========
 
 local function setAuto()
-    print("[LuckyBreakout] Enabling AutoRebirth")
-
     ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
         "LuckyBreakout",
         "LBSetAutoRebirth",
         true
     )
 
-    print("[LuckyBreakout] Enabling AutoBuySlots")
-
     ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
         "LuckyBreakout",
         "LBSetAutoBuySlots",
-        false
+        true
     )
 end
 
@@ -140,7 +99,6 @@ setAuto()
 
 HatchReady = true
 
-print("[LuckyBreakout] HatchReady = true")
 -- ===========- RETURN TO LUCKYBREAKOUT AFTER TIME TRIAL -===========
 
 task.spawn(function()
@@ -150,7 +108,9 @@ task.spawn(function()
         local inLuckyBreakout =
             workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("LuckyBreakout")
 
-        if _G.Time_Trial_End and not inLuckyBreakout then
+        if _G.Time_Trial_End
+            and not inLuckyBreakout then
+
             if not waitStart then
                 waitStart = tick()
             end
@@ -502,7 +462,6 @@ task.spawn(function()
 
                 if canHatch()
                     and tick() - lastEggTeleport >= EGG_TELEPORT_INTERVAL then
-
                     break
                 end
 
@@ -525,7 +484,6 @@ task.spawn(function()
 
                             if canHatch()
                                 and tick() - lastEggTeleport >= EGG_TELEPORT_INTERVAL then
-
                                 break
                             end
 
@@ -745,7 +703,6 @@ task.spawn(function()
 
         local OtherUpgrades = {
             "LuckyBreakoutGiftDrops",
-            "LuckyBreakoutBoardSlots",
             "LuckyBreakoutBuxBonus",
             "LuckyBreakoutBallPower",
             "LuckyBreakoutBallSpeed"
