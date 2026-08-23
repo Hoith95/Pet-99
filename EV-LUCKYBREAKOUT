@@ -91,7 +91,7 @@ local function setAuto()
     ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
         "LuckyBreakout",
         "LBSetAutoBuySlots",
-        true
+        false
     )
 end
 
