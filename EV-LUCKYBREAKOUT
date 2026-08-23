@@ -35,9 +35,11 @@ end
 
 local function getEggsHatched()
     local sd = getSave()
+
     if not sd then
         return nil
     end
+
     return tonumber(sd.EggsHatched) or 0
 end
 
@@ -50,9 +52,10 @@ until lastEggs ~= nil
 
 repeat
     task.wait(1)
+
     local currentEggs = getEggsHatched()
-    if currentEggs
-        and currentEggs > lastEggs then
+
+    if currentEggs and currentEggs > lastEggs then
         break
     end
 until false
@@ -63,7 +66,7 @@ local HatchReady = false
 
 repeat
     task.wait(2)
-until _G.Time_Trial_End == true
+until _G.Time_Trial_End == false
 
 task.wait(68)
 
@@ -77,111 +80,21 @@ task.wait(20)
 
 -- ===========- AUTO SETTINGS -===========
 
-local function getLuckyBreakout()
-    local sd = getSave()
-
-    return sd
-        and sd.InstanceVars
-        and sd.InstanceVars.LuckyBreakout
-        and sd.InstanceVars.LuckyBreakout.Rebirths
-        or 0
-end
-
-local function hasLuckyPeacockRainbow()
-    local sd = getSave()
-
-    if not sd
-        or not sd.Inventory
-        or not sd.Inventory.Pet then
-        return false
-    end
-
-    for _, v in pairs(sd.Inventory.Pet) do
-        if v.id == "Lucky Peacock"
-            and v.pt == 2 then
-            return true
-        end
-    end
-
-    return false
-end
-
-local function setAutoRebirth(state)
-    local args = {
-        [1] = "LuckyBreakout",
-        [2] = "LBSetAutoRebirth",
-        [3] = state
-    }
+local function setAuto()
+    ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
+        "LuckyBreakout",
+        "LBSetAutoRebirth",
+        true
+    )
 
     ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
-        unpack(args)
+        "LuckyBreakout",
+        "LBSetAutoBuySlots",
+        false
     )
 end
 
-local function setAutoBuySlots(state)
-    local args = {
-        [1] = "LuckyBreakout",
-        [2] = "LBSetAutoBuySlots",
-        [3] = state
-    }
-
-    ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
-        unpack(args)
-    )
-end
-
-task.spawn(function()
-    local autoRebirthState = nil
-
-    while true do
-        if not HatchReady then
-            task.wait(1)
-            continue
-        end
-
-        local hasPet = hasLuckyPeacockRainbow()
-        local rebirths = tonumber(getLuckyBreakout()) or 0
-
-        if hasPet then
-            if autoRebirthState ~= true then
-                setAutoRebirth(true)
-                setAutoBuySlots(true)
-                autoRebirthState = true
-            end
-
-            task.wait(2)
-            continue
-        end
-
-        if rebirths < 3 then
-            if autoRebirthState ~= true then
-                setAutoRebirth(true)
-                setAutoBuySlots(true)
-                autoRebirthState = true
-            end
-
-            task.wait(1)
-            continue
-        end
-
-        if autoRebirthState ~= false then
-            setAutoRebirth(false)
-            autoRebirthState = false
-        end
-
-        repeat
-            task.wait(1)
-            hasPet = hasLuckyPeacockRainbow()
-        until hasPet
-            or not HatchReady
-
-        if hasPet then
-            setAutoRebirth(true)
-            setAutoBuySlots(true)
-            autoRebirthState = true
-        end
-    end
-end)
+setAuto()
 
 HatchReady = true
 
@@ -194,9 +107,7 @@ task.spawn(function()
         local inLuckyBreakout =
             workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("LuckyBreakout")
 
-        if _G.Time_Trial_End
-            and not inLuckyBreakout then
-
+        if _G.Time_Trial_End and not inLuckyBreakout then
             if not waitStart then
                 waitStart = tick()
             end
@@ -223,9 +134,8 @@ task.spawn(function()
     local CustomEggs = workspace.__THINGS:WaitForChild("CustomEggs")
     local CustomEggsCmds = require(Client.CustomEggsCmds)
 
-    local CalcEggPrice = require(
-        ReplicatedStorage.Library.Balancing.CalcEggPrice
-    )
+    local CalcEggPrice =
+        require(ReplicatedStorage.Library.Balancing.CalcEggPrice)
 
     local HatchRemote =
         ReplicatedStorage.Network:WaitForChild("CustomEggs_Hatch")
@@ -286,9 +196,7 @@ task.spawn(function()
         local nearestDistance = math.huge
 
         for _, egg in ipairs(CustomEggs:GetChildren()) do
-            if not egg.Name:find(" ")
-                and #egg.Name >= 15 then
-
+            if not egg.Name:find(" ") and #egg.Name >= 15 then
                 local part =
                     egg.PrimaryPart
                     or egg:FindFirstChildWhichIsA("BasePart", true)
@@ -359,6 +267,7 @@ task.spawn(function()
     local EGG_DISTANCE = 40
     local EGG_OFFSET = 30
     local EGG_TELEPORT_INTERVAL = 300
+
     local lastEggTeleport = -math.huge
     local EggTeleporting = false
 
@@ -369,9 +278,7 @@ task.spawn(function()
                 continue
             end
 
-            if canHatch()
-                and not EggTeleporting then
-
+            if canHatch() and not EggTeleporting then
                 local model = HatchState.EggModel
 
                 if model and model.Parent then
@@ -381,13 +288,11 @@ task.spawn(function()
 
                     if part then
                         local root = getRoot()
-
                         local distance =
                             (root.Position - part.Position).Magnitude
 
                         if distance > EGG_DISTANCE
-                            and tick() - lastEggTeleport
-                                >= EGG_TELEPORT_INTERVAL then
+                            and tick() - lastEggTeleport >= EGG_TELEPORT_INTERVAL then
 
                             EggTeleporting = true
 
@@ -396,10 +301,7 @@ task.spawn(function()
                                 - part.CFrame.LookVector * EGG_OFFSET
 
                             root.CFrame =
-                                CFrame.lookAt(
-                                    pos,
-                                    part.Position
-                                )
+                                CFrame.lookAt(pos, part.Position)
 
                             lastEggTeleport = tick()
 
@@ -421,14 +323,10 @@ task.spawn(function()
                                 if newPart then
                                     local newPos =
                                         newPart.Position
-                                        - newPart.CFrame.LookVector
-                                        * EGG_OFFSET
+                                        - newPart.CFrame.LookVector * EGG_OFFSET
 
                                     local newDistance =
-                                        (
-                                            newRoot.Position
-                                            - newPart.Position
-                                        ).Magnitude
+                                        (newRoot.Position - newPart.Position).Magnitude
 
                                     if newDistance > EGG_DISTANCE then
                                         newRoot.CFrame =
@@ -461,8 +359,7 @@ task.spawn(function()
     end
 
     local function getChestPart(chest)
-        if not chest
-            or not chest:IsA("Model") then
+        if not chest or not chest:IsA("Model") then
             return nil
         end
 
@@ -480,9 +377,7 @@ task.spawn(function()
         local count = 0
 
         for _, chest in ipairs(breakables:GetChildren()) do
-            if chest:IsA("Model")
-                and tonumber(chest.Name) then
-
+            if chest:IsA("Model") and tonumber(chest.Name) then
                 local part = getChestPart(chest)
 
                 if part then
@@ -503,9 +398,7 @@ task.spawn(function()
         local root = getRoot()
 
         if root and part then
-            root.CFrame =
-                part.CFrame + Vector3.new(0, 3, 0)
-
+            root.CFrame = part.CFrame + Vector3.new(0, 3, 0)
             return true
         end
 
@@ -530,8 +423,7 @@ task.spawn(function()
             end
 
             if canHatch()
-                and tick() - lastEggTeleport
-                    >= EGG_TELEPORT_INTERVAL then
+                and tick() - lastEggTeleport >= EGG_TELEPORT_INTERVAL then
 
                 task.wait(0.25)
                 continue
@@ -546,7 +438,6 @@ task.spawn(function()
             end
 
             local root = getRoot()
-
             local nearbyCount =
                 getNearbyChestCount(root.Position)
 
@@ -567,8 +458,7 @@ task.spawn(function()
                 end
 
                 if canHatch()
-                    and tick() - lastEggTeleport
-                        >= EGG_TELEPORT_INTERVAL then
+                    and tick() - lastEggTeleport >= EGG_TELEPORT_INTERVAL then
 
                     break
                 end
@@ -577,14 +467,11 @@ task.spawn(function()
                     break
                 end
 
-                if chest:IsA("Model")
-                    and tonumber(chest.Name) then
-
+                if chest:IsA("Model") and tonumber(chest.Name) then
                     local part = getChestPart(chest)
 
                     if part then
                         local currentRoot = getRoot()
-
                         local distance =
                             (part.Position - currentRoot.Position).Magnitude
 
@@ -594,8 +481,8 @@ task.spawn(function()
                             end
 
                             if canHatch()
-                                and tick() - lastEggTeleport
-                                    >= EGG_TELEPORT_INTERVAL then
+                                and tick() - lastEggTeleport >= EGG_TELEPORT_INTERVAL then
+
                                 break
                             end
 
@@ -608,16 +495,12 @@ task.spawn(function()
                                     and not EggTeleporting
                                     and not (
                                         canHatch()
-                                        and tick() - lastEggTeleport
-                                            >= EGG_TELEPORT_INTERVAL
+                                        and tick() - lastEggTeleport >= EGG_TELEPORT_INTERVAL
                                     )
                                 do
                                     local currentRoot = getRoot()
-
                                     local nearby =
-                                        getNearbyChestCount(
-                                            currentRoot.Position
-                                        )
+                                        getNearbyChestCount(currentRoot.Position)
 
                                     if nearby > 0 then
                                         task.wait(0.1)
@@ -655,10 +538,7 @@ task.spawn(function()
             local maxHatch = HatchState.MaxHatch
 
             pcall(function()
-                HatchRemote:InvokeServer(
-                    eggName,
-                    maxHatch
-                )
+                HatchRemote:InvokeServer(eggName, maxHatch)
             end)
 
             task.wait(0.15)
@@ -680,9 +560,7 @@ task.spawn(function()
     until HatchReady
 
     local remote =
-        ReplicatedStorage.Network:WaitForChild(
-            "AutoTapper_Toggle"
-        )
+        ReplicatedStorage.Network:WaitForChild("AutoTapper_Toggle")
 
     while true do
         if not LuckyBreakoutRunning() then
@@ -692,9 +570,7 @@ task.spawn(function()
 
         local sd = getSave()
 
-        if sd
-            and not sd.AutoTapper then
-
+        if sd and not sd.AutoTapper then
             pcall(function()
                 remote:InvokeServer()
             end)
@@ -714,9 +590,7 @@ task.spawn(function()
     until HatchReady
 
     local DailyRewards =
-        ReplicatedStorage.Network:WaitForChild(
-            "DailyRewards_Redeem"
-        )
+        ReplicatedStorage.Network:WaitForChild("DailyRewards_Redeem")
 
     while true do
         if LuckyBreakoutRunning() then
@@ -725,9 +599,7 @@ task.spawn(function()
             }
 
             pcall(function()
-                DailyRewards:InvokeServer(
-                    unpack(args)
-                )
+                DailyRewards:InvokeServer(unpack(args))
             end)
 
             task.wait(1)
@@ -737,9 +609,7 @@ task.spawn(function()
             }
 
             pcall(function()
-                DailyRewards:InvokeServer(
-                    unpack(args)
-                )
+                DailyRewards:InvokeServer(unpack(args))
             end)
         end
 
@@ -755,17 +625,21 @@ task.spawn(function()
     until HatchReady
 
     local UpgradeRemote =
-        ReplicatedStorage.Network:WaitForChild(
-            "EventUpgrades: Purchase"
-        )
+        ReplicatedStorage.Network:WaitForChild("EventUpgrades: Purchase")
 
-    local UpgradeList = {
-        "LuckyBreakoutEggTier",
-        "LuckyBreakoutGiftDrops",
-        "LuckyBreakoutBuxBonus",
-        "LuckyBreakoutBallPower",
-        "LuckyBreakoutBallSpeed"
-    }
+    local function getEventUpgrades()
+        local sd = getSave()
+
+        if not sd then
+            return {}
+        end
+
+        return sd.EventUpgrades or {}
+    end
+
+    local function getUpgradeLevel(name)
+        return tonumber(getEventUpgrades()[name]) or 0
+    end
 
     local function getBreakoutBucks()
         local sd = getSave()
@@ -785,30 +659,66 @@ task.spawn(function()
         return 0
     end
 
+    local function purchaseUpgrade(name)
+        pcall(function()
+            UpgradeRemote:InvokeServer(name)
+        end)
+
+        task.wait(0.5)
+    end
+
     while true do
         if not LuckyBreakoutRunning() then
             task.wait(1)
             continue
         end
 
-        if getBreakoutBucks() > 550 then
-            for _, upgradeId in ipairs(UpgradeList) do
-                if not LuckyBreakoutRunning() then
-                    break
-                end
+        -- ===========- STAGE 1: BOARD SLOTS -===========
 
-                if getBreakoutBucks() <= 550 then
-                    break
-                end
+        local boardSlots =
+            getUpgradeLevel("LuckyBreakoutBoardSlots")
 
-                pcall(function()
-                    UpgradeRemote:InvokeServer(upgradeId)
-                end)
-
-                task.wait(0.2)
-            end
+        if boardSlots < 20 then
+            purchaseUpgrade("LuckyBreakoutBoardSlots")
+            continue
         end
 
-        task.wait(2)
+        -- ===========- STAGE 2: EGG TIER -===========
+
+        local eggTier =
+            getUpgradeLevel("LuckyBreakoutEggTier")
+
+        if eggTier < 4 then
+            if getBreakoutBucks() >= 550 then
+                purchaseUpgrade("LuckyBreakoutEggTier")
+            else
+                task.wait(1)
+            end
+
+            continue
+        end
+
+        -- ===========- STAGE 3: OTHER UPGRADES -===========
+
+        local OtherUpgrades = {
+            "LuckyBreakoutGiftDrops",
+            "LuckyBreakoutBuxBonus",
+            "LuckyBreakoutBallPower",
+            "LuckyBreakoutBallSpeed"
+        }
+
+        for _, upgradeId in ipairs(OtherUpgrades) do
+            if not LuckyBreakoutRunning() then
+                break
+            end
+
+            if getBreakoutBucks() < 550 then
+                break
+            end
+
+            purchaseUpgrade(upgradeId)
+        end
+
+        task.wait(1)
     end
 end)
