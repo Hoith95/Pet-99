@@ -47,15 +47,16 @@ local lastEggs
 
 repeat
     lastEggs = getEggsHatched()
-    task.wait(1)
+    task.wait(0.1)
 until lastEggs ~= nil
 
 repeat
-    task.wait(1)
+    task.wait(0.1)
 
     local currentEggs = getEggsHatched()
 
-    if currentEggs and currentEggs > lastEggs then
+    if currentEggs
+        and currentEggs > lastEggs then
         break
     end
 until false
