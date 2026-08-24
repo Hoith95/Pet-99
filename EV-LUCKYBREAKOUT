@@ -33,11 +33,9 @@ end
 
 local function getEggsHatched()
     local sd = getSave()
-
     if not sd then
         return nil
     end
-
     return tonumber(sd.EggsHatched) or 0
 end
 
@@ -117,7 +115,6 @@ task.spawn(function()
             lastRebirth = rebirths
             setAuto(rebirths)
         end
-
         task.wait(1)
     end
 end)
