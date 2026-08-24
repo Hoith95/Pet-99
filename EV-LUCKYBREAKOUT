@@ -124,10 +124,26 @@ HatchReady = true
 -- ===========- EXIT LUCKYBREAKOUT WHEN TIME TRIAL START -===========
 
 task.spawn(function()
+    local waitStart
+
     while true do
-        if _G.Time_Trial_End == false
-            and workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("LuckyBreakout") then
-            getRoot().CFrame = CFrame.new(9195,505,9810)
+        local active =
+            workspace.__THINGS.__INSTANCE_CONTAINER.Active
+
+        local inLuckyBreakout =
+            active:FindFirstChild("LuckyBreakout") ~= nil
+
+        if _G.Time_Trial_End == false and inLuckyBreakout then
+            if not waitStart then
+                waitStart = tick()
+            end
+
+            if tick() - waitStart >= 180 then
+                getRoot().CFrame = CFrame.new(9195, 505, 9810)
+                waitStart = nil
+            end
+        else
+            waitStart = nil
         end
         task.wait(2)
     end
