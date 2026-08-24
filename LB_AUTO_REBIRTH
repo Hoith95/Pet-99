@@ -1,0 +1,105 @@
+if _G.LB_AUTO_REBIRTH then
+    return
+end
+
+_G.LB_AUTO_REBIRTH = true
+
+-- ===========- AUTO SETTINGS + TIME TRIAL + MAX LEVEL -===========
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Client = ReplicatedStorage:WaitForChild("Library"):WaitForChild("Client")
+local Save = require(Client.Save)
+
+local Remote =
+    ReplicatedStorage.Network.Instancing_FireCustomFromClient
+
+local function getSave()
+    return Save.Get()
+end
+
+local function getRebirths()
+    local sd = getSave()
+
+    return sd
+        and sd.InstanceVars
+        and sd.InstanceVars.LuckyBreakout
+        and tonumber(sd.InstanceVars.LuckyBreakout.Rebirths)
+        or 0
+end
+
+local function getLuckyBreakouts3()
+    local sd = getSave()
+
+    return sd
+        and sd.InstanceVars
+        and sd.InstanceVars.LuckyBreakout
+        and sd.InstanceVars.LuckyBreakout.MaxLevel
+        or 0
+end
+
+local function setAuto(autoRebirth)
+    Remote:FireServer(
+        "LuckyBreakout",
+        "LBSetAutoRebirth",
+        autoRebirth
+    )
+
+    Remote:FireServer(
+        "LuckyBreakout",
+        "LBSetAutoBuySlots",
+        false
+    )
+end
+
+local lastRebirth = getRebirths()
+local lastTimeTrial = _G.Time_Trial_End
+local lastMaxLevel = getLuckyBreakouts3()
+local maxLevelTimer = tick()
+
+while true do
+    local rebirths = getRebirths()
+
+    -- ===========- MAX REBIRTH -===========
+
+    if rebirths >= 125 then
+        setAuto(false)
+        break
+    end
+
+    local timeTrial = _G.Time_Trial_End
+    local maxLevel = getLuckyBreakouts3()
+
+    -- ===========- TIME TRIAL END -===========
+
+    if timeTrial == true then
+        if timeTrial ~= lastTimeTrial
+            or rebirths ~= lastRebirth then
+
+            setAuto(true)
+
+            lastTimeTrial = timeTrial
+            lastRebirth = rebirths
+        end
+
+        -- ===========- MAX LEVEL CHECK -===========
+
+        if maxLevel ~= lastMaxLevel then
+            lastMaxLevel = maxLevel
+            maxLevelTimer = tick()
+
+        elseif tick() - maxLevelTimer >= 60 then
+            setAuto(true)
+            maxLevelTimer = tick()
+        end
+
+    -- ===========- TIME TRIAL RUNNING -===========
+
+    elseif timeTrial == false then
+        lastTimeTrial = timeTrial
+        lastRebirth = rebirths
+        lastMaxLevel = maxLevel
+        maxLevelTimer = tick()
+    end
+
+    task.wait(1)
+end
