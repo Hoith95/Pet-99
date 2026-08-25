@@ -121,10 +121,10 @@ end)
 
 HatchReady = true
 
--- ===========- EXIT LUCKYBREAKOUT WHEN TIME TRIAL START -===========
+-- ===========- EXIT LUCKYBREAKOUT AT 22:58 -===========
 
 task.spawn(function()
-    local waitStart
+    local lastExitDate
 
     while true do
         local active =
@@ -133,18 +133,22 @@ task.spawn(function()
         local inLuckyBreakout =
             active:FindFirstChild("LuckyBreakout") ~= nil
 
-        if _G.Time_Trial_End == false and inLuckyBreakout then
-            if not waitStart then
-                waitStart = tick()
-            end
+        local now =
+            os.date("!*t", os.time(os.date("!*t")) + 7 * 3600)
 
-            if tick() - waitStart >= 180 then
-                getRoot().CFrame = CFrame.new(9195, 505, 9810)
-                waitStart = nil
-            end
-        else
-            waitStart = nil
+        local today =
+            tostring(now.year) .. "-" ..
+            tostring(now.yday)
+
+        if now.hour == 22
+            and now.min == 58
+            and inLuckyBreakout
+            and lastExitDate ~= today then
+
+            getRoot().CFrame = CFrame.new(9195, 505, 9810)
+            lastExitDate = today
         end
+
         task.wait(2)
     end
 end)
