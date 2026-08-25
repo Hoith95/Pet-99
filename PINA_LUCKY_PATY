@@ -47,21 +47,21 @@ task.spawn(function()
             end)
             task.wait(0.01)
         else
-            -- ===========- MINI LUCKY BLOCK -===========
-            uid, amount = GetItem("Mini Lucky Block")
+            -- ===========- PARTY BOX -===========
+            uid, amount = GetItem("Party Box")
 
             if uid and amount > 0 then
                 pcall(function()
-                    MiniLuckyBlockConsume:InvokeServer(uid)
+                    PartyBoxConsume:InvokeServer(uid)
                 end)
                 task.wait(0.01)
             else
-                -- ===========- PARTY BOX -===========
-                uid, amount = GetItem("Party Box")
+                -- ===========- MINI LUCKY BLOCK -===========
+                uid, amount = GetItem("Mini Lucky Block")
 
                 if uid and amount > 0 then
                     pcall(function()
-                        PartyBoxConsume:InvokeServer(uid)
+                        MiniLuckyBlockConsume:InvokeServer(uid)
                     end)
                     task.wait(0.01)
                 else
