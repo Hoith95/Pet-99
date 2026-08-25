@@ -88,7 +88,7 @@ local function getLuckyBreakoutRebirths()
 end
 
 local function setAuto(rebirths)
-    local autoRebirth = rebirths < 125
+    local autoRebirth = rebirths < 250
 
     ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
         "LuckyBreakout",
