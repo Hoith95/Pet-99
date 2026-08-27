@@ -61,7 +61,7 @@ while true do
 
     -- ===========- MAX REBIRTH -===========
 
-    if rebirths >= 125 then
+    if rebirths >= 350 then
         setAuto(false)
         break
     end
