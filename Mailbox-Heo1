@@ -1,4 +1,3 @@
-```lua
 if _G.VAR_AUTO_MAIL_2 then return end
 _G.VAR_AUTO_MAIL_2 = true
 
