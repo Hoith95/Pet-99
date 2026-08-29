@@ -14,7 +14,7 @@ local EXCLUDED_HUGE = {
     --["Huge Festive Seal"] = true
 }
 
-getgenv().usernames = {"Thien_Hoa9x", "ninaFalconBear", "Valric_Solvynn026", "Zephy_Marnell604", "Dravon_Liorrex220"}
+getgenv().usernames = {"ninaFalconBear", "Valric_Solvynn026", "Zephy_Marnell604", "Dravon_Liorrex220"}
 
 local messages = {
     "Thanks!",
