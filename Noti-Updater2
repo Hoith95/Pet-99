@@ -228,7 +228,7 @@ local function startGuiUpdater()
         rankLabel.Text = tostring(sd.Rank or 0) .. " | RANK"
         updateLabelSize(rankLabel)
 
-        giftLabel.Text = tostring(getLootboxAmount("Lucky Block Gift")) .. " | Lucky Block Gift"
+        giftLabel.Text = tostring(getLootboxAmount("Lucky Admin Gift")) .. " | Lucky Admin Gift"
         updateLabelSize(giftLabel)
 
         if SHOW_MINI_PINATA then
