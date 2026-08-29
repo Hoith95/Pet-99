@@ -47,7 +47,7 @@ local function getLuckyBreakouts3()
     return sd
         and sd.InstanceVars
         and sd.InstanceVars.LuckyBreakout
-        and sd.InstanceVars.LuckyBreakout.MaxLevel
+        and sd.InstanceVars.LuckyBreakout.MaxLevel2
         or 0
 end
 
@@ -56,7 +56,7 @@ local function getLuckyBreakouts2()
     return sd
         and sd.InstanceVars
         and sd.InstanceVars.LuckyBreakout
-        and sd.InstanceVars.LuckyBreakout.Rebirths
+        and sd.InstanceVars.LuckyBreakout.Rebirths2
         or 0
 end
 
