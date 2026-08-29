@@ -4,11 +4,11 @@ if _G.LOOKFPS then
 end
 _G.LOOKFPS = true
 
--- ⚙️ CONFIG
+-- ===========- CONFIG -===========
 local DEBUG = false
 
 _G.FPS_CONFIG = _G.FPS_CONFIG or {
-    TIME_TRIAL = 5,
+    TIME_TRIAL = 4,
 
     GARDEN = 4,
     GARDEN_EXCEPTION = 4,
@@ -16,13 +16,13 @@ _G.FPS_CONFIG = _G.FPS_CONFIG or {
     LUCKY_EXCEPTION = 3,
 
     XMAS = {
-        EARLY = 5,
+        EARLY = 4,
         MID = 4,
         LATE = 3
     },
 
     DEFAULT_EARLY = 3,
-    DEFAULT_LATE = 3
+    DEFAULT_LATE = 4
 }
 
 _G.SetFPS = function(path, value)
@@ -49,10 +49,10 @@ end
 
 local FPS = _G.FPS_CONFIG
 
--- ⏱️ CONSTANT
-local THREE_HOURS = 999
+-- ===========- CONSTANT -===========
+local TWO_HOURS = 7200
 
--- 🚀 INIT
+-- ===========- INIT -===========
 task.wait(268)
 local startTime = tick()
 
@@ -63,7 +63,7 @@ task.spawn(function()
 	local container = things:WaitForChild("__INSTANCE_CONTAINER")
 	local currentFPS = nil
 
-	-- 🔧 UTIL
+	-- ===========- UTIL -===========
 	local function log(...)
 		if DEBUG then
 			print("[FPS]", ...)
@@ -82,7 +82,7 @@ task.spawn(function()
 		return container:FindFirstChild("Active")
 	end
 
-	-- 🌍 STATE DETECT
+	-- ===========- STATE DETECT -===========
 	local function isTimeTrial(active)
 		return active and active:FindFirstChild("TimeTrial")
 	end
@@ -103,71 +103,71 @@ task.spawn(function()
 		)
 	end
 
+	-- ===========- LUCKY EXCEPTION TEMP DISABLED -===========
 	local function isLuckyException()
-		return _G.S1 or _G.S2 or _G.S3 or _G.S4 or _G.S5
-			or _G.P1 or _G.SUU6 or _G.SUU7 or _G.SUU8
-			or _G.S7 or _G.S8 or _G.S9 or _G.S10
+		return false
 	end
 
 	local function isLowFPSPlace(placeId)
 		return placeId == 95635359880599
-			or placeId == 119454325063278
-			or placeId == 8737899170
-			or placeId == 16498369169
-			or placeId == 17503543197
-			or placeId == 15502339080
+		or placeId == 119454325063278
+		or placeId == 8737899170
+		or placeId == 16498369169
+		or placeId == 17503543197
+		or placeId == 15502339080
 	end
 
-	-- 🧠 DEFAULT RULE
+	-- ===========- DEFAULT RULE -===========
 	local function getDefaultFPS(elapsed)
-		if elapsed >= THREE_HOURS then
-			return FPS.DEFAULT_LATE, "Default(After3h)"
+		if elapsed >= TWO_HOURS then
+			return FPS.DEFAULT_LATE, "Default(After2h)"
 		else
 			return FPS.DEFAULT_EARLY, "Default(Early)"
 		end
 	end
 
-	-- 🧠 CORE LOGIC
+	-- ===========- CORE LOGIC -===========
 	local function resolveFPS()
 		local active = getActive()
 		local elapsed = tick() - startTime
 
-		-- 🥇 Priority 0: Garden
+		-- Priority 0: Garden
 		if isGarden(active) then
 			if isLuckyException() then
 				return FPS.GARDEN_EXCEPTION, "GardenException"
 			end
+
 			return FPS.GARDEN, "Garden"
 		end
 
-		-- 🥇 Priority 1: Time Trial
+		-- Priority 1: Time Trial
 		if isTimeTrial(active) then
 			return FPS.TIME_TRIAL, "TimeTrial"
 		end
 
-		-- 🥈 Priority 2: Low FPS Place
+		-- Priority 2: Low FPS Place
 		if isLowFPSPlace(place) then
 			return FPS.DEFAULT_EARLY, "LowFPSPlace"
 		end
 
-		-- 🥉 Priority 3: Lucky Event
+		-- Priority 3: Lucky Event
 		if isLucky(active) then
 			if isLuckyException() then
-				if elapsed >= THREE_HOURS then
-					return FPS.DEFAULT_LATE, "LuckyException(After3h)"
+				if elapsed >= TWO_HOURS then
+					return FPS.DEFAULT_LATE, "LuckyException(After2h)"
 				else
 					return FPS.LUCKY_EXCEPTION, "LuckyException(Early)"
 				end
 			else
-				if elapsed >= THREE_HOURS then
-					return FPS.DEFAULT_LATE, "LuckyNormal(After3h)"
+				if elapsed >= TWO_HOURS then
+					return FPS.DEFAULT_LATE, "LuckyNormal(After2h)"
 				else
 					return FPS.DEFAULT_EARLY, "LuckyNormal(Early)"
 				end
 			end
 		end
 
-		-- 🎄 Priority 4: Xmas
+		-- Priority 4: Xmas
 		if isXmas(active) then
 			if elapsed >= 14400 then
 				return FPS.XMAS.LATE, "XmasLate"
@@ -178,11 +178,11 @@ task.spawn(function()
 			end
 		end
 
-		-- 🧠 Default
+		-- Default
 		return getDefaultFPS(elapsed)
 	end
 
-	-- 🔁 LOOP
+	-- ===========- LOOP -===========
 	while true do
 		local active = getActive()
 
