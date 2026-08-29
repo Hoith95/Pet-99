@@ -88,7 +88,7 @@ local function getLuckyBreakoutRebirths()
 end
 
 local function setAuto(rebirths)
-    local autoRebirth = rebirths < 350
+    local autoRebirth = rebirths < 5
 
     ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
         "LuckyBreakout",
@@ -774,13 +774,21 @@ task.spawn(function()
             continue
         end
 
-        -- ===========- GIFT DROPS → 3 -===========
+        -- ===========- GIFT DROPS / Bux Bonus → 3 -===========
 
         local giftDrops =
             getUpgradeLevel("LuckyBreakoutGiftDrops")
 
+        local buxBonus =
+            getUpgradeLevel("LuckyBreakoutBuxBonus")
+
         if giftDrops < 3 then
             purchaseUpgrade("LuckyBreakoutGiftDrops")
+            continue
+        end
+
+        if buxBonus < 3 then
+            purchaseUpgrade("LuckyBreakoutBuxBonus")
             continue
         end
 
@@ -817,24 +825,48 @@ task.spawn(function()
         giftDrops =
             getUpgradeLevel("LuckyBreakoutGiftDrops")
 
+        buxBonus =
+            getUpgradeLevel("LuckyBreakoutBuxBonus")
+
         ballPower =
             getUpgradeLevel("LuckyBreakoutBallPower")
 
         ballSpeed =
             getUpgradeLevel("LuckyBreakoutBallSpeed")
 
+        blasterDamage =
+            getUpgradeLevel("LuckyBreakoutBlasterDamage")
+
+        blasterRate =
+            getUpgradeLevel("LuckyBreakoutBlasterRate")
+
+        if ballPower < 6 then
+            purchaseUpgrade("LuckyBreakoutBallPower")
+            continue
+        end
+
+        if ballSpeed < 6 then
+            purchaseUpgrade("LuckyBreakoutBallSpeed")
+            continue
+        end
+
         if giftDrops < 5 then
             purchaseUpgrade("LuckyBreakoutGiftDrops")
             continue
         end
 
-        if ballPower < 5 then
-            purchaseUpgrade("LuckyBreakoutBallPower")
+        if buxBonus < 5 then
+            purchaseUpgrade("LuckyBreakoutBuxBonus")
             continue
         end
 
-        if ballSpeed < 5 then
-            purchaseUpgrade("LuckyBreakoutBallSpeed")
+        if blasterDamage < 1 then
+            purchaseUpgrade("LuckyBreakoutBlasterDamage")
+            continue
+        end
+
+        if blasterRate < 1 then
+            purchaseUpgrade("LuckyBreakoutBlasterRate")
             continue
         end
 
