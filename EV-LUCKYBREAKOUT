@@ -236,7 +236,7 @@ task.spawn(function()
 
         return tonumber(
             sd.EventUpgrades.LuckyBreakoutEggTier
-        ) == 8
+        ) == 4
     end
 
     -- ===========- CAN HATCH -===========
