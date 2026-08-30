@@ -986,3 +986,53 @@ task.spawn(function()
     end
 end)
 
+-- ===========- AUTO USE BOOST POTIONS -===========
+
+task.spawn(function()
+    repeat
+        task.wait(5)
+    until HatchReady
+
+    local Consumables_Consume =
+        ReplicatedStorage.Network:WaitForChild("Consumables_Consume")
+
+    local BoostPotions = {
+        ["Lucky Speed Boost"] = true,
+        ["Lucky Egg Booster"] = true,
+        ["Lucky Damage Boost"] = true
+    }
+
+    local function useBoostPotion()
+        local sd = getSave()
+
+        if not sd
+            or not sd.Inventory
+            or not sd.Inventory.Consumable then
+            return
+        end
+
+        for uid, item in pairs(sd.Inventory.Consumable) do
+            if BoostPotions[item.id]
+                and tonumber(item.tn) == 1
+                and (tonumber(item._am) or 0) > 0 then
+
+                pcall(function()
+                    local args = {
+                        [1] = uid,
+                        [2] = 1
+                    }
+
+                    Consumables_Consume:InvokeServer(unpack(args))
+                end)
+                task.wait(1)
+            end
+        end
+    end
+
+    while true do
+        if LuckyBreakoutRunning() then
+            useBoostPotion()
+        end
+        task.wait(5)
+    end
+end)
