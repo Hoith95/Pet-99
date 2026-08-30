@@ -120,11 +120,13 @@ local function setAuto(rebirths)
 end
 
 local function setGCYield()
-    ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
-        "LuckyBreakout",
-        "GC_Yield",
-        true
-    )
+    local args = {
+        [1] = "LuckyBreakout",
+        [2] = "GC_Yield",
+        [3] = true
+    }
+
+    game:GetService("ReplicatedStorage").Network.Instancing_FireCustomFromClient:FireServer(unpack(args))
 end
 
 local rebirths = getLuckyBreakoutRebirths()
@@ -137,22 +139,22 @@ end
 
 task.spawn(function()
     local lastRebirth = rebirths
-    local GCYieldSet = rebirths >= 1
-
     while true do
         local rebirths = getLuckyBreakoutRebirths()
-
         if rebirths ~= lastRebirth then
             lastRebirth = rebirths
             setAuto(rebirths)
         end
+        task.wait(1)
+    end
+end)
 
-        if not GCYieldSet and rebirths >= 1 then
-            GCYieldSet = true
+task.spawn(function()
+    while true do
+        if getLuckyBreakoutRebirths() >= 1 then
             setGCYield()
         end
-
-        task.wait(1)
+        task.wait(60)
     end
 end)
 
@@ -709,7 +711,6 @@ task.spawn(function()
             pcall(function()
                 game:GetService("ReplicatedStorage").Network.LuckyTitanicKey_Unlock:InvokeServer(unpack(args))
             end)
-
             task.wait(1)
         end
     end
@@ -763,7 +764,6 @@ task.spawn(function()
                 EggTeleporting = false
             end
         end
-
         task.wait(2)
     end
 end)
