@@ -921,8 +921,8 @@ task.spawn(function()
             "LuckyBreakoutBlasterDamage",
             "LuckyBreakoutBlasterRate",
             "LuckyBreakoutEggTier",
-            "LuckyBreakoutBumperSlots"
-            "LuckyBreakoutBuxBonus"
+            "LuckyBreakoutBumperSlots",
+            "LuckyBreakoutBuxBonus",
         }
 
         for _, upgradeId in ipairs(MaxUpgrades) do
