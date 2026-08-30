@@ -18,6 +18,24 @@ local function getSave()
     return PlayerSave.Get()
 end
 
+local function getBreakoutCoins()
+    local sd = getSave()
+
+    if not sd
+        or not sd.Inventory
+        or not sd.Inventory.Currency then
+        return 0
+    end
+
+    for _, currency in pairs(sd.Inventory.Currency) do
+        if currency.id == "BreakoutCoins" then
+            return tonumber(currency._am) or 0
+        end
+    end
+
+    return 0
+end
+
 local function getRoot()
     local char = player.Character or player.CharacterAdded:Wait()
     return char:WaitForChild("HumanoidRootPart")
@@ -220,26 +238,6 @@ task.spawn(function()
         NeedCurrency = 0
     }
 
-    -- ===========- BREAKOUT COINS -===========
-
-    local function getBreakoutCoins()
-        local sd = getSave()
-
-        if not sd
-            or not sd.Inventory
-            or not sd.Inventory.Currency then
-            return 0
-        end
-
-        for _, currency in pairs(sd.Inventory.Currency) do
-            if currency.id == "BreakoutCoins" then
-                return tonumber(currency._am) or 0
-            end
-        end
-
-        return 0
-    end
-
     -- ===========- EGG TIER CHECK -===========
 
     local function canUseEgg()
@@ -251,7 +249,7 @@ task.spawn(function()
 
         return tonumber(
             sd.EventUpgrades.LuckyBreakoutEggTier
-        ) == 4
+        ) >= 4
     end
 
     -- ===========- CAN HATCH -===========
