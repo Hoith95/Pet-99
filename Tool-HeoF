@@ -55,7 +55,7 @@ getgenv().GTIME_TRIAL_ENCHANTS = {"Criticals","Tap Power","Tap Power","Strong Pe
 getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Happy Pets","Treasure Hunter","Chest Breaker","Walkspeed"}
 
 getgenv().GLOOTBOXES = {"Locked Hype Egg","Locked Hype Egg 3"}
-getgenv().GDO_AUTO_BALLOONS = true
+getgenv().GDO_AUTO_BALLOONS = false
 
 getgenv().GPROGRESS_MODE = "Hybrid" -- Hatch
 getgenv().GGFX_TEST1 = true
