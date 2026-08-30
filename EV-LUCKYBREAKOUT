@@ -99,6 +99,8 @@ task.wait(20)
 
 -- ===========- AUTO SETTINGS -===========
 
+_G.LUCKYBREAKOUT_AUTOREBIRTH_LIMIT = _G.LUCKYBREAKOUT_AUTOREBIRTH_LIMIT or 5
+
 local function getLuckyBreakoutRebirths()
     local sd = getSave()
 
@@ -110,7 +112,7 @@ local function getLuckyBreakoutRebirths()
 end
 
 local function setAuto(rebirths)
-    local autoRebirth = rebirths < 5
+    local autoRebirth = rebirths < _G.LUCKYBREAKOUT_AUTOREBIRTH_LIMIT
 
     ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
         "LuckyBreakout",
@@ -138,13 +140,22 @@ if rebirths >= 1 then
 end
 
 task.spawn(function()
-    local lastRebirth = rebirths
+    local lastRebirth = getLuckyBreakoutRebirths()
+    local lastLimit = _G.LUCKYBREAKOUT_AUTOREBIRTH_LIMIT
+
     while true do
         local rebirths = getLuckyBreakoutRebirths()
-        if rebirths ~= lastRebirth then
+        local limit = _G.LUCKYBREAKOUT_AUTOREBIRTH_LIMIT
+
+        if rebirths ~= lastRebirth
+            or limit ~= lastLimit then
+
             lastRebirth = rebirths
+            lastLimit = limit
+
             setAuto(rebirths)
         end
+
         task.wait(1)
     end
 end)
@@ -154,6 +165,7 @@ task.spawn(function()
         if getLuckyBreakoutRebirths() >= 1 then
             setGCYield()
         end
+
         task.wait(60)
     end
 end)
