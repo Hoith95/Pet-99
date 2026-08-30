@@ -844,7 +844,7 @@ task.spawn(function()
         boardSlots =
             getUpgradeLevel("LuckyBreakoutBoardSlots")
 
-        if boardSlots < 40 then
+        if boardSlots < 39 then
             purchaseUpgrade("LuckyBreakoutBoardSlots")
             continue
         end
