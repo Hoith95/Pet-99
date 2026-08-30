@@ -6,8 +6,6 @@ task.wait(60)
 local AutoMail2 = {
     ['Items'] = {
         --['Lucky Block Angelus'] = { Class = "Pet", RainbowOnly = true, PetCount = 1, Amount = "Max" },
-        ['Lucky Block Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
-        ['Lucky Admin Gift'] = { Class = "Lootbox", MinAmount = 10, Amount = "Max" },
         ['Lucky Damage Boost II'] = { Id = "Lucky Damage Boost", Class = "Consumable", tn = 2, MinAmount = 1, Amount = "Max" },
         ['Lucky Damage Boost III'] = { Id = "Lucky Damage Boost", Class = "Consumable", tn = 3, MinAmount = 1, Amount = "Max" },
         ['Lucky Speed Boost II'] = { Id = "Lucky Speed Boost", Class = "Consumable", tn = 2, MinAmount = 1, Amount = "Max" },
