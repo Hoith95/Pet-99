@@ -948,6 +948,8 @@ task.spawn(function()
                 local coins = getBreakoutCoins()
 
                 if coins >= 300000000 then
+
+                    -- HUGE
                     pcall(function()
                         local args = {
                             [1] = "Huge",
@@ -957,6 +959,9 @@ task.spawn(function()
                         game:GetService("ReplicatedStorage").Network.HV_Tally:InvokeServer(unpack(args))
                     end)
 
+                    task.wait(2)
+
+                    -- TITANIC
                     pcall(function()
                         local args = {
                             [1] = "Titanic",
@@ -966,6 +971,9 @@ task.spawn(function()
                         game:GetService("ReplicatedStorage").Network.HV_Tally:InvokeServer(unpack(args))
                     end)
 
+                    task.wait(2)
+
+                    -- GARGANTUAN
                     pcall(function()
                         local args = {
                             [1] = "Gargantuan",
