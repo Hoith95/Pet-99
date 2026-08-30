@@ -92,21 +92,30 @@ local function setAuto(rebirths)
 
     ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
         "LuckyBreakout",
-        "LBSetAutoRebirth",
+        "ZP_Cycle",
         autoRebirth
-    )
-
-    ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
-        "LuckyBreakout",
-        "LBSetAutoBuySlots",
-        false
     )
 end
 
-setAuto(getLuckyBreakoutRebirths())
+local function setGCYield()
+    ReplicatedStorage.Network.Instancing_FireCustomFromClient:FireServer(
+        "LuckyBreakout",
+        "GC_Yield",
+        true
+    )
+end
+
+local rebirths = getLuckyBreakoutRebirths()
+
+setAuto(rebirths)
+
+if rebirths >= 1 then
+    setGCYield()
+end
 
 task.spawn(function()
-    local lastRebirth = getLuckyBreakoutRebirths()
+    local lastRebirth = rebirths
+    local GCYieldSet = rebirths >= 1
 
     while true do
         local rebirths = getLuckyBreakoutRebirths()
@@ -115,6 +124,12 @@ task.spawn(function()
             lastRebirth = rebirths
             setAuto(rebirths)
         end
+
+        if not GCYieldSet and rebirths >= 1 then
+            GCYieldSet = true
+            setGCYield()
+        end
+
         task.wait(1)
     end
 end)
@@ -672,31 +687,47 @@ task.spawn(function()
         task.wait(5)
     until HatchReady
 
-    local DailyRewards =
-        ReplicatedStorage.Network:WaitForChild("DailyRewards_Redeem")
+    local function hasKey(keyName)
+        local sd = getSave()
+
+        if not sd
+            or not sd.Inventory
+            or not sd.Inventory.Misc then
+            return false
+        end
+
+        for _, item in pairs(sd.Inventory.Misc) do
+            if item.id == keyName then
+                return true
+            end
+        end
+        return false
+    end
 
     while true do
         if LuckyBreakoutRunning() then
-            local args = {
-                [1] = "LuckyBreakoutTitanicChest"
-            }
 
-            pcall(function()
-                DailyRewards:InvokeServer(unpack(args))
-            end)
+            if hasKey("Lucky Titanic Key") then
+                local args = {
+                    [1] = 1
+                }
 
-            task.wait(1)
+                pcall(function()
+                    game:GetService("ReplicatedStorage").Network.LuckyTitanicKey_Unlock:InvokeServer(unpack(args))
+                end)
+            end
 
-            local args = {
-                [1] = "LuckyBreakoutGargantuanChest"
-            }
+            if hasKey("Lucky Gargantuan Key") then
+                local args = {
+                    [1] = 1
+                }
 
-            pcall(function()
-                DailyRewards:InvokeServer(unpack(args))
-            end)
+                pcall(function()
+                    game:GetService("ReplicatedStorage").Network.LuckyGargantuanKey_Unlock:InvokeServer(unpack(args))
+                end)
+            end
         end
-
-        task.wait(5 * 60)
+        task.wait(5)
     end
 end)
 
@@ -903,3 +934,55 @@ task.spawn(function()
         task.wait(1)
     end
 end)
+
+-- ===========- BOOSTS -===========
+
+task.spawn(function()
+    repeat
+        task.wait(5)
+    until HatchReady
+
+    while true do
+        if LuckyBreakoutRunning() then
+            local rebirths = getLuckyBreakoutRebirths()
+
+            if rebirths >= 5 then
+                local coins = getBreakoutCoins()
+
+                if coins >= 300000000 then
+                    pcall(function()
+                        local args = {
+                            [1] = "Huge",
+                            [2] = 25000000
+                        }
+
+                        game:GetService("ReplicatedStorage").Network.HV_Tally:InvokeServer(unpack(args))
+                    end)
+
+                    pcall(function()
+                        local args = {
+                            [1] = "Titanic",
+                            [2] = 83000000
+                        }
+
+                        game:GetService("ReplicatedStorage").Network.HV_Tally:InvokeServer(unpack(args))
+                    end)
+
+                    pcall(function()
+                        local args = {
+                            [1] = "Gargantuan",
+                            [2] = 166000000
+                        }
+
+                        game:GetService("ReplicatedStorage").Network.HV_Tally:InvokeServer(unpack(args))
+                    end)
+
+                    task.wait(60 * 60)
+                    continue
+                end
+            end
+        end
+        task.wait(5)
+    end
+end)
+
