@@ -1,7 +1,7 @@
-if _G.VAR_AUTO_MAIL then
+if _G.VAR_AUTO_MAILS then
     return
 end
-_G.VAR_AUTO_MAIL = true
+_G.VAR_AUTO_MAILS = true
 
 _G.MAILBOX_STOP = false
 
