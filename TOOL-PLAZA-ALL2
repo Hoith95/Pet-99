@@ -14,6 +14,7 @@ local prices = {"4.7b", "4.8b", "4.9b"}
 
 getgenv().Settings = {
 ["Items"] = {
+        {Name = "Rainbow Lucky Chest Mimic", Data = {Price = "525m"}},
         {Name = "Rainbow Swirl", Data = {Price = "14.5b"}},
         {Name = "MBanana", Data = {Price = "10.5b"}},
         {Name = "Coin", Data = {Price = "7.5b"}},
