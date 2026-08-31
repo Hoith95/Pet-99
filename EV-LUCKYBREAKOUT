@@ -1208,31 +1208,33 @@ end
 
 -- ===========- MAIN LOOP -===========
 
-while true do
-    local bucks = getBreakoutBucks()
-    local rebirths = getRebirths()
-    local maxLevel = getMaxLevel()
+task.spawn(function()
+    while true do
+        local bucks = getBreakoutBucks()
+        local rebirths = getRebirths()
+        local maxLevel = getMaxLevel()
 
-    if bucks > 0 then
-        if checkPermanentUpgrades(bucks, rebirths) then
-            continue
+        if bucks > 0 then
+            if checkPermanentUpgrades(bucks, rebirths) then
+                continue
+            end
+
+            if checkBoardAndCombat(bucks, maxLevel) then
+                continue
+            end
+
+            if checkEconomyUpgrades(bucks) then
+                continue
+            end
+
+            if checkMaxAll(bucks) then
+                continue
+            end
         end
 
-        if checkBoardAndCombat(bucks, maxLevel) then
-            continue
-        end
-
-        if checkEconomyUpgrades(bucks) then
-            continue
-        end
-
-        if checkMaxAll(bucks) then
-            continue
-        end
+        task.wait(1)
     end
-
-    task.wait(1)
-end
+end)
 
 -- ===========- BOOSTS -===========
 
