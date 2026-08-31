@@ -87,7 +87,7 @@ repeat
     task.wait(2)
 until _G.Time_Trial_End == true
 
-task.wait(68)
+task.wait(5)
 
 getRoot().CFrame = CFrame.new(-15849, 40.27, -195)
 
@@ -99,7 +99,7 @@ task.wait(20)
 
 -- ===========- AUTO SETTINGS -===========
 
-_G.LUCKYBREAKOUT_AUTOREBIRTH_LIMIT = _G.LUCKYBREAKOUT_AUTOREBIRTH_LIMIT or 5
+_G.LUCKYBREAKOUT_AUTOREBIRTH_LIMIT = _G.LUCKYBREAKOUT_AUTOREBIRTH_LIMIT or 99999
 
 local function getLuckyBreakoutRebirths()
     local sd = getSave()
@@ -780,188 +780,453 @@ task.spawn(function()
     end
 end)
 
--- ===========- AUTO UPGRADE -===========
+-- ===========- SMART AUTO UPGRADE -===========
 
-task.spawn(function()
-    repeat
-        task.wait(5)
-    until HatchReady
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
 
-    local UpgradeRemote = ReplicatedStorage.Network:WaitForChild("EventUpgrades: Purchase")
+local UpgradeRemote = ReplicatedStorage.Network:WaitForChild("EventUpgrades: Purchase")
 
-    local function getEventUpgrades()
-        local sd = getSave()
+local UpgradeCosts = {
+    LuckyBreakoutBallPower = {5,12,25,50,95,175,320,570,1000,1750},
+    LuckyBreakoutBallSpeed = {5,12,25,50,95,175,320,570,1000,1750},
+    LuckyBreakoutBuxBonus = {5,12,25,50,95,175,320,570,1000,1750},
+    LuckyBreakoutGiftDrops = {5,12,25,50,95,175,320,570,1000,1750},
+    LuckyBreakoutBlasterRate = {10,24,55,120,260,550,1150,2400,5000,10000},
+    LuckyBreakoutBlasterDamage = {12,28,62,135,290,600,1250,2600,5400,11000},
+    LuckyBreakoutEggTier = {220,640,1680,4400,10000,22500,51000,117000,265000},
+    LuckyBreakoutBumperSlots = {11000,32000,84000,220000}
+}
 
-        if not sd then
-            return {}
-        end
+local BoardSlotsCosts = {
+    3,3,3,4,4,4,5,5,5,6,
+    6,6,7,7,8,8,9,9,10,11,
+    12,12,13,14,15,16,17,19,20,21,
+    23,24,26,28,30,32,34,37,39,42,
+    45,48,51,55,59,63,67,72,77,83,
+    88,95,101,108,116,124,133,142,152,162,
+    174,186,199,213,228,244,261,279,299,320,
+    342,366,392,419,448,480,513,549,588,629,
+    673,720,770,824,882,944,1010,1080,1156,1237,
+    1323,1416,1515,1621,1735,1856,1986,2125,2274,2433
+}
 
-        return sd.EventUpgrades or {}
+local CombatUpgrades = {
+    "LuckyBreakoutBallPower",
+    "LuckyBreakoutBallSpeed",
+    "LuckyBreakoutBlasterDamage",
+    "LuckyBreakoutBlasterRate"
+}
+
+local MaxTiers = {
+    LuckyBreakoutBallPower = 10,
+    LuckyBreakoutBallSpeed = 10,
+    LuckyBreakoutBoardSlots = 100,
+    LuckyBreakoutBuxBonus = 10,
+    LuckyBreakoutEggTier = 9,
+    LuckyBreakoutGiftDrops = 10,
+    LuckyBreakoutBlasterRate = 10,
+    LuckyBreakoutBlasterDamage = 10,
+    LuckyBreakoutBumperSlots = 4
+}
+
+local function getSave()
+    local ok, sd = pcall(PlayerSave.Get)
+    if ok then
+        return sd
+    end
+end
+
+local function getEventUpgrades()
+    local sd = getSave()
+    return sd and sd.EventUpgrades or {}
+end
+
+local function getUpgradeLevel(name)
+    return tonumber(getEventUpgrades()[name]) or 0
+end
+
+local function getBreakoutBucks()
+    local sd = getSave()
+
+    if not sd or not sd.Inventory or not sd.Inventory.Currency then
+        return 0
     end
 
-    local function getUpgradeLevel(name)
-        return tonumber(getEventUpgrades()[name]) or 0
+    for _, currency in pairs(sd.Inventory.Currency) do
+        if currency.id == "BreakoutBucks" then
+            return tonumber(currency._am) or 0
+        end
     end
 
-    local function purchaseUpgrade(name)
-        pcall(function()
-            UpgradeRemote:InvokeServer(name)
-        end)
+    return 0
+end
 
-        task.wait(0.5)
+local function getRebirths()
+    local sd = getSave()
+
+    return sd
+        and sd.InstanceVars
+        and sd.InstanceVars.LuckyBreakout
+        and tonumber(sd.InstanceVars.LuckyBreakout.Rebirths2)
+        or 0
+end
+
+local function getMaxLevel()
+    local sd = getSave()
+
+    return sd
+        and sd.InstanceVars
+        and sd.InstanceVars.LuckyBreakout
+        and tonumber(sd.InstanceVars.LuckyBreakout.MaxLevel2)
+        or 0
+end
+
+local function getNextCost(name)
+    local level = getUpgradeLevel(name)
+    local costs = UpgradeCosts[name]
+    local maxTier = MaxTiers[name]
+
+    if maxTier and level >= maxTier then
+        return nil
     end
 
-    while true do
-        if not LuckyBreakoutRunning() then
-            task.wait(1)
-            continue
-        end
+    if not costs then
+        return nil
+    end
 
-        -- ===========- BOARD SLOTS → 20 -===========
+    local nextLevel = level + 1
 
-        local boardSlots = getUpgradeLevel("LuckyBreakoutBoardSlots")
+    if nextLevel > #costs then
+        return nil
+    end
 
-        if boardSlots < 20 then
-            purchaseUpgrade("LuckyBreakoutBoardSlots")
-            continue
-        end
+    return costs[nextLevel]
+end
 
-        -- ===========- BALL POWER / SPEED → 3 -===========
+local function getNext10SlotCost(slots)
+    local total = 0
+    local count = 0
 
-        local ballPower = getUpgradeLevel("LuckyBreakoutBallPower")
-        local ballSpeed = getUpgradeLevel("LuckyBreakoutBallSpeed")
+    for level = slots + 1, math.min(slots + 10, #BoardSlotsCosts) do
+        total += BoardSlotsCosts[level]
+        count += 1
+    end
 
-        if ballPower < 3 then
-            purchaseUpgrade("LuckyBreakoutBallPower")
-            continue
-        end
+    if count == 0 then
+        return nil
+    end
 
-        if ballSpeed < 3 then
-            purchaseUpgrade("LuckyBreakoutBallSpeed")
-            continue
-        end
+    return total
+end
 
-        -- ===========- BOARD SLOTS → 30 -===========
+local function purchaseUpgrade(name)
+    pcall(function()
+        UpgradeRemote:InvokeServer(name)
+    end)
 
-        boardSlots = getUpgradeLevel("LuckyBreakoutBoardSlots")
+    task.wait(0.5)
+end
 
-        if boardSlots < 30 then
-            purchaseUpgrade("LuckyBreakoutBoardSlots")
-            continue
-        end
+-- ===========- PERMANENT UPGRADES -===========
 
-        -- ===========- GIFT DROPS / Bux Bonus → 3 -===========
+local function checkPermanentUpgrades(bucks, rebirths)
+    local eggTier = getUpgradeLevel("LuckyBreakoutEggTier")
 
-        local giftDrops = getUpgradeLevel("LuckyBreakoutGiftDrops")
-        local buxBonus = getUpgradeLevel("LuckyBreakoutBuxBonus")
+    if rebirths >= 25 and eggTier < 4 then
+        local cost = getNextCost("LuckyBreakoutEggTier")
 
-        if giftDrops < 3 then
-            purchaseUpgrade("LuckyBreakoutGiftDrops")
-            continue
-        end
-
-        if buxBonus < 3 then
-            purchaseUpgrade("LuckyBreakoutBuxBonus")
-            continue
-        end
-
-        -- ===========- BALL POWER / SPEED → 4 -===========
-
-        ballPower = getUpgradeLevel("LuckyBreakoutBallPower")
-        ballSpeed = getUpgradeLevel("LuckyBreakoutBallSpeed")
-
-        if ballPower < 4 then
-            purchaseUpgrade("LuckyBreakoutBallPower")
-            continue
-        end
-
-        if ballSpeed < 4 then
-            purchaseUpgrade("LuckyBreakoutBallSpeed")
-            continue
-        end
-
-        -- ===========- BOARD SLOTS → 40 -===========
-
-        boardSlots = getUpgradeLevel("LuckyBreakoutBoardSlots")
-
-        if boardSlots < 39 then
-            purchaseUpgrade("LuckyBreakoutBoardSlots")
-            continue
-        end
-
-        -- ===========- ALL MAIN UPGRADES → 5 -===========
-
-        giftDrops = getUpgradeLevel("LuckyBreakoutGiftDrops")
-        buxBonus = getUpgradeLevel("LuckyBreakoutBuxBonus")
-        ballPower = getUpgradeLevel("LuckyBreakoutBallPower")
-        ballSpeed = getUpgradeLevel("LuckyBreakoutBallSpeed")
-        blasterDamage = getUpgradeLevel("LuckyBreakoutBlasterDamage")
-        blasterRate = getUpgradeLevel("LuckyBreakoutBlasterRate")
-
-        if ballPower < 6 then
-            purchaseUpgrade("LuckyBreakoutBallPower")
-            continue
-        end
-
-        if ballSpeed < 6 then
-            purchaseUpgrade("LuckyBreakoutBallSpeed")
-            continue
-        end
-
-        if giftDrops < 5 then
-            purchaseUpgrade("LuckyBreakoutGiftDrops")
-            continue
-        end
-
-        if buxBonus < 5 then
-            purchaseUpgrade("LuckyBreakoutBuxBonus")
-            continue
-        end
-
-        if blasterDamage < 1 then
-            purchaseUpgrade("LuckyBreakoutBlasterDamage")
-            continue
-        end
-
-        if blasterRate < 1 then
-            purchaseUpgrade("LuckyBreakoutBlasterRate")
-            continue
-        end
-
-        -- ===========- EGG TIER → 8 -===========
-
-        local eggTier = getUpgradeLevel("LuckyBreakoutEggTier")
-
-        if eggTier < 8 then
+        if cost and cost <= bucks then
             purchaseUpgrade("LuckyBreakoutEggTier")
-            continue
+            return true
+        end
+    end
+
+    if rebirths >= 80 and eggTier < 8 then
+        local cost = getNextCost("LuckyBreakoutEggTier")
+
+        if cost and cost <= bucks then
+            purchaseUpgrade("LuckyBreakoutEggTier")
+            return true
+        end
+    end
+
+    return false
+end
+
+-- ===========- COMBAT / SLOT BALANCE -===========
+
+local function checkBoardAndCombat(bucks, maxLevel)
+    local slots = getUpgradeLevel("LuckyBreakoutBoardSlots")
+
+    if slots >= 100 then
+        return false
+    end
+
+    if maxLevel <= 40 then
+        local target = math.floor(slots / 10)
+
+        if target < 1 then
+            target = 1
         end
 
-        -- ===========- EVERYTHING → MAX -===========
+        if target > 10 then
+            target = 10
+        end
 
-        local MaxUpgrades = {
-            "LuckyBreakoutBoardSlots",
-            "LuckyBreakoutBallPower",
-            "LuckyBreakoutBallSpeed",
-            "LuckyBreakoutGiftDrops",
-            "LuckyBreakoutBlasterDamage",
-            "LuckyBreakoutBlasterRate",
-            "LuckyBreakoutEggTier",
-            "LuckyBreakoutBumperSlots",
-            "LuckyBreakoutBuxBonus",
-        }
+        local missingCombat = {}
 
-        for _, upgradeId in ipairs(MaxUpgrades) do
-            if not LuckyBreakoutRunning() then
-                break
+        for _, name in ipairs(CombatUpgrades) do
+            local level = getUpgradeLevel(name)
+
+            if level < target then
+                local cost = getNextCost(name)
+
+                if cost then
+                    table.insert(missingCombat, {
+                        name = name,
+                        level = level,
+                        cost = cost
+                    })
+                end
+            end
+        end
+
+        if #missingCombat > 0 then
+            local cheapestCombat = missingCombat[1]
+
+            for _, item in ipairs(missingCombat) do
+                if item.cost < cheapestCombat.cost then
+                    cheapestCombat = item
+                end
             end
 
-            purchaseUpgrade(upgradeId)
+            if cheapestCombat.cost <= bucks then
+                purchaseUpgrade(cheapestCombat.name)
+                return true
+            end
+
+            return false
         end
 
-        task.wait(1)
+        if BoardSlotsCosts[slots + 1] and BoardSlotsCosts[slots + 1] <= bucks then
+            purchaseUpgrade("LuckyBreakoutBoardSlots")
+            return true
+        end
+
+        return false
     end
-end)
+
+    local target = math.floor(slots / 10)
+
+    if target < 1 then
+        target = 1
+    end
+
+    if target > 10 then
+        target = 10
+    end
+
+    local missingCombat = {}
+
+    for _, name in ipairs(CombatUpgrades) do
+        local level = getUpgradeLevel(name)
+
+        if level < target then
+            local cost = getNextCost(name)
+
+            if cost then
+                table.insert(missingCombat, {
+                    name = name,
+                    level = level,
+                    cost = cost
+                })
+            end
+        end
+    end
+
+    if #missingCombat > 0 then
+        local next10Cost = getNext10SlotCost(slots)
+        local cheapestCombat = missingCombat[1]
+
+        for _, item in ipairs(missingCombat) do
+            if item.cost < cheapestCombat.cost then
+                cheapestCombat = item
+            end
+        end
+
+        if cheapestCombat.cost <= bucks
+            and next10Cost
+            and cheapestCombat.cost < next10Cost then
+
+            purchaseUpgrade(cheapestCombat.name)
+            return true
+        end
+
+        if cheapestCombat.cost <= bucks
+            and (not next10Cost or next10Cost > bucks) then
+
+            purchaseUpgrade(cheapestCombat.name)
+            return true
+        end
+    end
+
+    local allCombatReady = true
+
+    for _, name in ipairs(CombatUpgrades) do
+        if getUpgradeLevel(name) < target then
+            allCombatReady = false
+            break
+        end
+    end
+
+    if not allCombatReady then
+        return false
+    end
+
+    local next10Cost = getNext10SlotCost(slots)
+
+    if not next10Cost then
+        return false
+    end
+
+    if next10Cost > bucks then
+        local cheapestCombat
+        local cheapestCost = math.huge
+
+        for _, name in ipairs(CombatUpgrades) do
+            local cost = getNextCost(name)
+
+            if cost and cost < cheapestCost and cost <= bucks then
+                cheapestCost = cost
+                cheapestCombat = name
+            end
+        end
+
+        if cheapestCombat then
+            purchaseUpgrade(cheapestCombat)
+            return true
+        end
+
+        return false
+    end
+
+    local cheaperCombat = nil
+    local cheaperCombatCost = math.huge
+
+    for _, name in ipairs(CombatUpgrades) do
+        local cost = getNextCost(name)
+
+        if cost
+            and cost < next10Cost
+            and cost <= bucks
+            and cost < cheaperCombatCost then
+
+            cheaperCombatCost = cost
+            cheaperCombat = name
+        end
+    end
+
+    if cheaperCombat then
+        purchaseUpgrade(cheaperCombat)
+        return true
+    end
+
+    if BoardSlotsCosts[slots + 1] and BoardSlotsCosts[slots + 1] <= bucks then
+        purchaseUpgrade("LuckyBreakoutBoardSlots")
+        return true
+    end
+
+    return false
+end
+
+-- ===========- ECONOMY -===========
+
+local function checkEconomyUpgrades(bucks)
+    local buxLevel = getUpgradeLevel("LuckyBreakoutBuxBonus")
+    local giftLevel = getUpgradeLevel("LuckyBreakoutGiftDrops")
+
+    local buxCost = getNextCost("LuckyBreakoutBuxBonus")
+    local giftCost = getNextCost("LuckyBreakoutGiftDrops")
+
+    if buxLevel < 3
+        and buxCost
+        and buxCost <= bucks then
+
+        purchaseUpgrade("LuckyBreakoutBuxBonus")
+        return true
+    end
+
+    if giftLevel < 3
+        and giftCost
+        and giftCost <= bucks then
+
+        purchaseUpgrade("LuckyBreakoutGiftDrops")
+        return true
+    end
+
+    return false
+end
+
+-- ===========- MAX ALL -===========
+
+local function checkMaxAll(bucks)
+    local UpgradeList = {
+        "LuckyBreakoutBoardSlots",
+        "LuckyBreakoutBallPower",
+        "LuckyBreakoutBallSpeed",
+        "LuckyBreakoutBuxBonus",
+        "LuckyBreakoutEggTier",
+        "LuckyBreakoutGiftDrops",
+        "LuckyBreakoutBlasterRate",
+        "LuckyBreakoutBlasterDamage",
+        "LuckyBreakoutBumperSlots"
+    }
+
+    for _, name in ipairs(UpgradeList) do
+        local level = getUpgradeLevel(name)
+        local maxTier = MaxTiers[name]
+
+        if maxTier and level < maxTier then
+            local cost = getNextCost(name)
+
+            if cost and cost <= bucks then
+                purchaseUpgrade(name)
+                return true
+            end
+        end
+    end
+
+    return false
+end
+
+-- ===========- MAIN LOOP -===========
+
+while true do
+    local bucks = getBreakoutBucks()
+    local rebirths = getRebirths()
+    local maxLevel = getMaxLevel()
+
+    if bucks > 0 then
+        if checkPermanentUpgrades(bucks, rebirths) then
+            continue
+        end
+
+        if checkBoardAndCombat(bucks, maxLevel) then
+            continue
+        end
+
+        if checkEconomyUpgrades(bucks) then
+            continue
+        end
+
+        if checkMaxAll(bucks) then
+            continue
+        end
+    end
+
+    task.wait(1)
+end
 
 -- ===========- BOOSTS -===========
 
