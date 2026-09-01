@@ -19,7 +19,8 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/V
 end)
 
 spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_RECONNECT"))()
+wait(38)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial"))()
 end)
 
 spawn(function()
@@ -58,7 +59,7 @@ getgenv().GLOOTBOXES = {"Locked Hype Egg","Locked Hype Egg 3"}
 getgenv().GDO_AUTO_BALLOONS = false
 
 getgenv().GPROGRESS_MODE = "Hybrid" -- Hatch
-getgenv().GGFX_TEST1 = true
+--getgenv().GGFX_TEST1 = true
 getgenv().GGFX_MODE = 1
 getgenv().GRANK_TO = 99
 getgenv().GZONE_TO = 299
