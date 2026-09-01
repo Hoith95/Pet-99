@@ -53,9 +53,9 @@ local function startMonitor15Min()
 
         timer = timer + dt
 
-        if timer >= 900 then
-            warn("⏰ 15 phút không đổi lượt hoặc TotalRuns → Kick player.")
-            player:Kick("15 phút không đổi lượt/TotalRuns → nghi ngờ treo máy.")
+        if timer >= 1200 then
+            warn("⏰ 20 phút không đổi lượt hoặc TotalRuns → Kick player.")
+            player:Kick("20 phút không đổi lượt/TotalRuns → nghi ngờ treo máy.")
         end
     end)
 end
