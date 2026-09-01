@@ -142,11 +142,11 @@ getgenv().Settings = {
         {Name = "Lucky Admin Gift", Data = {Price = "+1%"}},
 
 		--{Name = "Rainbow Lucky Block Angelus", Data = {Price = "1%"}},
-        {Name = "Lucky Damage Boost TN2", Data = {Price = "+15%"}},
+        {Name = "Lucky Damage Boost TN2", Data = {Price = "+5%"}},
         {Name = "Lucky Damage Boost TN3", Data = {Price = "+15%"}},
-        {Name = "Lucky Speed Boost TN2", Data = {Price = "+15%"}},
+        {Name = "Lucky Speed Boost TN2", Data = {Price = "+5%"}},
         {Name = "Lucky Speed Boost TN3", Data = {Price = "+15%"}},
-        {Name = "Lucky Egg Booster TN2", Data = {Price = "+15%"}},
+        {Name = "Lucky Egg Booster TN2", Data = {Price = "+5%"}},
         {Name = "Lucky Egg Booster TN3", Data = {Price = "+15%"}},
 
         --{Name = "Charm Stone", Data = {Price = "1%"}},
