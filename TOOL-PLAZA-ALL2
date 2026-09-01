@@ -71,7 +71,7 @@ getgenv().Settings = {
 		{Name = "Shiny Titanic Crusader Dragon", Data = {Price = "20.5b"}},
 
 		{Name = "Titanic Scroll Dragon", Data = {Price = "4.5b"}},
-		{Name = "Golden Titanic Scroll Dragon", Data = {Price = "5.5b"}},
+		{Name = "Golden Titanic Scroll Dragon", Data = {Price = "5.3b"}},
 		{Name = "Rainbow Titanic Scroll Dragon", Data = {Price = "16.86b"}},
 
 		{Name = "Rainbow Titanic Ruinous Angelus", Data = {Price = "15.38b"}},
@@ -138,8 +138,8 @@ getgenv().Settings = {
         {Name = "Candycane Gift", Data = {Price = "1%"}},
         {Name = "Horseshoe Gift", Data = {Price = "300k"}},
         {Name = "Lucky Block Gift", Data = {Price = "1%"}},
-        {Name = "Fiesta Gift", Data = {Price = "35k"}},
-        {Name = "Lucky Admin Gift", Data = {Price = "+1%"}},
+        {Name = "Fiesta Gift", Data = {Price = "25k"}},
+        {Name = "Lucky Admin Gift", Data = {Price = "+5%"}},
 
 		--{Name = "Rainbow Lucky Block Angelus", Data = {Price = "1%"}},
         {Name = "Lucky Damage Boost TN2", Data = {Price = "+5%"}},
