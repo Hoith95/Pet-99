@@ -131,7 +131,7 @@ end
 local function safeTeleportOut()
 	if not TimeTrialRunning() then return end
 
-	teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Leave)
+	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-18439, 16.24, -569)
 	task.wait(9)
 	if increaseMonitorThread then pcall(task.cancel, increaseMonitorThread) increaseMonitorThread = nil end
 	if lagMonitorThread then pcall(task.cancel, lagMonitorThread) lagMonitorThread = nil end
@@ -523,7 +523,7 @@ task.spawn(function()
 			local startRuns = getTotalRuns()
 
 			waitUntilTimeTrialEnabled()
-			teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
+			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-15115, 16.24, 2221)
 			task.wait(5)
 			if not TimeTrialRunning() then
 				continue
@@ -532,7 +532,7 @@ task.spawn(function()
 			local retry = 0
 			while TimeTrialRunning() and not workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial") and retry < 3 do
 				retry += 1
-				teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
+				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-15115, 16.24, 2221)
 				task.wait(5)
 			end
 
