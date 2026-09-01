@@ -1,10 +1,10 @@
-if _G.MONITOR_15MIN_RUNNINGS then return end
-_G.MONITOR_15MIN_RUNNINGS = true
+if _G.MONITOR_15MIN_RUNNING then return end
+_G.MONITOR_15MIN_RUNNING = true
 
-local Players          = game:GetService("Players")
-local ReplicatedStorage= game:GetService("ReplicatedStorage")
-local RunService       = game:GetService("RunService")
-local Save             = require(ReplicatedStorage.Library.Client.Save)
+local Players           = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService        = game:GetService("RunService")
+local Save              = require(ReplicatedStorage.Library.Client.Save)
 
 local player = Players.LocalPlayer
 
@@ -18,43 +18,61 @@ local function getTotalRuns()
     return (sd and sd.TimeTrialStats and sd.TimeTrialStats.TotalRuns) or 0
 end
 
+local function isInTimeTrial()
+    local things = workspace:FindFirstChild("__THINGS")
+    if not things then
+        return false
+    end
+
+    local container = things:FindFirstChild("__INSTANCE_CONTAINER")
+    if not container then
+        return false
+    end
+
+    local active = container:FindFirstChild("Active")
+    if not active then
+        return false
+    end
+
+    return active:FindFirstChild("TimeTrial") ~= nil
+end
+
 local function startMonitor15Min()
     local lastUsed  = getRunsUsed()
     local lastTotal = getTotalRuns()
-    local timer     = 0
-    local paused    = false
+
+    local timer = 0
+    local timeTrialTimer = 0
 
     RunService.Heartbeat:Connect(function(dt)
-        local curUsed, curTotal = getRunsUsed(), getTotalRuns()
+        local curUsed  = getRunsUsed()
+        local curTotal = getTotalRuns()
 
         if curUsed >= 10 then
-            if not paused then
-                paused = true
-                timer = 0
-                lastUsed, lastTotal = curUsed, curTotal
-                warn("🛑 Đã đủ 10 lượt → tạm dừng theo dõi, chờ DailyRuns reset.")
+            if isInTimeTrial() then
+                timeTrialTimer = timeTrialTimer + dt
+
+                if timeTrialTimer >= 1200 then
+                    player:Kick("Đã đủ 10 lượt nhưng vẫn còn trong Time Trial quá 20 phút.")
+                end
+            else
+                timeTrialTimer = 0
             end
+
             return
         end
 
-        if paused then
-            paused = false
-            timer = 0
-            lastUsed, lastTotal = curUsed, curTotal
-            warn("🔄 DailyRuns đã reset → tiếp tục theo dõi 15 phút.")
-            return
-        end
+        timeTrialTimer = 0
 
         if curUsed ~= lastUsed or curTotal ~= lastTotal then
-            lastUsed, lastTotal = curUsed, curTotal
+            lastUsed  = curUsed
+            lastTotal = curTotal
             timer = 0
-            warn("🔄 Reset monitor15Min (Đã đổi lượt/TotalRuns).")
         end
 
         timer = timer + dt
 
         if timer >= 1200 then
-            warn("⏰ 20 phút không đổi lượt hoặc TotalRuns → Kick player.")
             player:Kick("20 phút không đổi lượt/TotalRuns → nghi ngờ treo máy.")
         end
     end)
