@@ -106,7 +106,7 @@ local function teleportTo(part)
 
 	local hrp = getHumanoidRootPart()
 	if hrp and part and part.CFrame then
-		hrp.CFrame = part.CFrame + Vector3.new(0, 3, 0)
+		hrp.CFrame = part.CFrame + Vector3.new(0, 8, 0)
 	end
 end
 
@@ -115,7 +115,7 @@ local function teleportToRewardLocation()
 
 	local hrp = getHumanoidRootPart()
 	if hrp then
-		hrp.CFrame = CFrame.new(-15079, 16.24, 2165)
+		hrp.CFrame = CFrame.new(-15079, 24.24, 2165)
 	end
 end
 
@@ -124,14 +124,14 @@ local function teleportToLocation()
 
 	local hrp = getHumanoidRootPart()
 	if hrp then
-		hrp.CFrame = CFrame.new(-15045, 16.24, 2201)
+		hrp.CFrame = CFrame.new(-15045, 24.24, 2201)
 	end
 end
 
 local function safeTeleportOut()
 	if not TimeTrialRunning() then return end
 
-	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-18439, 16.24, -569)
+	teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Leave)
 	task.wait(9)
 	if increaseMonitorThread then pcall(task.cancel, increaseMonitorThread) increaseMonitorThread = nil end
 	if lagMonitorThread then pcall(task.cancel, lagMonitorThread) lagMonitorThread = nil end
@@ -523,7 +523,7 @@ task.spawn(function()
 			local startRuns = getTotalRuns()
 
 			waitUntilTimeTrialEnabled()
-			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-15115, 16.24, 2221)
+			teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
 			task.wait(5)
 			if not TimeTrialRunning() then
 				continue
@@ -532,7 +532,7 @@ task.spawn(function()
 			local retry = 0
 			while TimeTrialRunning() and not workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial") and retry < 3 do
 				retry += 1
-				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-15115, 16.24, 2221)
+				teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
 				task.wait(5)
 			end
 
