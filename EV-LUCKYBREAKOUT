@@ -1350,3 +1350,71 @@ task.spawn(function()
         task.wait(5)
     end
 end)
+
+-- ===========- AUTO PLACE DEFLECTOR -===========
+
+task.spawn(function()
+    repeat
+        task.wait(5)
+    until HatchReady
+
+    local DeflectorPositions = {
+        {2, 10, 0},
+        {23, 10, 0},
+        {12, 16, 0},
+        {8, 3, 0},
+        {19, 3, 0}
+    }
+
+    local function getDeflector()
+        local sd = getSave()
+
+        if not sd or not sd.Inventory or not sd.Inventory.Bumper then
+            return nil, 0
+        end
+
+        for uid, item in pairs(sd.Inventory.Bumper) do
+            if item.id == "Deflector" then
+                return uid, tonumber(item._am) or 0
+            end
+        end
+
+        return nil, 0
+    end
+
+    local function placeDeflectors(uid)
+        for _, pos in ipairs(DeflectorPositions) do
+            local args = {
+                [1] = "LuckyBreakout",
+                [2] = "DV_Anchor",
+                [3] = uid,
+                [4] = pos[1],
+                [5] = pos[2],
+                [6] = pos[3]
+            }
+
+            pcall(function()
+                ReplicatedStorage.Network.Instancing_InvokeCustomFromClient:InvokeServer(unpack(args))
+            end)
+
+            task.wait(0.2)
+        end
+    end
+
+    local lastAmount = 0
+
+    while true do
+        local uid, amount = getDeflector()
+
+        if uid and amount > lastAmount then
+            placeDeflectors(uid)
+            lastAmount = amount
+
+            if amount >= 5 then
+                break
+            end
+        end
+
+        task.wait(1)
+    end
+end)
