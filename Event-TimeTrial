@@ -129,12 +129,47 @@ local function teleportToLocation()
 end
 
 local function safeTeleportOut()
-	if not TimeTrialRunning() then return end
+	local instances = workspace:FindFirstChild("__THINGS")
+	local timeTrialInstances = instances and instances:FindFirstChild("Instances")
+	local timeTrial = timeTrialInstances and timeTrialInstances:FindFirstChild("TimeTrial")
+	local teleports = timeTrial and timeTrial:FindFirstChild("Teleports")
+	local leave = teleports and teleports:FindFirstChild("Leave")
 
-	teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Leave)
-	task.wait(9)
+	if not leave or not leave.CFrame then
+		return false
+	end
+
+	local function getCurrentHRP()
+		local character = player.Character
+		if not character then return nil end
+		return character:FindFirstChild("HumanoidRootPart")
+	end
+
+	local function isTimeTrialActive()
+		local things = workspace:FindFirstChild("__THINGS")
+		local container = things and things:FindFirstChild("__INSTANCE_CONTAINER")
+		local active = container and container:FindFirstChild("Active")
+		return active and active:FindFirstChild("TimeTrial") ~= nil
+	end
+
+	for _ = 1, 3 do
+		local hrp = getCurrentHRP()
+		if hrp then
+			hrp.CFrame = leave.CFrame + Vector3.new(0, 8, 0)
+		end
+
+		task.wait(5)
+
+		if not isTimeTrialActive() then
+			if increaseMonitorThread then pcall(task.cancel, increaseMonitorThread) increaseMonitorThread = nil end
+			if lagMonitorThread then pcall(task.cancel, lagMonitorThread) lagMonitorThread = nil end
+			return true
+		end
+	end
+
 	if increaseMonitorThread then pcall(task.cancel, increaseMonitorThread) increaseMonitorThread = nil end
 	if lagMonitorThread then pcall(task.cancel, lagMonitorThread) lagMonitorThread = nil end
+	return false
 end
 
 -- 🔍 Lấy Max Zone từ Map4
@@ -548,12 +583,8 @@ task.spawn(function()
 			startIncreaseMonitor(startPoints, startRuns)
 			teleportFarmLoop(startPoints, startRuns)
 
-			if not TimeTrialRunning() then
-				continue
-			end
-
-			-- ✅ Nếu kết thúc lượt (do hết rương), thoát khỏi trial
-			if endFlag then
+			-- ✅ Luôn xử lý Leave kể cả khi script khác đã set Time_Trial_End = true
+			if endFlag or lagFlag or getRunsUsed() >= 10 or not TimeTrialRunning() then
 				safeTeleportOut()
 			end
 
