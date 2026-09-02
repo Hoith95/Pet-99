@@ -261,13 +261,19 @@ local function startIncreaseMonitor(startPoints, startRuns)
             if lagFlag then
                 return
             end
-            local currentPoints = getTimeTrialPoints()
-            local currentRuns = getTotalRuns()
+
+            local ok, data = pcall(Save.Get)
+            local stats = ok and data and data.TimeTrialStats
+
+            local currentPoints = tonumber(stats and stats.Points) or 0
+            local currentRuns = tonumber(stats and stats.TotalRuns) or 0
+
             if currentPoints > startPoints
                 or currentRuns > startRuns then
                 endFlag = true
                 return
             end
+
             task.wait(0.5)
         end
     end)
