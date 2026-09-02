@@ -20,12 +20,12 @@ end)
 
 spawn(function()
 wait(38)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial"))()
 end)
 
 spawn(function()
 wait(38)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TIME-TRIAL"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/TIME-TRIAL"))()
 end)
 
 spawn(function()
@@ -47,19 +47,19 @@ wait(68)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Noti-Updater2"))()
 end)
 
-getgenv().GDO_TIME_TRIAL = false
+getgenv().GDO_TIME_TRIAL = true
 getgenv().GTIME_TRIAL_MIN_TIME_TO_BOSS3 = 1
 getgenv().GTIME_TRIAL_CHEST_TO_CLAIM = 3
 getgenv().GTIME_TRIAL_HATCH_FIRST_SECONDS = 1
 getgenv().GTIME_TRIAL_ENCHANTS = {"Criticals","Tap Power","Tap Power","Strong Pets","Walkspeed","Chest Breaker","Criticals"}
 --getgenv().GENCHANTS = {"Criticals","Tap Power","Tap Power","Strong Pets","Walkspeed","Chest Breaker"}
-getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Happy Pets","Treasure Hunter","Chest Breaker","Walkspeed"}
+getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Strong Pets","Treasure Hunter","Chest Breaker","Happy Pets"}
 
 getgenv().GLOOTBOXES = {"Locked Hype Egg","Locked Hype Egg 3"}
 getgenv().GDO_AUTO_BALLOONS = false
 
 getgenv().GPROGRESS_MODE = "Hybrid" -- Hatch
---getgenv().GGFX_TEST1 = true
+getgenv().GGFX_TEST1 = true
 getgenv().GGFX_MODE = 1
 getgenv().GRANK_TO = 99
 getgenv().GZONE_TO = 299
