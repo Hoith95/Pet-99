@@ -31,10 +31,8 @@ local function getHumanoidRootPart()
 	while not TimeTrialRunning() do
 		task.wait(1)
 	end
-
 	local character = player.Character or player.CharacterAdded:Wait()
 	if not character then return nil end
-
 	local hrp = character:FindFirstChild("HumanoidRootPart")
 	local waitTime = 0
 	while not hrp and waitTime < 5 do
@@ -42,7 +40,6 @@ local function getHumanoidRootPart()
 		waitTime += 0.5
 		hrp = character:FindFirstChild("HumanoidRootPart")
 	end
-
 	return hrp
 end
 
@@ -103,7 +100,6 @@ end
 -- 🗺️ Teleport hỗ trợ
 local function teleportTo(part)
 	if not TimeTrialRunning() then return end
-
 	local hrp = getHumanoidRootPart()
 	if hrp and part and part.CFrame then
 		hrp.CFrame = part.CFrame + Vector3.new(0, 8, 0)
@@ -112,7 +108,6 @@ end
 
 local function teleportToRewardLocation()
 	if not TimeTrialRunning() then return end
-
 	local hrp = getHumanoidRootPart()
 	if hrp then
 		hrp.CFrame = CFrame.new(-15079, 24.24, 2165)
@@ -121,7 +116,6 @@ end
 
 local function teleportToLocation()
 	if not TimeTrialRunning() then return end
-
 	local hrp = getHumanoidRootPart()
 	if hrp then
 		hrp.CFrame = CFrame.new(-15045, 24.24, 2201)
@@ -129,44 +123,30 @@ local function teleportToLocation()
 end
 
 local function safeTeleportOut()
-	local instances = workspace:FindFirstChild("__THINGS")
-	local timeTrialInstances = instances and instances:FindFirstChild("Instances")
-	local timeTrial = timeTrialInstances and timeTrialInstances:FindFirstChild("TimeTrial")
-	local teleports = timeTrial and timeTrial:FindFirstChild("Teleports")
-	local leave = teleports and teleports:FindFirstChild("Leave")
-
-	if not leave or not leave.CFrame then
-		return false
-	end
-
-	local function getCurrentHRP()
-		local character = player.Character
-		if not character then return nil end
-		return character:FindFirstChild("HumanoidRootPart")
-	end
-
+	local exitPosition = CFrame.new(-18438, 16.24, -569)
 	local function isTimeTrialActive()
 		local things = workspace:FindFirstChild("__THINGS")
 		local container = things and things:FindFirstChild("__INSTANCE_CONTAINER")
 		local active = container and container:FindFirstChild("Active")
 		return active and active:FindFirstChild("TimeTrial") ~= nil
 	end
-
 	for _ = 1, 3 do
-		local hrp = getCurrentHRP()
+		local character = player.Character
+		local hrp = character and character:FindFirstChild("HumanoidRootPart")
 		if hrp then
-			hrp.CFrame = leave.CFrame + Vector3.new(0, 8, 0)
+			hrp.CFrame = exitPosition
 		end
-
-		task.wait(5)
-
-		if not isTimeTrialActive() then
-			if increaseMonitorThread then pcall(task.cancel, increaseMonitorThread) increaseMonitorThread = nil end
-			if lagMonitorThread then pcall(task.cancel, lagMonitorThread) lagMonitorThread = nil end
-			return true
+		local elapsed = 0
+		while elapsed < 5 do
+			if not isTimeTrialActive() then
+				if increaseMonitorThread then pcall(task.cancel, increaseMonitorThread) increaseMonitorThread = nil end
+				if lagMonitorThread then pcall(task.cancel, lagMonitorThread) lagMonitorThread = nil end
+				return true
+			end
+			task.wait(0.5)
+			elapsed += 0.5
 		end
 	end
-
 	if increaseMonitorThread then pcall(task.cancel, increaseMonitorThread) increaseMonitorThread = nil end
 	if lagMonitorThread then pcall(task.cancel, lagMonitorThread) lagMonitorThread = nil end
 	return false
@@ -176,7 +156,6 @@ end
 local function getMaxZoneFromMap4()
 	local mapFolder = workspace:FindFirstChild("Map4")
 	if not mapFolder then return 0 end
-
 	local maxZone = 0
 	for _, folder in ipairs(mapFolder:GetChildren()) do
 		if folder:IsA("Folder") then
@@ -193,17 +172,13 @@ end
 local function waitUntilReachMaxZone(useCustomZone)
 	waitUntilTimeTrialEnabled()
 	local maxMapZone = useCustomZone and 279 or getMaxZoneFromMap4()
-
 	while true do
 		waitUntilTimeTrialEnabled()
-
 		local success, data = pcall(function()
 			local _, zoneData = ZoneCmds.GetMaxOwnedZone()
 			return zoneData
 		end)
-
 		local current = success and data and data.ZoneNumber or 0
-
 		if current >= maxMapZone then
 			break
 		else
@@ -224,32 +199,21 @@ local function startMonitor12Min()
         local lastPoints    = getTimeTrialPoints()   -- điểm hiện tại
         local timer         = 0
         local teleportCount = 0  -- đếm số lần teleport out mà không đổi lượt
-
         while true do
             waitUntilTimeTrialEnabled()
-
-            -- Nếu đã đủ 10 lượt thì dừng hẳn
             if getRunsUsed() >= 10 then
                 return
             end
-
             task.wait(10)
             if not TimeTrialRunning() then
                 continue
             end
-
             timer = timer + 10
-
-            -- Lấy giá trị hiện tại
             local curUsed   = getRunsUsed()
             local curPoints = getTimeTrialPoints()
-
-            -- Kiểm tra điều kiện reset hoặc teleport out
             local runChanged    = (curUsed ~= lastUsed or curPoints ~= lastPoints)
             local teleportEvent = (endFlag or lagFlag)
-
             if runChanged or teleportEvent then
-                -- Nếu chỉ teleport out mà không đổi lượt/điểm, tăng bộ đếm
                 if teleportEvent and not runChanged then
                     teleportCount = teleportCount + 1
                     if teleportCount > 7 then
@@ -257,24 +221,17 @@ local function startMonitor12Min()
                         return
                     end
                 end
-
-                -- Nếu có runChanged thì reset bộ đếm teleport
                 if runChanged then
                     teleportCount = 0
                 end
-
-                -- Cập nhật lại mốc, reset bộ đếm thời gian và flags
                 lastUsed   = curUsed
                 lastPoints = curPoints
                 timer      = 0
                 endFlag    = false
                 lagFlag    = false
-
             end
-
-            -- Nếu vượt quá 720 giây (12 phút) mà không reset thì kick
-            if timer >= 720 then
-                player:Kick("⏰ 12 phút không đổi lượt hoặc điểm → nghi ngờ treo máy.")
+            if timer >= 900 then
+                player:Kick("⏰ 15 phút không đổi lượt hoặc điểm → nghi ngờ treo máy.")
                 return
             end
         end
@@ -285,46 +242,32 @@ end
 local function startLagMonitor()
     lagMonitorThread = task.spawn(function()
         local retryCount = 0
-
         while true do
             waitUntilTimeTrialEnabled()
-
-            -- Lấy HRP an toàn
             local hrp = getHumanoidRootPart()
             if not hrp then
                 task.wait(5)
                 continue
             end
-
-            -- Ghi nhận vị trí, đợi 60s
             local lastPos = hrp.Position
             task.wait(60)
             if not TimeTrialRunning() then
                 continue
             end
-
             local currPos = hrp.Position
-
-            -- Nếu đứng im (khoảng cách <1) thì tăng đếm
             if (lastPos - currPos).Magnitude < 1 then
                 retryCount += 1
-
                 if retryCount > 3 then
-                    -- Đứng im lần thứ 4 trở đi → kick
                     player:Kick("Lag quá lâu trong Time Trial.")
                     return
                 else
-                    -- Đứng im ≤3 lần → tele out 1 lần rồi dừng monitor
                     lagFlag = true
                     safeTeleportOut()
                     return
                 end
             else
-                -- Nếu di chuyển, reset lại bộ đếm
                 retryCount = 0
             end
-
-            -- Nhỏ delay trước lần check tiếp theo
             task.wait(5)
         end
     end)
@@ -333,19 +276,20 @@ end
 -- 🧠 Theo dõi tăng điểm
 local function startIncreaseMonitor(startPoints, startRuns)
     increaseMonitorThread = task.spawn(function()
+        local lastPoints = startPoints
+        local lastRuns = startRuns
         while true do
             waitUntilTimeTrialEnabled()
-
-            -- Nếu lagFlag bật, thôi dừng monitor
             if lagFlag then return end
-
-            -- Khi phát hiện điểm hoặc TotalRuns tăng, chỉ set endFlag
-            if getTimeTrialPoints() > startPoints or getTotalRuns() > startRuns then
+            local currentPoints = getTimeTrialPoints()
+            local currentRuns = getTotalRuns()
+            if currentPoints > startPoints or currentRuns > startRuns then
                 endFlag = true
                 return
             end
-
-            task.wait(1)
+            lastPoints = currentPoints
+            lastRuns = currentRuns
+            task.wait(0.1)
         end
     end)
 end
@@ -354,80 +298,44 @@ end
 local function teleportFarmLoop(startPoints, startRuns)
 	while true do
 		waitUntilTimeTrialEnabled()
-
 		if lagFlag or endFlag or _G.STOP_TIME_TRIAL then
 			return
 		end
-
-		-- 🔍 Kiểm tra nhân vật đã hồi sinh và có HRP chưa
-		local hrp = getHumanoidRootPart()
-		if not hrp then
-			task.wait(5)
+		local timeTrial = workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial")
+		local breakZones = timeTrial and timeTrial:FindFirstChild("BREAK_ZONES")
+		if not breakZones then
+			task.wait(1)
 			continue
 		end
-
-		local names = {}
-		for _, c in ipairs(workspace.__THINGS.Breakables:GetChildren()) do
-			if c:IsA("Model") and tonumber(c.Name) then
-				table.insert(names, c.Name)
-			end
+		local zones = breakZones:GetChildren()
+		if #zones == 0 then
+			task.wait(1)
+			continue
 		end
-
-		if #names > 0 then
-			for _, n in ipairs(names) do
-				if not TimeTrialRunning() or lagFlag or endFlag or _G.STOP_TIME_TRIAL then return end
-				local b = workspace.__THINGS.Breakables:FindFirstChild(n)
-				if b then
-					local p = b:FindFirstChildWhichIsA("BasePart")
-					if p then
-						teleportTo(p)
-						while workspace.__THINGS.Breakables:FindFirstChild(n) do
-							if not TimeTrialRunning() or lagFlag or endFlag or _G.STOP_TIME_TRIAL then return end
-							task.wait(0.01)
-						end
-					end
-				end
-			end
-		else
-			local found = false
-			for i = 1, 250 do
-				if not TimeTrialRunning() or lagFlag or endFlag or _G.STOP_TIME_TRIAL then return end
-				task.wait(0.5)
-				for _, c in ipairs(workspace.__THINGS.Breakables:GetChildren()) do
-					if c:IsA("Model") and tonumber(c.Name) then
-						found = true
-						break
-					end
-				end
-				if found then break end
-			end
-			if not found then
-				endFlag = true
+		for i = 1, math.min(6, #zones) do
+			if not TimeTrialRunning() or lagFlag or endFlag or _G.STOP_TIME_TRIAL then
 				return
 			end
+			local zone = zones[i]
+			if zone and zone:IsA("BasePart") then
+				local hrp = getHumanoidRootPart()
+				if hrp then
+					hrp.CFrame = zone.CFrame
+				end
+			end
+			task.wait(1)
 		end
-
-		task.wait(0.2)
 	end
 end
 
 -- 🎁 Đổi quà
 local function claimReward()
     if not TimeTrialRunning() then return end
-
-
-    -- 📊 Lấy điểm Time Trial
     local points = getTimeTrialPoints()
-
-    -- 📆 Giờ Việt Nam (UTC+7)
     local now = os.date("!*t", os.time(os.date("!*t")) + 7 * 3600)
     local currentDay = now.wday
     local currentHour = now.hour
-
-    -- Nếu Thứ 3 trước 23h thì đổi hết, ngược lại chỉ đổi hộp 3
     local isSaturdayFull = (currentDay == 3) and (currentHour < 23)
-
-    -- Tính số lượng từng loại hộp
     local chest3, chest2, chest1 = 0, 0, 0
     if isSaturdayFull then
         chest3 = math.floor(points / 5000)
@@ -438,36 +346,29 @@ local function claimReward()
     else
         chest3 = math.floor(points / 5000)
     end
-
-
     local totalChests = chest3 + chest2 + chest1
     if totalChests == 0 then
         return
     end
-
     local function openChest(chestType)
         local args = { [1] = chestType }
         return ReplicatedStorage.Network.TimeTrials_OpenChest:InvokeServer(unpack(args))
     end
-
     local function isAtExactRewardPosition()
         local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
         if not hrp then return false end
         local target = Vector3.new(-15079, 16.24, 2165)
         return (hrp.Position - target).Magnitude <= 2
     end
-
     local function claimMultiple(count, chestType)
         for i = 1, count do
             if not TimeTrialRunning() then return end
-
             local success, err = pcall(function()
                 openChest(chestType)
             end)
             if success then
             else
             end
-
             task.wait(3)
             if not isAtExactRewardPosition() then
                 teleportToRewardLocation()
@@ -478,11 +379,9 @@ local function claimReward()
             end
         end
     end
-
     local retry = 0
     while retry < 3 do
         if not TimeTrialRunning() then return end
-
         retry += 1
         teleportToRewardLocation()
         task.wait(3)
@@ -491,15 +390,12 @@ local function claimReward()
         else
         end
     end
-
     if not isAtExactRewardPosition() then
         return
     end
-
     claimMultiple(chest3, 3)
     claimMultiple(chest2, 2)
     claimMultiple(chest1, 1)
-
     task.wait(3)
     teleportToLocation()
 end
@@ -510,18 +406,13 @@ local function startAutoClaim()
         while true do
             waitUntilTimeTrialEnabled()
             task.wait(15 * 60)
-
             if not TimeTrialRunning() then
                 continue
             end
-
             local pts = getTimeTrialPoints()
-
-            -- Giờ VN
             local d = os.date("!*t", os.time(os.date("!*t")) + 7 * 3600)
             local can = (d.wday == 3 and d.hour < 23 and pts >= 1000)
                     or (d.wday ~= 3 and pts >= 5000)
-
             if can then
                 claimReward()
             else
@@ -530,79 +421,88 @@ local function startAutoClaim()
     end)
 end
 
+-- ===========- WAIT UNTIL EGGS HATCHED INCREASES -===========
+
+local function getEggsHatched()
+	local ok, data = pcall(Save.Get)
+	if not ok or not data then
+		return nil
+	end
+	return tonumber(data.EggsHatched) or 0
+end
+local lastEggs
+repeat
+	lastEggs = getEggsHatched()
+	task.wait(1)
+until lastEggs ~= nil
+local function waitUntilEggsHatchedIncreases()
+	repeat
+		task.wait(1)
+		local currentEggs = getEggsHatched()
+		if currentEggs and currentEggs > lastEggs then
+			lastEggs = currentEggs
+			break
+		end
+	until false
+end
+
 -- ✅ VÒNG LẶP CHÍNH
 task.spawn(function()
 	waitUntilTimeTrialEnabled()
 	waitUntilReachMaxZone(true)
 	startMonitor12Min()
-
+	waitUntilEggsHatchedIncreases()
 	while true do
 		waitUntilTimeTrialEnabled()
-
 		while getRunsUsed() < 10 do
 			waitUntilTimeTrialEnabled()
-
 			local used = getRunsUsed()
 			lagFlag = false
 			endFlag = false
-
 			if used > 0 then
 				task.wait(30)
 				if not TimeTrialRunning() then
 					continue
 				end
 			end
-
 			waitUntilTimeTrialEnabled()
 			local startPoints = getTimeTrialPoints()
 			local startRuns = getTotalRuns()
-
 			waitUntilTimeTrialEnabled()
-			teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
+			player.Character.HumanoidRootPart.CFrame = CFrame.new(-15114, 16.24, 2221)
 			task.wait(5)
 			if not TimeTrialRunning() then
 				continue
 			end
-
 			local retry = 0
 			while TimeTrialRunning() and not workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial") and retry < 3 do
 				retry += 1
-				teleportTo(workspace.__THINGS.Instances.TimeTrial.Teleports.Enter)
+				player.Character.HumanoidRootPart.CFrame = CFrame.new(-15114, 16.24, 2221)
 				task.wait(5)
 			end
-
 			if not TimeTrialRunning() then
 				continue
 			end
-
 			if not workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial") then
 				return
 			end
-
 			startLagMonitor()
 			startIncreaseMonitor(startPoints, startRuns)
 			teleportFarmLoop(startPoints, startRuns)
-
-			-- ✅ Luôn xử lý Leave kể cả khi script khác đã set Time_Trial_End = true
 			if endFlag or lagFlag or getRunsUsed() >= 10 or not TimeTrialRunning() then
 				safeTeleportOut()
 			end
-
 			task.wait(5)
-
 			if lagMonitorThread then pcall(task.cancel, lagMonitorThread) lagMonitorThread = nil end
 			if increaseMonitorThread then pcall(task.cancel, increaseMonitorThread) increaseMonitorThread = nil end
 		end
-
 		claimReward()
 		task.wait(60)
 		_G.Time_Trial_Done = true
 		_G.Time_Trial_End = true
-		
 		while not TimeTrialRunning() do
 			task.wait(60)
 		end
-
 		if monitor12minThread then pcall(task.cancel, monitor12minThread) monitor12minThread = nil end
 		task.wait(5)
 		startMonitor12Min()
