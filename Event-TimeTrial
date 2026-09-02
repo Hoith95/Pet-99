@@ -191,14 +191,12 @@ end
 waitUntilReachMaxZone(true)  -- Dùng zone cố định 274
 --waitUntilReachMaxZone(false) -- Dùng zone lấy từ Map4
 
--- ⏱️ Monitor 12 phút không tăng lượt/TotalRuns trực tiếp
-local function startMonitor12Min()
+-- ⏱️ Monitor 15 phút không tăng lượt/TotalRuns trực tiếp
+local function startMonitor15Min()
     monitor12minThread = task.spawn(function()
-        -- Khởi tạo giá trị đầu
-        local lastUsed      = getRunsUsed()          -- số lượt đã dùng
-        local lastPoints    = getTimeTrialPoints()   -- điểm hiện tại
-        local timer         = 0
-        local teleportCount = 0  -- đếm số lần teleport out mà không đổi lượt
+        local lastUsed   = getRunsUsed()
+        local lastPoints = getTimeTrialPoints()
+        local timer      = 0
         while true do
             waitUntilTimeTrialEnabled()
             if getRunsUsed() >= 10 then
@@ -211,23 +209,10 @@ local function startMonitor12Min()
             timer = timer + 10
             local curUsed   = getRunsUsed()
             local curPoints = getTimeTrialPoints()
-            local runChanged    = (curUsed ~= lastUsed or curPoints ~= lastPoints)
-            local teleportEvent = (endFlag or lagFlag)
-            if runChanged or teleportEvent then
-                if teleportEvent and not runChanged then
-                    teleportCount = teleportCount + 1
-                    if teleportCount > 7 then
-                        player:Kick("⏰ Quá 7 lần teleport out mà không đổi lượt → nghi ngờ treo máy.")
-                        return
-                    end
-                end
-                if runChanged then
-                    teleportCount = 0
-                end
+            if curUsed ~= lastUsed or curPoints ~= lastPoints then
                 lastUsed   = curUsed
                 lastPoints = curPoints
                 timer      = 0
-                lagFlag    = false
             end
             if timer >= 900 then
                 player:Kick("⏰ 15 phút không đổi lượt hoặc điểm → nghi ngờ treo máy.")
@@ -448,7 +433,7 @@ end
 task.spawn(function()
 	waitUntilTimeTrialEnabled()
 	waitUntilReachMaxZone(true)
-	startMonitor12Min()
+	startMonitor15Min()
 	waitUntilEggsHatchedIncreases()
 	while true do
 		waitUntilTimeTrialEnabled()
@@ -503,6 +488,6 @@ task.spawn(function()
 		end
 		if monitor12minThread then pcall(task.cancel, monitor12minThread) monitor12minThread = nil end
 		task.wait(5)
-		startMonitor12Min()
+		startMonitor15Min()
 	end
 end)
