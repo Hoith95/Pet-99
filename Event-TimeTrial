@@ -227,7 +227,6 @@ local function startMonitor12Min()
                 lastUsed   = curUsed
                 lastPoints = curPoints
                 timer      = 0
-                endFlag    = false
                 lagFlag    = false
             end
             if timer >= 900 then
