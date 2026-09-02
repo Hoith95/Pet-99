@@ -276,19 +276,18 @@ end
 -- 🧠 Theo dõi tăng điểm
 local function startIncreaseMonitor(startPoints, startRuns)
     increaseMonitorThread = task.spawn(function()
-        local lastPoints = startPoints
-        local lastRuns = startRuns
         while true do
             waitUntilTimeTrialEnabled()
-            if lagFlag then return end
+            if lagFlag then
+                return
+            end
             local currentPoints = getTimeTrialPoints()
             local currentRuns = getTotalRuns()
-            if currentPoints > startPoints or currentRuns > startRuns then
+            if currentPoints > startPoints
+                or currentRuns > startRuns then
                 endFlag = true
                 return
             end
-            lastPoints = currentPoints
-            lastRuns = currentRuns
             task.wait(0.1)
         end
     end)
