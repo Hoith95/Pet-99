@@ -103,10 +103,11 @@ local function teleportTo(part)
 end
 
 local function teleportToRewardLocation()
-	local hrp = getHumanoidRootPart()
-	if hrp then
-		hrp.CFrame = CFrame.new(-15079, 24.24, 2165)
-	end
+    local character = player.Character
+    local hrp = character and character:FindFirstChild("HumanoidRootPart")
+    if hrp then
+        hrp.CFrame = CFrame.new(-15079, 24.24, 2165)
+    end
 end
 
 local function teleportToLocation()
