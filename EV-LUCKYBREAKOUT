@@ -981,7 +981,7 @@ local function checkEarlyMaxLevelOne(bucks, rebirths, maxLevel)
     local powerLevel = getUpgradeLevel(power)
     local speedLevel = getUpgradeLevel(speed)
 
-    if powerLevel < 2 then
+    if powerLevel < 3 then
         local cost = getNextCost(power)
 
         if cost and cost <= bucks then
@@ -990,7 +990,7 @@ local function checkEarlyMaxLevelOne(bucks, rebirths, maxLevel)
         end
     end
 
-    if speedLevel < 2 then
+    if speedLevel < 3 then
         local cost = getNextCost(speed)
 
         if cost and cost <= bucks then
