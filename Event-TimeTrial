@@ -103,7 +103,6 @@ local function teleportTo(part)
 end
 
 local function teleportToRewardLocation()
-	if not TimeTrialRunning() then return end
 	local hrp = getHumanoidRootPart()
 	if hrp then
 		hrp.CFrame = CFrame.new(-15079, 24.24, 2165)
@@ -315,7 +314,6 @@ end
 
 -- 🎁 Đổi quà
 local function claimReward()
-    if not TimeTrialRunning() then return end
     local points = getTimeTrialPoints()
     local now = os.date("!*t", os.time(os.date("!*t")) + 7 * 3600)
     local currentDay = now.wday
@@ -347,7 +345,6 @@ local function claimReward()
     end
     local function claimMultiple(count, chestType)
         for i = 1, count do
-            if not TimeTrialRunning() then return end
             local success, err = pcall(function()
                 openChest(chestType)
             end)
@@ -366,7 +363,6 @@ local function claimReward()
     end
     local retry = 0
     while retry < 3 do
-        if not TimeTrialRunning() then return end
         retry += 1
         teleportToRewardLocation()
         task.wait(3)
