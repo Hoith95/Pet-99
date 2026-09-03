@@ -243,19 +243,15 @@ local function startIncreaseMonitor(startPoints, startRuns)
             if lagFlag then
                 return
             end
-
             local ok, data = pcall(Save.Get)
             local stats = ok and data and data.TimeTrialStats
-
             local currentPoints = tonumber(stats and stats.Points) or 0
             local currentRuns = tonumber(stats and stats.TotalRuns) or 0
-
             if currentPoints > startPoints
                 or currentRuns > startRuns then
                 endFlag = true
                 return
             end
-
             task.wait(0.5)
         end
     end)
@@ -412,63 +408,90 @@ end
 
 -- ✅ VÒNG LẶP CHÍNH
 task.spawn(function()
-	waitUntilTimeTrialEnabled()
-	waitUntilReachMaxZone(true)
-	startMonitor15Min()
-	waitUntilEggsHatchedIncreases()
-	while true do
-		waitUntilTimeTrialEnabled()
-		while getRunsUsed() < 10 do
-			waitUntilTimeTrialEnabled()
-			local used = getRunsUsed()
-			lagFlag = false
-			endFlag = false
-			if used > 0 then
-				task.wait(30)
-				if not TimeTrialRunning() then
-					continue
-				end
-			end
-			waitUntilTimeTrialEnabled()
-			local startPoints = getTimeTrialPoints()
-			local startRuns = getTotalRuns()
-			waitUntilTimeTrialEnabled()
-			player.Character.HumanoidRootPart.CFrame = CFrame.new(-15114, 16.24, 2221)
-			task.wait(5)
-			if not TimeTrialRunning() then
-				continue
-			end
-			local retry = 0
-			while TimeTrialRunning() and not workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial") and retry < 3 do
-				retry += 1
-				player.Character.HumanoidRootPart.CFrame = CFrame.new(-15114, 16.24, 2221)
-				task.wait(5)
-			end
-			if not TimeTrialRunning() then
-				continue
-			end
-			if not workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial") then
-				return
-			end
-			startLagMonitor()
-			startIncreaseMonitor(startPoints, startRuns)
-			teleportFarmLoop(startPoints, startRuns)
-			if endFlag or lagFlag or getRunsUsed() >= 10 or not TimeTrialRunning() then
-				safeTeleportOut()
-			end
-			task.wait(5)
-			if lagMonitorThread then pcall(task.cancel, lagMonitorThread) lagMonitorThread = nil end
-			if increaseMonitorThread then pcall(task.cancel, increaseMonitorThread) increaseMonitorThread = nil end
-		end
-		claimReward()
-		task.wait(60)
-		_G.Time_Trial_Done = true
-		_G.Time_Trial_End = true
-		while not TimeTrialRunning() do
-			task.wait(60)
-		end
-		if monitor15minThread then pcall(task.cancel, monitor15minThread) monitor15minThread = nil end
-		task.wait(5)
-		startMonitor15Min()
-	end
+    waitUntilTimeTrialEnabled()
+    waitUntilReachMaxZone(true)
+    startMonitor15Min()
+    waitUntilEggsHatchedIncreases()
+    while true do
+        while true do
+            local used = getRunsUsed()
+            if used >= 10 then
+                break
+            end
+            waitUntilTimeTrialEnabled()
+            used = getRunsUsed()
+            if used >= 10 then
+                break
+            end
+            lagFlag = false
+            endFlag = false
+            if used > 0 then
+                task.wait(30)
+                if not TimeTrialRunning() then
+                    continue
+                end
+            end
+            waitUntilTimeTrialEnabled()
+            local startPoints = getTimeTrialPoints()
+            local startRuns = getTotalRuns()
+            waitUntilTimeTrialEnabled()
+            local character = player.Character
+            local hrp = character and character:FindFirstChild("HumanoidRootPart")
+            if not hrp then
+                task.wait(3)
+                continue
+            end
+            hrp.CFrame = CFrame.new(-15114, 16.24, 2221)
+            task.wait(5)
+            if not TimeTrialRunning() then
+                continue
+            end
+            local retry = 0
+            while TimeTrialRunning()
+                and not workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial")
+                and retry < 3 do
+                retry += 1
+                local root = player.Character
+                    and player.Character:FindFirstChild("HumanoidRootPart")
+                if root then
+                    root.CFrame = CFrame.new(-15114, 16.24, 2221)
+                end
+                task.wait(5)
+            end
+            if not TimeTrialRunning() then
+                continue
+            end
+            if not workspace.__THINGS.__INSTANCE_CONTAINER.Active:FindFirstChild("TimeTrial") then
+                return
+            end
+            startLagMonitor()
+            startIncreaseMonitor(startPoints, startRuns)
+            teleportFarmLoop(startPoints, startRuns)
+            if endFlag or lagFlag or getRunsUsed() >= 10 or not TimeTrialRunning() then
+                safeTeleportOut()
+            end
+            task.wait(5)
+            if lagMonitorThread then
+                pcall(task.cancel, lagMonitorThread)
+                lagMonitorThread = nil
+            end
+            if increaseMonitorThread then
+                pcall(task.cancel, increaseMonitorThread)
+                increaseMonitorThread = nil
+            end
+        end
+        claimReward()
+        task.wait(60)
+        _G.Time_Trial_Done = true
+        _G.Time_Trial_End = true
+        while not TimeTrialRunning() do
+            task.wait(60)
+        end
+        if monitor15minThread then
+            pcall(task.cancel, monitor15minThread)
+            monitor15minThread = nil
+        end
+        task.wait(5)
+        startMonitor15Min()
+    end
 end)
