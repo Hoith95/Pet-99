@@ -29,7 +29,7 @@ spawn(function()
 end)
 
 spawn(function()
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_EGGS_HATCHED"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR_EGGS_HATCHED"))()
 end)
 
 spawn(function()
