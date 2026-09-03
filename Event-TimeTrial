@@ -28,9 +28,6 @@ local lagMonitorThread, increaseMonitorThread, monitor15minThread
 
 -- 🛡️ Lấy HumanoidRootPart an toàn
 local function getHumanoidRootPart()
-	while not TimeTrialRunning() do
-		task.wait(1)
-	end
 	local character = player.Character or player.CharacterAdded:Wait()
 	if not character then return nil end
 	local hrp = character:FindFirstChild("HumanoidRootPart")
@@ -103,11 +100,10 @@ local function teleportTo(part)
 end
 
 local function teleportToRewardLocation()
-    local character = player.Character
-    local hrp = character and character:FindFirstChild("HumanoidRootPart")
-    if hrp then
-        hrp.CFrame = CFrame.new(-15079, 24.24, 2165)
-    end
+	local hrp = getHumanoidRootPart()
+	if hrp then
+		hrp.CFrame = CFrame.new(-15079, 16.24, 2165)
+	end
 end
 
 local function teleportToLocation()
