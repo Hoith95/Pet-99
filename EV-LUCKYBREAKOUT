@@ -87,7 +87,7 @@ repeat
     task.wait(2)
 until _G.Time_Trial_End == true
 
-task.wait(368)
+task.wait(168)
 
 getRoot().CFrame = CFrame.new(-15849, 40.27, -195)
 
