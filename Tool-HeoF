@@ -20,11 +20,6 @@ end)
 
 spawn(function()
 wait(38)
---loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial"))()
-end)
-
-spawn(function()
-wait(38)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial"))()
 end)
 
