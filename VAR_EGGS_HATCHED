@@ -14,7 +14,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
 
 -- ================= CONFIG =================
-local CHECK_INTERVAL = 900       -- 15 phút
+local CHECK_INTERVAL = 1800       -- 30 phút
 local MIN_INCREASE   = 5000      -- Tối thiểu phải tăng 5.000
 
 -- ================= UTIL =================
@@ -75,7 +75,7 @@ task.spawn(function()
             )
             task.wait(1)
             LocalPlayer:Kick(
-                "EggsHatched tăng không đủ 5.000 trong 15 phút"
+                "EggsHatched tăng không đủ 5.000 trong 30 phút"
             )
             return
         end
