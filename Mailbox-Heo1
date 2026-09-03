@@ -1,72 +1,50 @@
 if _G.VAR_AUTO_MAIL_2 then return end
 _G.VAR_AUTO_MAIL_2 = true
-
 task.wait(60)
-
 local AutoMail2 = {
     ['Items'] = {
         --['Lucky Block Angelus'] = { Class = "Pet", RainbowOnly = true, PetCount = 1, Amount = "Max" },
+        ['Lucky Admin Gift'] = { Class = "Lootbox", MinAmount = 1, Amount = "Max" },
         ['Lucky Damage Boost II'] = { Id = "Lucky Damage Boost", Class = "Consumable", tn = 2, MinAmount = 1, Amount = "Max" },
         ['Lucky Damage Boost III'] = { Id = "Lucky Damage Boost", Class = "Consumable", tn = 3, MinAmount = 1, Amount = "Max" },
         ['Lucky Speed Boost II'] = { Id = "Lucky Speed Boost", Class = "Consumable", tn = 2, MinAmount = 1, Amount = "Max" },
         ['Lucky Speed Boost III'] = { Id = "Lucky Speed Boost", Class = "Consumable", tn = 3, MinAmount = 1, Amount = "Max" },
         ['Lucky Egg Booster II'] = { Id = "Lucky Egg Booster", Class = "Consumable", tn = 2, MinAmount = 1, Amount = "Max" },
         ['Lucky Egg Booster III'] = { Id = "Lucky Egg Booster", Class = "Consumable", tn = 3, MinAmount = 1, Amount = "Max" },
-
     },
-
     ['Loop Interval'] = 60,
-
-    ['Users'] = {
-        "ninaFalconBear",
-        "Valric_Solvynn026",
-        "Zephy_Marnell604",
-        "Dravon_Liorrex220"
-    }
+    ['Users'] = {"ninaFalconBear","Valric_Solvynn026","Zephy_Marnell604","Dravon_Liorrex220"}
 }
-
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
 local Client = ReplicatedStorage.Library.Client
 local Network = require(Client.Network)
 local SaveModule = require(Client.Save)
-
 local EF_Relay = ReplicatedStorage.Network.EF_Relay
-
 while task.wait(AutoMail2['Loop Interval']) do
     local Queue = {}
     local PetKeep = {}
-
     for Class, Items in pairs(SaveModule.Get()['Inventory']) do
         for uid, v in pairs(Items) do
             local Config = false
-
             for _, Info in pairs(AutoMail2['Items']) do
                 local isValid = true
-
                 if Info.pt and Info.pt ~= v.pt then
                     isValid = false
                 end
-
                 if Info.sh and Info.sh ~= v.sh then
                     isValid = false
                 end
-
                 if Info.tn and Info.tn ~= v.tn then
                     isValid = false
                 end
-
                 if Info.RainbowOnly and v.pt ~= 2 then
                     isValid = false
                 end
-
                 local itemAmount = tonumber(v._am) or 1
                 local itemId = Info.Id or Info.Name
-
                 if itemId == v.id
                     and Info.Class == Class
                     and isValid then
-
                     if Info.MinAmount then
                         if itemAmount >= Info.MinAmount then
                             Config = Info
@@ -82,66 +60,39 @@ while task.wait(AutoMail2['Loop Interval']) do
                     end
                 end
             end
-
             if Config then
-                Queue[uid] = {
-                    Class = Class,
-                    Info = v,
-                    Config = Config
-                }
+                Queue[uid] = {Class = Class,Info = v,Config = Config}
             end
         end
     end
-
     for uid, Data in pairs(Queue) do
         local v = Data.Info
         local Info = Data.Config
         local amountToSend = tonumber(v._am) or 1
-
         if Data.Class == "Pet" and Info.PetCount then
             local keep = PetKeep[v.id] or 0
-
             if keep < Info.PetCount then
                 local needKeep = Info.PetCount - keep
-
                 if amountToSend <= needKeep then
                     PetKeep[v.id] = keep + amountToSend
                     continue
                 end
-
                 amountToSend = amountToSend - needKeep
                 PetKeep[v.id] = Info.PetCount
             end
         end
-
-        local User = AutoMail2['Users'][
-            math.random(1, #AutoMail2['Users'])
-        ]
-
+        local User = AutoMail2['Users'][math.random(1, #AutoMail2['Users'])]
         if v._lk then
             while true do
-                local unlocked = Network.Invoke(
-                    "Locking_SetLocked",
-                    uid,
-                    false
-                )
-
+                local unlocked = Network.Invoke("Locking_SetLocked",uid,false)
                 if unlocked then
                     break
                 end
                 task.wait(0.1)
             end
         end
-
         while true do
-            local success = EF_Relay:InvokeServer(
-                User,
-                "Bless",
-                Data.Class,
-                uid,
-                amountToSend
-            )
-
+            local success = EF_Relay:InvokeServer(User,"Bless",Data.Class,uid,amountToSend)
             if success then
                 break
             end
