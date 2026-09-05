@@ -150,7 +150,6 @@ end
 local function waitUntilReachMaxZone(useCustomZone)
 	local maxMapZone = useCustomZone and 279 or getMaxZoneFromMap4()
 	while true do
-		waitUntilTimeTrialEnabled()
 		local success, data = pcall(function()
 			local _, zoneData = ZoneCmds.GetMaxOwnedZone()
 			return zoneData
