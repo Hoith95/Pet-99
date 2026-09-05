@@ -360,6 +360,10 @@ local function claimReward()
     teleportToLocation()
 end
 
+if getRunsLeft() <= 0 then
+    claimReward()
+end
+
 -- 🔄 Auto-claim song song, chạy mỗi 15 phút
 local function startAutoClaim()
     task.spawn(function()
