@@ -64,7 +64,7 @@ task.spawn(function()
         end
         local diff = currentEggs - lastEggs
         if diff >= MIN_INCREASE then
-            warn("[EggWatch] OK | +" .. diff .. " eggs / 15 phút")
+            warn("[EggWatch] OK | +" .. diff .. " eggs / 30 phút")
         else
             warn(
                 "[EggWatch] FAIL | +" ..
