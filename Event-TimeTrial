@@ -320,7 +320,7 @@ local function claimReward()
     local now = os.date("!*t", os.time(os.date("!*t")) + 7 * 3600)
     local currentDay = now.wday
     local currentHour = now.hour
-    local isSaturdayFull = (currentDay == 3) and (currentHour < 23)
+    local isSaturdayFull = (currentDay == 3 or currentDay == 7) and (currentHour < 23)
     local chest3, chest2, chest1 = 0, 0, 0
     if isSaturdayFull then
         chest3 = math.floor(points / 5000)
