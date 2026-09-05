@@ -212,7 +212,7 @@ local function startLagMonitor()
                 continue
             end
             local lastPos = hrp.Position
-            task.wait(60)
+            task.wait(180)
             if not TimeTrialRunning() then
                 continue
             end
