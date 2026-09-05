@@ -48,7 +48,7 @@ getgenv().GTIME_TRIAL_CHEST_TO_CLAIM = 3
 getgenv().GTIME_TRIAL_HATCH_FIRST_SECONDS = 1
 getgenv().GTIME_TRIAL_ENCHANTS = {"Criticals","Tap Power","Tap Power","Strong Pets","Walkspeed","Chest Breaker","Criticals"}
 --getgenv().GENCHANTS = {"Criticals","Tap Power","Tap Power","Strong Pets","Walkspeed","Chest Breaker"}
-getgenv().GENCHANTS = {"Criticals","Tap Power","Lucky Eggs","Strong Pets","Treasure Hunter","Chest Breaker","Happy Pets"}
+getgenv().GENCHANTS = {"Lucky Eggs","Treasure Hunter","Lucky Eggs","Treasure Hunter","Treasure Hunter","Diamonds","Lucky Eggs"}
 
 getgenv().GLOOTBOXES = {"Locked Hype Egg","Locked Hype Egg 3"}
 getgenv().GDO_AUTO_BALLOONS = true
