@@ -167,6 +167,31 @@ end
 waitUntilReachMaxZone(true)  -- Dùng zone cố định 274
 --waitUntilReachMaxZone(false) -- Dùng zone lấy từ Map4
 
+-- ===========- WAIT UNTIL EGGS HATCHED INCREASES -===========
+
+local function getEggsHatched()
+	local ok, data = pcall(Save.Get)
+	if not ok or not data then
+		return nil
+	end
+	return tonumber(data.EggsHatched) or 0
+end
+local lastEggs
+repeat
+	lastEggs = getEggsHatched()
+	task.wait(1)
+until lastEggs ~= nil
+local function waitUntilEggsHatchedIncreases()
+	repeat
+		task.wait(1)
+		local currentEggs = getEggsHatched()
+		if currentEggs and currentEggs > lastEggs then
+			lastEggs = currentEggs
+			break
+		end
+	until false
+end
+
 -- ⏱️ Monitor 15 phút không tăng lượt/TotalRuns trực tiếp
 local function startMonitor15Min()
     monitor15minThread = task.spawn(function()
@@ -359,6 +384,7 @@ local function claimReward()
 end
 
 if getRunsLeft() <= 0 then
+	waitUntilEggsHatchedIncreases()
     claimReward()
 end
 
@@ -381,31 +407,6 @@ local function startAutoClaim()
             end
         end
     end)
-end
-
--- ===========- WAIT UNTIL EGGS HATCHED INCREASES -===========
-
-local function getEggsHatched()
-	local ok, data = pcall(Save.Get)
-	if not ok or not data then
-		return nil
-	end
-	return tonumber(data.EggsHatched) or 0
-end
-local lastEggs
-repeat
-	lastEggs = getEggsHatched()
-	task.wait(1)
-until lastEggs ~= nil
-local function waitUntilEggsHatchedIncreases()
-	repeat
-		task.wait(1)
-		local currentEggs = getEggsHatched()
-		if currentEggs and currentEggs > lastEggs then
-			lastEggs = currentEggs
-			break
-		end
-	until false
 end
 
 -- ✅ VÒNG LẶP CHÍNH
