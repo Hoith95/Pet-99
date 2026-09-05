@@ -148,7 +148,6 @@ end
 
 -- 🕐 Chờ đến khi đạt Max Zone
 local function waitUntilReachMaxZone(useCustomZone)
-	waitUntilTimeTrialEnabled()
 	local maxMapZone = useCustomZone and 279 or getMaxZoneFromMap4()
 	while true do
 		waitUntilTimeTrialEnabled()
