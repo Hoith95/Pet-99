@@ -203,15 +203,15 @@ local function startGuiUpdater()
     -- RIGHT
     local rankLabel        = createLabel("RankLabel", right)
 
-	local rebirthLabel       = createLabel("RebirthLabel", right)
-	local luckyBreakoutLabel = createLabel("LuckyBreakoutLabel", right)
-	local coin2Label        = createLabel("Coin2Label", right)
-    local giftLabel        = createLabel("GiftLabel", right)
-    local gift2Label = createLabel("Gift2Label", right)
-    gift2Label.Visible = SHOW_MINI_PINATA
+	--local rebirthLabel       = createLabel("RebirthLabel", right)
+	--local luckyBreakoutLabel = createLabel("LuckyBreakoutLabel", right)
+	--local coin2Label        = createLabel("Coin2Label", right)
+    --local giftLabel        = createLabel("GiftLabel", right)
+    --local gift2Label = createLabel("Gift2Label", right)
+    --gift2Label.Visible = SHOW_MINI_PINATA
     --local megaPresentLabel = createLabel("MegaPresentLabel", right)
     --local raffleLabel      = createLabel("RaffleLabel", right)
-	local coinLabel        = createLabel("CoinLabel", right)
+	--local coinLabel        = createLabel("CoinLabel", right)
 	--local upgradeLabel 	   = createLabel("UpgradeLabel", right)
 
     -- LEFT / CENTER
@@ -228,25 +228,25 @@ local function startGuiUpdater()
         rankLabel.Text = tostring(sd.Rank or 0) .. " | RANK"
         updateLabelSize(rankLabel)
 
-        giftLabel.Text = tostring(getLootboxAmount("Lucky Admin Gift")) .. " | Lucky Admin Gift"
-        updateLabelSize(giftLabel)
+        --giftLabel.Text = tostring(getLootboxAmount("Lucky Admin Gift")) .. " | Lucky Admin Gift"
+        --updateLabelSize(giftLabel)
 
         if SHOW_MINI_PINATA then
             gift2Label.Text = tostring(getMiscAmount("Mini Pinata")) .. " | Mini Pinata"
             updateLabelSize(gift2Label)
         end
 
-        coinLabel.Text = Formatint(getCurrencyAmount("BreakoutCoins")) .. " | BreakoutCoins"
-        updateLabelSize(coinLabel)
+        --coinLabel.Text = Formatint(getCurrencyAmount("BreakoutCoins")) .. " | BreakoutCoins"
+        --updateLabelSize(coinLabel)
 
-        coin2Label.Text = Formatint(getCurrencyAmount("BreakoutBucks")) .. " | BreakoutBucks"
-        updateLabelSize(coin2Label)
+        --coin2Label.Text = Formatint(getCurrencyAmount("BreakoutBucks")) .. " | BreakoutBucks"
+        --updateLabelSize(coin2Label)
 
-		luckyBreakoutLabel.Text = getLuckyBreakouts3() .. " | MaxLevel"
-		updateLabelSize(luckyBreakoutLabel)
+		--luckyBreakoutLabel.Text = getLuckyBreakouts3() .. " | MaxLevel"
+		--updateLabelSize(luckyBreakoutLabel)
 
-		rebirthLabel.Text = getLuckyBreakouts2() .. " | Rebirth"
-		updateLabelSize(rebirthLabel)
+		--rebirthLabel.Text = getLuckyBreakouts2() .. " | Rebirth"
+		--updateLabelSize(rebirthLabel)
 
 		local runsLeft = getRunsLeft()
 		_G.Time_Trial_End = (runsLeft == 0)
