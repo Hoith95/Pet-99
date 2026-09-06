@@ -20,7 +20,7 @@ end)
 
 spawn(function()
 wait(38)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Event-TimeTrial"))()
 end)
 
 spawn(function()
@@ -41,6 +41,9 @@ spawn(function()
 wait(68)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Noti-Updater2"))()
 end)
+
+getgenv().GDO_COIN_ARCADE = true
+getgenv().GCOIN_ARCADE_EARN_IN_SECONDS_BEFORE_BUY = 600
 
 getgenv().GDO_TIME_TRIAL = false
 getgenv().GTIME_TRIAL_MIN_TIME_TO_BOSS3 = 1
