@@ -211,7 +211,7 @@ local function startGuiUpdater()
     --gift2Label.Visible = SHOW_MINI_PINATA
     --local megaPresentLabel = createLabel("MegaPresentLabel", right)
     --local raffleLabel      = createLabel("RaffleLabel", right)
-	--local coinLabel        = createLabel("CoinLabel", right)
+	local coinLabel        = createLabel("CoinLabel", right)
 	--local upgradeLabel 	   = createLabel("UpgradeLabel", right)
 
     -- LEFT / CENTER
@@ -236,8 +236,8 @@ local function startGuiUpdater()
             updateLabelSize(gift2Label)
         end
 
-        --coinLabel.Text = Formatint(getCurrencyAmount("BreakoutCoins")) .. " | BreakoutCoins"
-        --updateLabelSize(coinLabel)
+        coinLabel.Text = Formatint(getCurrencyAmount("ArcadeCoins")) .. " | ArcadeCoins"
+        updateLabelSize(coinLabel)
 
         --coin2Label.Text = Formatint(getCurrencyAmount("BreakoutBucks")) .. " | BreakoutBucks"
         --updateLabelSize(coin2Label)
