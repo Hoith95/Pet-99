@@ -43,7 +43,12 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/N
 end)
 
 getgenv().GDO_COIN_ARCADE = true
-getgenv().GCOIN_ARCADE_EARN_IN_SECONDS_BEFORE_BUY = 600
+getgenv().GTIMED_BOOSTS = 
+{
+    { Id = "Arcade Coin Boost", MaxTier = 1 },
+    { Id = "Arcade Luck Boost", MaxTier = 1 },
+    { Id = "Arcade XP Boost", MaxTier = 1 },
+}
 
 getgenv().GDO_TIME_TRIAL = false
 getgenv().GTIME_TRIAL_MIN_TIME_TO_BOSS3 = 1
