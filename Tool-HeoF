@@ -43,6 +43,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/N
 end)
 
 getgenv().GDO_COIN_ARCADE = true
+getgenv().GCOIN_ARCADE_ENTER_IN_RAFFLE = false
 getgenv().GTIMED_BOOSTS = 
 {
     { Id = "Arcade Coin Boost", MaxTier = 1 },
