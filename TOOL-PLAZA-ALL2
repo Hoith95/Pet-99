@@ -61,8 +61,19 @@ getgenv().Settings = {
 		{Name = "Golden Titanic Genie Fox", Data = {Price = "4.2b"}},
 		{Name = "Rainbow Titanic Genie Fox", Data = {Price = "16.5b"}},
 
+		{Name = "Titanic Lucky Bearserker", Data = {Price = "3.3b"}},
+		{Name = "Golden Titanic Lucky Bearserker", Data = {Price = "3.4b"}},
+		{Name = "Rainbow Titanic Lucky Bearserker", Data = {Price = "11.5b"}},
+
+		{Name = "Titanic Arcade Cat", Data = {Price = "3.3b"}},
+		{Name = "Golden Titanic Arcade Cat", Data = {Price = "3.5b"}},
+		{Name = "Rainbow Titanic Arcade Cat", Data = {Price = "13.5b"}},
+
+		{Name = "Titanic Arcade Bunny", Data = {Price = "3.5b"}},
+		{Name = "Golden Titanic Arcade Bunny", Data = {Price = "3.8b"}},
+		{Name = "Rainbow Titanic Arcade Bunny", Data = {Price = "18.5b"}},
+
 		{Name = "Titanic Catrina Cat", Data = {Price = "3.5b"}},
-		{Name = "Titanic Lucky Bearserker", Data = {Price = "3.5b"}},
 		{Name = "Titanic Mariachi Capybara", Data = {Price = "3.4b"}},
 
 		{Name = "Titanic Crusader Dragon", Data = {Price = "3.5b"}},
