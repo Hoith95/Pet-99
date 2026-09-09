@@ -1,0 +1,45 @@
+if _G.VAR_ARCADE_TICKET then return end
+_G.VAR_ARCADE_TICKET = true
+
+repeat task.wait() until game:IsLoaded()
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local PlayerSave = require(Client.Save)
+
+local TICKET_ID = "Arcade Ticket"
+local REQUIRED_AMOUNT = 2500
+local COOLDOWN = 60 * 60
+
+local function getSave()
+    return PlayerSave.Get()
+end
+
+local function getMiscAmount(itemId)
+    local sd = getSave()
+    if not sd or not sd.Inventory or not sd.Inventory.Misc then
+        return 0
+    end
+    for _, v in pairs(sd.Inventory.Misc) do
+        if v.id == itemId then
+            return tonumber(v._am) or 0
+        end
+    end
+    return 0
+end
+
+local function submitRaffle()
+    local args = {
+        [1] = "ArcadeTitanicRaffle",
+        [2] = 2500,
+        [3] = false
+    }
+    return ReplicatedStorage.Network.Raffle_Submit:InvokeServer(unpack(args))
+end
+
+while true do
+    repeat
+        task.wait(5)
+    until getMiscAmount(TICKET_ID) >= REQUIRED_AMOUNT
+    submitRaffle()
+    task.wait(COOLDOWN)
+end
