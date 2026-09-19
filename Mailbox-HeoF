@@ -9,7 +9,7 @@ end)
 
 spawn(function()
 wait(15)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Heo1"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Mailbox-Heo1"))()
 end)
 
 spawn(function()
@@ -25,7 +25,7 @@ spawn(function()
 end)
 
 spawn(function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-ARCADE-TICKET"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/VAR-ARCADE-TICKET"))()
 end)
 
 spawn(function()
