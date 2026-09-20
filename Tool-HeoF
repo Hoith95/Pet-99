@@ -42,7 +42,9 @@ wait(68)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Noti-Updater2"))()
 end)
 
-getgenv().GDO_TIME_TRIAL = true
+getgenv().GDO_SPACE_MINING_EVENT = true
+
+getgenv().GDO_TIME_TRIAL = false
 getgenv().GTIME_TRIAL_MIN_TIME_TO_BOSS3 = 1
 getgenv().GTIME_TRIAL_CHEST_TO_CLAIM = 3
 getgenv().GTIME_TRIAL_HATCH_FIRST_SECONDS = 1
@@ -67,7 +69,7 @@ getgenv().GCLEAR_FAVORITE_PETS = true
 getgenv().GHATCH_SPEED_MS = 0
 getgenv().GHUGE_COUNT = 999
 getgenv().GDAYCARE = true
-getgenv().GDAYCARE_NAME_PARTS_TO_EXCLUDE = {"Lucky Bearserker"}
+getgenv().GDAYCARE_NAME_PARTS_TO_EXCLUDE = {"Moonrock Golem", "Stardust Vein Pony"}
 getgenv().GWAIT_AT_GATES_TILL_RANK = 5
 getgenv().GMAX_EGG_SLOTS = 99
 getgenv().GMAX_EQUIP_SLOTS = 99
