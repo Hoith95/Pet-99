@@ -1,0 +1,43 @@
+if _G.VAR_AUTO_MINE then return end
+_G.VAR_AUTO_MINE = true
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local PlayerSave = require(ReplicatedStorage.Library.Client.Save)
+local Network = ReplicatedStorage:WaitForChild("Network")
+
+local function getSave()
+    return PlayerSave.Get()
+end
+
+local function getSpaceCoins()
+    local sd = getSave()
+    if not sd
+        or not sd.Inventory
+        or not sd.Inventory.Currency then
+        return 0
+    end
+    for _, currency in pairs(sd.Inventory.Currency) do
+        if currency.id == "SpaceCoins" then
+            return tonumber(currency._am) or 0
+        end
+    end
+    return 0
+end
+
+local CHECK_TIME = 3 * 60
+
+while true do
+    local lastCoins = getSpaceCoins()
+    local lastChangeTime = os.clock()
+    while os.clock() - lastChangeTime < CHECK_TIME do
+        task.wait(1)
+        local currentCoins = getSpaceCoins()
+        if currentCoins ~= lastCoins then
+            lastCoins = currentCoins
+            lastChangeTime = os.clock()
+        end
+    end
+    Network.AutoMine_Enable:FireServer()
+    task.wait(CHECK_TIME)
+    Network.AutoMine_Disable:FireServer()
+end
