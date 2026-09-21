@@ -42,7 +42,7 @@ wait(68)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Noti-Updater2"))()
 end)
 
-getgenv().GDO_SPACE_MINING_EVENT = true
+getgenv().GDO_SPACE_MINING_EVENT = false
 getgenv().GBUY_SPACE_MINE_MERCHANT = true
 getgenv().GMINING_EVENT_MAX_AUTO_CRAFT_RECIPE = 5
 getgenv().GTIMED_BOOSTS = 
@@ -52,7 +52,7 @@ getgenv().GTIMED_BOOSTS =
     { Id = "Space Mining Damage Booster", MaxTier = 1 }, --max is 1
 }
 
-getgenv().GDO_TIME_TRIAL = false
+getgenv().GDO_TIME_TRIAL = true
 getgenv().GTIME_TRIAL_MIN_TIME_TO_BOSS3 = 1
 getgenv().GTIME_TRIAL_CHEST_TO_CLAIM = 3
 getgenv().GTIME_TRIAL_HATCH_FIRST_SECONDS = 1
