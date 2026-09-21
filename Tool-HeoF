@@ -43,6 +43,14 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/N
 end)
 
 getgenv().GDO_SPACE_MINING_EVENT = true
+getgenv().GBUY_SPACE_MINE_MERCHANT = true
+getgenv().GMINING_EVENT_MAX_AUTO_CRAFT_RECIPE = 4
+getgenv().GTIMED_BOOSTS = 
+{
+    { Id = "Space Mining Coins Booster", MaxTier = 1}, --max is 1
+    { Id = "Space Mining Speed Booster", MaxTier = 1 }, --max is 1
+    { Id = "Space Mining Damage Booster", MaxTier = 1 }, --max is 1
+}
 
 getgenv().GDO_TIME_TRIAL = false
 getgenv().GTIME_TRIAL_MIN_TIME_TO_BOSS3 = 1
