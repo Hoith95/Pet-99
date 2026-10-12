@@ -180,8 +180,8 @@ getgenv().Settings = {
         --{Name = "Fantasy Key", Data = {Price = "55k"}},
         --{Name = "Fantasy Spinny Wheel Ticket", Data = {Price = "25k"}},
 
-        {Name = "Rainbow All Huges", Data = {Price = "+15%", Min_sell = "150m", Max_sell = "968m", sold_by_convention = true}},
-        {Name = "Shiny All Huges", Data = {Price = "+15%", Min_sell = "150m", Max_sell = "900m"}},
+        {Name = "Rainbow All Huges", Data = {Price = "+15%", Min_sell = "120m", Max_sell = "968m", sold_by_convention = true}},
+        {Name = "Shiny All Huges", Data = {Price = "+15%", Min_sell = "130m", Max_sell = "900m"}},
         {Name = "Shiny Rainbow All Huges", Data = {Price = "+15%", Min_sell = "1.5b", Max_sell = "5b"}},
 		{Name = "Shiny Golden All Huges", Data = {Price = "+15%", Min_sell = "1b", Max_sell = "5b"}},
         {Name = "Golden All Huges", Data = {Price = "+1%", Min_sell = "+15%", Max_sell = "75m", sold_by_convention = true}},
