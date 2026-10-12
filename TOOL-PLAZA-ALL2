@@ -1,4 +1,4 @@
-wait(38)
+--wait(38)
 
 spawn(function()
 wait(68)
