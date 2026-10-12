@@ -172,9 +172,6 @@ getgenv().Settings = {
         {Name = "Huge Sea Dragon Card", Data = {Price = "10m"}},
 
         --{Name = "Mini Pinata", Data = {Price = "50k"}},
-		{Name = "Huge Steppe Wolf", Data = {Price = "19m"}},
-        {Name = "All Huges", Data = {Price = "+1%", Min_sell = "+5%", Max_sell = "50m", sold_by_convention = true}},
-        {Name = "Golden All Huges", Data = {Price = "+1%", Min_sell = "+5%", Max_sell = "75m", sold_by_convention = true}},
 
         {Name = "Crystal Key", Data = {Price = "9k"}},
         --{Name = "Tech Key", Data = {Price = "40k"}},
@@ -183,10 +180,12 @@ getgenv().Settings = {
         {Name = "Fantasy Key", Data = {Price = "55k"}},
         {Name = "Fantasy Spinny Wheel Ticket", Data = {Price = "25k"}},
 
-        --{Name = "Rainbow All Huges", Data = {Price = "2%", Min_sell = "150m", Max_sell = "368m", sold_by_convention = true}},
-        --{Name = "Shiny All Huges", Data = {Price = "2%", Min_sell = "60m", Max_sell = "300m"}},
-        --{Name = "Shiny Rainbow All Huges", Data = {Price = "5%", Min_sell = "1.5b", Max_sell = "5b"}},
-		--{Name = "Shiny Golden All Huges", Data = {Price = "5%", Min_sell = "1b", Max_sell = "5b"}},
+        {Name = "Rainbow All Huges", Data = {Price = "+15%", Min_sell = "150m", Max_sell = "968m", sold_by_convention = true}},
+        {Name = "Shiny All Huges", Data = {Price = "+15%", Min_sell = "150m", Max_sell = "900m"}},
+        {Name = "Shiny Rainbow All Huges", Data = {Price = "+15%", Min_sell = "1.5b", Max_sell = "5b"}},
+		{Name = "Shiny Golden All Huges", Data = {Price = "+15%", Min_sell = "1b", Max_sell = "5b"}},
+        {Name = "Golden All Huges", Data = {Price = "+1%", Min_sell = "+15%", Max_sell = "75m", sold_by_convention = true}},
+        {Name = "All Huges", Data = {Price = "+1%", Min_sell = "+15%", Max_sell = "50m", sold_by_convention = true}},
     },
 ["xoa_Map"] = false,
 
