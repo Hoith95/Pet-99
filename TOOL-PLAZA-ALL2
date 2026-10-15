@@ -11,9 +11,15 @@ wait(68)
 end)
 
 spawn(function()
+wait(38)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/Shop"))()
+end)
+
+spawn(function()
 wait(68)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hoith95/Pet-99/main/LookFPS-PLAZA"))()
 end)
+
 local prices = {"4.7b", "4.8b", "4.9b"}
 
 getgenv().Settings = {
