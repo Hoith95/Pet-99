@@ -27,6 +27,7 @@ getgenv().Settings = {
         {Name = "MVP Key", Data = {Price = "569k"}},
 		{Name = "Huge", Category = "Potion", Data = {Price = "1.68m"}},
 		{Name = "Mastery", Category = "XPPotion", Data = {Price = "850k"}},
+		{Name = "Exclusive Raffle Ticket", Category = "Misc", Data = {Price = "18m"}},
         {Name = "MVP Key Upper Half", Data = {Price = "525k"}},
         {Name = "MVP Key Lower Half", Data = {Price = "20k"}},
         {Name = "Exclusive Egg 60", Data = {Price = "168m"}},
@@ -149,7 +150,7 @@ getgenv().Settings = {
         {Name = "Candycane Gift", Data = {Price = "1%"}},
         {Name = "Horseshoe Gift", Data = {Price = "300k"}},
         {Name = "Lucky Block Gift", Data = {Price = "1%"}},
-        {Name = "Fiesta Gift", Data = {Price = "25k"}},
+        {Name = "Fiesta Gift", Data = {Price = "20k"}},
         {Name = "Lucky Admin Gift", Data = {Price = "+5%"}},
 
 		--{Name = "Rainbow Lucky Block Angelus", Data = {Price = "1%"}},
