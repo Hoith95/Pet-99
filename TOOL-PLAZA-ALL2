@@ -18,7 +18,7 @@ getgenv().Settings = {
         {Name = "Rainbow Swirl", Data = {Price = "14.5b"}},
         {Name = "MBanana", Data = {Price = "10.5b"}},
         {Name = "Coin", Data = {Price = "7.5b"}},
-        {Name = "Yellow Lucky Block", Data = {Price = "11.5b"}},
+        {Name = "Yellow Lucky Block", Data = {Price = "10.5b"}},
         {Name = "Crown", Data = {Price = "25b"}},
         {Name = "Heart", Data = {Price = "38b"}},
         {Name = "Lucky Clover", Data = {Price = "38b"}},
