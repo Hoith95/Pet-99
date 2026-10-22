@@ -251,7 +251,7 @@ end
 if slotText then
     local current, total = slotText:match("^(%d+)/(%d+)$")
     local totalNum = tonumber(total)
-    local maxSlots = 25
+    local maxSlots = 50
 
     if totalNum and totalNum < maxSlots then
         local need = maxSlots - totalNum
@@ -888,12 +888,12 @@ end
 					
 					
 					Tong_item_da_treo_quay = Tong_item_da_treo_quay + 1
-					if Tong_item_da_treo_quay == 25 then 
+					if Tong_item_da_treo_quay == 50 then 
 						while true do							
 							local X_slot = kiemtra_quayconslottreo()
 							--warn("slot : "..X_slot)
 							
-							if X_slot < 25 then
+							if X_slot < 50 then
 								Tong_item_da_treo_quay = X_slot
 								break
 							end
@@ -1148,13 +1148,13 @@ local function sell_item(itemName)
 					task.wait(2)
 
 					Tong_item_da_treo_quay = Tong_item_da_treo_quay + 1
-					if Tong_item_da_treo_quay == 25 then 
+					if Tong_item_da_treo_quay == 50 then 
 						while true do
 							
 							local X_slot = kiemtra_quayconslottreo()
 							--warn("slot : "..X_slot)
 							
-							if X_slot < 25 then
+							if X_slot < 50 then
 								Tong_item_da_treo_quay = X_slot
 								break
 							end
@@ -1187,13 +1187,13 @@ local function sell_item(itemName)
 					task.wait(2)
 
 					Tong_item_da_treo_quay = Tong_item_da_treo_quay + 1
-					if Tong_item_da_treo_quay == 25 then 
+					if Tong_item_da_treo_quay == 50 then 
 						while true do
 							
 							local X_slot = kiemtra_quayconslottreo()
 							--warn("slot : "..X_slot)
 							
-							if X_slot < 25 then
+							if X_slot < 50 then
 								Tong_item_da_treo_quay = X_slot
 								break
 							end
