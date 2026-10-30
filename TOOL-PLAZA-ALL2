@@ -195,9 +195,9 @@ getgenv().Settings = {
         {Name = "Golden All Huges", Data = {Price = "23.5m", Min_sell = "+5%", Max_sell = "+5%", sold_by_convention = true}},
         {Name = "All Huges", Data = {Price = "23m", Min_sell = "23m", Max_sell = "33.5m", sold_by_convention = true}},
         {Name = "Rainbow All Huges", Data = {Price = "123m", Min_sell = "+5%", Max_sell = "968m", sold_by_convention = true}},
-        {Name = "Shiny All Huges", Data = {Price = "+5%", Min_sell = "+5%", Max_sell = "900m"}},
-        {Name = "Shiny Rainbow All Huges", Data = {Price = "+5%", Min_sell = "+5%", Max_sell = "5b"}},
+        {Name = "Shiny Rainbow All Huges", Data = {Price = "+3%", Min_sell = "+5%", Max_sell = "5b"}},
 		{Name = "Shiny Golden All Huges", Data = {Price = "+5%", Min_sell = "+5%", Max_sell = "5b"}},
+        {Name = "Shiny All Huges", Data = {Price = "+5%", Min_sell = "+5%", Max_sell = "900m"}},
     },
 ["xoa_Map"] = true,
 
