@@ -172,11 +172,12 @@ getgenv().Settings = {
         --{Name = "Arcade XP Boost TN2", Data = {Price = "+15%"}},
         --{Name = "Arcade XP Boost TN3", Data = {Price = "+15%"}},
 
-        --{Name = "Charm Stone", Data = {Price = "1%"}},
-        --{Name = "Royalty TN1", Data = {Price = "1%"}},
-        --{Name = "Overload TN1", Data = {Price = "1%"}},
+        {Name = "Charm Stone", Data = {Price = "+3%"}},
+        {Name = "Royalty TN1", Data = {Price = "+3%"}},
+        {Name = "Overload TN1", Data = {Price = "+3%"}},
 
-        {Name = "Mega Loot Chest", Data = {Price = "20m"}},
+		{Name = "Mega Loot Chest", Category = "Lootbox", Data = {Price = "20m"}},
+        --{Name = "Mega Loot Chest", Data = {Price = "20m"}},
         {Name = "Mega Potion Chest", Data = {Price = "10m"}},
         {Name = "Mega Enchant Chest", Data = {Price = "3m"}},
         {Name = "Mega Charm Chest", Data = {Price = "85m"}},
@@ -188,8 +189,8 @@ getgenv().Settings = {
         --{Name = "Crystal Key", Data = {Price = "9k"}},
         --{Name = "Tech Key", Data = {Price = "40k"}},
         --{Name = "Secret Key", Data = {Price = "28k"}},
-        {Name = "Void Key", Data = {Price = "45k"}},
-        {Name = "Fantasy Key", Data = {Price = "55k"}},
+        {Name = "Void Key", Data = {Price = "35k"}},
+        {Name = "Fantasy Key", Data = {Price = "35k"}},
         --{Name = "Fantasy Spinny Wheel Ticket", Data = {Price = "25k"}},
 
         {Name = "Golden All Huges", Data = {Price = "23.5m", Min_sell = "+5%", Max_sell = "+5%", sold_by_convention = true}},
