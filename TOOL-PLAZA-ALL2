@@ -175,6 +175,7 @@ getgenv().Settings = {
         {Name = "Charm Stone", Data = {Price = "+3%"}},
         {Name = "Royalty TN1", Data = {Price = "+3%"}},
         {Name = "Overload TN1", Data = {Price = "+3%"}},
+        {Name = "Glittering TN1", Data = {Price = "+3%"}},
 
 		{Name = "Mega Loot Chest", Category = "Lootbox", Data = {Price = "20m"}},
         --{Name = "Mega Loot Chest", Data = {Price = "20m"}},
